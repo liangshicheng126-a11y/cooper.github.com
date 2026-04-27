@@ -5,6 +5,7 @@ import { useTranslation } from "@/locales/LanguageProvider";
 import { ArrowRight, Briefcase, User, Mail, Sparkles, Zap, Figma, Palette, Video, PenTool, Layout, ExternalLink, Image as ImageIcon, Scissors, Clapperboard, Film } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import TiltCard from "@/components/TiltCard";
 
 export default function Home() {
   const { t, mounted } = useTranslation();
@@ -108,13 +109,13 @@ export default function Home() {
               const Icon = icons[i] || Sparkles;
               
               return (
-                <div key={i} className="glass p-8 rounded-[40px] border-white/5 hover:border-indigo-500/20 transition-all group flex flex-col items-center text-center">
+                <TiltCard key={i} className="glass p-8 rounded-[40px] border-white/5 hover:border-indigo-500/20 transition-all group flex flex-col items-center text-center">
                   <div className="w-16 h-16 rounded-2xl bg-indigo-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                     <Icon className="w-8 h-8 text-indigo-500" />
                   </div>
                   <h3 className="text-2xl font-bold mb-4">{service.title}</h3>
                   <p className="text-foreground/50 leading-relaxed text-sm">{service.desc}</p>
-                </div>
+                </TiltCard>
               );
             })}
           </div>
@@ -131,13 +132,13 @@ export default function Home() {
             { icon: User, label: t.contact.happyClients, value: "30+" },
             { icon: Mail, label: t.contact.activeSupport, value: "24/7" },
           ].map((stat, i) => (
-            <div key={i} className="glass p-8 rounded-[40px] border-white/5 group hover:border-indigo-500/30 transition-all flex flex-col items-center text-center">
+            <TiltCard key={i} className="glass p-8 rounded-[40px] border-white/5 group hover:border-indigo-500/30 transition-all flex flex-col items-center text-center">
               <div className="p-4 rounded-3xl bg-white/5 mb-6 group-hover:bg-indigo-500/10 transition-colors">
                 <stat.icon className="w-8 h-8 text-indigo-500" />
               </div>
               <h3 className="text-5xl font-bold mb-3 tabular-nums">{stat.value}</h3>
               <p className="text-foreground/40 font-bold uppercase tracking-widest text-xs">{stat.label}</p>
-            </div>
+            </TiltCard>
           ))}
           </div>
         </motion.section>
@@ -158,9 +159,8 @@ export default function Home() {
               { name: "CapCut", icon: Scissors, color: "#00C4CC" },
               { name: "Premiere", icon: Film, color: "#9999FF" },
             ].map((tool, i) => (
-              <motion.div
+              <TiltCard
                 key={i}
-                whileHover={{ y: -8, scale: 1.05 }}
                 className="glass p-6 rounded-3xl border-white/5 hover:border-white/20 transition-all flex flex-col items-center text-center group"
               >
                 <div
@@ -170,7 +170,7 @@ export default function Home() {
                   <tool.icon className="w-7 h-7" style={{ color: tool.color }} />
                 </div>
                 <p className="text-sm font-medium text-foreground/70">{tool.name}</p>
-              </motion.div>
+              </TiltCard>
             ))}
           </div>
         </motion.section>
@@ -184,13 +184,13 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {t.hero.workflow.steps.map((wf: any, i: number) => (
-              <div key={i} className="glass p-8 rounded-[40px] border-white/5 hover:border-indigo-500/20 transition-all relative group">
+              <TiltCard key={i} className="glass p-8 rounded-[40px] border-white/5 hover:border-indigo-500/20 transition-all relative group">
                 <div className="absolute top-6 right-6 text-6xl font-bold text-indigo-500/10 group-hover:text-indigo-500/20 transition-colors">
                   0{i + 1}
                 </div>
                 <h3 className="text-xl font-bold mb-4">{wf.title}</h3>
                 <p className="text-foreground/50 text-sm leading-relaxed">{wf.desc}</p>
-              </div>
+              </TiltCard>
             ))}
           </div>
         </motion.section>
@@ -231,18 +231,20 @@ export default function Home() {
                 href={`/portfolio/${project.id}`}
                 className="group relative h-[240px] sm:h-[300px] rounded-[40px] overflow-hidden glass border-white/5"
               >
-                <div 
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                  style={{ backgroundImage: `url(${project.image})` }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
-                <div className="absolute inset-0 p-8 flex flex-col justify-end">
-                  <span className="text-indigo-400 text-xs font-bold uppercase tracking-widest mb-2">{project.category}</span>
-                  <h3 className="text-xl font-bold text-white group-hover:text-indigo-200 transition-colors">{project.title}</h3>
-                </div>
-                <div className="absolute top-6 right-6 p-3 rounded-full glass border-white/10 text-white opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
-                  <ExternalLink className="w-4 h-4" />
-                </div>
+                <TiltCard className="relative w-full h-full">
+                  <div 
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                    style={{ backgroundImage: `url(${project.image})` }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                  <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                    <span className="text-indigo-400 text-xs font-bold uppercase tracking-widest mb-2">{project.category}</span>
+                    <h3 className="text-xl font-bold text-white group-hover:text-indigo-200 transition-colors">{project.title}</h3>
+                  </div>
+                  <div className="absolute top-6 right-6 p-3 rounded-full glass border-white/10 text-white opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
+                    <ExternalLink className="w-4 h-4" />
+                  </div>
+                </TiltCard>
               </Link>
             ))}
           </div>

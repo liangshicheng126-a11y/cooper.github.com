@@ -6,6 +6,7 @@ import { ArrowUpRight, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import TiltCard from "@/components/TiltCard";
 
 export default function Portfolio() {
   const { t, mounted } = useTranslation();
@@ -86,58 +87,60 @@ export default function Portfolio() {
               onMouseEnter={() => setHoveredId(project.id)}
               onMouseLeave={() => setHoveredId(null)}
             >
-              {/* Project Image */}
-              <div
-                className="absolute inset-0 transition-transform duration-700 group-hover:scale-110"
-                style={{
-                  backgroundImage: `url(${project.image})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              >
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors" />
-              </div>
+              <TiltCard className="relative w-full h-full">
+                {/* Project Image */}
+                <div
+                  className="absolute inset-0 transition-transform duration-700 group-hover:scale-110"
+                  style={{
+                    backgroundImage: `url(${project.image})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                >
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors" />
+                </div>
 
-              {/* Liquid Glass Overlay on Hover */}
-              <AnimatePresence>
-                {hoveredId === project.id && (
-                  <motion.div
-                    initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
-                    animate={{ opacity: 1, backdropFilter: "blur(12px)" }}
-                    exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
-                    className="absolute inset-0 p-6 sm:p-10 lg:p-12 flex flex-col justify-end bg-black/10 transition-all"
-                  >
+                {/* Liquid Glass Overlay on Hover */}
+                <AnimatePresence>
+                  {hoveredId === project.id && (
                     <motion.div
-                      initial={{ y: 20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.1 }}
+                      initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+                      animate={{ opacity: 1, backdropFilter: "blur(12px)" }}
+                      exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+                      className="absolute inset-0 p-6 sm:p-10 lg:p-12 flex flex-col justify-end bg-black/10 transition-all"
                     >
-                      <span className="text-white/60 text-sm font-medium mb-2 block">
-                        {project.category}
-                      </span>
-                      <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6 leading-tight">
-                        {project.title}
-                      </h3>
-                      <div className="inline-flex items-center space-x-3 text-white font-semibold group/btn">
-                        <span>{t.portfolio.viewProject}</span>
-                        <div className="p-3 rounded-full bg-white/20 group-hover/btn:bg-white group-hover/btn:text-black transition-all">
-                          <ArrowUpRight className="w-5 h-5" />
+                      <motion.div
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.1 }}
+                      >
+                        <span className="text-white/60 text-sm font-medium mb-2 block">
+                          {project.category}
+                        </span>
+                        <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6 leading-tight">
+                          {project.title}
+                        </h3>
+                        <div className="inline-flex items-center space-x-3 text-white font-semibold group/btn">
+                          <span>{t.portfolio.viewProject}</span>
+                          <div className="p-3 rounded-full bg-white/20 group-hover/btn:bg-white group-hover/btn:text-black transition-all">
+                            <ArrowUpRight className="w-5 h-5" />
+                          </div>
                         </div>
-                      </div>
+                      </motion.div>
                     </motion.div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                  )}
+                </AnimatePresence>
 
-              {/* Default Overlay (visible when not hovered) */}
-              <div
-                className={cn(
-                  "absolute top-8 right-8 p-3 rounded-full glass border-white/20 text-white transition-opacity duration-300",
-                  hoveredId === project.id ? "opacity-0" : "opacity-100"
-                )}
-              >
-                <ArrowUpRight className="w-5 h-5" />
-              </div>
+                {/* Default Overlay (visible when not hovered) */}
+                <div
+                  className={cn(
+                    "absolute top-8 right-8 p-3 rounded-full glass border-white/20 text-white transition-opacity duration-300",
+                    hoveredId === project.id ? "opacity-0" : "opacity-100"
+                  )}
+                >
+                  <ArrowUpRight className="w-5 h-5" />
+                </div>
+              </TiltCard>
             </Link>
           ))}
         </div>

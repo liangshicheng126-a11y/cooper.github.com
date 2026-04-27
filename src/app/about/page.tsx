@@ -5,6 +5,7 @@ import { useTranslation } from "@/locales/LanguageProvider";
 import { Github, Twitter, Mail, Award, Rocket, Zap, ArrowRight, Heart, Coffee } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import TiltCard from "@/components/TiltCard";
 
 export default function About() {
   const { t, mounted } = useTranslation();
@@ -63,10 +64,7 @@ export default function About() {
               </div>
             </motion.div>
 
-            <motion.div
-              variants={item}
-              className="relative aspect-square rounded-[40px] overflow-hidden glass p-4 border-white/10 group"
-            >
+            <TiltCard className="relative aspect-square rounded-[40px] overflow-hidden glass p-4 border-white/10 group">
               <div
                 className="w-full h-full rounded-[30px] transition-transform duration-700 group-hover:scale-105"
                 style={{
@@ -85,7 +83,7 @@ export default function About() {
                   {t.about.experience}
                 </span>
               </div>
-            </motion.div>
+            </TiltCard>
           </div>
         </header>
 
@@ -109,14 +107,13 @@ export default function About() {
 
             <div className="space-y-6">
               {t.about.skillDetails.map((skill, index) => (
-                <motion.div 
+                <TiltCard 
                   key={index} 
-                  variants={item} 
                   className="flex items-center space-x-4 glass p-4 rounded-2xl border-white/5 hover:border-indigo-500/20 transition-all"
                 >
                   <div className="w-2 h-2 rounded-full bg-indigo-500" />
                   <span className="text-lg font-medium">{skill}</span>
-                </motion.div>
+                </TiltCard>
               ))}
             </div>
           </section>
@@ -131,11 +128,11 @@ export default function About() {
               <span>{t.about.hobbiesTitle}</span>
             </motion.h2>
 
-            <div className="glass p-8 rounded-[30px] border-white/5">
+            <TiltCard className="glass p-8 rounded-[30px] border-white/5">
               <p className="text-lg text-foreground/60 leading-loose">
                 {t.about.hobbiesDesc}
               </p>
-            </div>
+            </TiltCard>
           </section>
         </div>
 

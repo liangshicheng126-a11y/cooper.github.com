@@ -21,7 +21,7 @@ export default function ScrollBlobs() {
     <div className="liquid-bg pointer-events-none">
       <motion.div
         aria-hidden
-        className="blob"
+        className="blob blob-indigo"
         animate={{
           x: [0, 14, -10, 8, 0],
           y: [0, -12, 10, -8, 0],
@@ -33,11 +33,14 @@ export default function ScrollBlobs() {
           ease: "easeInOut",
           repeatType: "mirror",
         }}
-        style={{ top: blob1Y, left: blob1X, scale: blob1Scale }}
-      />
+        style={{ top: blob1Y, left: blob1X, scale: blob1Scale, width: "min(52vw, 620px)", opacity: 0.3 }}
+      >
+        <div className="blob-glow" />
+        <div className="blob-noise" />
+      </motion.div>
       <motion.div
         aria-hidden
-        className="blob"
+        className="blob blob-cyan"
         animate={{
           x: [0, -16, 11, -7, 0],
           y: [0, 10, -14, 6, 0],
@@ -53,13 +56,16 @@ export default function ScrollBlobs() {
           top: blob2Y,
           left: blob2X,
           scale: blob2Scale,
-          background: "linear-gradient(135deg, #3b82f6 0%, #2dd4bf 100%)",
-          opacity: 0.13,
+          width: "min(46vw, 560px)",
+          opacity: 0.26,
         }}
-      />
+      >
+        <div className="blob-glow" />
+        <div className="blob-noise" />
+      </motion.div>
       <motion.div
         aria-hidden
-        className="blob"
+        className="blob blob-rose"
         animate={{
           x: [0, 12, -15, 9, 0],
           y: [0, -9, 13, -11, 0],
@@ -75,10 +81,13 @@ export default function ScrollBlobs() {
           top: blob3Y,
           left: blob3X,
           scale: blob3Scale,
-          background: "linear-gradient(135deg, #f43f5e 0%, #fb923c 100%)",
-          opacity: 0.12,
+          width: "min(42vw, 520px)",
+          opacity: 0.24,
         }}
-      />
+      >
+        <div className="blob-glow" />
+        <div className="blob-noise" />
+      </motion.div>
     </div>
   );
 }
