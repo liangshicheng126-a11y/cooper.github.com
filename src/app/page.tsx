@@ -49,36 +49,36 @@ export default function Home() {
 
           <motion.h1 
             variants={item}
-            className="text-8xl font-bold tracking-tight mb-8 max-w-5xl leading-[1.1]"
+            className="text-5xl sm:text-6xl lg:text-8xl font-bold tracking-tight mb-6 sm:mb-8 max-w-5xl leading-[1.1]"
           >
             {t.hero.title}
           </motion.h1>
 
           <motion.p 
             variants={item}
-            className="text-2xl text-foreground/60 mb-12 max-w-3xl leading-relaxed font-light"
+            className="text-lg sm:text-xl lg:text-2xl text-foreground/60 mb-8 sm:mb-12 max-w-3xl leading-relaxed font-light"
           >
             {t.hero.description}
           </motion.p>
 
-          <motion.div variants={item} className="flex space-x-6 items-center">
+          <motion.div variants={item} className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-0 sm:space-x-6">
             <Link
               href="/portfolio"
-              className="px-10 py-5 bg-indigo-600 text-white rounded-2xl font-bold flex items-center space-x-3 hover:bg-indigo-700 transition-all hover:scale-105 shadow-xl shadow-indigo-500/20"
+              className="px-8 sm:px-10 py-4 sm:py-5 bg-indigo-600 text-white rounded-2xl font-bold flex items-center justify-center space-x-3 hover:bg-indigo-700 transition-all hover:scale-105 shadow-xl shadow-indigo-500/20"
             >
               <span>{t.nav.portfolio}</span>
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
               href="/about"
-              className="px-10 py-5 glass rounded-2xl font-bold flex items-center space-x-3 hover:bg-white/10 transition-all"
+              className="px-8 sm:px-10 py-4 sm:py-5 glass rounded-2xl font-bold flex items-center justify-center space-x-3 hover:bg-white/10 transition-all"
             >
               <span>{t.nav.about}</span>
             </Link>
             
             <motion.div 
               variants={item}
-              className="ml-12 flex items-center space-x-4 border-l border-white/10 pl-12 py-2"
+              className="sm:ml-12 flex items-center space-x-4 sm:border-l border-white/10 sm:pl-12 py-2"
             >
               <div className="p-3 rounded-xl bg-indigo-500/10">
                 <Zap className="w-5 h-5 text-indigo-500 fill-indigo-500/20" />
@@ -94,14 +94,14 @@ export default function Home() {
         {/* Services / Focus Section */}
         <motion.section 
           variants={item}
-          className="mb-6"
+          className="mb-8 section-block rounded-[40px] p-6 sm:p-8 lg:p-10"
         >
           <div className="flex items-center space-x-4 mb-6">
             <h2 className="text-2xl font-bold">{t.hero.servicesTitle}</h2>
             <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />
           </div>
           
-          <div className="grid grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
             {t.hero.services.map((service: any, i: number) => {
               const icons = [Palette, Layout, Video];
               const Icon = icons[i] || Sparkles;
@@ -122,8 +122,9 @@ export default function Home() {
         {/* Stats Section */}
         <motion.section
           variants={item}
-          className="grid grid-cols-3 gap-8 mb-6"
+          className="mb-8 section-block rounded-[40px] p-6 sm:p-8 lg:p-10"
         >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
           {[
             { icon: Briefcase, label: t.contact.projectsCompleted, value: "50+" },
             { icon: User, label: t.contact.happyClients, value: "30+" },
@@ -137,16 +138,17 @@ export default function Home() {
               <p className="text-foreground/40 font-bold uppercase tracking-widest text-xs">{stat.label}</p>
             </div>
           ))}
+          </div>
         </motion.section>
 
         {/* Tools / Skills Section */}
-        <motion.section variants={item} className="mb-6">
+        <motion.section variants={item} className="mb-8 section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
           <div className="flex items-center space-x-4 mb-6">
             <h2 className="text-2xl font-bold">{t.hero.tools.title}</h2>
             <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />
             <span className="text-foreground/40 text-sm">{t.hero.tools.subtitle}</span>
           </div>
-          <div className="grid grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
             {[
               { name: "Photoshop", icon: Palette, color: "#31A8FF" },
               { name: "Illustrator", icon: PenTool, color: "#FF9A00" },
@@ -173,13 +175,13 @@ export default function Home() {
         </motion.section>
 
         {/* Workflow Section */}
-        <motion.section variants={item} className="mt-24 mb-12">
+        <motion.section variants={item} className="mt-8 mb-8 section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
           <div className="flex items-center space-x-4 mb-12">
             <h2 className="text-2xl font-bold">{t.hero.workflow.title}</h2>
             <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />
             <span className="text-foreground/40 text-sm">{t.hero.workflow.subtitle}</span>
           </div>
-          <div className="grid grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {t.hero.workflow.steps.map((wf: any, i: number) => (
               <div key={i} className="glass p-8 rounded-[40px] border-white/5 hover:border-indigo-500/20 transition-all relative group">
                 <div className="absolute top-6 right-6 text-6xl font-bold text-indigo-500/10 group-hover:text-indigo-500/20 transition-colors">
@@ -193,7 +195,7 @@ export default function Home() {
         </motion.section>
 
         {/* Featured Work Preview Section */}
-        <motion.section variants={item} className="mb-12">
+        <motion.section variants={item} className="mb-8 section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center space-x-4">
               <h2 className="text-2xl font-bold">{t.hero.featuredTitle}</h2>
@@ -208,7 +210,7 @@ export default function Home() {
             </Link>
           </div>
           
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {[
               { 
                 id: "p1", 
@@ -223,7 +225,11 @@ export default function Home() {
                 image: "https://images.unsplash.com/photo-1545235617-9465d2a55698?w=800&q=80"
               }
             ].map((project, i) => (
-              <Link key={i} href={`/portfolio/${project.id}`} className="group relative h-[300px] rounded-[40px] overflow-hidden glass border-white/5">
+              <Link
+                key={i}
+                href={`/portfolio/${project.id}`}
+                className="group relative h-[240px] sm:h-[300px] rounded-[40px] overflow-hidden glass border-white/5"
+              >
                 <div 
                   className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
                   style={{ backgroundImage: `url(${project.image})` }}

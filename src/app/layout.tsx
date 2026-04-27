@@ -5,6 +5,7 @@ import { LanguageProvider } from "@/locales/LanguageProvider";
 import Sidebar from "@/components/Sidebar";
 import LanguageToggle from "@/components/LanguageToggle";
 import PageTransition from "@/components/PageTransition";
+import ScrollBlobs from "@/components/ScrollBlobs";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,18 +35,13 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
         <LanguageProvider>
-          {/* Liquid Background */}
-          <div className="liquid-bg">
-            <div className="blob" style={{ top: '-10%', left: '-5%' }}></div>
-            <div className="blob" style={{ top: '40%', right: '-10%', background: 'linear-gradient(135deg, #3b82f6 0%, #2dd4bf 100%)' }}></div>
-            <div className="blob" style={{ bottom: '-10%', left: '20%', background: 'linear-gradient(135deg, #f43f5e 0%, #fb923c 100%)' }}></div>
-          </div>
+          <ScrollBlobs />
 
           {/* Layout Structure */}
           <div className="flex min-h-screen">
             <Sidebar />
             <LanguageToggle />
-            <main className="flex-1 ml-80 p-12 pr-24 relative z-10">
+            <main className="flex-1 ml-0 lg:ml-80 p-6 sm:p-8 lg:p-12 pr-6 sm:pr-10 lg:pr-24 pt-24 lg:pt-12 relative z-10">
               <PageTransition>
                 {children}
               </PageTransition>
