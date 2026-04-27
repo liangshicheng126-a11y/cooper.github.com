@@ -15,7 +15,9 @@ export const viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://liangshicheng126-a11y.github.io"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://liangshicheng126-a11y.github.io"
+  ),
   title: "Designer Portfolio",
   description: "Independent Designer / Visual Developer Portfolio",
   openGraph: {

@@ -1,5 +1,10 @@
 import type { NextConfig } from "next";
 
+const repository = process.env.GITHUB_REPOSITORY?.split("/")[1] ?? "";
+const isUserSiteRepo = repository.endsWith(".github.io");
+const pagesBasePath =
+  process.env.GITHUB_ACTIONS && repository && !isUserSiteRepo ? `/${repository}` : "";
+
 const nextConfig: NextConfig = {
   output: "export",
   trailingSlash: true,
@@ -13,8 +18,8 @@ const nextConfig: NextConfig = {
     ],
   },
   // Project Pages needs a repository prefix, e.g. /cooper.github.com
-  basePath: process.env.GITHUB_ACTIONS ? "/cooper.github.com" : "",
-  assetPrefix: process.env.GITHUB_ACTIONS ? "/cooper.github.com/" : undefined,
+  basePath: pagesBasePath,
+  assetPrefix: pagesBasePath ? `${pagesBasePath}/` : undefined,
 };
 
 export default nextConfig;
