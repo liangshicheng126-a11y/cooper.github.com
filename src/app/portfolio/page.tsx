@@ -59,16 +59,25 @@ export default function Portfolio() {
     show: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
   };
 
+  const heroMask = {
+    hidden: { opacity: 0, y: 30, clipPath: "inset(0 0 100% 0)" },
+    show: {
+      opacity: 1,
+      y: 0,
+      clipPath: "inset(0 0 0% 0)",
+      transition: { duration: 1.0, ease: [0.22, 1, 0.36, 1] },
+    },
+  };
+
   return (
     <div className={cn("pb-8", !mounted && "opacity-0")}>
       <motion.div variants={container} initial="hidden" animate="show">
         <header className="mb-16">
-          <motion.h1
-            variants={item}
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 tracking-tight"
-          >
-            {t.portfolio.title}
-          </motion.h1>
+          <motion.div variants={heroMask} className="overflow-hidden mb-6">
+            <motion.h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
+              {t.portfolio.title}
+            </motion.h1>
+          </motion.div>
           <motion.p
             variants={item}
             className="text-xl text-foreground/60 max-w-2xl"

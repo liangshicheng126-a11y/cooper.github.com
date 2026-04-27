@@ -26,6 +26,16 @@ export default function About() {
     show: { opacity: 1, y: 0, transition: { duration: 0.6 } },
   };
 
+  const heroMask = {
+    hidden: { opacity: 0, y: 30, clipPath: "inset(0 0 100% 0)" },
+    show: {
+      opacity: 1,
+      y: 0,
+      clipPath: "inset(0 0 0% 0)",
+      transition: { duration: 1.0, ease: [0.22, 1, 0.36, 1] },
+    },
+  };
+
   return (
     <div className={cn("max-w-4xl pb-8", !mounted && "opacity-0")}>
       <motion.div variants={container} initial="hidden" animate="show">
@@ -33,12 +43,11 @@ export default function About() {
           <motion.div variants={item} className="mb-4">
              <h2 className="text-2xl font-medium text-indigo-500">{t.about.name}</h2>
           </motion.div>
-          <motion.h1
-            variants={item}
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-8 sm:mb-12 tracking-tight"
-          >
-            {t.about.title}
-          </motion.h1>
+          <motion.div variants={heroMask} className="overflow-hidden mb-8 sm:mb-12">
+            <motion.h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
+              {t.about.title}
+            </motion.h1>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-center">
             <motion.div variants={item} className="flex flex-col justify-center space-y-8 lg:space-y-12 py-2 lg:py-4">

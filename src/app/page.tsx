@@ -105,22 +105,22 @@ export default function Home() {
               </div>
             </motion.div>
           </motion.div>
-
-          <motion.div
-            variants={heroSoft}
-            className="mt-8 sm:mt-10 text-foreground/45 text-xs uppercase tracking-[0.24em] font-semibold flex items-center gap-3"
-          >
-            <span>Scroll down</span>
-            <motion.span
-              aria-hidden
-              animate={{ y: [0, 6, 0], opacity: [0.4, 1, 0.4] }}
-              transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-              className="inline-block"
-            >
-              ↓
-            </motion.span>
-          </motion.div>
         </section>
+
+        <motion.div
+          variants={heroSoft}
+          className="text-foreground/45 text-xs uppercase tracking-[0.24em] font-semibold flex items-center gap-3"
+        >
+          <span>Scroll down</span>
+          <motion.span
+            aria-hidden
+            animate={{ y: [0, 6, 0], opacity: [0.4, 1, 0.4] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+            className="inline-block"
+          >
+            ↓
+          </motion.span>
+        </motion.div>
 
         {/* Services / Focus Section */}
         <motion.section 
