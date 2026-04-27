@@ -6,6 +6,13 @@ function run(command, args) {
     cwd: process.cwd(),
     encoding: "utf8",
     stdio: ["ignore", "pipe", "pipe"],
+    env: {
+      ...process.env,
+      GIT_AUTHOR_NAME: process.env.GIT_AUTHOR_NAME || "Cursor Auto Deploy",
+      GIT_AUTHOR_EMAIL: process.env.GIT_AUTHOR_EMAIL || "cursor-auto-deploy@local.dev",
+      GIT_COMMITTER_NAME: process.env.GIT_COMMITTER_NAME || "Cursor Auto Deploy",
+      GIT_COMMITTER_EMAIL: process.env.GIT_COMMITTER_EMAIL || "cursor-auto-deploy@local.dev",
+    },
   });
   return {
     code: result.status ?? 1,
