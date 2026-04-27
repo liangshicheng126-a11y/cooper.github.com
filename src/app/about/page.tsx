@@ -35,19 +35,19 @@ export default function About() {
           </motion.div>
           <motion.h1
             variants={item}
-            className="text-6xl font-bold mb-12 tracking-tight"
+            className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-8 sm:mb-12 tracking-tight"
           >
             {t.about.title}
           </motion.h1>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-            <motion.div variants={item} className="flex flex-col justify-center space-y-12 py-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-center">
+            <motion.div variants={item} className="flex flex-col justify-center space-y-8 lg:space-y-12 py-2 lg:py-4">
               <div>
                 <h3 className="text-xs uppercase font-bold text-foreground/40 tracking-widest mb-4 flex items-center space-x-2">
                   <Zap className="w-3 h-3 text-indigo-500" />
                   <span>{t.about.workTitle}</span>
                 </h3>
-                <p className="text-xl text-foreground/80 leading-relaxed font-medium">
+                <p className="text-lg sm:text-xl text-foreground/80 leading-relaxed font-medium">
                   {t.about.workDesc}
                 </p>
               </div>
@@ -57,7 +57,7 @@ export default function About() {
                   <Coffee className="w-3 h-3 text-indigo-500" />
                   <span>{t.about.spareTitle}</span>
                 </h3>
-                <p className="text-xl text-foreground/80 leading-relaxed font-medium">
+                <p className="text-lg sm:text-xl text-foreground/80 leading-relaxed font-medium">
                   {t.about.spareDesc}
                 </p>
               </div>
@@ -79,7 +79,7 @@ export default function About() {
               </div>
 
               {/* Experience Badge */}
-              <div className="absolute -bottom-6 -right-6 glass p-8 rounded-full shadow-2xl border-indigo-500/20 text-center flex flex-col items-center justify-center">
+              <div className="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 glass p-6 sm:p-8 rounded-full shadow-2xl border-indigo-500/20 text-center flex flex-col items-center justify-center">
                 <span className="text-3xl font-bold text-indigo-500 tabular-nums">5+</span>
                 <span className="text-[10px] uppercase font-bold text-foreground/40 tracking-widest">
                   {t.about.experience}

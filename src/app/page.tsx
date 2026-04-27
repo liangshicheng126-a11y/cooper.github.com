@@ -38,13 +38,13 @@ export default function Home() {
         <section className="min-h-[70vh] flex flex-col justify-start pt-2 pb-6">
           <motion.div 
             variants={item}
-            className="mb-8 inline-flex items-center space-x-3 px-4 py-1.5 rounded-full glass border-white/10 text-indigo-500 text-sm font-medium w-fit"
+            className="mb-8 inline-flex items-center space-x-3 px-4 py-1.5 rounded-full glass border-white/10 text-indigo-500 text-sm font-medium w-fit max-w-full"
           >
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
             </span>
-            <span>{t.hero.status}</span>
+            <span className="whitespace-normal break-words leading-snug">{t.hero.status}</span>
           </motion.div>
 
           <motion.h1 
@@ -143,10 +143,10 @@ export default function Home() {
 
         {/* Tools / Skills Section */}
         <motion.section variants={item} className="mb-8 section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
-          <div className="flex items-center space-x-4 mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-6">
             <h2 className="text-2xl font-bold">{t.hero.tools.title}</h2>
             <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />
-            <span className="text-foreground/40 text-sm">{t.hero.tools.subtitle}</span>
+            <span className="text-foreground/40 text-sm sm:text-right">{t.hero.tools.subtitle}</span>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
             {[
@@ -176,10 +176,10 @@ export default function Home() {
 
         {/* Workflow Section */}
         <motion.section variants={item} className="mb-8 section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
-          <div className="flex items-center space-x-4 mb-12">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-12">
             <h2 className="text-2xl font-bold">{t.hero.workflow.title}</h2>
             <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />
-            <span className="text-foreground/40 text-sm">{t.hero.workflow.subtitle}</span>
+            <span className="text-foreground/40 text-sm sm:text-right">{t.hero.workflow.subtitle}</span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {t.hero.workflow.steps.map((wf: any, i: number) => (
@@ -196,8 +196,8 @@ export default function Home() {
 
         {/* Featured Work Preview Section */}
         <motion.section variants={item} className="mb-8 section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center space-x-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-8">
+            <div className="flex items-center space-x-4 min-w-0">
               <h2 className="text-2xl font-bold">{t.hero.featuredTitle}</h2>
               <div className="w-24 h-px bg-gradient-to-r from-white/10 to-transparent" />
             </div>

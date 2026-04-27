@@ -61,10 +61,10 @@ export default function ProjectDetailClient({ id }: Props) {
       </motion.div>
 
       <header className="mb-16">
-        <motion.h1 variants={item} className="text-6xl font-bold mb-6 tracking-tight">
+        <motion.h1 variants={item} className="text-3xl sm:text-5xl lg:text-6xl font-bold mb-6 tracking-tight leading-tight">
           {project.title}
         </motion.h1>
-        <motion.p variants={item} className="text-2xl text-foreground/60 max-w-3xl leading-relaxed">
+        <motion.p variants={item} className="text-lg sm:text-xl lg:text-2xl text-foreground/60 max-w-3xl leading-relaxed">
           {project.desc}
         </motion.p>
       </header>
@@ -80,7 +80,7 @@ export default function ProjectDetailClient({ id }: Props) {
         />
       </motion.div>
 
-      <motion.div variants={item} className="grid grid-cols-3 gap-8 mb-24">
+      <motion.div variants={item} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-16 lg:mb-24">
         <div className="glass p-8 rounded-3xl border-white/5">
           <User className="w-6 h-6 text-indigo-500 mb-4" />
           <h4 className="text-xs uppercase font-bold text-foreground/40 tracking-widest mb-2">{t.portfolio.projectDetail.role}</h4>
@@ -106,8 +106,8 @@ export default function ProjectDetailClient({ id }: Props) {
         </div>
       </motion.div>
 
-      <div className="space-y-24">
-        <motion.section variants={item} className="grid grid-cols-1 md:grid-cols-2 gap-16">
+      <div className="space-y-16 lg:space-y-24">
+        <motion.section variants={item} className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-16">
           <div>
             <h2 className="text-3xl font-bold mb-6 flex items-center space-x-3">
               <Target className="w-6 h-6 text-indigo-500" />
@@ -124,7 +124,7 @@ export default function ProjectDetailClient({ id }: Props) {
           </div>
         </motion.section>
 
-        <motion.section variants={item} className="grid grid-cols-1 md:grid-cols-2 gap-16 flex-row-reverse">
+        <motion.section variants={item} className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-16 flex-row-reverse">
           <div className="md:order-2">
             <h2 className="text-3xl font-bold mb-6 flex items-center space-x-3">
               <Lightbulb className="w-6 h-6 text-indigo-500" />
@@ -146,7 +146,7 @@ export default function ProjectDetailClient({ id }: Props) {
             <CheckCircle className="w-6 h-6 text-indigo-500" />
             <span>{t.portfolio.projectDetail.results}</span>
           </h2>
-          <div className="grid grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
             <div className="p-8 rounded-3xl bg-indigo-500/5 border border-indigo-500/10 transition-all hover:bg-indigo-500/10">
               <span className="text-4xl font-bold text-indigo-500 mb-2 block">+45%</span>
               <span className="text-sm text-foreground/40 font-medium">User Engagement</span>

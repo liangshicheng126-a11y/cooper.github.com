@@ -65,7 +65,7 @@ export default function Portfolio() {
         <header className="mb-16">
           <motion.h1
             variants={item}
-            className="text-6xl font-bold mb-6 tracking-tight"
+            className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 tracking-tight"
           >
             {t.portfolio.title}
           </motion.h1>
@@ -77,12 +77,12 @@ export default function Portfolio() {
           </motion.p>
         </header>
 
-        <div className="grid grid-cols-2 gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
           {projects.map((project) => (
             <Link
               key={project.id}
               href={`/portfolio/${project.id}`}
-              className="group relative h-[450px] rounded-3xl overflow-hidden glass border-white/10 cursor-pointer"
+              className="group relative h-[320px] sm:h-[380px] lg:h-[450px] rounded-3xl overflow-hidden glass border-white/10 cursor-pointer"
               onMouseEnter={() => setHoveredId(project.id)}
               onMouseLeave={() => setHoveredId(null)}
             >
@@ -105,7 +105,7 @@ export default function Portfolio() {
                     initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
                     animate={{ opacity: 1, backdropFilter: "blur(12px)" }}
                     exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
-                    className="absolute inset-0 p-12 flex flex-col justify-end bg-black/10 transition-all"
+                    className="absolute inset-0 p-6 sm:p-10 lg:p-12 flex flex-col justify-end bg-black/10 transition-all"
                   >
                     <motion.div
                       initial={{ y: 20, opacity: 0 }}
@@ -115,7 +115,7 @@ export default function Portfolio() {
                       <span className="text-white/60 text-sm font-medium mb-2 block">
                         {project.category}
                       </span>
-                      <h3 className="text-3xl font-bold text-white mb-6">
+                      <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6 leading-tight">
                         {project.title}
                       </h3>
                       <div className="inline-flex items-center space-x-3 text-white font-semibold group/btn">
@@ -145,9 +145,9 @@ export default function Portfolio() {
         {/* CTA Section */}
         <motion.section
           variants={item}
-          className="mt-32 p-16 rounded-[40px] glass border-white/10 flex flex-col items-center text-center"
+          className="mt-16 sm:mt-24 p-8 sm:p-12 lg:p-16 rounded-[40px] glass border-white/10 flex flex-col items-center text-center"
         >
-          <h2 className="text-4xl font-bold mb-8">{t.portfolio.ctaTitle}</h2>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 sm:mb-8">{t.portfolio.ctaTitle}</h2>
           <Link
             href="/about"
             className="px-10 py-5 bg-indigo-500 text-white rounded-2xl font-bold flex items-center space-x-3 hover:bg-indigo-600 transition-all hover:scale-105 shadow-xl shadow-indigo-500/20"
