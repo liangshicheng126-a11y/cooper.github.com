@@ -27,7 +27,7 @@ export default function About() {
   };
 
   return (
-    <div className={cn("max-w-4xl pb-24", !mounted && "opacity-0")}>
+    <div className={cn("max-w-4xl pb-8", !mounted && "opacity-0")}>
       <motion.div variants={container} initial="hidden" animate="show">
         <header className="mb-20">
           <motion.div variants={item} className="mb-4">

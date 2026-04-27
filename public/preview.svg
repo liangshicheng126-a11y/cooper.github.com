@@ -35,16 +35,16 @@
     COOPER.
   </text>
   <text x="120" y="260" fill="white" fill-opacity="0.82" font-size="34" font-family="Inter, ui-sans-serif, system-ui" font-weight="600">
-    �=0�u��
+    可落地的灵感设计
   </text>
   <text x="120" y="330" fill="white" fill-opacity="0.58" font-size="24" font-family="Inter, ui-sans-serif, system-ui" font-weight="500">
-    Designer Portfolio " UI/UX " Visual " Motion
+    Designer Portfolio • UI/UX • Visual • Motion
   </text>
 
   <g>
     <rect x="120" y="390" width="320" height="90" rx="22" fill="#4F46E5" fill-opacity="0.85"/>
     <text x="160" y="448" fill="white" font-size="24" font-family="Inter, ui-sans-serif, system-ui" font-weight="700">
-      �	\��� �
+      精选作品预览 →
     </text>
   </g>
 </svg>

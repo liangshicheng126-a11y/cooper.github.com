@@ -49,7 +49,7 @@ export default function ProjectDetailClient({ id }: Props) {
   };
 
   return (
-    <motion.div variants={container} initial="hidden" animate="show" className="max-w-5xl pb-24">
+    <motion.div variants={container} initial="hidden" animate="show" className="max-w-5xl pb-8">
       <motion.div variants={item} className="mb-12">
         <Link
           href="/portfolio"

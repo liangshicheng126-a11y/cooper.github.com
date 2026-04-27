@@ -60,7 +60,7 @@ export default function Portfolio() {
   };
 
   return (
-    <div className={cn("pb-24", !mounted && "opacity-0")}>
+    <div className={cn("pb-8", !mounted && "opacity-0")}>
       <motion.div variants={container} initial="hidden" animate="show">
         <header className="mb-16">
           <motion.h1

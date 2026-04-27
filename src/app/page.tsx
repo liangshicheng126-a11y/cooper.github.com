@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useTranslation } from "@/locales/LanguageProvider";
-import { ArrowRight, Briefcase, User, Mail, Sparkles, Zap, Figma, Palette, Video, PenTool, Layout, Monitor, ExternalLink } from "lucide-react";
+import { ArrowRight, Briefcase, User, Mail, Sparkles, Zap, Figma, Palette, Video, PenTool, Layout, ExternalLink, Image as ImageIcon, Scissors, Clapperboard, Film } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
@@ -26,7 +26,7 @@ export default function Home() {
 
   return (
     <div
-      className={cn("flex flex-col pb-24", !mounted && "opacity-0")}
+      className={cn("flex flex-col pb-8", !mounted && "opacity-0")}
     >
       <motion.div
         variants={container}
@@ -150,12 +150,12 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
             {[
-              { name: "Photoshop", icon: Palette, color: "#31A8FF" },
+              { name: "Photoshop", icon: ImageIcon, color: "#31A8FF" },
               { name: "Illustrator", icon: PenTool, color: "#FF9A00" },
               { name: "Figma", icon: Figma, color: "#F24E1E" },
-              { name: "After Effects", icon: Video, color: "#9999FF" },
-              { name: "CapCut", icon: Video, color: "#00C4CC" },
-              { name: "Premiere", icon: Video, color: "#9999FF" },
+              { name: "After Effects", icon: Clapperboard, color: "#9999FF" },
+              { name: "CapCut", icon: Scissors, color: "#00C4CC" },
+              { name: "Premiere", icon: Film, color: "#9999FF" },
             ].map((tool, i) => (
               <motion.div
                 key={i}
