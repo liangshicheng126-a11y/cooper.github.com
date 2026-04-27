@@ -70,7 +70,7 @@ export default function About() {
               <div
                 className="w-full h-full rounded-[30px] transition-transform duration-700 group-hover:scale-105"
                 style={{
-                  backgroundImage: `url(/profile.jpg)`,
+                  backgroundImage: `url(/profile.png)`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}

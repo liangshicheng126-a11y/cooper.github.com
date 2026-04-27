@@ -35,7 +35,7 @@ export default function Home() {
         className="flex flex-col flex-1"
       >
         {/* Hero Section */}
-        <section className="min-h-[70vh] flex flex-col justify-start pt-2 pb-12">
+        <section className="min-h-[70vh] flex flex-col justify-start pt-2 pb-6">
           <motion.div 
             variants={item}
             className="mb-8 inline-flex items-center space-x-3 px-4 py-1.5 rounded-full glass border-white/10 text-indigo-500 text-sm font-medium w-fit"
@@ -175,7 +175,7 @@ export default function Home() {
         </motion.section>
 
         {/* Workflow Section */}
-        <motion.section variants={item} className="mt-8 mb-8 section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
+        <motion.section variants={item} className="mb-8 section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
           <div className="flex items-center space-x-4 mb-12">
             <h2 className="text-2xl font-bold">{t.hero.workflow.title}</h2>
             <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />
