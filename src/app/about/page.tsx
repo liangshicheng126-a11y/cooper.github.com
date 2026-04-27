@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useTranslation } from "@/locales/LanguageProvider";
-import { Github, Twitter, Mail, Award, Rocket, Zap, ArrowRight, Heart, Coffee } from "lucide-react";
+import { Zap, ArrowRight, Coffee } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 

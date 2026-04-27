@@ -1,15 +1,13 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useTranslation } from "@/locales/LanguageProvider";
 import { ArrowUpRight, ArrowRight } from "lucide-react";
-import { useState } from "react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 export default function Portfolio() {
   const { t, mounted } = useTranslation();
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   if (!mounted) return null;
 
@@ -92,59 +90,39 @@ export default function Portfolio() {
               key={project.id}
               href={`/portfolio/${project.id}`}
               className="group relative h-[320px] sm:h-[380px] lg:h-[450px] rounded-3xl overflow-hidden glass border-white/10 cursor-pointer"
-              onMouseEnter={() => setHoveredId(project.id)}
-              onMouseLeave={() => setHoveredId(null)}
             >
               {/* Project Image */}
               <div
-                className="absolute inset-0 transition-transform duration-700 group-hover:scale-110"
+                className="absolute inset-0 transition-transform duration-500 group-hover:scale-105"
                 style={{
                   backgroundImage: `url(${project.image})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}
               >
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors" />
+                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/45 transition-colors" />
               </div>
 
-              {/* Liquid Glass Overlay on Hover */}
-              <AnimatePresence>
-                {hoveredId === project.id && (
-                  <motion.div
-                    initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
-                    animate={{ opacity: 1, backdropFilter: "blur(12px)" }}
-                    exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
-                    className="absolute inset-0 p-6 sm:p-10 lg:p-12 flex flex-col justify-end bg-black/10 transition-all"
-                  >
-                    <motion.div
-                      initial={{ y: 20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.1 }}
-                    >
-                      <span className="text-white/60 text-sm font-medium mb-2 block">
-                        {project.category}
-                      </span>
-                      <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6 leading-tight">
-                        {project.title}
-                      </h3>
-                      <div className="inline-flex items-center space-x-3 text-white font-semibold group/btn">
-                        <span>{t.portfolio.viewProject}</span>
-                        <div className="p-3 rounded-full bg-white/20 group-hover/btn:bg-white group-hover/btn:text-black transition-all">
-                          <ArrowUpRight className="w-5 h-5" />
-                        </div>
-                      </div>
-                    </motion.div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {/* Lightweight Hover Overlay */}
+              <div className="absolute inset-0 p-6 sm:p-10 lg:p-12 flex flex-col justify-end bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                  <span className="text-white/60 text-sm font-medium mb-2 block">
+                    {project.category}
+                  </span>
+                  <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6 leading-tight">
+                    {project.title}
+                  </h3>
+                  <div className="inline-flex items-center space-x-3 text-white font-semibold group/btn">
+                    <span>{t.portfolio.viewProject}</span>
+                    <div className="p-3 rounded-full bg-white/20 group-hover/btn:bg-white group-hover/btn:text-black transition-all">
+                      <ArrowUpRight className="w-5 h-5" />
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               {/* Default Overlay (visible when not hovered) */}
-              <div
-                className={cn(
-                  "absolute top-8 right-8 p-3 rounded-full glass border-white/20 text-white transition-opacity duration-300",
-                  hoveredId === project.id ? "opacity-0" : "opacity-100"
-                )}
-              >
+              <div className="absolute top-8 right-8 p-3 rounded-full glass border-white/20 text-white transition-opacity duration-300 opacity-100 group-hover:opacity-0">
                 <ArrowUpRight className="w-5 h-5" />
               </div>
             </Link>

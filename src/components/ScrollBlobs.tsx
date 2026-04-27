@@ -7,7 +7,7 @@ export default function ScrollBlobs() {
     <div className="liquid-bg pointer-events-none">
       <motion.div
         aria-hidden
-        className="blob blob-indigo"
+        className="blob blob-indigo hidden md:block"
         animate={{
           x: [0, 36, -28, 18, -14, 0],
           y: [0, -26, 22, -18, 10, 0],
@@ -27,7 +27,7 @@ export default function ScrollBlobs() {
       </motion.div>
       <motion.div
         aria-hidden
-        className="blob blob-cyan"
+        className="blob blob-cyan hidden md:block"
         animate={{
           x: [0, -34, 24, -18, 12, 0],
           y: [0, 22, -28, 14, -10, 0],
@@ -52,7 +52,7 @@ export default function ScrollBlobs() {
       </motion.div>
       <motion.div
         aria-hidden
-        className="blob blob-rose"
+        className="blob blob-rose hidden lg:block"
         animate={{
           x: [0, 28, -30, 20, -12, 0],
           y: [0, -20, 24, -16, 12, 0],
