@@ -9,6 +9,11 @@ import ScrollBlobs from "@/components/ScrollBlobs";
 
 const inter = Inter({ subsets: ["latin"] });
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://liangshicheng126-a11y.github.io"),
   title: "Designer Portfolio",
@@ -41,7 +46,7 @@ export default function RootLayout({
           <div className="flex min-h-screen">
             <Sidebar />
             <LanguageToggle />
-            <main className="flex-1 ml-0 lg:ml-80 p-6 sm:p-8 lg:p-12 pr-6 sm:pr-10 lg:pr-24 pt-24 lg:pt-12 relative z-10">
+            <main className="flex-1 ml-0 xl:ml-80 p-6 sm:p-8 xl:p-12 pr-6 sm:pr-10 xl:pr-24 pt-24 xl:pt-12 relative z-10">
               <PageTransition>
                 {children}
               </PageTransition>

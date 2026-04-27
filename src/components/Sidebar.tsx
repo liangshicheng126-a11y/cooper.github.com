@@ -41,7 +41,7 @@ const Sidebar = () => {
   return (
     <>
       {/* Mobile Top Bar */}
-      <div className="fixed left-4 right-4 top-4 z-50 lg:hidden">
+      <div className="fixed left-4 right-4 top-4 z-50 xl:hidden">
         <div className="glass rounded-2xl border-white/10 px-4 py-3 flex items-center justify-between">
           <Link href="/" className="flex items-center" onClick={() => setMobileOpen(false)}>
             <span className="text-lg font-bold bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent tracking-wider">
@@ -63,7 +63,7 @@ const Sidebar = () => {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            className="fixed inset-0 z-[55] lg:hidden"
+            className="fixed inset-0 z-[55] xl:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -146,7 +146,7 @@ const Sidebar = () => {
       </AnimatePresence>
 
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex fixed left-6 top-6 bottom-6 w-64 glass rounded-3xl z-50 flex-col p-8 transition-all duration-500 hover:shadow-2xl hover:shadow-indigo-500/10">
+      <aside className="hidden xl:flex fixed left-6 top-6 bottom-6 w-64 glass rounded-3xl z-50 flex-col p-8 transition-all duration-500 hover:shadow-2xl hover:shadow-indigo-500/10">
         {/* Logo */}
         <div className="mb-12">
           <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent tracking-wider">
