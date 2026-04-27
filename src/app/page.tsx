@@ -93,6 +93,7 @@ export default function Home() {
 
         {/* Services / Focus Section */}
         <motion.section 
+          id="services-block"
           variants={item}
           className="mb-8 section-block rounded-[40px] p-6 sm:p-8 lg:p-10"
         >
@@ -142,7 +143,7 @@ export default function Home() {
         </motion.section>
 
         {/* Tools / Skills Section */}
-        <motion.section variants={item} className="mb-8 section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
+        <motion.section id="featured-block" variants={item} className="mb-8 section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-6">
             <h2 className="text-2xl font-bold">{t.hero.tools.title}</h2>
             <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />

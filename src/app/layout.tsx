@@ -5,7 +5,7 @@ import { LanguageProvider } from "@/locales/LanguageProvider";
 import Sidebar from "@/components/Sidebar";
 import LanguageToggle from "@/components/LanguageToggle";
 import PageTransition from "@/components/PageTransition";
-import ScrollBlobs from "@/components/ScrollBlobs";
+import SnowParallaxBackground from "@/components/SnowParallaxBackground";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -40,7 +40,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
         <LanguageProvider>
-          <ScrollBlobs />
+          <SnowParallaxBackground />
 
           {/* Layout Structure */}
           <div className="flex min-h-screen">
