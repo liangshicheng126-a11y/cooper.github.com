@@ -17,7 +17,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // Project Pages needs a repository prefix, e.g. /cooper.github.com
+  // Project Pages needs a repository prefix, e.g. /<repository-name>
   basePath: pagesBasePath,
   assetPrefix: pagesBasePath ? `${pagesBasePath}/` : undefined,
 };

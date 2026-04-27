@@ -8,6 +8,11 @@ import PageTransition from "@/components/PageTransition";
 import ScrollBlobs from "@/components/ScrollBlobs";
 
 const inter = Inter({ subsets: ["latin"] });
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.GITHUB_REPOSITORY_OWNER
+    ? `https://${process.env.GITHUB_REPOSITORY_OWNER}.github.io`
+    : "http://localhost:3000");
 
 export const viewport = {
   width: "device-width",
@@ -15,9 +20,7 @@ export const viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://liangshicheng126-a11y.github.io"
-  ),
+  metadataBase: new URL(siteUrl),
   title: "Designer Portfolio",
   description: "Independent Designer / Visual Developer Portfolio",
   openGraph: {
