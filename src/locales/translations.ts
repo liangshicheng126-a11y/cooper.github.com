@@ -51,7 +51,24 @@ export const translations = {
         "围棋业余三段"
       ],
       hobbiesTitle: "爱好",
-      hobbiesDesc: "徒步 / 滑雪 / 攀冰 / 越野跑 / 潜水 / 篮球 / 羽毛球 / 钢琴 / 摄影 / 围棋",
+      hobbiesGroups: [
+        {
+          title: "户外探索",
+          items: ["徒步", "滑雪", "攀冰", "越野跑", "潜水"]
+        },
+        {
+          title: "运动竞技",
+          items: ["篮球", "羽毛球"]
+        },
+        {
+          title: "艺术表达",
+          items: ["钢琴", "摄影"]
+        },
+        {
+          title: "思维博弈",
+          items: ["围棋"]
+        }
+      ],
       philosophy: "我不仅是'做设计的人'，更是'从极限体验和自然之美中汲取灵感，并用专业技能将其表达出来'的创作者。",
       experience: "年经验",
       basedIn: "现居",
@@ -148,7 +165,24 @@ export const translations = {
         "Go (Weiqi) Amateur 3-Dan"
       ],
       hobbiesTitle: "Hobbies",
-      hobbiesDesc: "Hiking / Skiing / Ice Climbing / Trail Running / Diving / Basketball / Badminton / Piano / Photography / Go",
+      hobbiesGroups: [
+        {
+          title: "Outdoor Exploration",
+          items: ["Hiking", "Skiing", "Ice Climbing", "Trail Running", "Diving"]
+        },
+        {
+          title: "Competitive Sports",
+          items: ["Basketball", "Badminton"]
+        },
+        {
+          title: "Artistic Expression",
+          items: ["Piano", "Photography"]
+        },
+        {
+          title: "Strategic Games",
+          items: ["Go"]
+        }
+      ],
       philosophy: "I am not just a 'designer', but a creator who 'draws inspiration from extreme experiences and natural beauty, expressing it through professional skills'.",
       experience: "Years Exp.",
       basedIn: "Based in",

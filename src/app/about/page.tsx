@@ -136,10 +136,21 @@ export default function About() {
               <span>{t.about.hobbiesTitle}</span>
             </motion.h2>
 
-            <div className="glass p-8 rounded-[30px] border-white/5">
-              <p className="text-lg text-foreground/60 leading-loose">
-                {t.about.hobbiesDesc}
-              </p>
+            <div className="space-y-6">
+              {t.about.hobbiesGroups.map((group, index) => (
+                <div
+                  key={index}
+                  className="glass p-5 rounded-2xl border-white/5 hover:border-purple-500/20 transition-all"
+                >
+                  <div className="flex items-center space-x-3 mb-3">
+                    <div className="w-2 h-2 rounded-full bg-purple-500" />
+                    <h3 className="text-base font-semibold text-foreground/90">{group.title}</h3>
+                  </div>
+                  <p className="text-base text-foreground/60 leading-relaxed">
+                    {group.items.join(" / ")}
+                  </p>
+                </div>
+              ))}
             </div>
           </section>
         </div>
