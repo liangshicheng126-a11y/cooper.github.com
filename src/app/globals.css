@@ -190,9 +190,3 @@ body {
   100% { border-radius: 53% 47% 46% 54% / 40% 55% 45% 60%; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .blob {
-    animation: none;
-    transform: none !important;
-  }
-}
