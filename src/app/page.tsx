@@ -24,6 +24,21 @@ export default function Home() {
     show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
   };
 
+  const heroMask = {
+    hidden: { opacity: 0, y: 36, clipPath: "inset(0 0 100% 0)" },
+    show: {
+      opacity: 1,
+      y: 0,
+      clipPath: "inset(0 0 0% 0)",
+      transition: { duration: 1.1, ease: [0.22, 1, 0.36, 1] },
+    },
+  };
+
+  const heroSoft = {
+    hidden: { opacity: 0, y: 18 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.2 } },
+  };
+
   return (
     <div
       className={cn("flex flex-col pb-8", !mounted && "opacity-0")}
@@ -37,7 +52,7 @@ export default function Home() {
         {/* Hero Section */}
         <section className="min-h-[48vh] lg:min-h-[58vh] flex flex-col justify-start pt-2 pb-0">
           <motion.div 
-            variants={item}
+            variants={heroSoft}
             className="mb-8 inline-flex items-center space-x-3 px-4 py-1.5 rounded-full glass border-white/10 text-indigo-500 text-sm font-medium w-fit max-w-full"
           >
             <span className="relative flex h-2 w-2">
@@ -47,21 +62,22 @@ export default function Home() {
             <span className="whitespace-normal break-words leading-snug">{t.hero.status}</span>
           </motion.div>
 
-          <motion.h1 
-            variants={item}
-            className="text-5xl sm:text-6xl lg:text-8xl font-bold tracking-tight mb-6 sm:mb-8 max-w-5xl leading-[1.1]"
-          >
-            {t.hero.title}
-          </motion.h1>
+          <motion.div variants={heroMask} className="overflow-hidden mb-6 sm:mb-8">
+            <motion.h1 
+              className="text-5xl sm:text-6xl lg:text-8xl font-bold tracking-tight max-w-5xl leading-[1.1]"
+            >
+              {t.hero.title}
+            </motion.h1>
+          </motion.div>
 
           <motion.p 
-            variants={item}
+            variants={heroSoft}
             className="text-lg sm:text-xl lg:text-2xl text-foreground/60 mb-8 sm:mb-12 max-w-3xl leading-relaxed font-light"
           >
             {t.hero.description}
           </motion.p>
 
-          <motion.div variants={item} className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-0 sm:space-x-6">
+          <motion.div variants={heroSoft} className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-0 sm:space-x-6">
             <Link
               href="/portfolio"
               className="px-8 sm:px-10 py-4 sm:py-5 bg-indigo-600 text-white rounded-2xl font-bold flex items-center justify-center space-x-3 hover:bg-indigo-700 transition-all hover:scale-105 shadow-xl shadow-indigo-500/20"
@@ -88,6 +104,21 @@ export default function Home() {
                 <p className="text-sm font-medium text-foreground/80">{t.hero.latestProject}</p>
               </div>
             </motion.div>
+          </motion.div>
+
+          <motion.div
+            variants={heroSoft}
+            className="mt-8 sm:mt-10 text-foreground/45 text-xs uppercase tracking-[0.24em] font-semibold flex items-center gap-3"
+          >
+            <span>Scroll down</span>
+            <motion.span
+              aria-hidden
+              animate={{ y: [0, 6, 0], opacity: [0.4, 1, 0.4] }}
+              transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+              className="inline-block"
+            >
+              ↓
+            </motion.span>
           </motion.div>
         </section>
 
