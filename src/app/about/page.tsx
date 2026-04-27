@@ -107,13 +107,13 @@ export default function About() {
 
             <div className="space-y-6">
               {t.about.skillDetails.map((skill, index) => (
-                <TiltCard 
+                <div 
                   key={index} 
                   className="flex items-center space-x-4 glass p-4 rounded-2xl border-white/5 hover:border-indigo-500/20 transition-all"
                 >
                   <div className="w-2 h-2 rounded-full bg-indigo-500" />
                   <span className="text-lg font-medium">{skill}</span>
-                </TiltCard>
+                </div>
               ))}
             </div>
           </section>
@@ -128,11 +128,11 @@ export default function About() {
               <span>{t.about.hobbiesTitle}</span>
             </motion.h2>
 
-            <TiltCard className="glass p-8 rounded-[30px] border-white/5">
+            <div className="glass p-8 rounded-[30px] border-white/5">
               <p className="text-lg text-foreground/60 leading-loose">
                 {t.about.hobbiesDesc}
               </p>
-            </TiltCard>
+            </div>
           </section>
         </div>
 

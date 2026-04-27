@@ -33,10 +33,10 @@ export default function Home() {
         variants={container}
         initial="hidden"
         animate="show"
-        className="flex flex-col flex-1"
+        className="flex flex-col flex-1 space-y-8"
       >
         {/* Hero Section */}
-        <section className="min-h-[70vh] flex flex-col justify-start pt-2 pb-6">
+        <section className="min-h-[58vh] lg:min-h-[70vh] flex flex-col justify-start pt-2 pb-2">
           <motion.div 
             variants={item}
             className="mb-8 inline-flex items-center space-x-3 px-4 py-1.5 rounded-full glass border-white/10 text-indigo-500 text-sm font-medium w-fit max-w-full"
@@ -96,7 +96,7 @@ export default function Home() {
         <motion.section 
           id="services-block"
           variants={item}
-          className="mb-8 section-block rounded-[40px] p-6 sm:p-8 lg:p-10"
+          className="section-block rounded-[40px] p-6 sm:p-8 lg:p-10"
         >
           <div className="flex items-center space-x-4 mb-6">
             <h2 className="text-2xl font-bold">{t.hero.servicesTitle}</h2>
@@ -109,13 +109,13 @@ export default function Home() {
               const Icon = icons[i] || Sparkles;
               
               return (
-                <TiltCard key={i} className="glass p-8 rounded-[40px] border-white/5 hover:border-indigo-500/20 transition-all group flex flex-col items-center text-center">
+                <div key={i} className="glass p-8 rounded-[40px] border-white/5 hover:border-indigo-500/20 transition-all group flex flex-col items-center text-center">
                   <div className="w-16 h-16 rounded-2xl bg-indigo-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                     <Icon className="w-8 h-8 text-indigo-500" />
                   </div>
                   <h3 className="text-2xl font-bold mb-4">{service.title}</h3>
                   <p className="text-foreground/50 leading-relaxed text-sm">{service.desc}</p>
-                </TiltCard>
+                </div>
               );
             })}
           </div>
@@ -124,7 +124,7 @@ export default function Home() {
         {/* Stats Section */}
         <motion.section
           variants={item}
-          className="mb-8 section-block rounded-[40px] p-6 sm:p-8 lg:p-10"
+          className="section-block rounded-[40px] p-6 sm:p-8 lg:p-10"
         >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
           {[
@@ -132,19 +132,19 @@ export default function Home() {
             { icon: User, label: t.contact.happyClients, value: "30+" },
             { icon: Mail, label: t.contact.activeSupport, value: "24/7" },
           ].map((stat, i) => (
-            <TiltCard key={i} className="glass p-8 rounded-[40px] border-white/5 group hover:border-indigo-500/30 transition-all flex flex-col items-center text-center">
+            <div key={i} className="glass p-8 rounded-[40px] border-white/5 group hover:border-indigo-500/30 transition-all flex flex-col items-center text-center">
               <div className="p-4 rounded-3xl bg-white/5 mb-6 group-hover:bg-indigo-500/10 transition-colors">
                 <stat.icon className="w-8 h-8 text-indigo-500" />
               </div>
               <h3 className="text-5xl font-bold mb-3 tabular-nums">{stat.value}</h3>
               <p className="text-foreground/40 font-bold uppercase tracking-widest text-xs">{stat.label}</p>
-            </TiltCard>
+            </div>
           ))}
           </div>
         </motion.section>
 
         {/* Tools / Skills Section */}
-        <motion.section id="featured-block" variants={item} className="mb-8 section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
+        <motion.section id="featured-block" variants={item} className="section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-6">
             <h2 className="text-2xl font-bold">{t.hero.tools.title}</h2>
             <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />
@@ -159,7 +159,7 @@ export default function Home() {
               { name: "CapCut", icon: Scissors, color: "#00C4CC" },
               { name: "Premiere", icon: Film, color: "#9999FF" },
             ].map((tool, i) => (
-              <TiltCard
+              <div
                 key={i}
                 className="glass p-6 rounded-3xl border-white/5 hover:border-white/20 transition-all flex flex-col items-center text-center group"
               >
@@ -170,13 +170,13 @@ export default function Home() {
                   <tool.icon className="w-7 h-7" style={{ color: tool.color }} />
                 </div>
                 <p className="text-sm font-medium text-foreground/70">{tool.name}</p>
-              </TiltCard>
+              </div>
             ))}
           </div>
         </motion.section>
 
         {/* Workflow Section */}
-        <motion.section variants={item} className="mb-8 section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
+        <motion.section variants={item} className="section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-12">
             <h2 className="text-2xl font-bold">{t.hero.workflow.title}</h2>
             <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />
@@ -184,19 +184,19 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {t.hero.workflow.steps.map((wf: any, i: number) => (
-              <TiltCard key={i} className="glass p-8 rounded-[40px] border-white/5 hover:border-indigo-500/20 transition-all relative group">
+              <div key={i} className="glass p-8 rounded-[40px] border-white/5 hover:border-indigo-500/20 transition-all relative group">
                 <div className="absolute top-6 right-6 text-6xl font-bold text-indigo-500/10 group-hover:text-indigo-500/20 transition-colors">
                   0{i + 1}
                 </div>
                 <h3 className="text-xl font-bold mb-4">{wf.title}</h3>
                 <p className="text-foreground/50 text-sm leading-relaxed">{wf.desc}</p>
-              </TiltCard>
+              </div>
             ))}
           </div>
         </motion.section>
 
         {/* Featured Work Preview Section */}
-        <motion.section variants={item} className="mb-8 section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
+        <motion.section variants={item} className="section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-8">
             <div className="flex items-center space-x-4 min-w-0">
               <h2 className="text-2xl font-bold">{t.hero.featuredTitle}</h2>

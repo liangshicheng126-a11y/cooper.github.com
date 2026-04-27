@@ -48,7 +48,6 @@ export const translations = {
         "品牌视觉系统 (PS/AI)",
         "UI/UX 设计 (Figma)",
         "动态视频包装 (AE/剪映)",
-        "IELTS 7.0 / TOPIK Level 3",
         "围棋业余三段"
       ],
       hobbiesTitle: "爱好",
@@ -146,7 +145,6 @@ export const translations = {
         "Brand Visual Identity (PS/AI)",
         "UI/UX Design (Figma)",
         "Motion Graphics (AE/CapCut)",
-        "IELTS 7.0 / TOPIK Level 3",
         "Go (Weiqi) Amateur 3-Dan"
       ],
       hobbiesTitle: "Hobbies",
