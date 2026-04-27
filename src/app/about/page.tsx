@@ -5,7 +5,6 @@ import { useTranslation } from "@/locales/LanguageProvider";
 import { Github, Twitter, Mail, Award, Rocket, Zap, ArrowRight, Heart, Coffee } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import TiltCard from "@/components/TiltCard";
 
 export default function About() {
   const { t, mounted } = useTranslation();
@@ -64,7 +63,7 @@ export default function About() {
               </div>
             </motion.div>
 
-            <TiltCard className="relative aspect-square rounded-[40px] overflow-hidden glass p-4 border-white/10 group">
+            <div className="relative aspect-square rounded-[40px] overflow-hidden glass p-4 border-white/10 group">
               <div
                 className="w-full h-full rounded-[30px] transition-transform duration-700 group-hover:scale-105"
                 style={{
@@ -83,7 +82,7 @@ export default function About() {
                   {t.about.experience}
                 </span>
               </div>
-            </TiltCard>
+            </div>
           </div>
         </header>
 

@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { useTranslation } from "@/locales/LanguageProvider";
 import { ArrowLeft, Calendar, User, Layout, Target, Lightbulb, CheckCircle } from "lucide-react";
 import Link from "next/link";
-import TiltCard from "@/components/TiltCard";
 
 type Props = {
   id: string;
@@ -82,17 +81,17 @@ export default function ProjectDetailClient({ id }: Props) {
       </motion.div>
 
       <motion.div variants={item} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-16 lg:mb-24">
-        <TiltCard className="glass p-8 rounded-3xl border-white/5">
+        <div className="glass p-8 rounded-3xl border-white/5">
           <User className="w-6 h-6 text-indigo-500 mb-4" />
           <h4 className="text-xs uppercase font-bold text-foreground/40 tracking-widest mb-2">{t.portfolio.projectDetail.role}</h4>
           <p className="text-lg font-bold">{project.role}</p>
-        </TiltCard>
-        <TiltCard className="glass p-8 rounded-3xl border-white/5">
+        </div>
+        <div className="glass p-8 rounded-3xl border-white/5">
           <Calendar className="w-6 h-6 text-indigo-500 mb-4" />
           <h4 className="text-xs uppercase font-bold text-foreground/40 tracking-widest mb-2">{t.portfolio.projectDetail.date}</h4>
           <p className="text-lg font-bold">{project.date}</p>
-        </TiltCard>
-        <TiltCard className="glass p-8 rounded-3xl border-white/5">
+        </div>
+        <div className="glass p-8 rounded-3xl border-white/5">
           <Layout className="w-6 h-6 text-indigo-500 mb-4" />
           <h4 className="text-xs uppercase font-bold text-foreground/40 tracking-widest mb-2">Category</h4>
           <p className="text-lg font-bold">
@@ -104,7 +103,7 @@ export default function ProjectDetailClient({ id }: Props) {
                   ? t.portfolio.categories.photography
                   : t.portfolio.categories.video}
           </p>
-        </TiltCard>
+        </div>
       </motion.div>
 
       <div className="space-y-16 lg:space-y-24">
@@ -118,11 +117,11 @@ export default function ProjectDetailClient({ id }: Props) {
               在本项目中，我们面临的主要挑战是如何在保持品牌传统基因的同时，通过现代的设计语言吸引更年轻的受众。这不仅需要视觉上的革新，更需要对用户交互心理的深度洞察。
             </p>
           </div>
-          <TiltCard className="glass rounded-[30px] p-2 border-white/10 aspect-video overflow-hidden">
+          <div className="glass rounded-[30px] p-2 border-white/10 aspect-video overflow-hidden">
             <div className="w-full h-full rounded-[20px] bg-indigo-500/5 flex items-center justify-center italic text-foreground/40 text-sm">
               Project Image 2
             </div>
-          </TiltCard>
+          </div>
         </motion.section>
 
         <motion.section variants={item} className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-16 flex-row-reverse">
@@ -135,11 +134,11 @@ export default function ProjectDetailClient({ id }: Props) {
               我们提出了一套基于“液态玻璃”美学的交互方案，利用动态模糊和半透明层级感，营造出深邃且直观的视觉深度。这种方案成功地平衡了艺术性与易用性。
             </p>
           </div>
-          <TiltCard className="glass rounded-[30px] p-2 border-white/10 aspect-video overflow-hidden md:order-1">
+          <div className="glass rounded-[30px] p-2 border-white/10 aspect-video overflow-hidden md:order-1">
             <div className="w-full h-full rounded-[20px] bg-purple-500/5 flex items-center justify-center italic text-foreground/40 text-sm">
               Project Image 3
             </div>
-          </TiltCard>
+          </div>
         </motion.section>
 
         <motion.section variants={item} className="text-center max-w-3xl mx-auto">
