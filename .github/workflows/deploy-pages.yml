@@ -37,6 +37,7 @@ jobs:
         run: npm run build
         env:
           GITHUB_ACTIONS: true
+          NEXT_PUBLIC_SITE_URL: https://cooperliang.cn
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
