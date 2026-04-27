@@ -22,11 +22,33 @@ export default function ScrollBlobs() {
       <motion.div
         aria-hidden
         className="blob"
+        animate={{
+          x: [0, 14, -10, 8, 0],
+          y: [0, -12, 10, -8, 0],
+          rotate: [0, 8, -6, 5, 0],
+        }}
+        transition={{
+          duration: 23,
+          repeat: Infinity,
+          ease: "easeInOut",
+          repeatType: "mirror",
+        }}
         style={{ top: blob1Y, left: blob1X, scale: blob1Scale }}
       />
       <motion.div
         aria-hidden
         className="blob"
+        animate={{
+          x: [0, -16, 11, -7, 0],
+          y: [0, 10, -14, 6, 0],
+          rotate: [0, -10, 7, -5, 0],
+        }}
+        transition={{
+          duration: 27,
+          repeat: Infinity,
+          ease: "easeInOut",
+          repeatType: "mirror",
+        }}
         style={{
           top: blob2Y,
           left: blob2X,
@@ -38,6 +60,17 @@ export default function ScrollBlobs() {
       <motion.div
         aria-hidden
         className="blob"
+        animate={{
+          x: [0, 12, -15, 9, 0],
+          y: [0, -9, 13, -11, 0],
+          rotate: [0, 6, -9, 4, 0],
+        }}
+        transition={{
+          duration: 31,
+          repeat: Infinity,
+          ease: "easeInOut",
+          repeatType: "mirror",
+        }}
         style={{
           top: blob3Y,
           left: blob3X,
