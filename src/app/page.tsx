@@ -50,7 +50,7 @@ export default function Home() {
         className="flex flex-col flex-1 space-y-6"
       >
         {/* Hero Section */}
-        <section className="min-h-[48vh] lg:min-h-[58vh] flex flex-col justify-start pt-2 pb-0">
+        <section className="min-h-[36vh] lg:min-h-[44vh] flex flex-col justify-start pt-2 pb-0">
           <motion.div 
             variants={heroSoft}
             className="mb-8 inline-flex items-center space-x-3 px-4 py-1.5 rounded-full glass border-white/10 text-indigo-500 text-sm font-medium w-fit max-w-full"
