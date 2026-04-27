@@ -8,7 +8,7 @@ export const translations = {
     },
     hero: {
       status: "为可落地的灵感设计",
-      title: "创造美学与功能的交汇",
+      title: "为需求而创造",
       subtitle: "独立设计师 / 视觉开发者 / 创意探索者",
       description: "从自然之美与极限体验中汲取灵感，用设计语言构建独特的视觉叙事。",
       servicesTitle: "专业服务",
