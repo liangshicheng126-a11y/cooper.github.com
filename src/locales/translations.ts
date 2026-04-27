@@ -49,7 +49,6 @@ export const translations = {
         "UI/UX 设计 (Figma)",
         "动态视频包装 (AE/剪映)",
         "摄影与视觉叙事",
-        "品牌提案与设计呈现",
         "项目统筹与跨团队协作",
         "围棋业余三段"
       ],
@@ -166,7 +165,6 @@ export const translations = {
         "UI/UX Design (Figma)",
         "Motion Graphics (AE/CapCut)",
         "Photography & Visual Storytelling",
-        "Brand Pitching & Design Presentation",
         "Project Planning & Cross-team Collaboration",
         "Go (Weiqi) Amateur 3-Dan"
       ],
