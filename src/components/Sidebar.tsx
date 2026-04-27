@@ -22,6 +22,8 @@ const Sidebar = () => {
   const { language, setLanguage, t, mounted } = useTranslation();
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+  const homeHref = basePath ? `${basePath}/` : "/";
 
   // Prevents hydration mismatch by ensuring the initial render matches the server
   const currentLanguageLabel = !mounted ? "English" : (language === "zh" ? "English" : "中文");
@@ -41,7 +43,7 @@ const Sidebar = () => {
       {/* Mobile Top Bar */}
       <div className="fixed left-4 right-4 top-4 z-50 xl:hidden">
         <div className="glass rounded-2xl border-white/10 px-4 py-3 flex items-center justify-between">
-          <Link href="/" className="flex items-center" onClick={() => setMobileOpen(false)}>
+          <Link href={homeHref} className="flex items-center" onClick={() => setMobileOpen(false)}>
             <span className="text-lg font-bold bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent tracking-wider">
               COOPER.
             </span>
@@ -96,11 +98,11 @@ const Sidebar = () => {
                 {navItems.map((item) => (
                   <Link
                     key={item.href}
-                    href={item.href}
+                    href={item.href === "/" ? homeHref : item.href}
                     onClick={() => setMobileOpen(false)}
                     className={cn(
                       "flex items-center space-x-4 p-4 rounded-2xl transition-all duration-300 group w-full",
-                      pathname === item.href
+              (item.href === "/" ? pathname === "/" : pathname === item.href)
                         ? "bg-white/10 text-indigo-500 shadow-sm"
                         : "text-foreground/70 hover:text-foreground hover:bg-white/5"
                     )}
@@ -157,10 +159,10 @@ const Sidebar = () => {
         {navItems.map((item) => (
           <Link
             key={item.href}
-            href={item.href}
+            href={item.href === "/" ? homeHref : item.href}
             className={cn(
               "flex items-center space-x-4 p-3 rounded-xl transition-all duration-300 group w-full",
-              pathname === item.href 
+              (item.href === "/" ? pathname === "/" : pathname === item.href) 
                 ? "bg-white/10 text-indigo-500 shadow-sm" 
                 : "text-foreground/60 hover:text-foreground hover:bg-white/5"
             )}
@@ -168,7 +170,7 @@ const Sidebar = () => {
             <div className="w-5 flex justify-center">
               <item.icon className={cn(
                 "w-5 h-5 transition-transform duration-300 group-hover:scale-110 shrink-0",
-                pathname === item.href ? "text-indigo-500" : "text-foreground/40 group-hover:text-indigo-400"
+                (item.href === "/" ? pathname === "/" : pathname === item.href) ? "text-indigo-500" : "text-foreground/40 group-hover:text-indigo-400"
               )} />
             </div>
             <span className="font-medium truncate transition-all duration-300">{item.name}</span>
