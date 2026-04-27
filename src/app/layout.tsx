@@ -9,8 +9,20 @@ import PageTransition from "@/components/PageTransition";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://liangshicheng126-a11y.github.io"),
   title: "Designer Portfolio",
   description: "Independent Designer / Visual Developer Portfolio",
+  openGraph: {
+    title: "Designer Portfolio",
+    description: "Independent Designer / Visual Developer Portfolio",
+    images: ["/preview.svg"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Designer Portfolio",
+    description: "Independent Designer / Visual Developer Portfolio",
+    images: ["/preview.svg"],
+  },
 };
 
 export default function RootLayout({

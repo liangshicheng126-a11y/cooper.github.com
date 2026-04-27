@@ -1,0 +1,50 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B1220"/>
+      <stop offset="1" stop-color="#0A0F1A"/>
+    </linearGradient>
+    <radialGradient id="blob1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(220 150) rotate(30) scale(420 320)">
+      <stop stop-color="#6366F1" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#6366F1" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="blob2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(980 220) rotate(-10) scale(460 340)">
+      <stop stop-color="#22D3EE" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#22D3EE" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="blob3" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(620 540) rotate(12) scale(520 360)">
+      <stop stop-color="#FB7185" stop-opacity="0.38"/>
+      <stop offset="1" stop-color="#FB7185" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blur" x="-80" y="-80" width="1360" height="790" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="26"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <g filter="url(#blur)">
+    <ellipse cx="220" cy="150" rx="360" ry="260" fill="url(#blob1)"/>
+    <ellipse cx="980" cy="220" rx="380" ry="280" fill="url(#blob2)"/>
+    <ellipse cx="620" cy="540" rx="440" ry="300" fill="url(#blob3)"/>
+  </g>
+
+  <rect x="74" y="86" width="1052" height="458" rx="40" fill="white" fill-opacity="0.04" stroke="white" stroke-opacity="0.10"/>
+
+  <text x="120" y="190" fill="white" font-size="56" font-family="Inter, ui-sans-serif, system-ui" font-weight="800" letter-spacing="2">
+    COOPER.
+  </text>
+  <text x="120" y="260" fill="white" fill-opacity="0.82" font-size="34" font-family="Inter, ui-sans-serif, system-ui" font-weight="600">
+    ï=0„u¾¡
+  </text>
+  <text x="120" y="330" fill="white" fill-opacity="0.58" font-size="24" font-family="Inter, ui-sans-serif, system-ui" font-weight="500">
+    Designer Portfolio " UI/UX " Visual " Motion
+  </text>
+
+  <g>
+    <rect x="120" y="390" width="320" height="90" rx="22" fill="#4F46E5" fill-opacity="0.85"/>
+    <text x="160" y="448" fill="white" font-size="24" font-family="Inter, ui-sans-serif, system-ui" font-weight="700">
+      ¾	\Á„È ’
+    </text>
+  </g>
+</svg>
