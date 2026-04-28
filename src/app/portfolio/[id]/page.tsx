@@ -52,61 +52,42 @@ async function getPhotographyGroups(): Promise<PhotographyGroup[]> {
     return { year: match[1], location: match[2] };
   };
 
-  try {
-    const topLevelEntries = await fs.readdir(photosDir, { withFileTypes: true });
+  const isMonth = (name: string) => /^(0?[1-9]|1[0-2])(?:月)?$/.test(name);
+  const joinWebPath = (segments: string[]) =>
+    `/photos/photography/${segments.map((s) => encodeURIComponent(s)).join("/")}`;
 
-    for (const entry of topLevelEntries) {
-      if (entry.isFile() && isImage(entry.name)) {
-        const parsed = splitFromFileName(entry.name);
-        pushPhoto(
-          parsed?.year ?? "Unknown",
-          parsed?.location ?? "Unknown",
-          `/photos/photography/${encodeURIComponent(entry.name)}`
-        );
+  const readAllImages = async (dirAbs: string, relParts: string[] = []) => {
+    const entries = await fs.readdir(dirAbs, { withFileTypes: true });
+    const out: { relParts: string[]; fileName: string }[] = [];
+    for (const entry of entries) {
+      if (entry.isDirectory()) {
+        out.push(...(await readAllImages(path.join(dirAbs, entry.name), [...relParts, entry.name])));
         continue;
       }
+      if (!entry.isFile() || !isImage(entry.name)) continue;
+      out.push({ relParts, fileName: entry.name });
+    }
+    return out;
+  };
 
-      if (!entry.isDirectory()) continue;
+  try {
+    const images = await readAllImages(photosDir);
+    for (const image of images) {
+      const parsed = splitFromFileName(image.fileName);
+      const dirs = image.relParts;
+      const yearIndex = dirs.findIndex((part) => isYear(part));
+      const year = yearIndex >= 0 ? dirs[yearIndex] : (parsed?.year ?? "Unknown");
 
-      const firstDir = entry.name;
-      const firstDirAbs = path.join(photosDir, firstDir);
-      const secondLevelEntries = await fs.readdir(firstDirAbs, { withFileTypes: true });
-
-      if (isYear(firstDir)) {
-        for (const second of secondLevelEntries) {
-          if (second.isFile() && isImage(second.name)) {
-            pushPhoto(
-              firstDir,
-              "Unknown",
-              `/photos/photography/${encodeURIComponent(firstDir)}/${encodeURIComponent(second.name)}`
-            );
-            continue;
-          }
-
-          if (!second.isDirectory()) continue;
-
-          const location = second.name;
-          const locationAbs = path.join(firstDirAbs, location);
-          const files = await fs.readdir(locationAbs, { withFileTypes: true });
-          for (const file of files) {
-            if (!file.isFile() || !isImage(file.name)) continue;
-            pushPhoto(
-              firstDir,
-              location,
-              `/photos/photography/${encodeURIComponent(firstDir)}/${encodeURIComponent(location)}/${encodeURIComponent(file.name)}`
-            );
-          }
-        }
-      } else {
-        for (const second of secondLevelEntries) {
-          if (!second.isFile() || !isImage(second.name)) continue;
-          pushPhoto(
-            "Unknown",
-            firstDir,
-            `/photos/photography/${encodeURIComponent(firstDir)}/${encodeURIComponent(second.name)}`
-          );
-        }
+      let location = parsed?.location ?? "Unknown";
+      if (yearIndex >= 0) {
+        const afterYear = dirs.slice(yearIndex + 1);
+        const filtered = afterYear.filter((part, idx) => !(idx === 0 && isMonth(part)));
+        if (filtered.length > 0) location = filtered[0];
+      } else if (dirs.length > 0) {
+        location = dirs[0];
       }
+
+      pushPhoto(year, location, joinWebPath([...dirs, image.fileName]));
     }
 
     return Array.from(groups.values())
