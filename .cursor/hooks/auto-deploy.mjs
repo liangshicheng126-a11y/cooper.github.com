@@ -21,18 +21,62 @@ function run(command, args) {
   };
 }
 
+function getCurrentBranch() {
+  const branch = run("git", ["branch", "--show-current"]);
+  if (branch.code !== 0) return "";
+  return branch.stdout.trim();
+}
+
+function parseChangedFiles(porcelainOutput) {
+  return porcelainOutput
+    .split("\n")
+    .map((line) => line.trimEnd())
+    .filter(Boolean)
+    .map((line) => {
+      const rawPath = line.slice(3).trim();
+      if (rawPath.includes(" -> ")) {
+        return rawPath.split(" -> ").pop()?.trim() ?? "";
+      }
+      return rawPath;
+    })
+    .filter(Boolean);
+}
+
+function shouldIgnore(path) {
+  const normalized = path.replace(/\\/g, "/");
+  return (
+    normalized.startsWith(".next/") ||
+    normalized.startsWith("out/") ||
+    normalized.startsWith("node_modules/") ||
+    normalized.startsWith(".git/")
+  );
+}
+
 const status = run("git", ["status", "--porcelain"]);
 if (status.code !== 0) {
   process.stdout.write('{ "continue": false }');
   process.exit(0);
 }
 
-if (!status.stdout.trim()) {
+const changedFiles = parseChangedFiles(status.stdout);
+const deployableFiles = changedFiles.filter((file) => !shouldIgnore(file));
+
+if (deployableFiles.length === 0) {
   process.stdout.write('{ "continue": false }');
   process.exit(0);
 }
 
-run("git", ["add", "-A"]);
+const branch = getCurrentBranch();
+if (!branch) {
+  process.stdout.write('{ "continue": false }');
+  process.exit(0);
+}
+
+const add = run("git", ["add", "-A", "--", ...deployableFiles]);
+if (add.code !== 0) {
+  process.stdout.write('{ "continue": false }');
+  process.exit(0);
+}
 
 const timestamp = new Date().toISOString().replace("T", " ").replace(/\..+/, " UTC");
 const commitMessage = `chore: auto deploy after chat (${timestamp})`;
@@ -43,5 +87,5 @@ if (commit.code !== 0) {
   process.exit(0);
 }
 
-run("git", ["push", "origin", "HEAD"]);
+run("git", ["push", "origin", branch]);
 process.stdout.write('{ "continue": false }');
