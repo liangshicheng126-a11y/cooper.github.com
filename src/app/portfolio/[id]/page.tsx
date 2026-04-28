@@ -61,9 +61,10 @@ async function getPhotographyGroups(): Promise<PhotographyGroup[]> {
     return { year: match[1], location: match[2] };
   };
 
-  const isMonth = (name: string) => /^(0?[1-9]|1[0-2])(?:月)?$/.test(name);
+  const isMonth = (name: string) => /^([0]?[1-9]|1[0-2])(?:月|[-_ ].+)?$/i.test(name);
   const normalizeMonth = (name: string) => {
-    const numeric = name.replace("月", "").padStart(2, "0");
+    const raw = name.match(/^([0]?[1-9]|1[0-2])/);
+    const numeric = (raw?.[1] ?? "").padStart(2, "0");
     return /^(0[1-9]|1[0-2])$/.test(numeric) ? numeric : "Unknown";
   };
   const joinWebPath = (segments: string[]) =>
@@ -111,6 +112,7 @@ async function getPhotographyGroups(): Promise<PhotographyGroup[]> {
         const afterYear = dirs.slice(yearIndex + 1);
         const filtered = afterYear.filter((part, idx) => !(idx === 0 && isMonth(part)));
         if (filtered.length > 0) location = filtered[0];
+        else if (afterYear.length > 1) location = afterYear[afterYear.length - 1];
       } else if (dirs.length > 0) {
         location = dirs[0];
       }

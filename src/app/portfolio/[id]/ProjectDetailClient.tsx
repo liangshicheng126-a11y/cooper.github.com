@@ -68,7 +68,11 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
     acc[group.year].push(group);
     return acc;
   }, {});
-  const years = Object.keys(photographyByYear);
+  const years = Object.keys(photographyByYear).sort((a, b) => {
+    const aYear = /^\d{4}$/.test(a) ? Number(a) : -1;
+    const bYear = /^\d{4}$/.test(b) ? Number(b) : -1;
+    return bYear - aYear;
+  });
   const getOrientation = (photo: string) => photoOrientation[photo] ?? "square";
   const getPhotoCardClass = (orientation: "landscape" | "portrait" | "square") => {
     if (orientation === "landscape") {
@@ -202,7 +206,6 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
                       <h3 className="leading-none">
                         <span className="inline-flex items-end gap-3 bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
                           <span className="text-4xl sm:text-5xl font-extrabold tracking-[0.08em]">{year}</span>
-                          <span className="text-lg sm:text-xl font-bold tracking-[0.16em]">/{group.month}</span>
                         </span>
                         <span className="mt-3 inline-flex items-center rounded-full px-4 py-2 glass border-white/25 bg-white/15 text-sm sm:text-base font-black tracking-[0.22em] uppercase bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-500 bg-clip-text text-transparent">
                           {group.location}
