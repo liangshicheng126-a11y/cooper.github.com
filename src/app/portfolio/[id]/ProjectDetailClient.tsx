@@ -25,9 +25,8 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
   const [photoOrientation, setPhotoOrientation] = useState<Record<string, "landscape" | "portrait" | "square">>({});
   const [lightboxPhotos, setLightboxPhotos] = useState<string[] | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState(0);
-  const [posterDragDistance, setPosterDragDistance] = useState<Record<string, number>>({});
   const posterViewportRefs = useRef<Record<string, HTMLDivElement | null>>({});
-  const posterTrackRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const posterDragState = useRef<Record<string, { active: boolean; startX: number; startScrollLeft: number; moved: boolean }>>({});
 
   if (!mounted) return null;
 
@@ -126,30 +125,6 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
       document.body.classList.remove("lightbox-open");
     };
   }, [lightboxPhotos, id]);
-
-  useEffect(() => {
-    if (!hasPosterGallery) return;
-
-    const recalcPosterDragDistance = () => {
-      const next: Record<string, number> = {};
-      for (const group of posterGroups) {
-        const viewport = posterViewportRefs.current[group.label];
-        const track = posterTrackRefs.current[group.label];
-        if (!viewport || !track) {
-          next[group.label] = 0;
-          continue;
-        }
-        next[group.label] = Math.max(0, track.scrollWidth - viewport.clientWidth);
-      }
-      setPosterDragDistance(next);
-    };
-
-    recalcPosterDragDistance();
-    window.addEventListener("resize", recalcPosterDragDistance);
-    return () => {
-      window.removeEventListener("resize", recalcPosterDragDistance);
-    };
-  }, [hasPosterGallery, posterGroups]);
 
   const container = {
     hidden: { opacity: 0 },
@@ -334,17 +309,39 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
                     ref={(node) => {
                       posterViewportRefs.current[group.label] = node;
                     }}
-                    className="overflow-hidden cursor-grab active:cursor-grabbing"
+                    className="overflow-x-auto cursor-grab active:cursor-grabbing select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                    onPointerDown={(event) => {
+                      const viewport = posterViewportRefs.current[group.label];
+                      if (!viewport) return;
+                      posterDragState.current[group.label] = {
+                        active: true,
+                        startX: event.clientX,
+                        startScrollLeft: viewport.scrollLeft,
+                        moved: false,
+                      };
+                      viewport.setPointerCapture(event.pointerId);
+                    }}
+                    onPointerMove={(event) => {
+                      const viewport = posterViewportRefs.current[group.label];
+                      const drag = posterDragState.current[group.label];
+                      if (!viewport || !drag?.active) return;
+                      const deltaX = event.clientX - drag.startX;
+                      if (Math.abs(deltaX) > 6) drag.moved = true;
+                      viewport.scrollLeft = drag.startScrollLeft - deltaX;
+                    }}
+                    onPointerUp={(event) => {
+                      const viewport = posterViewportRefs.current[group.label];
+                      const drag = posterDragState.current[group.label];
+                      if (!viewport || !drag) return;
+                      drag.active = false;
+                      viewport.releasePointerCapture(event.pointerId);
+                    }}
+                    onPointerCancel={() => {
+                      const drag = posterDragState.current[group.label];
+                      if (drag) drag.active = false;
+                    }}
                   >
-                    <motion.div
-                      ref={(node) => {
-                        posterTrackRefs.current[group.label] = node;
-                      }}
-                      drag="x"
-                      dragConstraints={{ left: -(posterDragDistance[group.label] ?? 0), right: 0 }}
-                      dragElastic={0.08}
-                      className="flex w-max gap-4 sm:gap-5 pr-4"
-                    >
+                    <div className="flex w-max gap-4 sm:gap-5 pr-4">
                       {group.posters.map((poster, index) => (
                         <div
                           key={poster}
@@ -353,7 +350,14 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
                           <button
                             type="button"
                             className="relative w-[240px] sm:w-[280px] lg:w-[320px] text-left"
-                            onClick={() => openLightbox(group.posters, index)}
+                            onClick={() => {
+                              const drag = posterDragState.current[group.label];
+                              if (drag?.moved) {
+                                drag.moved = false;
+                                return;
+                              }
+                              openLightbox(group.posters, index);
+                            }}
                           >
                             <img
                               src={poster}
@@ -382,7 +386,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
                           </button>
                         </div>
                       ))}
-                    </motion.div>
+                    </div>
                   </div>
                 </div>
               </div>
