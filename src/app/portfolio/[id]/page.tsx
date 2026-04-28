@@ -10,6 +10,9 @@ type PhotographyGroup = {
   photos: string[];
   latestTimestamp: number;
 };
+type RawPhotographyGroup = Omit<PhotographyGroup, "photos"> & {
+  photos: Array<{ path: string; timestamp: number }>;
+};
 
 export function generateStaticParams() {
   return PROJECT_IDS.map((id) => ({ id }));
@@ -27,7 +30,7 @@ export default async function ProjectDetailPage({
 
 async function getPhotographyGroups(): Promise<PhotographyGroup[]> {
   const photosDir = path.join(process.cwd(), "public", "photos", "photography");
-  const groups = new Map<string, PhotographyGroup>();
+  const groups = new Map<string, RawPhotographyGroup>();
 
   const pushPhoto = (year: string, month: string, location: string, webPath: string, timestamp: number) => {
     const safeYear = year || "Unknown";
@@ -36,7 +39,7 @@ async function getPhotographyGroups(): Promise<PhotographyGroup[]> {
     const key = `${safeYear}__${safeMonth}__${safeLocation}`;
     const current = groups.get(key);
     if (current) {
-      current.photos.push(webPath);
+      current.photos.push({ path: webPath, timestamp });
       current.latestTimestamp = Math.max(current.latestTimestamp, timestamp);
       return;
     }
@@ -44,7 +47,7 @@ async function getPhotographyGroups(): Promise<PhotographyGroup[]> {
       year: safeYear,
       month: safeMonth,
       location: safeLocation,
-      photos: [webPath],
+      photos: [{ path: webPath, timestamp }],
       latestTimestamp: timestamp,
     });
   };
@@ -122,7 +125,12 @@ async function getPhotographyGroups(): Promise<PhotographyGroup[]> {
     return Array.from(groups.values())
       .map((group) => ({
         ...group,
-        photos: group.photos.sort((a, b) => b.localeCompare(a, "en")),
+        photos: group.photos
+          .sort((a, b) => {
+            if (b.timestamp !== a.timestamp) return b.timestamp - a.timestamp;
+            return b.path.localeCompare(a.path, "en");
+          })
+          .map((photo) => photo.path),
       }))
       .sort((a, b) => {
         if (b.latestTimestamp !== a.latestTimestamp) return b.latestTimestamp - a.latestTimestamp;

@@ -174,8 +174,8 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
       {hasPhotographyGallery && (
         <motion.section variants={item} className="mb-16 lg:mb-24">
           <div className="flex items-center justify-between gap-4 mb-5">
-            <h2 className="text-2xl font-bold">{t.portfolio.projectDetail.photoGallery}</h2>
-            <span className="text-sm text-foreground/50">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t.portfolio.projectDetail.photoGallery}</h2>
+            <span className="text-base sm:text-lg text-foreground/55 font-medium">
               {t.portfolio.projectDetail.photoCount}{" "}
               {photographyGroups.reduce((sum, group) => sum + group.photos.length, 0)}
             </span>
@@ -186,7 +186,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
                 {yearIndex > 0 && (
                   <div className="year-divider glass border-white/10 rounded-xl">
                     <div className="year-divider-track">
-                      {Array.from({ length: 18 }).map((_, i) => (
+                      {Array.from({ length: 36 }).map((_, i) => (
                         <span key={`${year}-${i}`} className="inline-flex items-center gap-4">
                           <span>{year}</span>
                           <span>{t.portfolio.projectDetail.yearDividerDot}</span>
@@ -199,8 +199,12 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
                 {photographyByYear[year].map((group) => (
                   <div key={`${year}-${group.month}-${group.location}`} className="space-y-3">
                     <div className="flex items-center justify-between gap-4">
-                      <h3 className="text-2xl sm:text-3xl font-bold text-foreground/90 tracking-tight">
-                        {year}/{group.month} · {group.location}
+                      <h3 className="leading-none">
+                        <span className="inline-flex items-end gap-3 bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
+                          <span className="text-4xl sm:text-5xl font-extrabold tracking-[0.08em]">{year}</span>
+                          <span className="text-lg sm:text-xl font-bold tracking-[0.16em]">/{group.month}</span>
+                        </span>
+                        <span className="block mt-2 text-lg sm:text-2xl text-foreground/85 font-semibold tracking-wide">{group.location}</span>
                       </h3>
                       <span className="text-sm sm:text-base uppercase tracking-widest text-foreground/55 font-semibold">
                         {group.photos.length} {t.portfolio.projectDetail.photosUnit}
@@ -234,13 +238,6 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
                                 setPhotoOrientation((prev) => (prev[photo] === next ? prev : { ...prev, [photo]: next }));
                               }}
                             />
-                            <div className="absolute top-3 left-3 px-2 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase bg-black/35 text-white/90 border border-white/20">
-                              {getOrientation(photo) === "landscape"
-                                ? t.portfolio.projectDetail.landscapeTag
-                                : getOrientation(photo) === "portrait"
-                                  ? t.portfolio.projectDetail.portraitTag
-                                  : t.portfolio.projectDetail.squareTag}
-                            </div>
                           </button>
                         </div>
                       ))}
