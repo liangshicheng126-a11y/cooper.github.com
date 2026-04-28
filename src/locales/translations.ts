@@ -108,8 +108,8 @@ export const translations = {
         solution: "解决方案",
         solutionText: "我们提出了一套基于“动态交互”逻辑的视觉方案，结合动态模糊与半透明层级感，营造更清晰且更具节奏的界面体验。这种方案成功平衡了表达力与易用性。",
         results: "成果展示",
-        userEngagement: "用户参与度",
-        activeUsers: "活跃用户"
+        userEngagement: "全平台播放",
+        activeUsers: "5秒完播率"
       }
     },
     contact: {
@@ -231,8 +231,8 @@ export const translations = {
         solution: "Solution",
         solutionText: "We proposed a visual framework based on dynamic interaction principles, combining motion blur and translucent layering to create a clearer and more rhythmic interface experience. The approach balanced expressive style with everyday usability.",
         results: "Results",
-        userEngagement: "User Engagement",
-        activeUsers: "Active Users"
+        userEngagement: "Plays Across Platforms",
+        activeUsers: "5s Completion Rate"
       }
     },
     contact: {
