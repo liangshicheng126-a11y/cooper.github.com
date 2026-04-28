@@ -5,6 +5,7 @@ import { useTranslation } from "@/locales/LanguageProvider";
 import { ArrowRight, Briefcase, User, Mail, Sparkles, Zap, Figma, Palette, Video, PenTool, Layout, ExternalLink, Image as ImageIcon, Scissors, Clapperboard, Film } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import ScrollDirectionSection from "@/components/ScrollDirectionSection";
 
 export default function Home() {
   const { t, mounted } = useTranslation();
@@ -123,9 +124,8 @@ export default function Home() {
         </section>
 
         {/* Services / Focus Section */}
-        <motion.section 
+        <ScrollDirectionSection
           id="services-block"
-          variants={item}
           className="section-block rounded-[40px] p-6 sm:p-8 lg:p-10"
         >
           <div className="flex items-center space-x-4 mb-6">
@@ -149,13 +149,10 @@ export default function Home() {
               );
             })}
           </div>
-        </motion.section>
+        </ScrollDirectionSection>
 
         {/* Stats Section */}
-        <motion.section
-          variants={item}
-          className="section-block rounded-[40px] p-6 sm:p-8 lg:p-10"
-        >
+        <ScrollDirectionSection className="section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
           {[
             { icon: Briefcase, label: t.contact.projectsCompleted, value: "50+" },
@@ -171,10 +168,10 @@ export default function Home() {
             </div>
           ))}
           </div>
-        </motion.section>
+        </ScrollDirectionSection>
 
         {/* Tools / Skills Section */}
-        <motion.section id="featured-block" variants={item} className="section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
+        <ScrollDirectionSection id="featured-block" className="section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-6">
             <h2 className="text-2xl font-bold">{t.hero.tools.title}</h2>
             <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />
@@ -203,10 +200,10 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </motion.section>
+        </ScrollDirectionSection>
 
         {/* Workflow Section */}
-        <motion.section variants={item} className="section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
+        <ScrollDirectionSection className="section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-12">
             <h2 className="text-2xl font-bold">{t.hero.workflow.title}</h2>
             <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />
@@ -223,10 +220,10 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </motion.section>
+        </ScrollDirectionSection>
 
         {/* Featured Work Preview Section */}
-        <motion.section variants={item} className="section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
+        <ScrollDirectionSection className="section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-8">
             <div className="flex items-center space-x-4 min-w-0">
               <h2 className="text-2xl font-bold">{t.hero.featuredTitle}</h2>
@@ -276,7 +273,7 @@ export default function Home() {
               </Link>
             ))}
           </div>
-        </motion.section>
+        </ScrollDirectionSection>
       </motion.div>
     </div>
   );
