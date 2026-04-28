@@ -37,6 +37,9 @@ jobs:
         run: npm run build
         env:
           GITHUB_ACTIONS: true
+          # Apex 自定义域名（如 cooperliang.top）与 /<repo>/_next 路径不一致时需清空 basePath
+          GITHUB_PAGES_CUSTOM_DOMAIN_ROOT: "true"
+          NEXT_PUBLIC_SITE_URL: https://cooperliang.top
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
