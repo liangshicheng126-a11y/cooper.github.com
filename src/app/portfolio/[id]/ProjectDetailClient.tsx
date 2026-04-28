@@ -14,9 +14,13 @@ type Props = {
     location: string;
     photos: string[];
   }>;
+  posterGroups?: Array<{
+    label: string;
+    posters: string[];
+  }>;
 };
 
-export default function ProjectDetailClient({ id, photographyGroups = [] }: Props) {
+export default function ProjectDetailClient({ id, photographyGroups = [], posterGroups = [] }: Props) {
   const { t, mounted } = useTranslation();
   const [photoOrientation, setPhotoOrientation] = useState<Record<string, "landscape" | "portrait" | "square">>({});
   const [lightboxPhotos, setLightboxPhotos] = useState<string[] | null>(null);
@@ -63,6 +67,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
   };
   const hasBilibiliPreview = Boolean(bilibiliByProject[id]?.length);
   const hasPhotographyGallery = id === "p3" && photographyGroups.length > 0;
+  const hasPosterGallery = id === "p1" && posterGroups.length > 0;
   const photographyByYear = photographyGroups.reduce<Record<string, typeof photographyGroups>>((acc, group) => {
     if (!acc[group.year]) acc[group.year] = [];
     acc[group.year].push(group);
@@ -276,6 +281,57 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
                     </div>
                   </div>
                 ))}
+              </div>
+            ))}
+          </div>
+        </motion.section>
+      )}
+
+      {hasPosterGallery && (
+        <motion.section variants={item} className="mb-16 lg:mb-24">
+          <div className="flex items-center justify-between gap-4 mb-5">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t.portfolio.projectDetail.posterGallery}</h2>
+            <span className="text-base sm:text-lg text-foreground/55 font-medium">
+              {t.portfolio.projectDetail.posterCount}{" "}
+              {posterGroups.reduce((sum, group) => sum + group.posters.length, 0)}
+            </span>
+          </div>
+          <div className="space-y-10">
+            {posterGroups.map((group) => (
+              <div key={group.label} className="space-y-4">
+                <h3 className="text-lg sm:text-xl font-bold text-foreground/80">{group.label}</h3>
+                <div className="grid grid-cols-12 gap-4">
+                  {group.posters.map((poster, index) => (
+                    <div
+                      key={poster}
+                      className={`group rounded-2xl overflow-hidden glass border-white/10 ${getPhotoCardClass(getOrientation(poster))}`}
+                    >
+                      <button
+                        type="button"
+                        className="relative w-full h-full text-left"
+                        onClick={() => openLightbox(group.posters, index)}
+                      >
+                        <img
+                          src={poster}
+                          alt={`${t.portfolio.projectDetail.posterAlt} ${index + 1}`}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                          loading="lazy"
+                          onLoad={(event) => {
+                            const target = event.currentTarget;
+                            const { naturalWidth, naturalHeight } = target;
+                            const next =
+                              naturalWidth > naturalHeight
+                                ? "landscape"
+                                : naturalWidth < naturalHeight
+                                  ? "portrait"
+                                  : "square";
+                            setPhotoOrientation((prev) => (prev[poster] === next ? prev : { ...prev, [poster]: next }));
+                          }}
+                        />
+                      </button>
+                    </div>
+                  ))}
+                </div>
               </div>
             ))}
           </div>

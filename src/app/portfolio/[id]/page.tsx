@@ -10,6 +10,14 @@ type PhotographyGroup = {
   photos: string[];
   latestTimestamp: number;
 };
+type PosterGroup = {
+  label: string;
+  posters: string[];
+  latestTimestamp: number;
+};
+type RawPosterGroup = Omit<PosterGroup, "posters"> & {
+  posters: Array<{ path: string; timestamp: number }>;
+};
 type RawPhotographyGroup = Omit<PhotographyGroup, "photos"> & {
   photos: Array<{ path: string; timestamp: number }>;
 };
@@ -25,7 +33,8 @@ export default async function ProjectDetailPage({
 }) {
   const { id } = await params;
   const photographyGroups = await getPhotographyGroups();
-  return <ProjectDetailClient id={id} photographyGroups={photographyGroups} />;
+  const posterGroups = await getPosterGroups();
+  return <ProjectDetailClient id={id} photographyGroups={photographyGroups} posterGroups={posterGroups} />;
 }
 
 async function getPhotographyGroups(): Promise<PhotographyGroup[]> {
@@ -163,6 +172,79 @@ async function getPhotographyGroups(): Promise<PhotographyGroup[]> {
 
         if (b.latestTimestamp !== a.latestTimestamp) return b.latestTimestamp - a.latestTimestamp;
         return a.location.localeCompare(b.location, "en");
+      });
+  } catch {
+    return [];
+  }
+}
+
+async function getPosterGroups(): Promise<PosterGroup[]> {
+  const postersDir = path.join(process.cwd(), "public", "photos", "posters");
+  const groups = new Map<string, RawPosterGroup>();
+  const isImage = (name: string) => /\.(jpg|jpeg|png|webp|avif)$/i.test(name);
+  const joinWebPath = (segments: string[]) =>
+    `/photos/posters/${segments.map((s) => encodeURIComponent(s)).join("/")}`;
+  const parseDateToken = (value: string) => {
+    const m = value.match(/(20\d{2})[-_]?([01]\d)?[-_]?([0-3]\d)?/);
+    if (!m) return 0;
+    const year = m[1];
+    const month = (m[2] || "01").padStart(2, "0");
+    const day = (m[3] || "01").padStart(2, "0");
+    return Date.parse(`${year}-${month}-${day}T00:00:00Z`) || 0;
+  };
+
+  const readAllImages = async (dirAbs: string, relParts: string[] = []) => {
+    const entries = await fs.readdir(dirAbs, { withFileTypes: true });
+    const out: { relParts: string[]; fileName: string }[] = [];
+    for (const entry of entries) {
+      if (entry.isDirectory()) {
+        out.push(...(await readAllImages(path.join(dirAbs, entry.name), [...relParts, entry.name])));
+        continue;
+      }
+      if (!entry.isFile() || !isImage(entry.name)) continue;
+      out.push({ relParts, fileName: entry.name });
+    }
+    return out;
+  };
+
+  const pushPoster = (label: string, webPath: string, timestamp: number) => {
+    const key = label || "精选";
+    const current = groups.get(key);
+    if (current) {
+      current.posters.push({ path: webPath, timestamp });
+      current.latestTimestamp = Math.max(current.latestTimestamp, timestamp);
+      return;
+    }
+    groups.set(key, {
+      label: key,
+      posters: [{ path: webPath, timestamp }],
+      latestTimestamp: timestamp,
+    });
+  };
+
+  try {
+    const images = await readAllImages(postersDir);
+    for (const image of images) {
+      const firstFolder = image.relParts[0];
+      const label = firstFolder || "精选";
+      const tsSource = `${label}-${image.fileName}`;
+      const timestamp = parseDateToken(tsSource);
+      pushPoster(label, joinWebPath([...image.relParts, image.fileName]), Number.isNaN(timestamp) ? 0 : timestamp);
+    }
+
+    return Array.from(groups.values())
+      .map((group) => ({
+        ...group,
+        posters: group.posters
+          .sort((a, b) => {
+            if (b.timestamp !== a.timestamp) return b.timestamp - a.timestamp;
+            return b.path.localeCompare(a.path, "en");
+          })
+          .map((poster) => poster.path),
+      }))
+      .sort((a, b) => {
+        if (b.latestTimestamp !== a.latestTimestamp) return b.latestTimestamp - a.latestTimestamp;
+        return a.label.localeCompare(b.label, "zh-Hans-CN");
       });
   } catch {
     return [];
