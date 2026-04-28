@@ -76,7 +76,7 @@ export default function About() {
               <div
                 className="w-full h-full rounded-[30px] transition-transform duration-700 group-hover:scale-105"
                 style={{
-                  backgroundImage: `url(/profile.png)`,
+                  backgroundImage: `url(/experience-badge.png)`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}
@@ -167,11 +167,6 @@ export default function About() {
           variants={item}
           className="mt-32 p-16 rounded-[40px] glass border-white/10 flex flex-col items-center text-center bg-gradient-to-br from-indigo-500/5 to-purple-500/5 relative overflow-hidden"
         >
-          <div
-            className="absolute inset-0 bg-center bg-cover bg-no-repeat opacity-30"
-            style={{ backgroundImage: "url(/experience-badge.png)" }}
-          />
-          <div className="absolute inset-0 bg-black/35" />
           <h2 className="relative z-10 text-4xl font-bold mb-8">{t.about.ctaTitle}</h2>
           <Link
             href="/portfolio"
