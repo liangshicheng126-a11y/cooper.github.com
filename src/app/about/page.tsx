@@ -88,9 +88,8 @@ export default function About() {
               <div
                 className="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 w-28 h-28 sm:w-32 sm:h-32 rounded-full shadow-2xl border border-white/30 overflow-hidden text-center flex flex-col items-center justify-center"
                 style={{
-                  backgroundImage: "url(/experience-badge.png)",
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
+                  background:
+                    "radial-gradient(circle at 30% 30%, rgba(99,102,241,0.95), rgba(79,70,229,0.9) 45%, rgba(67,56,202,0.95))",
                 }}
               >
                 <div className="absolute inset-0 bg-black/40" />
@@ -166,12 +165,17 @@ export default function About() {
         {/* CTA Section */}
         <motion.section
           variants={item}
-          className="mt-32 p-16 rounded-[40px] glass border-white/10 flex flex-col items-center text-center bg-gradient-to-br from-indigo-500/5 to-purple-500/5"
+          className="mt-32 p-16 rounded-[40px] glass border-white/10 flex flex-col items-center text-center bg-gradient-to-br from-indigo-500/5 to-purple-500/5 relative overflow-hidden"
         >
-          <h2 className="text-4xl font-bold mb-8">{t.about.ctaTitle}</h2>
+          <div
+            className="absolute inset-0 bg-center bg-cover bg-no-repeat opacity-30"
+            style={{ backgroundImage: "url(/experience-badge.png)" }}
+          />
+          <div className="absolute inset-0 bg-black/35" />
+          <h2 className="relative z-10 text-4xl font-bold mb-8">{t.about.ctaTitle}</h2>
           <Link
             href="/portfolio"
-            className="px-10 py-5 bg-foreground text-background rounded-2xl font-bold flex items-center space-x-3 hover:opacity-90 transition-all hover:scale-105"
+            className="relative z-10 px-10 py-5 bg-foreground text-background rounded-2xl font-bold flex items-center space-x-3 hover:opacity-90 transition-all hover:scale-105"
           >
             <span>{t.about.ctaButton}</span>
             <ArrowRight className="w-5 h-5" />
