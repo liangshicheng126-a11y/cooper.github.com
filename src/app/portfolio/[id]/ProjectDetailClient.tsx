@@ -379,7 +379,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
       )}
 
       <div className="space-y-16 lg:space-y-24">
-        {id !== "p3" && id !== "p4" && (
+        {id === "p2" && (
           resultsSection
         )}
       </div>
