@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useTranslation } from "@/locales/LanguageProvider";
-import { ArrowLeft, Calendar, User, Layout, Target, Lightbulb, CheckCircle } from "lucide-react";
+import { ArrowLeft, Calendar, User, Layout, Target, Lightbulb, CheckCircle, ExternalLink } from "lucide-react";
 import Link from "next/link";
 
 type Props = {
@@ -33,6 +33,13 @@ export default function ProjectDetailClient({ id }: Props) {
     p2: "https://images.unsplash.com/photo-1581291518137-473305565547?w=1200&q=80",
     p3: "https://images.unsplash.com/photo-1493863641943-9b68992a8d07?w=1200&q=80",
     p4: "https://images.unsplash.com/photo-1536240478700-b869070f9279?w=1200&q=80",
+  };
+
+  const bilibiliByProject: Partial<Record<string, { bvid: string; href: string }>> = {
+    p4: {
+      bvid: "BV1Ws9rB9ErL",
+      href: "https://www.bilibili.com/video/BV1Ws9rB9ErL/",
+    },
   };
 
   const container = {
@@ -91,6 +98,33 @@ export default function ProjectDetailClient({ id }: Props) {
           }}
         />
       </motion.div>
+
+      {bilibiliByProject[id] && (
+        <motion.section variants={item} className="mb-16 lg:mb-24">
+          <div className="flex items-center justify-between gap-4 mb-5">
+            <h2 className="text-2xl font-bold">{t.portfolio.projectDetail.videoPreview}</h2>
+            <a
+              href={bilibiliByProject[id]!.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-sm font-medium text-indigo-500 hover:text-indigo-400 transition-colors"
+            >
+              <span>{t.portfolio.projectDetail.watchOnBilibili}</span>
+              <ExternalLink className="w-4 h-4" />
+            </a>
+          </div>
+          <div className="glass rounded-[30px] p-2 border-white/10 aspect-video overflow-hidden">
+            <iframe
+              src={`https://player.bilibili.com/player.html?bvid=${bilibiliByProject[id]!.bvid}&page=1&high_quality=1`}
+              className="w-full h-full rounded-[20px]"
+              scrolling="no"
+              frameBorder="0"
+              allowFullScreen
+              title="Bilibili Video Player"
+            />
+          </div>
+        </motion.section>
+      )}
 
       <motion.div variants={item} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-16 lg:mb-24">
         <div className="glass p-8 rounded-3xl border-white/5">
