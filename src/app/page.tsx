@@ -247,10 +247,10 @@ export default function Home() {
                 image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80"
               },
               { 
-                id: "p2", 
-                title: t.portfolio.projects.p2.title, 
-                category: t.portfolio.categories.uiux,
-                image: "https://images.unsplash.com/photo-1545235617-9465d2a55698?w=800&q=80"
+                id: "p3", 
+                title: t.portfolio.projects.p3.title, 
+                category: t.portfolio.categories.photography,
+                image: "https://images.unsplash.com/photo-1493863641943-9b68992a8d07?w=800&q=80"
               }
             ].map((project, i) => (
               <Link
