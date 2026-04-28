@@ -87,6 +87,10 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
     setLightboxPhotos(photos);
     setLightboxIndex(index);
   };
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  };
   const resultsSection = (
     <motion.section variants={item} className="text-center max-w-3xl mx-auto">
       <h2 className="text-3xl font-bold mb-8 flex items-center justify-center space-x-3">
@@ -121,11 +125,6 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
       opacity: 1,
       transition: { staggerChildren: 0.1 },
     },
-  };
-
-  const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.6 } },
   };
 
   const heroMask = {
