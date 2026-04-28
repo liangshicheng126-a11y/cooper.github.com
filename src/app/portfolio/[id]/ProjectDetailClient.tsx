@@ -10,7 +10,7 @@ type Props = {
   id: string;
   photographyGroups?: Array<{
     year: string;
-    month: string;
+    dateLabel: string;
     location: string;
     photos: string[];
   }>;
@@ -201,11 +201,12 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
                 )}
 
                 {photographyByYear[year].map((group) => (
-                  <div key={`${year}-${group.month}-${group.location}`} className="space-y-3">
+                  <div key={`${year}-${group.dateLabel}-${group.location}`} className="space-y-3">
                     <div className="flex items-center justify-between gap-4">
                       <h3 className="leading-none">
                         <span className="inline-flex items-end gap-3 bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
                           <span className="text-4xl sm:text-5xl font-extrabold tracking-[0.08em]">{year}</span>
+                          <span className="text-lg sm:text-xl font-bold tracking-[0.16em]">/{group.dateLabel}</span>
                         </span>
                         <span className="mt-3 inline-flex items-center rounded-full px-4 py-2 glass border-white/25 bg-white/15 text-sm sm:text-base font-black tracking-[0.22em] uppercase bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-500 bg-clip-text text-transparent">
                           {group.location}

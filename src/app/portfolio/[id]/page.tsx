@@ -5,7 +5,7 @@ import path from "node:path";
 const PROJECT_IDS = ["p1", "p2", "p3", "p4"] as const;
 type PhotographyGroup = {
   year: string;
-  month: string;
+  dateLabel: string;
   location: string;
   photos: string[];
   latestTimestamp: number;
@@ -32,11 +32,11 @@ async function getPhotographyGroups(): Promise<PhotographyGroup[]> {
   const photosDir = path.join(process.cwd(), "public", "photos", "photography");
   const groups = new Map<string, RawPhotographyGroup>();
 
-  const pushPhoto = (year: string, month: string, location: string, webPath: string, timestamp: number) => {
+  const pushPhoto = (year: string, dateLabel: string, location: string, webPath: string, timestamp: number) => {
     const safeYear = year || "Unknown";
-    const safeMonth = month || "Unknown";
+    const safeDateLabel = dateLabel || "Unknown";
     const safeLocation = location || "Unknown";
-    const key = `${safeYear}__${safeMonth}__${safeLocation}`;
+    const key = `${safeYear}__${safeDateLabel}__${safeLocation}`;
     const current = groups.get(key);
     if (current) {
       current.photos.push({ path: webPath, timestamp });
@@ -45,7 +45,7 @@ async function getPhotographyGroups(): Promise<PhotographyGroup[]> {
     }
     groups.set(key, {
       year: safeYear,
-      month: safeMonth,
+      dateLabel: safeDateLabel,
       location: safeLocation,
       photos: [{ path: webPath, timestamp }],
       latestTimestamp: timestamp,
@@ -62,11 +62,6 @@ async function getPhotographyGroups(): Promise<PhotographyGroup[]> {
   };
 
   const isMonth = (name: string) => /^([0]?[1-9]|1[0-2])(?:月|[-_ ].+)?$/i.test(name);
-  const normalizeMonth = (name: string) => {
-    const raw = name.match(/^([0]?[1-9]|1[0-2])/);
-    const numeric = (raw?.[1] ?? "").padStart(2, "0");
-    return /^(0[1-9]|1[0-2])$/.test(numeric) ? numeric : "Unknown";
-  };
   const joinWebPath = (segments: string[]) =>
     `/photos/photography/${segments.map((s) => encodeURIComponent(s)).join("/")}`;
   const parseFileDate = (name: string) => {
@@ -79,6 +74,22 @@ async function getPhotographyGroups(): Promise<PhotographyGroup[]> {
         day: withSeparators[3],
       };
     }
+    return null;
+  };
+  const parseDateFromFolderLabel = (label: string) => {
+    const cleaned = label.trim();
+    const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+    const monDay = cleaned.match(/^([A-Za-z]{3})\s+([0-3]?\d)$/);
+    if (monDay) {
+      const idx = monthNames.indexOf(monDay[1].toUpperCase());
+      if (idx >= 0) return { month: String(idx + 1).padStart(2, "0"), day: monDay[2].padStart(2, "0") };
+    }
+    const monthOnly = cleaned.match(/^([0]?[1-9]|1[0-2])$/);
+    if (monthOnly) return { month: monthOnly[1].padStart(2, "0"), day: "01" };
+    const monthDayCN = cleaned.match(/^([0]?[1-9]|1[0-2])月([0-3]?\d)$/);
+    if (monthDayCN) return { month: monthDayCN[1].padStart(2, "0"), day: monthDayCN[2].padStart(2, "0") };
+    const numericDay = cleaned.match(/^([0]?[1-9]|1[0-2])[-_ ]([0-3]?\d)$/);
+    if (numericDay) return { month: numericDay[1].padStart(2, "0"), day: numericDay[2].padStart(2, "0") };
     return null;
   };
 
@@ -104,24 +115,27 @@ async function getPhotographyGroups(): Promise<PhotographyGroup[]> {
       const dirs = image.relParts;
       const yearIndex = dirs.findIndex((part) => isYear(part));
       const year = yearIndex >= 0 ? dirs[yearIndex] : (parsed?.year ?? "Unknown");
-      const monthDir = yearIndex >= 0 ? dirs[yearIndex + 1] : undefined;
-      const month = monthDir && isMonth(monthDir) ? normalizeMonth(monthDir) : (parsedDate?.month ?? "Unknown");
+      const dateDir = yearIndex >= 0 ? dirs[yearIndex + 1] : undefined;
+      const dateLabel = dateDir ?? "Unknown";
 
       let location = parsed?.location ?? "Unknown";
       if (yearIndex >= 0) {
         const afterYear = dirs.slice(yearIndex + 1);
-        const filtered = afterYear.filter((part, idx) => !(idx === 0 && isMonth(part)));
-        if (filtered.length > 0) location = filtered[0];
-        else if (afterYear.length > 1) location = afterYear[afterYear.length - 1];
+        if (afterYear.length > 1) {
+          location = afterYear[1];
+        } else if (afterYear.length === 1) {
+          location = isMonth(afterYear[0]) ? "Unknown" : afterYear[0];
+        }
       } else if (dirs.length > 0) {
         location = dirs[0];
       }
 
       const safeYearForDate = /^\d{4}$/.test(year) ? year : "1970";
-      const safeMonthForDate = /^(0[1-9]|1[0-2])$/.test(month) ? month : "01";
-      const safeDayForDate = parsedDate?.day ?? "01";
+      const folderDate = dateDir ? parseDateFromFolderLabel(dateDir) : null;
+      const safeMonthForDate = folderDate?.month ?? parsedDate?.month ?? "01";
+      const safeDayForDate = folderDate?.day ?? parsedDate?.day ?? "01";
       const timestamp = Date.parse(`${safeYearForDate}-${safeMonthForDate}-${safeDayForDate}T00:00:00Z`);
-      pushPhoto(year, month, location, joinWebPath([...dirs, image.fileName]), Number.isNaN(timestamp) ? 0 : timestamp);
+      pushPhoto(year, dateLabel, location, joinWebPath([...dirs, image.fileName]), Number.isNaN(timestamp) ? 0 : timestamp);
     }
 
     return Array.from(groups.values())
@@ -139,8 +153,12 @@ async function getPhotographyGroups(): Promise<PhotographyGroup[]> {
         const bYear = /^\d{4}$/.test(b.year) ? Number(b.year) : -1;
         if (bYear !== aYear) return bYear - aYear;
 
-        const aMonth = /^(0[1-9]|1[0-2])$/.test(a.month) ? Number(a.month) : -1;
-        const bMonth = /^(0[1-9]|1[0-2])$/.test(b.month) ? Number(b.month) : -1;
+        const aMonth = parseDateFromFolderLabel(a.dateLabel)?.month
+          ? Number(parseDateFromFolderLabel(a.dateLabel)!.month)
+          : -1;
+        const bMonth = parseDateFromFolderLabel(b.dateLabel)?.month
+          ? Number(parseDateFromFolderLabel(b.dateLabel)!.month)
+          : -1;
         if (bMonth !== aMonth) return bMonth - aMonth;
 
         if (b.latestTimestamp !== a.latestTimestamp) return b.latestTimestamp - a.latestTimestamp;
