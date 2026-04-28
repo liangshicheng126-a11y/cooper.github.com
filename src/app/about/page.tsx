@@ -36,6 +36,9 @@ export default function About() {
     },
   };
 
+  const scrollSlideViewport = { once: false, amount: 0.35, margin: "0px 0px -40px 0px" as const };
+  const scrollEase = [0.22, 1, 0.36, 1] as const;
+
   return (
     <div className={cn("max-w-4xl pb-8", !mounted && "opacity-0")}>
       <motion.div variants={container} initial="hidden" animate="show">
@@ -113,7 +116,10 @@ export default function About() {
           {/* Skills Section */}
           <section>
             <motion.h2
-              variants={item}
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={scrollSlideViewport}
+              transition={{ duration: 0.55, ease: scrollEase }}
               className="text-3xl font-bold mb-10 flex items-center space-x-4"
             >
               <div className="w-12 h-1 bg-indigo-500 rounded-full" />
@@ -122,13 +128,21 @@ export default function About() {
 
             <div className="space-y-6">
               {t.about.skillDetails.map((skill, index) => (
-                <div 
-                  key={index} 
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -56 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={scrollSlideViewport}
+                  transition={{
+                    duration: 0.5,
+                    ease: scrollEase,
+                    delay: index * 0.07,
+                  }}
                   className="flex items-center space-x-4 glass p-4 rounded-2xl border-white/5 hover:border-indigo-500/20 transition-all"
                 >
                   <div className="w-2 h-2 rounded-full bg-indigo-500" />
                   <span className="text-lg font-medium">{skill}</span>
-                </div>
+                </motion.div>
               ))}
             </div>
           </section>
@@ -136,7 +150,10 @@ export default function About() {
           {/* Hobbies Section */}
           <section>
             <motion.h2
-              variants={item}
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={scrollSlideViewport}
+              transition={{ duration: 0.55, ease: scrollEase }}
               className="text-3xl font-bold mb-10 flex items-center space-x-4"
             >
               <div className="w-12 h-1 bg-purple-500 rounded-full" />
@@ -145,8 +162,16 @@ export default function About() {
 
             <div className="space-y-6">
               {t.about.hobbiesGroups.map((group, index) => (
-                <div
+                <motion.div
                   key={index}
+                  initial={{ opacity: 0, x: 56 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={scrollSlideViewport}
+                  transition={{
+                    duration: 0.5,
+                    ease: scrollEase,
+                    delay: index * 0.07,
+                  }}
                   className="glass p-5 rounded-2xl border-white/5 hover:border-purple-500/20 transition-all"
                 >
                   <div className="flex items-center space-x-3 mb-3">
@@ -156,7 +181,7 @@ export default function About() {
                   <p className="text-base text-foreground/60 leading-relaxed">
                     {group.items.join(" / ")}
                   </p>
-                </div>
+                </motion.div>
               ))}
             </div>
           </section>
