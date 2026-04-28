@@ -304,7 +304,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
                   {group.posters.map((poster, index) => (
                     <div
                       key={poster}
-                      className="group mb-4 sm:mb-5 break-inside-avoid rounded-2xl overflow-hidden glass border-white/10"
+                      className="group mb-4 sm:mb-5 break-inside-avoid rounded-2xl overflow-hidden glass border-white/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(0,0,0,0.22)]"
                     >
                       <button
                         type="button"
