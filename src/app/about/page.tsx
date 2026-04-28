@@ -194,7 +194,7 @@ export default function About() {
         >
           <h2 className="relative z-10 text-4xl font-bold mb-8">{t.about.ctaTitle}</h2>
           <Link
-            href="/portfolio"
+            href="/contact"
             className="relative z-10 px-10 py-5 bg-foreground text-background rounded-2xl font-bold flex items-center space-x-3 hover:opacity-90 transition-all hover:scale-105"
           >
             <span>{t.about.ctaButton}</span>

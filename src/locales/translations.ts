@@ -75,7 +75,7 @@ export const translations = {
       experience: "年经验",
       basedIn: "现居",
       ctaTitle: "准备好开启新项目了吗？",
-      ctaButton: "查看作品"
+      ctaButton: "欢迎打扰"
     },
     portfolio: {
       title: "精选作品",
@@ -124,7 +124,24 @@ export const translations = {
       location: "中国-浙江",
       projectsCompleted: "完成项目",
       happyClients: "客户好评",
-      activeSupport: "全天候支持"
+      activeSupport: "全天候支持",
+      pageTitle: "联系我",
+      pageSubtitle: "我是 Cooper，很高兴听到你的想法。无论是合作、咨询还是交流，都欢迎随时联系。",
+      formName: "姓名",
+      formEmail: "邮箱",
+      formWebsite: "网站 / 社媒（可选）",
+      formTopic: "你想聊什么？",
+      formMessage: "具体内容",
+      formConsent: "我已阅读并同意相关条款",
+      formSubmit: "发送信息",
+      topics: {
+        collaboration: "合作项目",
+        uiux: "UI/UX 设计",
+        visual: "品牌视觉",
+        photography: "摄影",
+        video: "视频剪辑",
+        other: "其他"
+      }
     }
   },
   en: {
@@ -203,7 +220,7 @@ export const translations = {
       experience: "Years Exp.",
       basedIn: "Based in",
       ctaTitle: "Ready to start a new project?",
-      ctaButton: "View Portfolio"
+      ctaButton: "Feel Free to Reach Out"
     },
     portfolio: {
       title: "Featured Works",
@@ -252,7 +269,24 @@ export const translations = {
       location: "Zhejiang, China",
       projectsCompleted: "Projects Completed",
       happyClients: "Happy Clients",
-      activeSupport: "Active Support"
+      activeSupport: "Active Support",
+      pageTitle: "Contact Me",
+      pageSubtitle: "I am Cooper, and I would love to hear from you. For collaborations, consultations, or just a hello, feel free to reach out.",
+      formName: "Name",
+      formEmail: "Email",
+      formWebsite: "Website / Social (Optional)",
+      formTopic: "What can I help with?",
+      formMessage: "Message",
+      formConsent: "I have read and accepted the terms",
+      formSubmit: "Send Message",
+      topics: {
+        collaboration: "Collaboration",
+        uiux: "UI/UX Design",
+        visual: "Brand Visual",
+        photography: "Photography",
+        video: "Video Editing",
+        other: "Other"
+      }
     }
   }
 };
