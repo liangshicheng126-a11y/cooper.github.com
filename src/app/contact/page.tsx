@@ -4,9 +4,18 @@ import { motion } from "framer-motion";
 import { useTranslation } from "@/locales/LanguageProvider";
 import { Mail, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 export default function ContactPage() {
   const { t, mounted } = useTranslation();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    website: "",
+    topic: "",
+    message: "",
+    consent: false,
+  });
 
   if (!mounted) return null;
 
@@ -21,6 +30,23 @@ export default function ContactPage() {
   const item = {
     hidden: { opacity: 0, y: 18 },
     show: { opacity: 1, y: 0, transition: { duration: 0.55 } },
+  };
+
+  const submitByMail = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim() || !formData.consent) return;
+
+    const subject = `[Portfolio Contact] ${formData.topic || "General Inquiry"} - ${formData.name}`;
+    const body = [
+      `Name: ${formData.name}`,
+      `Email: ${formData.email}`,
+      `Website/Social: ${formData.website || "-"}`,
+      `Topic: ${formData.topic || "-"}`,
+      "",
+      formData.message,
+    ].join("\n");
+
+    window.location.href = `mailto:liangshicheng303@126.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
   return (
@@ -39,7 +65,7 @@ export default function ContactPage() {
         </motion.header>
 
         <motion.section variants={item} className="glass rounded-[36px] border-white/15 p-6 sm:p-8 lg:p-10">
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={submitByMail}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <label className="space-y-2">
                 <span className="text-xs uppercase tracking-[0.18em] text-foreground/45 font-bold">
@@ -47,6 +73,9 @@ export default function ContactPage() {
                 </span>
                 <input
                   type="text"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
                   className="w-full h-12 rounded-xl bg-white/5 border border-white/15 px-4 outline-none focus:border-indigo-400/50 transition-colors"
                   placeholder={t.contact.formName}
                 />
@@ -57,6 +86,9 @@ export default function ContactPage() {
                 </span>
                 <input
                   type="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
                   className="w-full h-12 rounded-xl bg-white/5 border border-white/15 px-4 outline-none focus:border-indigo-400/50 transition-colors"
                   placeholder={t.contact.formEmail}
                 />
@@ -69,6 +101,8 @@ export default function ContactPage() {
               </span>
               <input
                 type="text"
+                value={formData.website}
+                onChange={(e) => setFormData((prev) => ({ ...prev, website: e.target.value }))}
                 className="w-full h-12 rounded-xl bg-white/5 border border-white/15 px-4 outline-none focus:border-indigo-400/50 transition-colors"
                 placeholder={t.contact.formWebsite}
               />
@@ -78,7 +112,11 @@ export default function ContactPage() {
               <span className="text-xs uppercase tracking-[0.18em] text-foreground/45 font-bold">
                 {t.contact.formTopic}
               </span>
-              <select className="w-full h-12 rounded-xl bg-white/5 border border-white/15 px-4 outline-none focus:border-indigo-400/50 transition-colors">
+              <select
+                value={formData.topic}
+                onChange={(e) => setFormData((prev) => ({ ...prev, topic: e.target.value }))}
+                className="w-full h-12 rounded-xl bg-white/5 border border-white/15 px-4 outline-none focus:border-indigo-400/50 transition-colors"
+              >
                 <option>{t.contact.topics.collaboration}</option>
                 <option>{t.contact.topics.uiux}</option>
                 <option>{t.contact.topics.visual}</option>
@@ -94,13 +132,22 @@ export default function ContactPage() {
               </span>
               <textarea
                 rows={6}
+                required
+                value={formData.message}
+                onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))}
                 className="w-full rounded-xl bg-white/5 border border-white/15 p-4 outline-none focus:border-indigo-400/50 transition-colors resize-y min-h-[150px]"
                 placeholder={t.contact.formMessage}
               />
             </label>
 
             <label className="flex items-start gap-3 text-sm text-foreground/70">
-              <input type="checkbox" className="mt-0.5 accent-indigo-500" />
+              <input
+                type="checkbox"
+                required
+                checked={formData.consent}
+                onChange={(e) => setFormData((prev) => ({ ...prev, consent: e.target.checked }))}
+                className="mt-0.5 accent-indigo-500"
+              />
               <span>{t.contact.formConsent}</span>
             </label>
 
