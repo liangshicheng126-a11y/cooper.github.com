@@ -51,7 +51,7 @@ export default function Home() {
         className="flex flex-col flex-1 space-y-6"
       >
         {/* Hero Section */}
-        <section className="min-h-[36vh] lg:min-h-[44vh] flex flex-col justify-start pt-2 pb-0">
+        <section className="min-h-[36vh] lg:min-h-[44vh] flex flex-col justify-start pt-1 sm:pt-2 pb-0">
           <motion.div 
             variants={heroSoft}
             className="mb-8 inline-flex items-center space-x-3 px-4 py-1.5 rounded-full glass border-white/10 text-indigo-500 text-sm font-medium w-fit max-w-full"
@@ -65,7 +65,7 @@ export default function Home() {
 
           <motion.div variants={heroMask} className="overflow-hidden mb-6 sm:mb-8">
             <motion.h1 
-              className="text-5xl sm:text-6xl lg:text-8xl font-bold tracking-tight max-w-5xl leading-[1.1]"
+              className="text-4xl sm:text-6xl lg:text-8xl font-bold tracking-tight max-w-5xl leading-[1.1]"
             >
               {t.hero.title}
             </motion.h1>
@@ -78,24 +78,24 @@ export default function Home() {
             {t.hero.description}
           </motion.p>
 
-          <motion.div variants={heroSoft} className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-0 sm:space-x-6">
+          <motion.div variants={heroSoft} className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-0 sm:space-x-6">
             <Link
               href="/portfolio"
-              className="px-8 sm:px-10 py-4 sm:py-5 bg-indigo-600 text-white rounded-2xl font-bold flex items-center justify-center space-x-3 hover:bg-indigo-700 transition-all hover:scale-105 shadow-xl shadow-indigo-500/20"
+              className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 bg-indigo-600 text-white rounded-2xl font-bold flex items-center justify-center space-x-3 hover:bg-indigo-700 transition-all hover:scale-105 shadow-xl shadow-indigo-500/20"
             >
               <span>{t.nav.portfolio}</span>
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
               href="/about"
-              className="px-8 sm:px-10 py-4 sm:py-5 glass rounded-2xl font-bold flex items-center justify-center space-x-3 hover:bg-white/10 transition-all"
+              className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 glass rounded-2xl font-bold flex items-center justify-center space-x-3 hover:bg-white/10 transition-all"
             >
               <span>{t.nav.about}</span>
             </Link>
 
             <motion.div
               variants={heroSoft}
-              className="text-foreground/45 text-xs uppercase tracking-[0.24em] font-semibold flex items-center gap-3 sm:px-2"
+              className="hidden sm:flex text-foreground/45 text-xs uppercase tracking-[0.24em] font-semibold items-center gap-3 sm:px-2"
             >
               <span>Scroll down</span>
               <motion.span
@@ -110,7 +110,7 @@ export default function Home() {
             
             <motion.div 
               variants={item}
-              className="sm:ml-12 flex items-center space-x-4 sm:border-l border-white/10 sm:pl-12 py-2"
+              className="w-full sm:w-auto sm:ml-12 flex items-center space-x-4 sm:border-l border-white/10 sm:pl-12 py-2"
             >
               <div className="p-3 rounded-xl bg-indigo-500/10">
                 <Zap className="w-5 h-5 text-indigo-500 fill-indigo-500/20" />

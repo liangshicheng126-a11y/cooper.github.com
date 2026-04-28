@@ -51,7 +51,7 @@ export default function RootLayout({
           <div className="flex min-h-screen">
             <Sidebar />
             <LanguageToggle />
-            <main className="flex-1 ml-0 xl:ml-80 p-6 sm:p-8 xl:p-12 pr-6 sm:pr-10 xl:pr-24 pt-24 xl:pt-12 relative z-10">
+            <main className="flex-1 ml-0 xl:ml-80 px-4 sm:px-8 xl:px-12 pb-8 sm:pb-10 xl:pb-12 pt-24 xl:pt-12 xl:pr-24 relative z-10">
               <PageTransition>
                 {children}
               </PageTransition>

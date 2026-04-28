@@ -42,7 +42,7 @@ export default function About() {
   return (
     <div className={cn("max-w-4xl pb-8", !mounted && "opacity-0")}>
       <motion.div variants={container} initial="hidden" animate="show">
-        <header className="mb-20">
+        <header className="mb-14 sm:mb-20">
           <motion.div variants={item} className="mb-4">
              <h2 className="text-2xl font-medium text-indigo-500">{t.about.name}</h2>
           </motion.div>
@@ -106,13 +106,13 @@ export default function About() {
         </header>
 
         {/* Philosophy Quote */}
-        <motion.section variants={item} className="mb-24 p-12 rounded-[40px] bg-indigo-500/5 border border-indigo-500/10 italic">
-          <p className="text-2xl text-indigo-500/80 leading-relaxed text-center">
+        <motion.section variants={item} className="mb-16 sm:mb-24 p-6 sm:p-12 rounded-[28px] sm:rounded-[40px] bg-indigo-500/5 border border-indigo-500/10 italic">
+          <p className="text-lg sm:text-2xl text-indigo-500/80 leading-relaxed text-center">
             &ldquo;{t.about.philosophy}&rdquo;
           </p>
         </motion.section>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 sm:gap-20">
           {/* Skills Section */}
           <section>
             <motion.h2
@@ -190,9 +190,9 @@ export default function About() {
         {/* CTA Section */}
         <motion.section
           variants={item}
-          className="mt-32 p-16 rounded-[40px] glass border-white/10 flex flex-col items-center text-center bg-gradient-to-br from-indigo-500/5 to-purple-500/5 relative overflow-hidden"
+          className="mt-20 sm:mt-32 p-8 sm:p-16 rounded-[28px] sm:rounded-[40px] glass border-white/10 flex flex-col items-center text-center bg-gradient-to-br from-indigo-500/5 to-purple-500/5 relative overflow-hidden"
         >
-          <h2 className="relative z-10 text-4xl font-bold mb-8">{t.about.ctaTitle}</h2>
+          <h2 className="relative z-10 text-2xl sm:text-4xl font-bold mb-6 sm:mb-8">{t.about.ctaTitle}</h2>
           <Link
             href="/contact"
             className="relative z-10 px-10 py-5 bg-foreground text-background rounded-2xl font-bold flex items-center space-x-3 hover:opacity-90 transition-all hover:scale-105"

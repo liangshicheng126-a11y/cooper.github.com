@@ -197,7 +197,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
 
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="max-w-5xl pb-8">
-      <motion.div variants={item} className="mb-12">
+      <motion.div variants={item} className="mb-8 sm:mb-12">
         <Link
           href="/portfolio"
           className="inline-flex items-center space-x-2 text-foreground/60 hover:text-indigo-500 transition-colors group"
@@ -207,7 +207,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
         </Link>
       </motion.div>
 
-      <header className="mb-16">
+      <header className="mb-10 sm:mb-16">
         <motion.div variants={heroMask} className="overflow-hidden mb-6">
           <motion.h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
             {project.title}
@@ -220,18 +220,18 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
         )}
       </header>
 
-      <motion.div variants={item} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-16 lg:mb-24">
-        <div className="glass p-8 rounded-3xl border-white/5">
+      <motion.div variants={item} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-12 sm:mb-16 lg:mb-24">
+        <div className="glass p-6 sm:p-8 rounded-3xl border-white/5">
           <User className="w-6 h-6 text-indigo-500 mb-4" />
           <h4 className="text-xs uppercase font-bold text-foreground/40 tracking-widest mb-2">{t.portfolio.projectDetail.role}</h4>
           <p className="text-lg font-bold">{project.role}</p>
         </div>
-        <div className="glass p-8 rounded-3xl border-white/5">
+        <div className="glass p-6 sm:p-8 rounded-3xl border-white/5">
           <Calendar className="w-6 h-6 text-indigo-500 mb-4" />
           <h4 className="text-xs uppercase font-bold text-foreground/40 tracking-widest mb-2">{t.portfolio.projectDetail.date}</h4>
           <p className="text-lg font-bold">{project.date}</p>
         </div>
-        <div className="glass p-8 rounded-3xl border-white/5">
+        <div className="glass p-6 sm:p-8 rounded-3xl border-white/5">
           <Layout className="w-6 h-6 text-indigo-500 mb-4" />
           <h4 className="text-xs uppercase font-bold text-foreground/40 tracking-widest mb-2">{t.portfolio.projectDetail.category}</h4>
           <p className="text-lg font-bold">
@@ -247,7 +247,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
       </motion.div>
 
       {!hasBilibiliPreview && (
-        <motion.div variants={item} className="aspect-[21/9] rounded-[40px] overflow-hidden glass border-white/10 mb-16">
+        <motion.div variants={item} className="aspect-[4/3] sm:aspect-[21/9] rounded-[28px] sm:rounded-[40px] overflow-hidden glass border-white/10 mb-12 sm:mb-16">
           <div
             className="w-full h-full"
             style={{
@@ -400,7 +400,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
                         >
                           <button
                             type="button"
-                            className="relative w-[240px] sm:w-[280px] lg:w-[320px] text-left"
+                            className="relative w-[78vw] max-w-[260px] sm:w-[280px] lg:w-[320px] text-left"
                             onClick={() => {
                               const drag = posterDragState.current[group.label];
                               if (drag?.moved) {

@@ -185,18 +185,18 @@ export default function ContactPage() {
               <span>{t.contact.formConsent}</span>
             </label>
 
-            <div className="pt-2 flex flex-wrap items-center gap-4">
+            <div className="pt-2 flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 sm:gap-4">
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="inline-flex items-center gap-2 px-6 h-12 rounded-xl bg-indigo-500 text-white font-bold hover:bg-indigo-600 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+                className="inline-flex w-full sm:w-auto justify-center items-center gap-2 px-6 h-12 rounded-xl bg-indigo-500 text-white font-bold hover:bg-indigo-600 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 <Send className="w-4 h-4" />
                 <span>{isSubmitting ? t.contact.formSending : t.contact.formSubmit}</span>
               </button>
               <a
                 href="mailto:liangshicheng303@126.com"
-                className="inline-flex items-center gap-2 text-indigo-500 hover:text-indigo-400 transition-colors"
+                className="inline-flex items-center gap-2 text-indigo-500 hover:text-indigo-400 transition-colors break-all"
               >
                 <Mail className="w-4 h-4" />
                 <span>liangshicheng303@126.com</span>
