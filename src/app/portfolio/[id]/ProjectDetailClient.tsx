@@ -87,6 +87,24 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
     setLightboxPhotos(photos);
     setLightboxIndex(index);
   };
+  const resultsSection = (
+    <motion.section variants={item} className="text-center max-w-3xl mx-auto">
+      <h2 className="text-3xl font-bold mb-8 flex items-center justify-center space-x-3">
+        <CheckCircle className="w-6 h-6 text-indigo-500" />
+        <span>{t.portfolio.projectDetail.results}</span>
+      </h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
+        <div className="p-8 rounded-3xl bg-indigo-500/5 border border-indigo-500/10 transition-all hover:bg-indigo-500/10">
+          <span className="text-4xl font-bold text-indigo-500 mb-2 block">4w+</span>
+          <span className="text-sm text-foreground/40 font-medium">{t.portfolio.projectDetail.userEngagement}</span>
+        </div>
+        <div className="p-8 rounded-3xl bg-purple-500/5 border border-purple-500/10 transition-all hover:bg-purple-500/10">
+          <span className="text-4xl font-bold text-purple-500 mb-2 block">50%+</span>
+          <span className="text-sm text-foreground/40 font-medium">{t.portfolio.projectDetail.activeUsers}</span>
+        </div>
+      </div>
+    </motion.section>
+  );
 
   useEffect(() => {
     if (id !== "p3") return;
@@ -266,6 +284,12 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
       )}
 
       {hasBilibiliPreview && (
+        <>
+        {id === "p4" && (
+          <div className="mb-12 lg:mb-16">
+            {resultsSection}
+          </div>
+        )}
         <motion.section variants={item} className="mb-16 lg:mb-24">
           <div className="flex items-center justify-between gap-4 mb-5">
             <h2 className="text-2xl font-bold">{t.portfolio.projectDetail.videoPreview}</h2>
@@ -296,26 +320,12 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
             ))}
           </div>
         </motion.section>
+        </>
       )}
 
       <div className="space-y-16 lg:space-y-24">
-        {id !== "p3" && (
-          <motion.section variants={item} className="text-center max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold mb-8 flex items-center justify-center space-x-3">
-            <CheckCircle className="w-6 h-6 text-indigo-500" />
-            <span>{t.portfolio.projectDetail.results}</span>
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
-            <div className="p-8 rounded-3xl bg-indigo-500/5 border border-indigo-500/10 transition-all hover:bg-indigo-500/10">
-              <span className="text-4xl font-bold text-indigo-500 mb-2 block">4w+</span>
-              <span className="text-sm text-foreground/40 font-medium">{t.portfolio.projectDetail.userEngagement}</span>
-            </div>
-            <div className="p-8 rounded-3xl bg-purple-500/5 border border-purple-500/10 transition-all hover:bg-purple-500/10">
-              <span className="text-4xl font-bold text-purple-500 mb-2 block">50%+</span>
-              <span className="text-sm text-foreground/40 font-medium">{t.portfolio.projectDetail.activeUsers}</span>
-            </div>
-          </div>
-          </motion.section>
+        {id !== "p3" && id !== "p4" && (
+          resultsSection
         )}
       </div>
 
