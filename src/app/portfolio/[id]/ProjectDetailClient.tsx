@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useTranslation } from "@/locales/LanguageProvider";
 import { ArrowLeft, Calendar, User, Layout, CheckCircle, ExternalLink, X, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {
   id: string;
@@ -87,6 +87,15 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
     setLightboxPhotos(photos);
     setLightboxIndex(index);
   };
+
+  useEffect(() => {
+    if (id !== "p3") return;
+    const active = Boolean(lightboxPhotos);
+    document.body.classList.toggle("lightbox-open", active);
+    return () => {
+      document.body.classList.remove("lightbox-open");
+    };
+  }, [lightboxPhotos, id]);
 
   const container = {
     hidden: { opacity: 0 },
@@ -340,11 +349,11 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
               </button>
             </>
           )}
-          <div className="w-full max-w-6xl max-h-[90vh] rounded-2xl overflow-hidden border border-white/20">
+          <div className="w-full max-w-[92vw] max-h-[92vh] rounded-2xl overflow-hidden border border-white/20 flex items-center justify-center">
             <img
               src={lightboxPhotos[lightboxIndex]}
               alt={`${t.portfolio.projectDetail.photoAlt} ${lightboxIndex + 1}`}
-              className="w-full h-full object-contain"
+              className="max-w-full max-h-[90vh] w-auto h-auto object-contain"
             />
           </div>
         </div>

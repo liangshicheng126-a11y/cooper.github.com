@@ -144,7 +144,7 @@ const Sidebar = () => {
       </AnimatePresence>
 
       {/* Desktop Sidebar */}
-      <aside className="hidden xl:flex fixed left-6 top-6 bottom-6 w-64 rounded-3xl z-[70] flex-col p-8 transition-all duration-500 border border-white/25 bg-white/20 backdrop-blur-2xl shadow-[0_24px_80px_rgba(15,23,42,0.22)]">
+      <aside className="sidebar-shell hidden xl:flex fixed left-6 top-6 bottom-6 w-64 rounded-3xl z-[70] flex-col p-8 transition-all duration-500 border border-white/25 bg-white/20 backdrop-blur-2xl shadow-[0_24px_80px_rgba(15,23,42,0.22)]">
         {/* Logo */}
         <div className="mb-12">
           <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent tracking-wider">

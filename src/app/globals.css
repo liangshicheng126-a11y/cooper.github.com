@@ -237,3 +237,9 @@ body {
   display: none;
 }
 
+body.lightbox-open .sidebar-shell {
+  transform: translateX(-130%);
+  opacity: 0;
+  pointer-events: none;
+}
+
