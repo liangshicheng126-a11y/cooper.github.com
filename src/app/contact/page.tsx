@@ -16,9 +16,11 @@ export default function ContactPage() {
     topic: "",
     message: "",
     consent: false,
+    company: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitState, setSubmitState] = useState<"idle" | "success" | "error">("idle");
+  const [startedAt, setStartedAt] = useState(() => Date.now());
 
   if (!mounted) return null;
 
@@ -51,6 +53,8 @@ export default function ContactPage() {
           website: formData.website,
           topic: formData.topic,
           message: formData.message,
+          company: formData.company,
+          startedAt,
         }),
       });
 
@@ -63,7 +67,9 @@ export default function ContactPage() {
         topic: "",
         message: "",
         consent: false,
+        company: "",
       });
+      setStartedAt(Date.now());
     } catch {
       setSubmitState("error");
     } finally {
@@ -88,6 +94,15 @@ export default function ContactPage() {
 
         <motion.section variants={item} className="glass rounded-[36px] border-white/15 p-6 sm:p-8 lg:p-10">
           <form className="space-y-6" onSubmit={submitByMail}>
+            <input
+              type="text"
+              autoComplete="off"
+              tabIndex={-1}
+              aria-hidden="true"
+              className="hidden"
+              value={formData.company}
+              onChange={(e) => setFormData((prev) => ({ ...prev, company: e.target.value }))}
+            />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <label className="space-y-2">
                 <span className="text-xs uppercase tracking-[0.18em] text-foreground/45 font-bold">
