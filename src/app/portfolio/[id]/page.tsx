@@ -5,8 +5,10 @@ import path from "node:path";
 const PROJECT_IDS = ["p1", "p2", "p3", "p4"] as const;
 type PhotographyGroup = {
   year: string;
+  month: string;
   location: string;
   photos: string[];
+  latestTimestamp: number;
 };
 
 export function generateStaticParams() {
@@ -27,19 +29,23 @@ async function getPhotographyGroups(): Promise<PhotographyGroup[]> {
   const photosDir = path.join(process.cwd(), "public", "photos", "photography");
   const groups = new Map<string, PhotographyGroup>();
 
-  const pushPhoto = (year: string, location: string, webPath: string) => {
+  const pushPhoto = (year: string, month: string, location: string, webPath: string, timestamp: number) => {
     const safeYear = year || "Unknown";
+    const safeMonth = month || "Unknown";
     const safeLocation = location || "Unknown";
-    const key = `${safeYear}__${safeLocation}`;
+    const key = `${safeYear}__${safeMonth}__${safeLocation}`;
     const current = groups.get(key);
     if (current) {
       current.photos.push(webPath);
+      current.latestTimestamp = Math.max(current.latestTimestamp, timestamp);
       return;
     }
     groups.set(key, {
       year: safeYear,
+      month: safeMonth,
       location: safeLocation,
       photos: [webPath],
+      latestTimestamp: timestamp,
     });
   };
 
@@ -53,8 +59,24 @@ async function getPhotographyGroups(): Promise<PhotographyGroup[]> {
   };
 
   const isMonth = (name: string) => /^(0?[1-9]|1[0-2])(?:月)?$/.test(name);
+  const normalizeMonth = (name: string) => {
+    const numeric = name.replace("月", "").padStart(2, "0");
+    return /^(0[1-9]|1[0-2])$/.test(numeric) ? numeric : "Unknown";
+  };
   const joinWebPath = (segments: string[]) =>
     `/photos/photography/${segments.map((s) => encodeURIComponent(s)).join("/")}`;
+  const parseFileDate = (name: string) => {
+    const base = name.replace(/\.[^.]+$/, "");
+    const withSeparators = base.match(/(20\d{2})[-_]?([01]\d)[-_]?([0-3]\d)/);
+    if (withSeparators) {
+      return {
+        year: withSeparators[1],
+        month: withSeparators[2],
+        day: withSeparators[3],
+      };
+    }
+    return null;
+  };
 
   const readAllImages = async (dirAbs: string, relParts: string[] = []) => {
     const entries = await fs.readdir(dirAbs, { withFileTypes: true });
@@ -74,9 +96,12 @@ async function getPhotographyGroups(): Promise<PhotographyGroup[]> {
     const images = await readAllImages(photosDir);
     for (const image of images) {
       const parsed = splitFromFileName(image.fileName);
+      const parsedDate = parseFileDate(image.fileName);
       const dirs = image.relParts;
       const yearIndex = dirs.findIndex((part) => isYear(part));
       const year = yearIndex >= 0 ? dirs[yearIndex] : (parsed?.year ?? "Unknown");
+      const monthDir = yearIndex >= 0 ? dirs[yearIndex + 1] : undefined;
+      const month = monthDir && isMonth(monthDir) ? normalizeMonth(monthDir) : (parsedDate?.month ?? "Unknown");
 
       let location = parsed?.location ?? "Unknown";
       if (yearIndex >= 0) {
@@ -87,19 +112,23 @@ async function getPhotographyGroups(): Promise<PhotographyGroup[]> {
         location = dirs[0];
       }
 
-      pushPhoto(year, location, joinWebPath([...dirs, image.fileName]));
+      const safeYearForDate = /^\d{4}$/.test(year) ? year : "1970";
+      const safeMonthForDate = /^(0[1-9]|1[0-2])$/.test(month) ? month : "01";
+      const safeDayForDate = parsedDate?.day ?? "01";
+      const timestamp = Date.parse(`${safeYearForDate}-${safeMonthForDate}-${safeDayForDate}T00:00:00Z`);
+      pushPhoto(year, month, location, joinWebPath([...dirs, image.fileName]), Number.isNaN(timestamp) ? 0 : timestamp);
     }
 
     return Array.from(groups.values())
       .map((group) => ({
         ...group,
-        photos: group.photos.sort((a, b) => a.localeCompare(b, "en")),
+        photos: group.photos.sort((a, b) => b.localeCompare(a, "en")),
       }))
       .sort((a, b) => {
-        if (a.year === b.year) return a.location.localeCompare(b.location, "en");
-        if (a.year === "Unknown") return 1;
-        if (b.year === "Unknown") return -1;
-        return Number(b.year) - Number(a.year);
+        if (b.latestTimestamp !== a.latestTimestamp) return b.latestTimestamp - a.latestTimestamp;
+        if (a.year !== b.year) return b.year.localeCompare(a.year, "en");
+        if (a.month !== b.month) return b.month.localeCompare(a.month, "en");
+        return a.location.localeCompare(b.location, "en");
       });
   } catch {
     return [];

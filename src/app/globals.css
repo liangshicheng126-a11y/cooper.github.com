@@ -205,18 +205,19 @@ body {
 .year-divider {
   overflow: hidden;
   white-space: nowrap;
-  padding: 0.5rem 0;
+  padding: 0.75rem 0;
 }
 
 .year-divider-track {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 1rem;
-  min-width: 200%;
-  animation: year-marquee 14s linear infinite;
+  gap: 2rem;
+  width: max-content;
+  animation: year-marquee 12s linear infinite;
   color: rgb(99 102 241 / 0.8);
-  font-weight: 700;
-  letter-spacing: 0.18em;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
   text-transform: uppercase;
 }
 

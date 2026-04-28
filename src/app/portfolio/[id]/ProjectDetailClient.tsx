@@ -10,6 +10,7 @@ type Props = {
   id: string;
   photographyGroups?: Array<{
     year: string;
+    month: string;
     location: string;
     photos: string[];
   }>;
@@ -185,24 +186,23 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
                 {yearIndex > 0 && (
                   <div className="year-divider glass border-white/10 rounded-xl">
                     <div className="year-divider-track">
-                      <span>{year}</span>
-                      <span>{t.portfolio.projectDetail.yearDividerDot}</span>
-                      <span>{year}</span>
-                      <span>{t.portfolio.projectDetail.yearDividerDot}</span>
-                      <span>{year}</span>
-                      <span>{t.portfolio.projectDetail.yearDividerDot}</span>
-                      <span>{year}</span>
+                      {Array.from({ length: 18 }).map((_, i) => (
+                        <span key={`${year}-${i}`} className="inline-flex items-center gap-4">
+                          <span>{year}</span>
+                          <span>{t.portfolio.projectDetail.yearDividerDot}</span>
+                        </span>
+                      ))}
                     </div>
                   </div>
                 )}
 
                 {photographyByYear[year].map((group) => (
-                  <div key={`${year}-${group.location}`} className="space-y-3">
+                  <div key={`${year}-${group.month}-${group.location}`} className="space-y-3">
                     <div className="flex items-center justify-between gap-4">
-                      <h3 className="text-lg font-semibold text-foreground/85">
-                        {year} · {group.location}
+                      <h3 className="text-2xl sm:text-3xl font-bold text-foreground/90 tracking-tight">
+                        {year}/{group.month} · {group.location}
                       </h3>
-                      <span className="text-xs uppercase tracking-widest text-foreground/45">
+                      <span className="text-sm sm:text-base uppercase tracking-widest text-foreground/55 font-semibold">
                         {group.photos.length} {t.portfolio.projectDetail.photosUnit}
                       </span>
                     </div>
@@ -287,7 +287,8 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
       )}
 
       <div className="space-y-16 lg:space-y-24">
-        <motion.section variants={item} className="text-center max-w-3xl mx-auto">
+        {id !== "p3" && (
+          <motion.section variants={item} className="text-center max-w-3xl mx-auto">
           <h2 className="text-3xl font-bold mb-8 flex items-center justify-center space-x-3">
             <CheckCircle className="w-6 h-6 text-indigo-500" />
             <span>{t.portfolio.projectDetail.results}</span>
@@ -302,7 +303,8 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
               <span className="text-sm text-foreground/40 font-medium">{t.portfolio.projectDetail.activeUsers}</span>
             </div>
           </div>
-        </motion.section>
+          </motion.section>
+        )}
       </div>
 
       {lightboxPhotos && (
