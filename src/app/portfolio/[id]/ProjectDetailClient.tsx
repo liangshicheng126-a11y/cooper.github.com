@@ -144,6 +144,57 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
     },
   };
 
+  if (id === "p2") {
+    return (
+      <motion.div variants={container} initial="hidden" animate="show" className="max-w-5xl pb-8">
+        <motion.div variants={item} className="mb-12">
+          <Link
+            href="/portfolio"
+            className="inline-flex items-center space-x-2 text-foreground/60 hover:text-indigo-500 transition-colors group"
+          >
+            <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+            <span className="font-medium">{t.portfolio.projectDetail.back}</span>
+          </Link>
+        </motion.div>
+
+        <motion.section
+          variants={item}
+          className="min-h-[55vh] rounded-[40px] glass border-white/10 flex flex-col items-center justify-center text-center px-6 py-16"
+        >
+          <motion.div
+            animate={{ y: [0, -10, 0], rotate: [0, -2, 2, 0] }}
+            transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+            className="relative mb-8"
+          >
+            <div className="w-20 h-20 rounded-2xl bg-indigo-500/20 border border-indigo-400/40 flex items-center justify-center">
+              <Layout className="w-10 h-10 text-indigo-400" />
+            </div>
+            <motion.span
+              className="absolute -inset-2 rounded-3xl border border-indigo-400/30"
+              animate={{ scale: [1, 1.12, 1], opacity: [0.45, 0.1, 0.45] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </motion.div>
+
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
+            正在施工中
+          </h1>
+          <p className="text-lg sm:text-xl text-foreground/60 mb-10">
+            敬请期待
+          </p>
+
+          <div className="w-full max-w-md h-2 rounded-full bg-white/10 overflow-hidden">
+            <motion.div
+              className="h-full rounded-full bg-gradient-to-r from-indigo-400 via-violet-400 to-cyan-400"
+              animate={{ x: ["-100%", "100%"] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: "linear" }}
+            />
+          </div>
+        </motion.section>
+      </motion.div>
+    );
+  }
+
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="max-w-5xl pb-8">
       <motion.div variants={item} className="mb-12">
