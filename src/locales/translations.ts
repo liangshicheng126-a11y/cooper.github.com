@@ -92,7 +92,7 @@ export const translations = {
       projects: {
         p1: { title: "品牌视觉重构", desc: "通过深度调研与创意表达，为品牌打造全新的视觉识别系统。", date: "2024", role: "首席设计师" },
         p2: { title: "动态交互系统", desc: "探索未来主义的数字界面交互体验，融合流动感与高可用性的交互美学。", date: "2024", role: "UI/UX 设计师" },
-        p3: { title: "光影叙事集", desc: "捕捉光影瞬间，讲述关于时间与空间的故事。", date: "2023", role: "摄影师" },
+        p3: { title: "光影叙事集", desc: "捕捉光影瞬间，讲述关于时间与空间的故事。", date: "2年+", role: "摄影师" },
         p4: { title: "情绪重启", desc: "用色调打破视觉惯性，用节奏操控情绪起伏，在色彩与时间中寻找叙事的可能性。", date: "2024", role: "视频剪辑师" }
       },
       projectDetail: {
@@ -220,7 +220,7 @@ export const translations = {
       projects: {
         p1: { title: "Brand Visual Refactor", desc: "Crafting a new visual identity system through deep research and creative expression.", date: "2024", role: "Lead Designer" },
         p2: { title: "Dynamic Interaction System", desc: "Exploring futuristic digital interfaces with a dynamic interaction aesthetic and strong usability.", date: "2024", role: "UI/UX Designer" },
-        p3: { title: "Light & Shadow", desc: "Capturing fleeting moments of light and shadow, telling stories of time and space.", date: "2023", role: "Photographer" },
+        p3: { title: "Light & Shadow", desc: "Capturing fleeting moments of light and shadow, telling stories of time and space.", date: "2+ Years", role: "Photographer" },
         p4: { title: "Emotion Reboot", desc: "Breaking visual inertia with color tones, controlling emotional ups and downs with rhythm, finding narrative possibilities in color and time.", date: "2024", role: "Video Editor" }
       },
       projectDetail: {
