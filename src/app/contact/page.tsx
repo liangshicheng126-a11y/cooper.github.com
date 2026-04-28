@@ -81,9 +81,6 @@ export default function ContactPage() {
     <div className={cn("max-w-4xl pb-8", !mounted && "opacity-0")}>
       <motion.div variants={container} initial="hidden" animate="show">
         <motion.header variants={item} className="mb-12">
-          <p className="text-indigo-500 text-sm uppercase tracking-[0.2em] font-bold mb-4">
-            {t.contact.getInTouch}
-          </p>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
             {t.contact.pageTitle}
           </h1>
