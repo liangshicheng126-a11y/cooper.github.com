@@ -204,7 +204,9 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
                           <span className="text-4xl sm:text-5xl font-extrabold tracking-[0.08em]">{year}</span>
                           <span className="text-lg sm:text-xl font-bold tracking-[0.16em]">/{group.month}</span>
                         </span>
-                        <span className="block mt-2 text-lg sm:text-2xl text-foreground/85 font-semibold tracking-wide">{group.location}</span>
+                        <span className="mt-3 inline-flex items-center rounded-full px-4 py-2 glass border-white/25 bg-white/15 text-sm sm:text-base font-black tracking-[0.22em] uppercase bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-500 bg-clip-text text-transparent">
+                          {group.location}
+                        </span>
                       </h3>
                       <span className="text-sm sm:text-base uppercase tracking-widest text-foreground/55 font-semibold">
                         {group.photos.length} {t.portfolio.projectDetail.photosUnit}

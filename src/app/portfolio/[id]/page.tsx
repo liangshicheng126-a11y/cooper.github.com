@@ -133,9 +133,15 @@ async function getPhotographyGroups(): Promise<PhotographyGroup[]> {
           .map((photo) => photo.path),
       }))
       .sort((a, b) => {
+        const aYear = /^\d{4}$/.test(a.year) ? Number(a.year) : -1;
+        const bYear = /^\d{4}$/.test(b.year) ? Number(b.year) : -1;
+        if (bYear !== aYear) return bYear - aYear;
+
+        const aMonth = /^(0[1-9]|1[0-2])$/.test(a.month) ? Number(a.month) : -1;
+        const bMonth = /^(0[1-9]|1[0-2])$/.test(b.month) ? Number(b.month) : -1;
+        if (bMonth !== aMonth) return bMonth - aMonth;
+
         if (b.latestTimestamp !== a.latestTimestamp) return b.latestTimestamp - a.latestTimestamp;
-        if (a.year !== b.year) return b.year.localeCompare(a.year, "en");
-        if (a.month !== b.month) return b.month.localeCompare(a.month, "en");
         return a.location.localeCompare(b.location, "en");
       });
   } catch {
