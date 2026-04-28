@@ -5,6 +5,7 @@ import { useTranslation } from "@/locales/LanguageProvider";
 import { Mail, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import type { FormEvent } from "react";
 
 export default function ContactPage() {
   const { t, mounted } = useTranslation();
@@ -16,6 +17,8 @@ export default function ContactPage() {
     message: "",
     consent: false,
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitState, setSubmitState] = useState<"idle" | "success" | "error">("idle");
 
   if (!mounted) return null;
 
@@ -32,21 +35,40 @@ export default function ContactPage() {
     show: { opacity: 1, y: 0, transition: { duration: 0.55 } },
   };
 
-  const submitByMail = (event: React.FormEvent<HTMLFormElement>) => {
+  const submitByMail = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim() || !formData.consent) return;
+    setIsSubmitting(true);
+    setSubmitState("idle");
 
-    const subject = `[Portfolio Contact] ${formData.topic || "General Inquiry"} - ${formData.name}`;
-    const body = [
-      `Name: ${formData.name}`,
-      `Email: ${formData.email}`,
-      `Website/Social: ${formData.website || "-"}`,
-      `Topic: ${formData.topic || "-"}`,
-      "",
-      formData.message,
-    ].join("\n");
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          website: formData.website,
+          topic: formData.topic,
+          message: formData.message,
+        }),
+      });
 
-    window.location.href = `mailto:liangshicheng303@126.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      if (!response.ok) throw new Error("submit_failed");
+      setSubmitState("success");
+      setFormData({
+        name: "",
+        email: "",
+        website: "",
+        topic: "",
+        message: "",
+        consent: false,
+      });
+    } catch {
+      setSubmitState("error");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -154,10 +176,11 @@ export default function ContactPage() {
             <div className="pt-2 flex flex-wrap items-center gap-4">
               <button
                 type="submit"
-                className="inline-flex items-center gap-2 px-6 h-12 rounded-xl bg-indigo-500 text-white font-bold hover:bg-indigo-600 transition-colors"
+                disabled={isSubmitting}
+                className="inline-flex items-center gap-2 px-6 h-12 rounded-xl bg-indigo-500 text-white font-bold hover:bg-indigo-600 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 <Send className="w-4 h-4" />
-                <span>{t.contact.formSubmit}</span>
+                <span>{isSubmitting ? t.contact.formSending : t.contact.formSubmit}</span>
               </button>
               <a
                 href="mailto:liangshicheng303@126.com"
@@ -167,6 +190,12 @@ export default function ContactPage() {
                 <span>liangshicheng303@126.com</span>
               </a>
             </div>
+            {submitState === "success" && (
+              <p className="text-sm text-emerald-500 font-medium">{t.contact.formSuccess}</p>
+            )}
+            {submitState === "error" && (
+              <p className="text-sm text-rose-500 font-medium">{t.contact.formError}</p>
+            )}
           </form>
         </motion.section>
       </motion.div>

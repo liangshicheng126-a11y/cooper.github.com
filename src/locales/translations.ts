@@ -134,6 +134,9 @@ export const translations = {
       formMessage: "具体内容",
       formConsent: "我已阅读并同意相关条款",
       formSubmit: "发送信息",
+      formSending: "发送中...",
+      formSuccess: "已成功发送，我会尽快回复你。",
+      formError: "发送失败，请稍后重试或直接邮件联系。",
       topics: {
         collaboration: "合作项目",
         uiux: "UI/UX 设计",
@@ -279,6 +282,9 @@ export const translations = {
       formMessage: "Message",
       formConsent: "I have read and accepted the terms",
       formSubmit: "Send Message",
+      formSending: "Sending...",
+      formSuccess: "Message sent successfully. I will get back to you soon.",
+      formError: "Failed to send. Please try again later or contact me via email.",
       topics: {
         collaboration: "Collaboration",
         uiux: "UI/UX Design",
