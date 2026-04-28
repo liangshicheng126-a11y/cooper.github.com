@@ -202,3 +202,35 @@ body {
   100% { border-radius: 53% 47% 46% 54% / 40% 55% 45% 60%; }
 }
 
+.year-divider {
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 0.5rem 0;
+}
+
+.year-divider-track {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 200%;
+  animation: year-marquee 14s linear infinite;
+  color: rgb(99 102 241 / 0.8);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+@keyframes year-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+

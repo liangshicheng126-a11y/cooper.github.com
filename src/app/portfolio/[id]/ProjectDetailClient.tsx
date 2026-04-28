@@ -7,10 +7,14 @@ import Link from "next/link";
 
 type Props = {
   id: string;
-  photographyPhotos?: string[];
+  photographyGroups?: Array<{
+    year: string;
+    location: string;
+    photos: string[];
+  }>;
 };
 
-export default function ProjectDetailClient({ id, photographyPhotos = [] }: Props) {
+export default function ProjectDetailClient({ id, photographyGroups = [] }: Props) {
   const { t, mounted } = useTranslation();
 
   if (!mounted) return null;
@@ -53,7 +57,13 @@ export default function ProjectDetailClient({ id, photographyPhotos = [] }: Prop
     ],
   };
   const hasBilibiliPreview = Boolean(bilibiliByProject[id]?.length);
-  const hasPhotographyGallery = id === "p3" && photographyPhotos.length > 0;
+  const hasPhotographyGallery = id === "p3" && photographyGroups.length > 0;
+  const photographyByYear = photographyGroups.reduce<Record<string, typeof photographyGroups>>((acc, group) => {
+    if (!acc[group.year]) acc[group.year] = [];
+    acc[group.year].push(group);
+    return acc;
+  }, {});
+  const years = Object.keys(photographyByYear);
 
   const container = {
     hidden: { opacity: 0 },
@@ -147,21 +157,54 @@ export default function ProjectDetailClient({ id, photographyPhotos = [] }: Prop
           <div className="flex items-center justify-between gap-4 mb-5">
             <h2 className="text-2xl font-bold">{t.portfolio.projectDetail.photoGallery}</h2>
             <span className="text-sm text-foreground/50">
-              {t.portfolio.projectDetail.photoCount} {photographyPhotos.length}
+              {t.portfolio.projectDetail.photoCount}{" "}
+              {photographyGroups.reduce((sum, group) => sum + group.photos.length, 0)}
             </span>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-            {photographyPhotos.map((photo, index) => (
-              <div
-                key={photo}
-                className="group aspect-[4/5] rounded-2xl overflow-hidden glass border-white/10"
-              >
-                <div
-                  className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                  style={{ backgroundImage: `url(${photo})` }}
-                  role="img"
-                  aria-label={`${t.portfolio.projectDetail.photoAlt} ${index + 1}`}
-                />
+          <div className="space-y-10">
+            {years.map((year, yearIndex) => (
+              <div key={year} className="space-y-6">
+                {yearIndex > 0 && (
+                  <div className="year-divider glass border-white/10 rounded-xl">
+                    <div className="year-divider-track">
+                      <span>{year}</span>
+                      <span>{t.portfolio.projectDetail.yearDividerDot}</span>
+                      <span>{year}</span>
+                      <span>{t.portfolio.projectDetail.yearDividerDot}</span>
+                      <span>{year}</span>
+                      <span>{t.portfolio.projectDetail.yearDividerDot}</span>
+                      <span>{year}</span>
+                    </div>
+                  </div>
+                )}
+
+                {photographyByYear[year].map((group) => (
+                  <div key={`${year}-${group.location}`} className="space-y-3">
+                    <div className="flex items-center justify-between gap-4">
+                      <h3 className="text-lg font-semibold text-foreground/85">
+                        {year} · {group.location}
+                      </h3>
+                      <span className="text-xs uppercase tracking-widest text-foreground/45">
+                        {group.photos.length} {t.portfolio.projectDetail.photosUnit}
+                      </span>
+                    </div>
+                    <div className="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory no-scrollbar">
+                      {group.photos.map((photo, index) => (
+                        <div
+                          key={photo}
+                          className="group shrink-0 w-[78vw] sm:w-[46vw] lg:w-[30vw] max-w-[420px] aspect-[4/5] rounded-2xl overflow-hidden glass border-white/10 snap-start"
+                        >
+                          <div
+                            className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                            style={{ backgroundImage: `url(${photo})` }}
+                            role="img"
+                            aria-label={`${t.portfolio.projectDetail.photoAlt} ${index + 1}`}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </div>
             ))}
           </div>
