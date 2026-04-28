@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useTranslation } from "@/locales/LanguageProvider";
 import { ArrowLeft, Calendar, User, Layout, CheckCircle, ExternalLink } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 type Props = {
   id: string;
@@ -16,6 +17,7 @@ type Props = {
 
 export default function ProjectDetailClient({ id, photographyGroups = [] }: Props) {
   const { t, mounted } = useTranslation();
+  const [photoOrientation, setPhotoOrientation] = useState<Record<string, "landscape" | "portrait" | "square">>({});
 
   if (!mounted) return null;
 
@@ -64,6 +66,16 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
     return acc;
   }, {});
   const years = Object.keys(photographyByYear);
+  const getOrientation = (photo: string) => photoOrientation[photo] ?? "square";
+  const getPhotoCardClass = (orientation: "landscape" | "portrait" | "square") => {
+    if (orientation === "landscape") {
+      return "w-[86vw] sm:w-[56vw] lg:w-[42vw] max-w-[640px] aspect-[16/10]";
+    }
+    if (orientation === "portrait") {
+      return "w-[58vw] sm:w-[34vw] lg:w-[24vw] max-w-[360px] aspect-[3/4]";
+    }
+    return "w-[68vw] sm:w-[42vw] lg:w-[30vw] max-w-[460px] aspect-[1/1]";
+  };
 
   const container = {
     hidden: { opacity: 0 },
@@ -192,14 +204,34 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
                       {group.photos.map((photo, index) => (
                         <div
                           key={photo}
-                          className="group shrink-0 w-[78vw] sm:w-[46vw] lg:w-[30vw] max-w-[420px] aspect-[4/5] rounded-2xl overflow-hidden glass border-white/10 snap-start"
+                          className={`group shrink-0 rounded-2xl overflow-hidden glass border-white/10 snap-start ${getPhotoCardClass(getOrientation(photo))}`}
                         >
-                          <div
-                            className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                            style={{ backgroundImage: `url(${photo})` }}
-                            role="img"
-                            aria-label={`${t.portfolio.projectDetail.photoAlt} ${index + 1}`}
-                          />
+                          <div className="relative w-full h-full">
+                            <img
+                              src={photo}
+                              alt={`${t.portfolio.projectDetail.photoAlt} ${index + 1}`}
+                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                              loading="lazy"
+                              onLoad={(event) => {
+                                const target = event.currentTarget;
+                                const { naturalWidth, naturalHeight } = target;
+                                const next =
+                                  naturalWidth > naturalHeight
+                                    ? "landscape"
+                                    : naturalWidth < naturalHeight
+                                      ? "portrait"
+                                      : "square";
+                                setPhotoOrientation((prev) => (prev[photo] === next ? prev : { ...prev, [photo]: next }));
+                              }}
+                            />
+                            <div className="absolute top-3 left-3 px-2 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase bg-black/35 text-white/90 border border-white/20">
+                              {getOrientation(photo) === "landscape"
+                                ? t.portfolio.projectDetail.landscapeTag
+                                : getOrientation(photo) === "portrait"
+                                  ? t.portfolio.projectDetail.portraitTag
+                                  : t.portfolio.projectDetail.squareTag}
+                            </div>
+                          </div>
                         </div>
                       ))}
                     </div>
