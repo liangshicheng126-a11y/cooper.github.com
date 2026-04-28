@@ -7,9 +7,10 @@ import Link from "next/link";
 
 type Props = {
   id: string;
+  photographyPhotos?: string[];
 };
 
-export default function ProjectDetailClient({ id }: Props) {
+export default function ProjectDetailClient({ id, photographyPhotos = [] }: Props) {
   const { t, mounted } = useTranslation();
 
   if (!mounted) return null;
@@ -52,6 +53,7 @@ export default function ProjectDetailClient({ id }: Props) {
     ],
   };
   const hasBilibiliPreview = Boolean(bilibiliByProject[id]?.length);
+  const hasPhotographyGallery = id === "p3" && photographyPhotos.length > 0;
 
   const container = {
     hidden: { opacity: 0 },
@@ -138,6 +140,32 @@ export default function ProjectDetailClient({ id }: Props) {
             }}
           />
         </motion.div>
+      )}
+
+      {hasPhotographyGallery && (
+        <motion.section variants={item} className="mb-16 lg:mb-24">
+          <div className="flex items-center justify-between gap-4 mb-5">
+            <h2 className="text-2xl font-bold">{t.portfolio.projectDetail.photoGallery}</h2>
+            <span className="text-sm text-foreground/50">
+              {t.portfolio.projectDetail.photoCount} {photographyPhotos.length}
+            </span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+            {photographyPhotos.map((photo, index) => (
+              <div
+                key={photo}
+                className="group aspect-[4/5] rounded-2xl overflow-hidden glass border-white/10"
+              >
+                <div
+                  className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                  style={{ backgroundImage: `url(${photo})` }}
+                  role="img"
+                  aria-label={`${t.portfolio.projectDetail.photoAlt} ${index + 1}`}
+                />
+              </div>
+            ))}
+          </div>
+        </motion.section>
       )}
 
       {hasBilibiliPreview && (
