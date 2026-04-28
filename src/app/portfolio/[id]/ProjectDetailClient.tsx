@@ -256,7 +256,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
               <span className="text-sm text-foreground/40 font-medium">{t.portfolio.projectDetail.userEngagement}</span>
             </div>
             <div className="p-8 rounded-3xl bg-purple-500/5 border border-purple-500/10 transition-all hover:bg-purple-500/10">
-              <span className="text-4xl font-bold text-purple-500 mb-2 block">50+</span>
+              <span className="text-4xl font-bold text-purple-500 mb-2 block">50%+</span>
               <span className="text-sm text-foreground/40 font-medium">{t.portfolio.projectDetail.activeUsers}</span>
             </div>
           </div>
