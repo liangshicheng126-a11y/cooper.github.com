@@ -45,6 +45,10 @@ export default function ProjectDetailClient({ id }: Props) {
         bvid: "BV1ys9rBREj8",
         href: "https://www.bilibili.com/video/BV1ys9rBREj8/",
       },
+      {
+        bvid: "BV1Ct9rBXEAs",
+        href: "https://www.bilibili.com/video/BV1Ct9rBXEAs/",
+      },
     ],
   };
 
