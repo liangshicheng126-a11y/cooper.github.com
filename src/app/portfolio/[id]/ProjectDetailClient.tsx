@@ -51,6 +51,7 @@ export default function ProjectDetailClient({ id }: Props) {
       },
     ],
   };
+  const hasBilibiliPreview = Boolean(bilibiliByProject[id]?.length);
 
   const container = {
     hidden: { opacity: 0 },
@@ -93,23 +94,53 @@ export default function ProjectDetailClient({ id }: Props) {
             {project.title}
           </motion.h1>
         </motion.div>
-        <motion.p variants={item} className="text-lg sm:text-xl lg:text-2xl text-foreground/60 max-w-3xl leading-relaxed">
-          {project.desc}
-        </motion.p>
+        {id !== "p4" && (
+          <motion.p variants={item} className="text-lg sm:text-xl lg:text-2xl text-foreground/60 max-w-3xl leading-relaxed">
+            {project.desc}
+          </motion.p>
+        )}
       </header>
 
-      <motion.div variants={item} className="aspect-[21/9] rounded-[40px] overflow-hidden glass border-white/10 mb-16">
-        <div
-          className="w-full h-full"
-          style={{
-            backgroundImage: `url(${images[id] || images.p1})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        />
+      <motion.div variants={item} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-16 lg:mb-24">
+        <div className="glass p-8 rounded-3xl border-white/5">
+          <User className="w-6 h-6 text-indigo-500 mb-4" />
+          <h4 className="text-xs uppercase font-bold text-foreground/40 tracking-widest mb-2">{t.portfolio.projectDetail.role}</h4>
+          <p className="text-lg font-bold">{project.role}</p>
+        </div>
+        <div className="glass p-8 rounded-3xl border-white/5">
+          <Calendar className="w-6 h-6 text-indigo-500 mb-4" />
+          <h4 className="text-xs uppercase font-bold text-foreground/40 tracking-widest mb-2">{t.portfolio.projectDetail.date}</h4>
+          <p className="text-lg font-bold">{project.date}</p>
+        </div>
+        <div className="glass p-8 rounded-3xl border-white/5">
+          <Layout className="w-6 h-6 text-indigo-500 mb-4" />
+          <h4 className="text-xs uppercase font-bold text-foreground/40 tracking-widest mb-2">{t.portfolio.projectDetail.category}</h4>
+          <p className="text-lg font-bold">
+            {id === "p1"
+              ? t.portfolio.categories.graphic
+              : id === "p2"
+                ? t.portfolio.categories.uiux
+                : id === "p3"
+                  ? t.portfolio.categories.photography
+                  : t.portfolio.categories.video}
+          </p>
+        </div>
       </motion.div>
 
-      {bilibiliByProject[id] && (
+      {!hasBilibiliPreview && (
+        <motion.div variants={item} className="aspect-[21/9] rounded-[40px] overflow-hidden glass border-white/10 mb-16">
+          <div
+            className="w-full h-full"
+            style={{
+              backgroundImage: `url(${images[id] || images.p1})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          />
+        </motion.div>
+      )}
+
+      {hasBilibiliPreview && (
         <motion.section variants={item} className="mb-16 lg:mb-24">
           <div className="flex items-center justify-between gap-4 mb-5">
             <h2 className="text-2xl font-bold">{t.portfolio.projectDetail.videoPreview}</h2>
@@ -141,32 +172,6 @@ export default function ProjectDetailClient({ id }: Props) {
           </div>
         </motion.section>
       )}
-
-      <motion.div variants={item} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-16 lg:mb-24">
-        <div className="glass p-8 rounded-3xl border-white/5">
-          <User className="w-6 h-6 text-indigo-500 mb-4" />
-          <h4 className="text-xs uppercase font-bold text-foreground/40 tracking-widest mb-2">{t.portfolio.projectDetail.role}</h4>
-          <p className="text-lg font-bold">{project.role}</p>
-        </div>
-        <div className="glass p-8 rounded-3xl border-white/5">
-          <Calendar className="w-6 h-6 text-indigo-500 mb-4" />
-          <h4 className="text-xs uppercase font-bold text-foreground/40 tracking-widest mb-2">{t.portfolio.projectDetail.date}</h4>
-          <p className="text-lg font-bold">{project.date}</p>
-        </div>
-        <div className="glass p-8 rounded-3xl border-white/5">
-          <Layout className="w-6 h-6 text-indigo-500 mb-4" />
-          <h4 className="text-xs uppercase font-bold text-foreground/40 tracking-widest mb-2">{t.portfolio.projectDetail.category}</h4>
-          <p className="text-lg font-bold">
-            {id === "p1"
-              ? t.portfolio.categories.graphic
-              : id === "p2"
-                ? t.portfolio.categories.uiux
-                : id === "p3"
-                  ? t.portfolio.categories.photography
-                  : t.portfolio.categories.video}
-          </p>
-        </div>
-      </motion.div>
 
       <div className="space-y-16 lg:space-y-24">
         <motion.section variants={item} className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-16">
