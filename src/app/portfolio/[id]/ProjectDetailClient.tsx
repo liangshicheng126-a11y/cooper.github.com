@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useTranslation } from "@/locales/LanguageProvider";
-import { ArrowLeft, Calendar, User, Layout, CheckCircle, ExternalLink } from "lucide-react";
+import { ArrowLeft, Calendar, User, Layout, CheckCircle, ExternalLink, X, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -18,6 +18,8 @@ type Props = {
 export default function ProjectDetailClient({ id, photographyGroups = [] }: Props) {
   const { t, mounted } = useTranslation();
   const [photoOrientation, setPhotoOrientation] = useState<Record<string, "landscape" | "portrait" | "square">>({});
+  const [lightboxPhotos, setLightboxPhotos] = useState<string[] | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   if (!mounted) return null;
 
@@ -69,12 +71,16 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
   const getOrientation = (photo: string) => photoOrientation[photo] ?? "square";
   const getPhotoCardClass = (orientation: "landscape" | "portrait" | "square") => {
     if (orientation === "landscape") {
-      return "w-[86vw] sm:w-[56vw] lg:w-[42vw] max-w-[640px] aspect-[16/10]";
+      return "col-span-12 sm:col-span-8 lg:col-span-6 aspect-[16/10]";
     }
     if (orientation === "portrait") {
-      return "w-[58vw] sm:w-[34vw] lg:w-[24vw] max-w-[360px] aspect-[3/4]";
+      return "col-span-6 sm:col-span-4 lg:col-span-3 aspect-[3/4]";
     }
-    return "w-[68vw] sm:w-[42vw] lg:w-[30vw] max-w-[460px] aspect-[1/1]";
+    return "col-span-6 sm:col-span-4 lg:col-span-4 aspect-square";
+  };
+  const openLightbox = (photos: string[], index: number) => {
+    setLightboxPhotos(photos);
+    setLightboxIndex(index);
   };
 
   const container = {
@@ -200,13 +206,17 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
                         {group.photos.length} {t.portfolio.projectDetail.photosUnit}
                       </span>
                     </div>
-                    <div className="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory no-scrollbar">
+                    <div className="grid grid-cols-12 gap-4">
                       {group.photos.map((photo, index) => (
                         <div
                           key={photo}
-                          className={`group shrink-0 rounded-2xl overflow-hidden glass border-white/10 snap-start ${getPhotoCardClass(getOrientation(photo))}`}
+                          className={`group rounded-2xl overflow-hidden glass border-white/10 ${getPhotoCardClass(getOrientation(photo))}`}
                         >
-                          <div className="relative w-full h-full">
+                          <button
+                            type="button"
+                            className="relative w-full h-full text-left"
+                            onClick={() => openLightbox(group.photos, index)}
+                          >
                             <img
                               src={photo}
                               alt={`${t.portfolio.projectDetail.photoAlt} ${index + 1}`}
@@ -231,7 +241,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
                                   ? t.portfolio.projectDetail.portraitTag
                                   : t.portfolio.projectDetail.squareTag}
                             </div>
-                          </div>
+                          </button>
                         </div>
                       ))}
                     </div>
@@ -294,6 +304,46 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
           </div>
         </motion.section>
       </div>
+
+      {lightboxPhotos && (
+        <div className="fixed inset-0 z-[120] bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
+          <button
+            type="button"
+            className="absolute top-5 right-5 w-10 h-10 rounded-full glass text-white flex items-center justify-center"
+            onClick={() => setLightboxPhotos(null)}
+            aria-label="Close preview"
+          >
+            <X className="w-5 h-5" />
+          </button>
+          {lightboxPhotos.length > 1 && (
+            <>
+              <button
+                type="button"
+                className="absolute left-3 sm:left-6 w-10 h-10 rounded-full glass text-white flex items-center justify-center"
+                onClick={() => setLightboxIndex((prev) => (prev - 1 + lightboxPhotos.length) % lightboxPhotos.length)}
+                aria-label="Previous photo"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                type="button"
+                className="absolute right-3 sm:right-6 w-10 h-10 rounded-full glass text-white flex items-center justify-center"
+                onClick={() => setLightboxIndex((prev) => (prev + 1) % lightboxPhotos.length)}
+                aria-label="Next photo"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </>
+          )}
+          <div className="w-full max-w-6xl max-h-[90vh] rounded-2xl overflow-hidden border border-white/20">
+            <img
+              src={lightboxPhotos[lightboxIndex]}
+              alt={`${t.portfolio.projectDetail.photoAlt} ${lightboxIndex + 1}`}
+              className="w-full h-full object-contain"
+            />
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 }
