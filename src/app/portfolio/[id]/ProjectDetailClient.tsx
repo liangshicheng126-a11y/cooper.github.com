@@ -204,14 +204,12 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
                   <div key={`${year}-${group.dateLabel}-${group.location}`} className="space-y-3">
                     <div className="flex items-center justify-between gap-4">
                       <h3 className="leading-none">
-                        <span className="inline-flex items-end gap-3 bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
+                        <span className="inline-flex flex-wrap items-center gap-2 sm:gap-3 bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-500 bg-clip-text text-transparent">
                           <span className="text-4xl sm:text-5xl font-extrabold tracking-[0.08em]">{year}</span>
-                          <span className="text-lg sm:text-xl font-bold tracking-[0.16em] text-foreground/55">·</span>
-                          <span className="text-lg sm:text-xl font-bold tracking-[0.16em]">{group.dateLabel}</span>
-                          <span className="text-lg sm:text-xl font-bold tracking-[0.16em] text-foreground/55">·</span>
-                        </span>
-                        <span className="mt-3 inline-flex items-center rounded-full px-4 py-2 glass border-white/25 bg-white/15 text-sm sm:text-base font-black tracking-[0.22em] bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-500 bg-clip-text text-transparent">
-                          {group.location}
+                          <span className="text-xl sm:text-2xl font-bold opacity-80">·</span>
+                          <span className="text-lg sm:text-2xl font-bold tracking-[0.14em] uppercase">{group.dateLabel}</span>
+                          <span className="text-xl sm:text-2xl font-bold opacity-80">·</span>
+                          <span className="text-lg sm:text-2xl font-black tracking-[0.16em] uppercase">{group.location}</span>
                         </span>
                       </h3>
                       <span className="text-sm sm:text-base uppercase tracking-widest text-foreground/55 font-semibold">
