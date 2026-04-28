@@ -211,7 +211,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
 
                 {photographyByYear[year].map((group) => (
                   <div key={`${year}-${group.dateLabel}-${group.location}`} className="space-y-3">
-                    <div className="flex items-center justify-between gap-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
                       <h3 className="leading-none">
                         <span className="inline-flex flex-wrap items-center gap-2 sm:gap-3 bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-500 bg-clip-text text-transparent">
                           <span className="text-4xl sm:text-5xl font-extrabold tracking-[0.08em]">{year}</span>
@@ -221,7 +221,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [] }: Prop
                           <span className="text-lg sm:text-2xl font-black tracking-[0.16em] uppercase">{group.location}</span>
                         </span>
                       </h3>
-                      <span className="text-sm sm:text-base uppercase tracking-widest text-foreground/55 font-semibold">
+                      <span className="text-xs sm:text-base uppercase tracking-widest text-foreground/55 font-semibold self-end sm:self-auto">
                         {group.photos.length} {t.portfolio.projectDetail.photosUnit}
                       </span>
                     </div>

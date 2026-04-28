@@ -46,14 +46,24 @@ const Sidebar = () => {
               COOPER.
             </span>
           </Link>
-          <button
-            type="button"
-            className="glass w-10 h-10 rounded-xl flex items-center justify-center hover:border-indigo-500/30 transition-all active:scale-95"
-            onClick={() => setMobileOpen((v) => !v)}
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
-          >
-            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              className="glass px-3 h-10 rounded-xl text-[11px] font-bold tracking-widest text-foreground/70 hover:text-indigo-500 hover:border-indigo-500/30 transition-all stable-ui-text"
+              onClick={toggleLanguage}
+              aria-label={language === "zh" ? "Switch to English" : "切换至中文"}
+            >
+              {mounted ? (language === "zh" ? "EN" : "中文") : "EN"}
+            </button>
+            <button
+              type="button"
+              className="glass w-10 h-10 rounded-xl flex items-center justify-center hover:border-indigo-500/30 transition-all active:scale-95"
+              onClick={() => setMobileOpen((v) => !v)}
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            >
+              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
       </div>
 

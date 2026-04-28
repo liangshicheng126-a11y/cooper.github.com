@@ -223,6 +223,18 @@ body {
   transform: translate3d(0, 0, 0);
 }
 
+@media (max-width: 640px) {
+  .year-divider {
+    padding: 0.5rem 0;
+  }
+
+  .year-divider-track {
+    gap: 1.25rem;
+    letter-spacing: 0.14em;
+    font-size: clamp(0.9rem, 3.6vw, 1.1rem);
+  }
+}
+
 @keyframes year-marquee {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
