@@ -18,7 +18,7 @@ export const translations = {
         { title: "视频/摄像", desc: "用视觉故事传递品牌价值" }
       ],
       recentWork: "近期动态",
-      latestProject: "最新项目：色彩重启视频剪辑 3.23",
+      latestProject: "最新项目：情绪重启视频剪辑 3.23",
       featuredTitle: "精选作品预览",
       viewAllWork: "查看全部作品",
       tools: {
@@ -91,18 +91,23 @@ export const translations = {
       },
       projects: {
         p1: { title: "品牌视觉重构", desc: "通过深度调研与创意表达，为品牌打造全新的视觉识别系统。", date: "2024", role: "首席设计师" },
-        p2: { title: "液态交互系统", desc: "探索未来主义的数字界面交互体验，融合液态玻璃美学。", date: "2024", role: "UI/UX 设计师" },
+        p2: { title: "动态交互系统", desc: "探索未来主义的数字界面交互体验，融合流动感与高可用性的交互美学。", date: "2024", role: "UI/UX 设计师" },
         p3: { title: "光影叙事集", desc: "捕捉城市角落中的光影瞬间，讲述关于时间与空间的故事。", date: "2023", role: "摄影师" },
-        p4: { title: "色彩重启", desc: "用色调打破视觉惯性，用节奏操控情绪起伏，在色彩与时间中寻找叙事的可能性。", date: "2024", role: "视频剪辑师" }
+        p4: { title: "情绪重启", desc: "用色调打破视觉惯性，用节奏操控情绪起伏，在色彩与时间中寻找叙事的可能性。", date: "2024", role: "视频剪辑师" }
       },
       projectDetail: {
         back: "返回作品集",
         role: "我的角色",
         date: "项目时间",
+        category: "项目分类",
         overview: "项目概述",
         challenge: "挑战与目标",
+        challengeText: "在本项目中，我们面临的主要挑战是如何在保持品牌传统基因的同时，通过现代设计语言吸引更年轻的受众。这不仅需要视觉上的革新，更需要对用户交互心理的深度洞察。",
         solution: "解决方案",
-        results: "成果展示"
+        solutionText: "我们提出了一套基于“动态交互”逻辑的视觉方案，结合动态模糊与半透明层级感，营造更清晰且更具节奏的界面体验。这种方案成功平衡了表达力与易用性。",
+        results: "成果展示",
+        userEngagement: "用户参与度",
+        activeUsers: "活跃用户"
       }
     },
     contact: {
@@ -134,7 +139,7 @@ export const translations = {
         { title: "Video / Cinematography", desc: "Delivering brand value through visual storytelling" }
       ],
       recentWork: "Latest News",
-      latestProject: "Latest Project: Color Reboot Video Edit 3.23",
+      latestProject: "Latest Project: Emotion Reboot Video Edit 3.23",
       featuredTitle: "Featured Works Preview",
       viewAllWork: "View All Works",
       tools: {
@@ -207,18 +212,23 @@ export const translations = {
       },
       projects: {
         p1: { title: "Brand Visual Refactor", desc: "Crafting a new visual identity system through deep research and creative expression.", date: "2024", role: "Lead Designer" },
-        p2: { title: "Liquid Interaction", desc: "Exploring futuristic digital interface experiences blended with liquid glass aesthetics.", date: "2024", role: "UI/UX Designer" },
+        p2: { title: "Dynamic Interaction System", desc: "Exploring futuristic digital interfaces with a dynamic interaction aesthetic and strong usability.", date: "2024", role: "UI/UX Designer" },
         p3: { title: "Light & Shadow", desc: "Capturing moments of light and shadow in city corners, telling stories of time and space.", date: "2023", role: "Photographer" },
-        p4: { title: "Color Reboot", desc: "Breaking visual inertia with color tones, controlling emotional ups and downs with rhythm, finding narrative possibilities in color and time.", date: "2024", role: "Video Editor" }
+        p4: { title: "Emotion Reboot", desc: "Breaking visual inertia with color tones, controlling emotional ups and downs with rhythm, finding narrative possibilities in color and time.", date: "2024", role: "Video Editor" }
       },
       projectDetail: {
         back: "Back to Portfolio",
         role: "My Role",
         date: "Date",
+        category: "Category",
         overview: "Overview",
         challenge: "Challenge",
+        challengeText: "The core challenge was preserving the brand's legacy while using modern design language to attract a younger audience. This required not only visual innovation, but also deep insight into user interaction psychology.",
         solution: "Solution",
-        results: "Results"
+        solutionText: "We proposed a visual framework based on dynamic interaction principles, combining motion blur and translucent layering to create a clearer and more rhythmic interface experience. The approach balanced expressive style with everyday usability.",
+        results: "Results",
+        userEngagement: "User Engagement",
+        activeUsers: "Active Users"
       }
     },
     contact: {

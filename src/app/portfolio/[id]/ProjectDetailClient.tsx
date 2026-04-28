@@ -105,7 +105,7 @@ export default function ProjectDetailClient({ id }: Props) {
         </div>
         <div className="glass p-8 rounded-3xl border-white/5">
           <Layout className="w-6 h-6 text-indigo-500 mb-4" />
-          <h4 className="text-xs uppercase font-bold text-foreground/40 tracking-widest mb-2">Category</h4>
+          <h4 className="text-xs uppercase font-bold text-foreground/40 tracking-widest mb-2">{t.portfolio.projectDetail.category}</h4>
           <p className="text-lg font-bold">
             {id === "p1"
               ? t.portfolio.categories.graphic
@@ -126,7 +126,7 @@ export default function ProjectDetailClient({ id }: Props) {
               <span>{t.portfolio.projectDetail.challenge}</span>
             </h2>
             <p className="text-lg text-foreground/60 leading-relaxed">
-              在本项目中，我们面临的主要挑战是如何在保持品牌传统基因的同时，通过现代的设计语言吸引更年轻的受众。这不仅需要视觉上的革新，更需要对用户交互心理的深度洞察。
+              {t.portfolio.projectDetail.challengeText}
             </p>
           </div>
           <div className="glass rounded-[30px] p-2 border-white/10 aspect-video overflow-hidden">
@@ -143,7 +143,7 @@ export default function ProjectDetailClient({ id }: Props) {
               <span>{t.portfolio.projectDetail.solution}</span>
             </h2>
             <p className="text-lg text-foreground/60 leading-relaxed">
-              我们提出了一套基于“液态玻璃”美学的交互方案，利用动态模糊和半透明层级感，营造出深邃且直观的视觉深度。这种方案成功地平衡了艺术性与易用性。
+              {t.portfolio.projectDetail.solutionText}
             </p>
           </div>
           <div className="glass rounded-[30px] p-2 border-white/10 aspect-video overflow-hidden md:order-1">
@@ -161,11 +161,11 @@ export default function ProjectDetailClient({ id }: Props) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
             <div className="p-8 rounded-3xl bg-indigo-500/5 border border-indigo-500/10 transition-all hover:bg-indigo-500/10">
               <span className="text-4xl font-bold text-indigo-500 mb-2 block">+45%</span>
-              <span className="text-sm text-foreground/40 font-medium">User Engagement</span>
+              <span className="text-sm text-foreground/40 font-medium">{t.portfolio.projectDetail.userEngagement}</span>
             </div>
             <div className="p-8 rounded-3xl bg-purple-500/5 border border-purple-500/10 transition-all hover:bg-purple-500/10">
               <span className="text-4xl font-bold text-purple-500 mb-2 block">100k+</span>
-              <span className="text-sm text-foreground/40 font-medium">Active Users</span>
+              <span className="text-sm text-foreground/40 font-medium">{t.portfolio.projectDetail.activeUsers}</span>
             </div>
           </div>
         </motion.section>
