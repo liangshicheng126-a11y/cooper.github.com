@@ -25,9 +25,8 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
   const [photoOrientation, setPhotoOrientation] = useState<Record<string, "landscape" | "portrait" | "square">>({});
   const [lightboxPhotos, setLightboxPhotos] = useState<string[] | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState(0);
-  const [posterDragDistance, setPosterDragDistance] = useState<Record<string, number>>({});
   const posterViewportRefs = useRef<Record<string, HTMLDivElement | null>>({});
-  const posterTrackRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const posterDragState = useRef<Record<string, { active: boolean; startX: number; startScrollLeft: number; moved: boolean }>>({});
 
   if (!mounted) return null;
 
@@ -129,25 +128,27 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
 
   useEffect(() => {
     if (!hasPosterGallery) return;
+    let raf = 0;
+    const speed = 0.6;
 
-    const recalcPosterDragDistance = () => {
-      const next: Record<string, number> = {};
+    const tick = () => {
       for (const group of posterGroups) {
         const viewport = posterViewportRefs.current[group.label];
-        const track = posterTrackRefs.current[group.label];
-        if (!viewport || !track) {
-          next[group.label] = 0;
-          continue;
+        const drag = posterDragState.current[group.label];
+        if (!viewport || drag?.active) continue;
+        const loopPoint = viewport.scrollWidth / 2;
+        if (loopPoint <= 0) continue;
+        viewport.scrollLeft += speed;
+        if (viewport.scrollLeft >= loopPoint) {
+          viewport.scrollLeft -= loopPoint;
         }
-        next[group.label] = Math.max(0, track.scrollWidth - viewport.clientWidth);
       }
-      setPosterDragDistance(next);
+      raf = window.requestAnimationFrame(tick);
     };
 
-    recalcPosterDragDistance();
-    window.addEventListener("resize", recalcPosterDragDistance);
+    raf = window.requestAnimationFrame(tick);
     return () => {
-      window.removeEventListener("resize", recalcPosterDragDistance);
+      window.cancelAnimationFrame(raf);
     };
   }, [hasPosterGallery, posterGroups]);
 
@@ -334,30 +335,63 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
                     ref={(node) => {
                       posterViewportRefs.current[group.label] = node;
                     }}
-                    className="overflow-hidden cursor-grab active:cursor-grabbing"
+                    className="overflow-hidden cursor-grab active:cursor-grabbing select-none"
+                    onPointerDown={(event) => {
+                      const viewport = posterViewportRefs.current[group.label];
+                      if (!viewport) return;
+                      posterDragState.current[group.label] = {
+                        active: true,
+                        startX: event.clientX,
+                        startScrollLeft: viewport.scrollLeft,
+                        moved: false,
+                      };
+                      viewport.setPointerCapture(event.pointerId);
+                    }}
+                    onPointerMove={(event) => {
+                      const viewport = posterViewportRefs.current[group.label];
+                      const drag = posterDragState.current[group.label];
+                      if (!viewport || !drag?.active) return;
+                      const deltaX = event.clientX - drag.startX;
+                      if (Math.abs(deltaX) > 6) drag.moved = true;
+                      const loopPoint = viewport.scrollWidth / 2;
+                      if (loopPoint <= 0) return;
+                      viewport.scrollLeft = drag.startScrollLeft - deltaX;
+                      if (viewport.scrollLeft < 0) viewport.scrollLeft += loopPoint;
+                      if (viewport.scrollLeft >= loopPoint) viewport.scrollLeft -= loopPoint;
+                    }}
+                    onPointerUp={(event) => {
+                      const viewport = posterViewportRefs.current[group.label];
+                      const drag = posterDragState.current[group.label];
+                      if (!viewport || !drag) return;
+                      drag.active = false;
+                      viewport.releasePointerCapture(event.pointerId);
+                    }}
+                    onPointerCancel={() => {
+                      const drag = posterDragState.current[group.label];
+                      if (drag) drag.active = false;
+                    }}
                   >
-                    <motion.div
-                      ref={(node) => {
-                        posterTrackRefs.current[group.label] = node;
-                      }}
-                      drag="x"
-                      dragConstraints={{ left: -(posterDragDistance[group.label] ?? 0), right: 0 }}
-                      dragElastic={0.08}
-                      className="flex w-max gap-4 sm:gap-5 pr-4"
-                    >
-                      {group.posters.map((poster, index) => (
+                    <div className="flex w-max gap-4 sm:gap-5 pr-4">
+                      {[...group.posters, ...group.posters].map((poster, loopIndex) => (
                         <div
-                          key={poster}
+                          key={`${poster}-${loopIndex}`}
                           className="group shrink-0 rounded-2xl overflow-hidden glass border-white/10"
                         >
                           <button
                             type="button"
                             className="relative w-[240px] sm:w-[280px] lg:w-[320px] text-left"
-                            onClick={() => openLightbox(group.posters, index)}
+                            onClick={() => {
+                              const drag = posterDragState.current[group.label];
+                              if (drag?.moved) {
+                                drag.moved = false;
+                                return;
+                              }
+                              openLightbox(group.posters, loopIndex % group.posters.length);
+                            }}
                           >
                             <img
                               src={poster}
-                              alt={`${t.portfolio.projectDetail.posterAlt} ${index + 1}`}
+                              alt={`${t.portfolio.projectDetail.posterAlt} ${(loopIndex % group.posters.length) + 1}`}
                               className={`w-full object-cover transition-transform duration-700 group-hover:scale-[1.02] ${
                                 getOrientation(poster) === "portrait"
                                   ? "h-[360px] sm:h-[420px] lg:h-[480px]"
@@ -383,7 +417,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
                           </button>
                         </div>
                       ))}
-                    </motion.div>
+                    </div>
                   </div>
                 </div>
               </div>
