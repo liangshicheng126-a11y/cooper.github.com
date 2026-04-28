@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useTranslation } from "@/locales/LanguageProvider";
 import { ArrowLeft, Calendar, User, Layout, CheckCircle, ExternalLink, X, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Props = {
   id: string;
@@ -25,6 +25,9 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
   const [photoOrientation, setPhotoOrientation] = useState<Record<string, "landscape" | "portrait" | "square">>({});
   const [lightboxPhotos, setLightboxPhotos] = useState<string[] | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [posterDragDistance, setPosterDragDistance] = useState<Record<string, number>>({});
+  const posterViewportRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const posterTrackRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   if (!mounted) return null;
 
@@ -123,6 +126,30 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
       document.body.classList.remove("lightbox-open");
     };
   }, [lightboxPhotos, id]);
+
+  useEffect(() => {
+    if (!hasPosterGallery) return;
+
+    const recalcPosterDragDistance = () => {
+      const next: Record<string, number> = {};
+      for (const group of posterGroups) {
+        const viewport = posterViewportRefs.current[group.label];
+        const track = posterTrackRefs.current[group.label];
+        if (!viewport || !track) {
+          next[group.label] = 0;
+          continue;
+        }
+        next[group.label] = Math.max(0, track.scrollWidth - viewport.clientWidth);
+      }
+      setPosterDragDistance(next);
+    };
+
+    recalcPosterDragDistance();
+    window.addEventListener("resize", recalcPosterDragDistance);
+    return () => {
+      window.removeEventListener("resize", recalcPosterDragDistance);
+    };
+  }, [hasPosterGallery, posterGroups]);
 
   const container = {
     hidden: { opacity: 0 },
@@ -300,37 +327,62 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
             {posterGroups.map((group) => (
               <div key={group.label} className="space-y-4">
                 <h3 className="text-lg sm:text-xl font-bold text-foreground/80">{group.label}</h3>
-                <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 sm:gap-5 [column-fill:_balance]">
-                  {group.posters.map((poster, index) => (
-                    <div
-                      key={poster}
-                      className="group mb-4 sm:mb-5 break-inside-avoid rounded-2xl overflow-hidden glass border-white/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(0,0,0,0.22)]"
+                <div className="relative">
+                  <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-8 bg-gradient-to-r from-background to-transparent" />
+                  <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-8 bg-gradient-to-l from-background to-transparent" />
+                  <div
+                    ref={(node) => {
+                      posterViewportRefs.current[group.label] = node;
+                    }}
+                    className="overflow-hidden cursor-grab active:cursor-grabbing"
+                  >
+                    <motion.div
+                      ref={(node) => {
+                        posterTrackRefs.current[group.label] = node;
+                      }}
+                      drag="x"
+                      dragConstraints={{ left: -(posterDragDistance[group.label] ?? 0), right: 0 }}
+                      dragElastic={0.08}
+                      className="flex w-max gap-4 sm:gap-5 pr-4"
                     >
-                      <button
-                        type="button"
-                        className="relative w-full text-left"
-                        onClick={() => openLightbox(group.posters, index)}
-                      >
-                        <img
-                          src={poster}
-                          alt={`${t.portfolio.projectDetail.posterAlt} ${index + 1}`}
-                          className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-[1.02]"
-                          loading="lazy"
-                          onLoad={(event) => {
-                            const target = event.currentTarget;
-                            const { naturalWidth, naturalHeight } = target;
-                            const next =
-                              naturalWidth > naturalHeight
-                                ? "landscape"
-                                : naturalWidth < naturalHeight
-                                  ? "portrait"
-                                  : "square";
-                            setPhotoOrientation((prev) => (prev[poster] === next ? prev : { ...prev, [poster]: next }));
-                          }}
-                        />
-                      </button>
-                    </div>
-                  ))}
+                      {group.posters.map((poster, index) => (
+                        <div
+                          key={poster}
+                          className="group shrink-0 rounded-2xl overflow-hidden glass border-white/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(0,0,0,0.22)]"
+                        >
+                          <button
+                            type="button"
+                            className="relative w-[240px] sm:w-[280px] lg:w-[320px] text-left"
+                            onClick={() => openLightbox(group.posters, index)}
+                          >
+                            <img
+                              src={poster}
+                              alt={`${t.portfolio.projectDetail.posterAlt} ${index + 1}`}
+                              className={`w-full object-cover transition-transform duration-700 group-hover:scale-[1.02] ${
+                                getOrientation(poster) === "portrait"
+                                  ? "h-[360px] sm:h-[420px] lg:h-[480px]"
+                                  : getOrientation(poster) === "landscape"
+                                    ? "h-[210px] sm:h-[240px] lg:h-[270px]"
+                                    : "h-[260px] sm:h-[300px] lg:h-[340px]"
+                              }`}
+                              loading="lazy"
+                              onLoad={(event) => {
+                                const target = event.currentTarget;
+                                const { naturalWidth, naturalHeight } = target;
+                                const next =
+                                  naturalWidth > naturalHeight
+                                    ? "landscape"
+                                    : naturalWidth < naturalHeight
+                                      ? "portrait"
+                                      : "square";
+                                setPhotoOrientation((prev) => (prev[poster] === next ? prev : { ...prev, [poster]: next }));
+                              }}
+                            />
+                          </button>
+                        </div>
+                      ))}
+                    </motion.div>
+                  </div>
                 </div>
               </div>
             ))}
