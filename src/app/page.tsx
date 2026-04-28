@@ -39,9 +39,6 @@ export default function Home() {
     show: { opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.2 } },
   };
 
-  const servicesSlideViewport = { once: false, amount: 0.35, margin: "0px 0px -40px 0px" as const };
-  const servicesScrollEase = [0.22, 1, 0.36, 1] as const;
-
   return (
     <div
       className={cn("flex flex-col pb-8", !mounted && "opacity-0")}
@@ -125,50 +122,34 @@ export default function Home() {
           </motion.div>
         </section>
 
-        {/* Services / Focus Section — title row + 3 cards = 4 scroll-in blocks */}
-        <section
+        {/* Services / Focus Section */}
+        <motion.section 
           id="services-block"
+          variants={item}
           className="section-block rounded-[40px] p-6 sm:p-8 lg:p-10"
         >
-          <motion.div
-            initial={{ opacity: 0, y: 48 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={servicesSlideViewport}
-            transition={{ duration: 0.55, ease: servicesScrollEase }}
-            className="flex items-center space-x-4 mb-6"
-          >
+          <div className="flex items-center space-x-4 mb-6">
             <h2 className="text-2xl font-bold">{t.hero.servicesTitle}</h2>
             <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />
-          </motion.div>
-
+          </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
             {t.hero.services.map((service: any, i: number) => {
               const icons = [Palette, Layout, Video];
               const Icon = icons[i] || Sparkles;
-
+              
               return (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 56 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={servicesSlideViewport}
-                  transition={{
-                    duration: 0.5,
-                    ease: servicesScrollEase,
-                    delay: i * 0.08,
-                  }}
-                  className="glass p-8 rounded-[40px] border-white/5 hover:border-indigo-500/20 transition-all group flex flex-col items-center text-center"
-                >
+                <div key={i} className="glass p-8 rounded-[40px] border-white/5 hover:border-indigo-500/20 transition-all group flex flex-col items-center text-center">
                   <div className="w-16 h-16 rounded-2xl bg-indigo-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                     <Icon className="w-8 h-8 text-indigo-500" />
                   </div>
                   <h3 className="text-2xl font-bold mb-4">{service.title}</h3>
                   <p className="text-foreground/50 leading-relaxed text-sm">{service.desc}</p>
-                </motion.div>
+                </div>
               );
             })}
           </div>
-        </section>
+        </motion.section>
 
         {/* Stats Section */}
         <motion.section
