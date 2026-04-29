@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useTranslation } from "@/locales/LanguageProvider";
 import { ArrowLeft, Calendar, User, Layout, CheckCircle, ExternalLink, X, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {
   id: string;
@@ -25,8 +25,6 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
   const [photoOrientation, setPhotoOrientation] = useState<Record<string, "landscape" | "portrait" | "square">>({});
   const [lightboxPhotos, setLightboxPhotos] = useState<string[] | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState(0);
-  const posterViewportRefs = useRef<Record<string, HTMLDivElement | null>>({});
-  const posterDragState = useRef<Record<string, { active: boolean; startX: number; startScrollLeft: number; moved: boolean }>>({});
 
   if (!mounted) return null;
 
@@ -353,92 +351,38 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
             {posterGroups.map((group) => (
               <div key={group.label} className="space-y-4">
                 <h3 className="text-lg sm:text-xl font-bold text-foreground/80">{group.label}</h3>
-                <div className="relative">
-                  <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-8 bg-gradient-to-r from-background to-transparent" />
-                  <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-8 bg-gradient-to-l from-background to-transparent" />
-                  <div
-                    ref={(node) => {
-                      posterViewportRefs.current[group.label] = node;
-                    }}
-                    className="overflow-x-auto cursor-grab active:cursor-grabbing select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-                    onPointerDown={(event) => {
-                      const viewport = posterViewportRefs.current[group.label];
-                      if (!viewport) return;
-                      posterDragState.current[group.label] = {
-                        active: true,
-                        startX: event.clientX,
-                        startScrollLeft: viewport.scrollLeft,
-                        moved: false,
-                      };
-                      viewport.setPointerCapture(event.pointerId);
-                    }}
-                    onPointerMove={(event) => {
-                      const viewport = posterViewportRefs.current[group.label];
-                      const drag = posterDragState.current[group.label];
-                      if (!viewport || !drag?.active) return;
-                      const deltaX = event.clientX - drag.startX;
-                      if (Math.abs(deltaX) > 6) drag.moved = true;
-                      viewport.scrollLeft = drag.startScrollLeft - deltaX;
-                    }}
-                    onPointerUp={(event) => {
-                      const viewport = posterViewportRefs.current[group.label];
-                      const drag = posterDragState.current[group.label];
-                      if (!viewport || !drag) return;
-                      drag.active = false;
-                      viewport.releasePointerCapture(event.pointerId);
-                    }}
-                    onPointerCancel={() => {
-                      const drag = posterDragState.current[group.label];
-                      if (drag) drag.active = false;
-                    }}
-                  >
-                    <div className="flex w-max gap-4 sm:gap-5 pr-4">
-                      {group.posters.map((poster, index) => (
-                        <div
-                          key={poster}
-                          className="group shrink-0 rounded-2xl overflow-hidden glass border-white/10"
-                        >
-                          <button
-                            type="button"
-                            className="relative w-[78vw] max-w-[260px] sm:w-[280px] lg:w-[320px] text-left"
-                            onClick={() => {
-                              const drag = posterDragState.current[group.label];
-                              if (drag?.moved) {
-                                drag.moved = false;
-                                return;
-                              }
-                              openLightbox(group.posters, index);
-                            }}
-                          >
-                            <img
-                              src={poster}
-                              alt={`${t.portfolio.projectDetail.posterAlt} ${index + 1}`}
-                              className={`w-full object-cover transition-transform duration-700 group-hover:scale-[1.02] ${
-                                getOrientation(poster) === "portrait"
-                                  ? "h-[360px] sm:h-[420px] lg:h-[480px]"
-                                  : getOrientation(poster) === "landscape"
-                                    ? "h-[210px] sm:h-[240px] lg:h-[270px]"
-                                    : "h-[260px] sm:h-[300px] lg:h-[340px]"
-                              }`}
-                              loading="lazy"
-                              draggable={false}
-                              onLoad={(event) => {
-                                const target = event.currentTarget;
-                                const { naturalWidth, naturalHeight } = target;
-                                const next =
-                                  naturalWidth > naturalHeight
-                                    ? "landscape"
-                                    : naturalWidth < naturalHeight
-                                      ? "portrait"
-                                      : "square";
-                                setPhotoOrientation((prev) => (prev[poster] === next ? prev : { ...prev, [poster]: next }));
-                              }}
-                            />
-                          </button>
-                        </div>
-                      ))}
+                <div className="columns-1 sm:columns-2 lg:columns-3 [column-gap:1rem] sm:[column-gap:1.25rem]">
+                  {group.posters.map((poster, index) => (
+                    <div
+                      key={poster}
+                      className="group mb-4 sm:mb-5 break-inside-avoid overflow-hidden rounded-2xl glass border border-white/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_44px_-24px_rgba(15,23,42,0.85)]"
+                    >
+                      <button
+                        type="button"
+                        className="relative block w-full text-left"
+                        onClick={() => openLightbox(group.posters, index)}
+                      >
+                        <img
+                          src={poster}
+                          alt={`${t.portfolio.projectDetail.posterAlt} ${index + 1}`}
+                          className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                          loading="lazy"
+                          draggable={false}
+                          onLoad={(event) => {
+                            const target = event.currentTarget;
+                            const { naturalWidth, naturalHeight } = target;
+                            const next =
+                              naturalWidth > naturalHeight
+                                ? "landscape"
+                                : naturalWidth < naturalHeight
+                                  ? "portrait"
+                                  : "square";
+                            setPhotoOrientation((prev) => (prev[poster] === next ? prev : { ...prev, [poster]: next }));
+                          }}
+                        />
+                      </button>
                     </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             ))}
