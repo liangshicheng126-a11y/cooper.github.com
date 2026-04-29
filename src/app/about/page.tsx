@@ -38,6 +38,31 @@ export default function About() {
 
   const scrollSlideViewport = { once: false, amount: 0.35, margin: "0px 0px -40px 0px" as const };
   const scrollEase = [0.22, 1, 0.36, 1] as const;
+  const smoothViewport = { once: true, amount: 0.2, margin: "0px 0px -24px 0px" as const };
+  const listContainer = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.06,
+      },
+    },
+  };
+  const skillListItem = {
+    hidden: { opacity: 0, x: -20 },
+    show: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.36, ease: scrollEase },
+    },
+  };
+  const hobbyListItem = {
+    hidden: { opacity: 0, x: 20 },
+    show: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.36, ease: scrollEase },
+    },
+  };
 
   return (
     <div className={cn("max-w-4xl pb-8", !mounted && "opacity-0")}>
@@ -126,25 +151,24 @@ export default function About() {
               <span>{t.about.skills}</span>
             </motion.h2>
 
-            <div className="space-y-6">
+            <motion.div
+              variants={listContainer}
+              initial="hidden"
+              whileInView="show"
+              viewport={smoothViewport}
+              className="space-y-6"
+            >
               {t.about.skillDetails.map((skill, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, x: -56 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={scrollSlideViewport}
-                  transition={{
-                    duration: 0.5,
-                    ease: scrollEase,
-                    delay: index * 0.07,
-                  }}
-                  className="flex items-center space-x-4 glass p-4 rounded-2xl border-white/5 hover:border-indigo-500/20 transition-all"
+                  variants={skillListItem}
+                  className="flex items-center space-x-4 glass p-4 rounded-2xl border-white/5 hover:border-indigo-500/20 transition-colors will-change-transform"
                 >
                   <div className="w-2 h-2 rounded-full bg-indigo-500" />
                   <span className="text-lg font-medium">{skill}</span>
                 </motion.div>
               ))}
-            </div>
+            </motion.div>
           </section>
 
           {/* Hobbies Section */}
@@ -160,19 +184,18 @@ export default function About() {
               <span>{t.about.hobbiesTitle}</span>
             </motion.h2>
 
-            <div className="space-y-6">
+            <motion.div
+              variants={listContainer}
+              initial="hidden"
+              whileInView="show"
+              viewport={smoothViewport}
+              className="space-y-6"
+            >
               {t.about.hobbiesGroups.map((group, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, x: 56 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={scrollSlideViewport}
-                  transition={{
-                    duration: 0.5,
-                    ease: scrollEase,
-                    delay: index * 0.07,
-                  }}
-                  className="glass p-5 rounded-2xl border-white/5 hover:border-purple-500/20 transition-all"
+                  variants={hobbyListItem}
+                  className="glass p-5 rounded-2xl border-white/5 hover:border-purple-500/20 transition-colors will-change-transform"
                 >
                   <div className="flex items-center space-x-3 mb-3">
                     <div className="w-2 h-2 rounded-full bg-purple-500" />
@@ -183,7 +206,7 @@ export default function About() {
                   </p>
                 </motion.div>
               ))}
-            </div>
+            </motion.div>
           </section>
         </div>
 
