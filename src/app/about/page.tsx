@@ -38,7 +38,7 @@ export default function About() {
 
   const scrollSlideViewport = { once: false, amount: 0.35, margin: "0px 0px -40px 0px" as const };
   const scrollEase = [0.22, 1, 0.36, 1] as const;
-  const smoothViewport = { once: true, amount: 0.2, margin: "0px 0px -24px 0px" as const };
+  const smoothViewport = { once: false, amount: 0.2, margin: "0px 0px -24px 0px" as const };
   const listContainer = {
     hidden: {},
     show: {
@@ -49,14 +49,6 @@ export default function About() {
   };
   const skillListItem = {
     hidden: { opacity: 0, x: -20 },
-    show: {
-      opacity: 1,
-      x: 0,
-      transition: { duration: 0.36, ease: scrollEase },
-    },
-  };
-  const hobbyListItem = {
-    hidden: { opacity: 0, x: 20 },
     show: {
       opacity: 1,
       x: 0,
@@ -194,7 +186,7 @@ export default function About() {
               {t.about.hobbiesGroups.map((group, index) => (
                 <motion.div
                   key={index}
-                  variants={hobbyListItem}
+                  variants={skillListItem}
                   className="glass p-5 rounded-2xl border-white/5 hover:border-purple-500/20 transition-colors will-change-transform"
                 >
                   <div className="flex items-center space-x-3 mb-3">
