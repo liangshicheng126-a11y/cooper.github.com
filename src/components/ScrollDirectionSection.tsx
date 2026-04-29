@@ -4,7 +4,7 @@ import { motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
-const DIST = 72;
+const DIST = 36;
 const ease = [0.22, 1, 0.36, 1] as const;
 
 type Props = {
@@ -17,13 +17,14 @@ export default function ScrollDirectionSection({ children, className, id }: Prop
   const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, {
     once: false,
-    amount: 0.2,
-    margin: "-8% 0px -10% 0px",
+    amount: 0.14,
+    margin: "-4% 0px -6% 0px",
   });
 
   const lastScrollY = useRef(0);
   const scrollDirRef = useRef<"up" | "down">("down");
   const [offY, setOffY] = useState(DIST);
+  const [hasEntered, setHasEntered] = useState(false);
 
   const computeOffY = () => {
     const el = ref.current;
@@ -61,13 +62,17 @@ export default function ScrollDirectionSection({ children, className, id }: Prop
     setOffY(computeOffY());
   }, [isInView]);
 
+  useEffect(() => {
+    if (isInView) setHasEntered(true);
+  }, [isInView]);
+
   return (
     <motion.section
       ref={ref}
       id={id}
       initial={{ opacity: 0, y: DIST }}
       animate={{
-        opacity: isInView ? 1 : 0,
+        opacity: isInView || hasEntered ? 1 : 0,
         y: isInView ? 0 : offY,
       }}
       transition={{ duration: 0.55, ease }}
