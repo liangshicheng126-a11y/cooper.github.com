@@ -9,6 +9,7 @@ import ScrollDirectionSection from "@/components/ScrollDirectionSection";
 import BlurText from "@/components/BlurText";
 import CountUp from "@/components/CountUp";
 import Magnet from "@/components/Magnet";
+import ToolCard from "@/components/ToolCard";
 
 export default function Home() {
   const { t, mounted } = useTranslation();
@@ -208,7 +209,7 @@ export default function Home() {
             <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />
             <span className="text-foreground/40 text-sm sm:text-right">{t.hero.tools.subtitle}</span>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4" style={{ perspective: "800px" }}>
             {[
               { name: "Photoshop", icon: ImageIcon, color: "#31A8FF" },
               { name: "Illustrator", icon: PenTool, color: "#FF9A00" },
@@ -217,18 +218,7 @@ export default function Home() {
               { name: "CapCut", icon: Scissors, color: "#00C4CC" },
               { name: "Premiere", icon: Film, color: "#9999FF" },
             ].map((tool, i) => (
-              <div
-                key={i}
-                className="glass p-6 rounded-3xl border-white/5 hover:border-white/20 transition-all flex flex-col items-center text-center group"
-              >
-                <div
-                  className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 group-hover:shadow-lg transition-shadow"
-                  style={{ backgroundColor: `${tool.color}20`, boxShadow: `0 0 20px ${tool.color}40` }}
-                >
-                  <tool.icon className="w-7 h-7" style={{ color: tool.color }} />
-                </div>
-                <p className="text-sm font-medium text-foreground/70">{tool.name}</p>
-              </div>
+              <ToolCard key={i} index={i} {...tool} />
             ))}
           </div>
         </ScrollDirectionSection>
