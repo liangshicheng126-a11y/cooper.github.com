@@ -6,6 +6,9 @@ import { ArrowRight, Briefcase, User, Mail, Sparkles, Zap, Figma, Palette, Video
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import ScrollDirectionSection from "@/components/ScrollDirectionSection";
+import BlurText from "@/components/BlurText";
+import CountUp from "@/components/CountUp";
+import Magnet from "@/components/Magnet";
 
 export default function Home() {
   const { t, mounted } = useTranslation();
@@ -64,34 +67,50 @@ export default function Home() {
           </motion.div>
 
           <motion.div variants={heroMask} className="overflow-hidden mb-6 sm:mb-8">
-            <motion.h1 
-              className="text-4xl sm:text-6xl lg:text-8xl font-bold tracking-tight max-w-5xl leading-[1.1]"
-            >
-              {t.hero.title}
-            </motion.h1>
+            <h1 className="text-4xl sm:text-6xl lg:text-8xl font-bold tracking-tight max-w-5xl leading-[1.1]">
+              <BlurText
+                text={t.hero.title}
+                delay={80}
+                direction="bottom"
+                animateBy="words"
+                stepDuration={0.4}
+                className="inline-flex flex-wrap"
+              />
+            </h1>
           </motion.div>
 
-          <motion.p 
+          <motion.div
             variants={heroSoft}
             className="text-lg sm:text-xl lg:text-2xl text-foreground/60 mb-8 sm:mb-12 max-w-3xl leading-relaxed font-light"
           >
-            {t.hero.description}
-          </motion.p>
+            <BlurText
+              text={t.hero.description}
+              delay={40}
+              direction="bottom"
+              animateBy="words"
+              stepDuration={0.32}
+              className="inline-flex flex-wrap leading-relaxed"
+            />
+          </motion.div>
 
           <motion.div variants={heroSoft} className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-0 sm:space-x-6">
-            <Link
-              href="/portfolio"
-              className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 bg-indigo-600 text-white rounded-2xl font-bold flex items-center justify-center space-x-3 hover:bg-indigo-700 transition-all hover:scale-105 shadow-xl shadow-indigo-500/20"
-            >
-              <span>{t.nav.portfolio}</span>
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-            <Link
-              href="/about"
-              className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 glass rounded-2xl font-bold flex items-center justify-center space-x-3 hover:bg-white/10 transition-all"
-            >
-              <span>{t.nav.about}</span>
-            </Link>
+            <Magnet padding={50} magnetStrength={3}>
+              <Link
+                href="/portfolio"
+                className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 bg-indigo-600 text-white rounded-2xl font-bold flex items-center justify-center space-x-3 hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-500/20"
+              >
+                <span>{t.nav.portfolio}</span>
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+            </Magnet>
+            <Magnet padding={50} magnetStrength={3}>
+              <Link
+                href="/about"
+                className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 glass rounded-2xl font-bold flex items-center justify-center space-x-3 hover:bg-white/10 transition-all"
+              >
+                <span>{t.nav.about}</span>
+              </Link>
+            </Magnet>
 
             <motion.div
               variants={heroSoft}
@@ -155,15 +174,27 @@ export default function Home() {
         <ScrollDirectionSection className="section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
           {[
-            { icon: Briefcase, label: t.contact.projectsCompleted, value: "50+" },
-            { icon: User, label: t.contact.happyClients, value: "30+" },
-            { icon: Mail, label: t.contact.activeSupport, value: "24/7" },
+            { icon: Briefcase, label: t.contact.projectsCompleted, countTo: 50, suffix: "+" },
+            { icon: User, label: t.contact.happyClients, countTo: 30, suffix: "+" },
+            { icon: Mail, label: t.contact.activeSupport, countTo: null, value: "24/7" },
           ].map((stat, i) => (
             <div key={i} className="glass p-8 rounded-[40px] border-white/5 group hover:border-indigo-500/30 transition-all flex flex-col items-center text-center">
               <div className="p-4 rounded-3xl bg-white/5 mb-6 group-hover:bg-indigo-500/10 transition-colors">
                 <stat.icon className="w-8 h-8 text-indigo-500" />
               </div>
-              <h3 className="text-5xl font-bold mb-3 tabular-nums">{stat.value}</h3>
+              <h3 className="text-5xl font-bold mb-3 tabular-nums">
+                {stat.countTo !== null ? (
+                  <CountUp
+                    to={stat.countTo}
+                    from={0}
+                    duration={1.6}
+                    delay={i * 0.15}
+                    suffix={stat.suffix}
+                  />
+                ) : (
+                  stat.value
+                )}
+              </h3>
               <p className="text-foreground/40 font-bold uppercase tracking-widest text-xs">{stat.label}</p>
             </div>
           ))}
