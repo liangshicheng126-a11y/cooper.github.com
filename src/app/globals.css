@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes ping-once {
+  0% { transform: scale(1); opacity: 0.7; }
+  70% { transform: scale(1.9); opacity: 0; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+
+.animate-ping-once {
+  animation: ping-once 0.9s cubic-bezier(0, 0, 0.2, 1) forwards;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

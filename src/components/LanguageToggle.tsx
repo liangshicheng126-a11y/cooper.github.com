@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { Languages } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { useTranslation } from "@/locales/LanguageProvider";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
@@ -10,6 +10,13 @@ const LanguageToggle = () => {
   const { language, setLanguage, mounted } = useTranslation();
   const pathname = usePathname();
   const showToggle = pathname === "/";
+  const [pinged, setPinged] = useState(false);
+
+  useEffect(() => {
+    if (!mounted) return;
+    const t = setTimeout(() => setPinged(true), 2200);
+    return () => clearTimeout(t);
+  }, [mounted]);
 
   if (!mounted) return null;
 
@@ -17,25 +24,59 @@ const LanguageToggle = () => {
     setLanguage(language === "zh" ? "en" : "zh");
   };
 
+  const isZh = language === "zh";
+
   return (
     <div
       className={cn(
         "hidden xl:block fixed top-8 right-8 z-[60] transition-all duration-300",
-        showToggle ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-2 pointer-events-none"
+        showToggle
+          ? "opacity-100 translate-y-0 pointer-events-auto"
+          : "opacity-0 -translate-y-2 pointer-events-none"
       )}
     >
-      <button
-        onClick={toggleLanguage}
-        className="glass w-14 h-14 rounded-full flex items-center justify-center text-xs font-bold text-foreground/70 hover:text-indigo-500 hover:border-indigo-500/30 transition-all duration-300 group hover:shadow-lg hover:shadow-indigo-500/10 active:scale-95"
-        title={language === "zh" ? "Switch to English" : "切换至中文"}
-      >
-        <div className="relative w-full h-full flex items-center justify-center">
-          <Languages className="w-5 h-5 transition-all duration-500 group-hover:opacity-0 group-hover:scale-0" />
-          <span className="absolute opacity-0 scale-0 transition-all duration-500 group-hover:opacity-100 group-hover:scale-110 uppercase font-mono tracking-tighter">
-            {language === "zh" ? "EN" : "ZH"}
+      <div className="relative">
+        {/* Ping ring — fires once after page load to catch attention */}
+        {pinged && (
+          <span className="absolute inset-0 rounded-full border border-indigo-400/60 animate-ping-once pointer-events-none" />
+        )}
+
+        <motion.button
+          onClick={toggleLanguage}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.93 }}
+          title={isZh ? "Switch to English" : "切换至中文"}
+          className="relative flex items-center gap-1.5 px-4 py-2.5 rounded-full glass border border-indigo-400/30 shadow-lg shadow-indigo-500/15 hover:border-indigo-400/60 hover:shadow-indigo-500/25 transition-all duration-300 group"
+        >
+          {/* Active-language pill indicator */}
+          <span className="relative flex h-1.5 w-1.5 mr-0.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-60" />
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-indigo-500" />
           </span>
-        </div>
-      </button>
+
+          {/* ZH label */}
+          <span
+            className={cn(
+              "text-[11px] font-bold tracking-widest transition-colors duration-200",
+              isZh ? "text-indigo-400" : "text-foreground/35"
+            )}
+          >
+            中
+          </span>
+
+          <span className="text-foreground/20 text-[10px] font-light select-none">/</span>
+
+          {/* EN label */}
+          <span
+            className={cn(
+              "text-[11px] font-bold tracking-widest transition-colors duration-200",
+              !isZh ? "text-indigo-400" : "text-foreground/35"
+            )}
+          >
+            EN
+          </span>
+        </motion.button>
+      </div>
     </div>
   );
 };
