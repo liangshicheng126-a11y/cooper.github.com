@@ -3,15 +3,15 @@
 /**
  * ProjectCard — 精选作品卡片
  *
- * 入场：clip-path 幕布揭幕动效（灵感来自 reactbits.dev/animations/animated-content）
- *       使用 Framer Motion whileInView 触发，无需 GSAP
+ * 入场：opacity + y 渐入（用 useInView hook 驱动，可靠触发无论元素是否已在视口）
+ *       外层 overflow-hidden 包裹 + clipPath 仅作装饰性幕布效果
  *
  * 悬停：GlareHover 斜向光晕扫过（来自 reactbits.dev/animations/glare-hover）
  *       通过 CSS backgroundPosition 过渡实现，无需额外 CSS 文件
  */
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useRef, useState } from "react";
+import { motion, useInView } from "framer-motion";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
@@ -33,26 +33,26 @@ export default function ProjectCard({
   viewProject,
 }: ProjectCardProps) {
   const [hovered, setHovered] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
 
-  // Stagger direction: even cards from left, odd from right (adds visual rhythm)
-  const xOffset = index % 2 === 0 ? -40 : 40;
+  // useInView is more reliable than whileInView when elements are already
+  // in the viewport on mount (e.g. after !mounted → null hydration pattern)
+  const isInView = useInView(ref, { once: true, amount: 0.08 });
+
+  const xOffset = index % 2 === 0 ? -32 : 32;
 
   return (
     <motion.div
-      initial={{
-        opacity: 0,
-        x: xOffset,
-        clipPath: "inset(0 0 100% 0 round 24px)",
-      }}
-      whileInView={{
-        opacity: 1,
-        x: 0,
-        clipPath: "inset(0 0 0% 0 round 24px)",
-      }}
-      viewport={{ once: true, amount: 0.12 }}
+      ref={ref}
+      initial={{ opacity: 0, y: 48, x: xOffset }}
+      animate={
+        isInView
+          ? { opacity: 1, y: 0, x: 0 }
+          : { opacity: 0, y: 48, x: xOffset }
+      }
       transition={{
-        duration: 0.9,
-        delay: index * 0.14,
+        duration: 0.75,
+        delay: index * 0.12,
         ease: [0.22, 1, 0.36, 1],
       }}
     >
@@ -93,7 +93,7 @@ export default function ProjectCard({
 
         {/* Hover content overlay */}
         <div className="absolute inset-0 p-6 sm:p-10 lg:p-12 flex flex-col justify-end bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <div className="translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-350 ease-out">
+          <div className="translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-out">
             <span className="text-white/60 text-sm font-medium mb-2 block uppercase tracking-widest">
               {category}
             </span>
