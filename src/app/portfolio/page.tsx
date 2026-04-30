@@ -2,9 +2,10 @@
 
 import { motion } from "framer-motion";
 import { useTranslation } from "@/locales/LanguageProvider";
-import { ArrowUpRight, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import ProjectCard from "@/components/ProjectCard";
 
 export default function Portfolio() {
   const { t, mounted } = useTranslation();
@@ -85,47 +86,16 @@ export default function Portfolio() {
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
-          {projects.map((project) => (
-            <Link
+          {projects.map((project, i) => (
+            <ProjectCard
               key={project.id}
-              href={`/portfolio/${project.id}`}
-              className="group relative h-[320px] sm:h-[380px] lg:h-[450px] rounded-3xl overflow-hidden glass border-white/10 cursor-pointer"
-            >
-              {/* Project Image */}
-              <div
-                className="absolute inset-0 transition-transform duration-500 group-hover:scale-105"
-                style={{
-                  backgroundImage: `url(${project.image})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              >
-                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/45 transition-colors" />
-              </div>
-
-              {/* Lightweight Hover Overlay */}
-              <div className="absolute inset-0 p-6 sm:p-10 lg:p-12 flex flex-col justify-end bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                  <span className="text-white/60 text-sm font-medium mb-2 block">
-                    {project.category}
-                  </span>
-                  <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6 leading-tight">
-                    {project.title}
-                  </h3>
-                  <div className="inline-flex items-center space-x-3 text-white font-semibold group/btn">
-                    <span>{t.portfolio.viewProject}</span>
-                    <div className="p-3 rounded-full bg-white/20 group-hover/btn:bg-white group-hover/btn:text-black transition-all">
-                      <ArrowUpRight className="w-5 h-5" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Default Overlay (visible when not hovered) */}
-              <div className="absolute top-8 right-8 p-3 rounded-full glass border-white/20 text-white transition-opacity duration-300 opacity-100 group-hover:opacity-0">
-                <ArrowUpRight className="w-5 h-5" />
-              </div>
-            </Link>
+              id={project.id}
+              title={project.title}
+              category={project.category}
+              image={project.image}
+              index={i}
+              viewProject={t.portfolio.viewProject}
+            />
           ))}
         </div>
 

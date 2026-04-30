@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useTranslation } from "@/locales/LanguageProvider";
-import { ArrowRight, Briefcase, User, Mail, Sparkles, Zap, Figma, Palette, Video, PenTool, Layout, ExternalLink, Image as ImageIcon, Scissors, Clapperboard, Film } from "lucide-react";
+import { ArrowRight, Briefcase, User, Mail, Sparkles, Zap, Figma, Palette, Video, PenTool, Layout, Image as ImageIcon, Scissors, Clapperboard, Film } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import ScrollDirectionSection from "@/components/ScrollDirectionSection";
@@ -10,6 +10,7 @@ import BlurText from "@/components/BlurText";
 import CountUp from "@/components/CountUp";
 import Magnet from "@/components/Magnet";
 import ToolCard from "@/components/ToolCard";
+import ProjectCard from "@/components/ProjectCard";
 
 export default function Home() {
   const { t, mounted } = useTranslation();
@@ -274,24 +275,15 @@ export default function Home() {
                 image: "https://images.unsplash.com/photo-1493863641943-9b68992a8d07?w=800&q=80"
               }
             ].map((project, i) => (
-              <Link
+              <ProjectCard
                 key={i}
-                href={`/portfolio/${project.id}`}
-                className="group relative h-[240px] sm:h-[300px] rounded-[40px] overflow-hidden glass border-white/5"
-              >
-                <div 
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                  style={{ backgroundImage: `url(${project.image})` }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
-                <div className="absolute inset-0 p-8 flex flex-col justify-end">
-                  <span className="text-indigo-400 text-xs font-bold uppercase tracking-widest mb-2">{project.category}</span>
-                  <h3 className="text-xl font-bold text-white group-hover:text-indigo-200 transition-colors">{project.title}</h3>
-                </div>
-                <div className="absolute top-6 right-6 p-3 rounded-full glass border-white/10 text-white opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
-                  <ExternalLink className="w-4 h-4" />
-                </div>
-              </Link>
+                id={project.id}
+                title={project.title}
+                category={project.category}
+                image={project.image}
+                index={i}
+                viewProject={t.hero.viewAllWork}
+              />
             ))}
           </div>
         </ScrollDirectionSection>
