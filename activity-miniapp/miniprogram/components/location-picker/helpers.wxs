@@ -1,0 +1,10 @@
+// components/location-picker/helpers.wxs
+var helpers = {
+  fmtCoord: function(lat, lng) {
+    if (!lat || !lng) return '未获取坐标'
+    var latStr = (Math.round(lat * 10000) / 10000).toString()
+    var lngStr = (Math.round(lng * 10000) / 10000).toString()
+    return latStr + ', ' + lngStr
+  },
+}
+module.exports = helpers

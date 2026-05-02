@@ -37,7 +37,7 @@ function openNavigation(latitude, longitude, name) {
   })
 }
 
-// 逆地理编码（坐标转地址）
+// 逆地理编码（坐标 → 地址）
 function reverseGeocode(latitude, longitude) {
   return new Promise((resolve, reject) => {
     wx.request({
@@ -54,8 +54,37 @@ function reverseGeocode(latitude, longitude) {
   })
 }
 
+// 正向地理编码（文字地址 → 坐标），仅支持国内
+// 成功返回 { latitude, longitude, title, address }
+function geocodeAddress(address) {
+  return new Promise((resolve, reject) => {
+    if (!MAP_KEY || MAP_KEY === 'YOUR_TENCENT_MAP_KEY') {
+      return reject(new Error('MAP_KEY 未配置'))
+    }
+    wx.request({
+      url: `https://apis.map.qq.com/ws/geocoder/v1/?address=${encodeURIComponent(address)}&key=${MAP_KEY}`,
+      success: (res) => {
+        if (res.data?.status === 0) {
+          const loc = res.data.result.location
+          resolve({
+            latitude:  loc.lat,
+            longitude: loc.lng,
+            title:     res.data.result.title || address,
+            address:   res.data.result.address || address,
+          })
+        } else {
+          reject(new Error(res.data?.message || '地址解析失败'))
+        }
+      },
+      fail: reject,
+    })
+  })
+}
+
 module.exports = {
   chooseLocation,
   openNavigation,
   reverseGeocode,
+  geocodeAddress,
 }
+

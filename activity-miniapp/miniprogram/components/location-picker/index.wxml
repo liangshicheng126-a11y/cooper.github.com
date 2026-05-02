@@ -1,106 +1,176 @@
 <!-- components/location-picker/index.wxml -->
+<wxs src="./helpers.wxs" module="h" />
 <view wx:if="{{show}}" class="picker-mask" catchtap="onClose">
   <view class="picker-panel" catchtap="">
 
-    <!-- 标题栏 -->
+    <!-- ══ 标题栏 ══ -->
     <view class="panel-header">
-      <text class="panel-title">선택 지점 / 选择地点</text>
+      <view class="header-left">
+        <!-- 地图确认步骤有返回按钮 -->
+        <view wx:if="{{step === 'map'}}" class="back-btn" bindtap="backToSearch">
+          <text class="back-arrow">‹</text>
+          <text class="back-text">重新搜索</text>
+        </view>
+        <text wx:else class="panel-title">选择地点</text>
+      </view>
       <text class="panel-close" catchtap="onClose">✕</text>
     </view>
 
-    <!-- 国内 / 海外 模式切换 -->
-    <view class="mode-tabs">
-      <view
-        class="mode-tab {{mode === 'china' ? 'mode-tab--active' : ''}}"
-        bindtap="setModeChina"
-      >🇨🇳 中国地点</view>
-      <view
-        class="mode-tab {{mode === 'intl' ? 'mode-tab--active' : ''}}"
-        bindtap="setModeIntl"
-      >🌏 海外地点</view>
-    </view>
+    <!-- ══ STEP 1：搜索 ══ -->
+    <view wx:if="{{step === 'search'}}" class="step-body">
 
-    <!-- 国内：直接调腾讯地图 -->
-    <view wx:if="{{mode === 'china'}}" class="mode-body">
-      <view class="china-tip">调起微信内置地图，支持搜索国内所有地址</view>
-      <button class="btn-pick-china" bindtap="pickChina" loading="{{loading}}">
-        📍 打开地图选择
-      </button>
-    </view>
-
-    <!-- 海外：文字搜索 -->
-    <view wx:else class="mode-body">
-
-      <!-- 语言选择 -->
-      <view class="lang-tabs">
-        <view
-          class="lang-tab {{lang === 'ko' ? 'lang-tab--active' : ''}}"
-          bindtap="setLangKo"
-        >🇰🇷 한국어</view>
-        <view
-          class="lang-tab {{lang === 'zh' ? 'lang-tab--active' : ''}}"
-          bindtap="setLangZh"
-        >🇨🇳 中文</view>
-        <view
-          class="lang-tab {{lang === 'en' ? 'lang-tab--active' : ''}}"
-          bindtap="setLangEn"
-        >🌐 English</view>
+      <!-- 国内 / 海外 tab -->
+      <view class="mode-tabs">
+        <view class="mode-tab {{mode==='china'?'mode-tab--active':''}}" bindtap="setModeChina">🇨🇳 中国</view>
+        <view class="mode-tab {{mode==='intl'?'mode-tab--active':''}}" bindtap="setModeIntl">🌏 海外</view>
       </view>
 
-      <!-- 韩语快捷城市 -->
-      <scroll-view wx:if="{{lang === 'ko'}}" scroll-x class="shortcut-scroll">
-        <view class="shortcut-list">
-          <view
-            wx:for="{{koShortcuts}}"
-            wx:key="*this"
-            class="shortcut-chip"
-            data-kw="{{item}}"
-            bindtap="onShortcut"
-          >{{item}}</view>
-        </view>
-      </scroll-view>
+      <!-- ─ 国内模式 ─ -->
+      <view wx:if="{{mode === 'china'}}" class="mode-body">
 
-      <!-- 搜索框 -->
-      <view class="search-row">
-        <input
-          class="search-input"
-          placeholder="{{placeholder}}"
-          value="{{keyword}}"
-          bindinput="onKeywordInput"
-          confirm-type="search"
-          bindconfirm="doSearch"
-          focus="{{mode === 'intl'}}"
-        />
-        <view class="search-btn {{loading ? 'search-btn--loading' : ''}}" bindtap="doSearch">
-          <text wx:if="{{!loading}}">{{lang === 'ko' ? '검색' : '搜索'}}</text>
-          <view wx:else class="loading-dots"><text>·</text><text>·</text><text>·</text></view>
-        </view>
-      </view>
-      <text class="search-tip">{{searchTip}}</text>
-
-      <!-- 搜索结果 -->
-      <scroll-view scroll-y class="result-list" wx:if="{{results.length > 0}}">
-        <view
-          wx:for="{{results}}"
-          wx:key="place_id"
-          class="result-item"
-          data-idx="{{index}}"
-          bindtap="onSelectResult"
-        >
-          <view class="result-main">
-            <text class="result-name">{{item.primary_name}}</text>
-            <text class="result-badge" wx:if="{{item.country_code}}">{{item.country_flag}}</text>
+        <!-- 文字输入地址栏 -->
+        <view class="text-input-section">
+          <view class="section-label">✏️ 直接输入地址</view>
+          <view class="text-addr-row">
+            <input
+              class="text-addr-input"
+              placeholder="粘贴或手动输入详细地址"
+              value="{{textAddress}}"
+              bindinput="onTextAddressInput"
+              confirm-type="search"
+              bindconfirm="geocodeTextAddress"
+            />
+            <view class="addr-search-btn {{geocoding?'addr-search-btn--loading':''}}" bindtap="geocodeTextAddress">
+              <text wx:if="{{!geocoding}}">定位</text>
+              <text wx:else>…</text>
+            </view>
           </view>
-          <text class="result-sub" wx:if="{{item.secondary_name}}">{{item.secondary_name}}</text>
-          <text class="result-addr">{{item.display_name}}</text>
+          <text class="section-hint">输入后点「定位」自动在地图上显示位置</text>
         </view>
-      </scroll-view>
 
-      <view class="no-result" wx:if="{{searched && results.length === 0 && !loading}}">
-        <text wx:if="{{lang === 'ko'}}">검색 결과가 없습니다. 다른 키워드를 입력해 보세요.</text>
-        <text wx:else>未找到相关地点，请尝试其他关键词</text>
+        <view class="divider-row"><text class="divider-text">或</text></view>
+
+        <!-- 腾讯地图选点 -->
+        <view class="china-tip">使用微信内置地图搜索并选点</view>
+        <button class="btn-pick-china" bindtap="pickChina" loading="{{loading}}">
+          📍 打开地图选择
+        </button>
       </view>
 
+      <!-- ─ 海外模式 ─ -->
+      <view wx:else class="mode-body">
+
+        <!-- 文字输入地址栏 -->
+        <view class="text-input-section">
+          <view class="section-label">✏️ 直接输入地址</view>
+          <view class="text-addr-row">
+            <input
+              class="text-addr-input"
+              placeholder="粘贴或输入完整地址（任意语言）"
+              value="{{textAddress}}"
+              bindinput="onTextAddressInput"
+              confirm-type="search"
+              bindconfirm="geocodeTextAddressIntl"
+            />
+            <view class="addr-search-btn {{geocoding?'addr-search-btn--loading':''}}" bindtap="geocodeTextAddressIntl">
+              <text wx:if="{{!geocoding}}">定位</text>
+              <text wx:else>…</text>
+            </view>
+          </view>
+          <text class="section-hint">支持中文、韩文、英文等各种语言地址</text>
+        </view>
+
+        <view class="divider-row"><text class="divider-text">或 关键词搜索</text></view>
+
+        <!-- 语言选择 -->
+        <view class="lang-tabs">
+          <view class="lang-tab {{lang==='ko'?'lang-tab--active':''}}" bindtap="setLangKo">🇰🇷 한국어</view>
+          <view class="lang-tab {{lang==='zh'?'lang-tab--active':''}}" bindtap="setLangZh">🇨🇳 中文</view>
+          <view class="lang-tab {{lang==='en'?'lang-tab--active':''}}" bindtap="setLangEn">🌐 English</view>
+        </view>
+
+        <!-- 韩语快捷 -->
+        <scroll-view wx:if="{{lang==='ko'}}" scroll-x class="shortcut-scroll">
+          <view class="shortcut-list">
+            <view wx:for="{{koShortcuts}}" wx:key="*this" class="shortcut-chip" data-kw="{{item}}" bindtap="onShortcut">{{item}}</view>
+          </view>
+        </scroll-view>
+
+        <!-- 搜索框 -->
+        <view class="search-row">
+          <input
+            class="search-input"
+            placeholder="{{placeholder}}"
+            value="{{keyword}}"
+            bindinput="onKeywordInput"
+            confirm-type="search"
+            bindconfirm="doSearch"
+          />
+          <view class="search-btn {{loading?'search-btn--loading':''}}" bindtap="doSearch">
+            <text wx:if="{{!loading}}">{{lang==='ko'?'검색':'搜索'}}</text>
+            <view wx:else class="loading-dots"><text>·</text><text>·</text><text>·</text></view>
+          </view>
+        </view>
+        <text class="search-tip">{{searchTip}}</text>
+
+        <!-- 搜索结果 -->
+        <scroll-view scroll-y class="result-list" wx:if="{{results.length > 0}}">
+          <view wx:for="{{results}}" wx:key="place_id" class="result-item" data-idx="{{index}}" bindtap="onSelectResult">
+            <view class="result-main">
+              <text class="result-name">{{item.primary_name}}</text>
+              <text class="result-badge" wx:if="{{item.country_flag}}">{{item.country_flag}}</text>
+            </view>
+            <text class="result-sub" wx:if="{{item.secondary_name}}">{{item.secondary_name}}</text>
+            <text class="result-addr">{{item.display_name}}</text>
+          </view>
+        </scroll-view>
+
+        <view class="no-result" wx:if="{{searched && results.length===0 && !loading}}">
+          <text wx:if="{{lang==='ko'}}">검색 결과가 없습니다. 다른 키워드를 입력해 보세요.</text>
+          <text wx:else>未找到相关地点，请尝试其他关键词</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- ══ STEP 2：地图确认 & 拖拽调整 ══ -->
+    <view wx:if="{{step === 'map'}}" class="map-confirm-body">
+
+      <!-- 当前地址信息 -->
+      <view class="confirm-addr-card">
+        <text class="confirm-name">{{pendingLocation.name}}</text>
+        <text class="confirm-addr">{{pendingLocation.address}}</text>
+        <text class="confirm-hint">📌 点击地图可移动定位点到精确位置</text>
+      </view>
+
+      <!-- 可交互地图 -->
+      <map
+        id="confirmMap"
+        class="confirm-map"
+        latitude="{{pendingLocation.latitude}}"
+        longitude="{{pendingLocation.longitude}}"
+        scale="{{mapScale}}"
+        markers="{{mapMarkers}}"
+        show-location
+        bindtap="onMapTap"
+        bindregionchange="onRegionChange"
+      />
+
+      <!-- 缩放控制 -->
+      <view class="map-controls">
+        <view class="map-ctrl-btn" bindtap="zoomIn">＋</view>
+        <view class="map-ctrl-btn" bindtap="zoomOut">－</view>
+      </view>
+
+      <!-- 坐标显示 -->
+      <view class="coord-bar">
+        <text class="coord-text">📍 {{h.fmtCoord(pendingLocation.latitude, pendingLocation.longitude)}}</text>
+        <view class="coord-reset" bindtap="resetPin" wx:if="{{pinMoved}}">恢复原位</view>
+      </view>
+
+      <!-- 确认按钮 -->
+      <view class="confirm-bar">
+        <button class="btn-confirm" bindtap="confirmLocation">确认此位置</button>
+      </view>
     </view>
 
   </view>
