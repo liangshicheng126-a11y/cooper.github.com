@@ -37,10 +37,15 @@ Page({
     conflictActivity: '',
     pendingRegisterParams: null,
     loadError: false,
+    loading: true,
   },
 
   onLoad(options) {
     const id = options.id
+    if (!id) {
+      this.setData({ loading: false, loadError: true })
+      return
+    }
     this.setData({ activityId: id })
     this._loadDetail(id)
   },
@@ -53,7 +58,13 @@ Page({
         request.get(`/activities/${id}/sub-activities`),
         request.get(`/activities/${id}/my-registration`),
       ])
+
       const activity = actRes.data
+      if (!activity || !activity.id) {
+        this.setData({ loading: false, loadError: true })
+        return
+      }
+
       const status = getActivityStatus(activity)
       const { text, cls } = STATUS_MAP[status] || STATUS_MAP.active
       const pct = activity.maxParticipants > 0
@@ -89,11 +100,13 @@ Page({
         progressPct: pct,
         progressClass: pct >= 90 ? 'fill-danger' : pct >= 60 ? 'fill-warning' : 'fill-primary',
         cannotRegister: ['ended', 'full', 'cancelled', 'offline'].includes(status),
+        loading: false,
       })
       wx.setNavigationBarTitle({ title: activity.name })
     } catch (e) {
+      console.error('[activity-detail] 加载失败:', e)
       wx.showToast({ title: e.message || '加载失败', icon: 'none' })
-      this.setData({ loadError: true })
+      this.setData({ loadError: true, loading: false })
     } finally {
       wx.hideNavigationBarLoading()
     }

@@ -1,41 +1,58 @@
 <!-- pages/activity-detail/index.wxml -->
 <view class="page">
 
-  <!-- 加载失败提示 -->
-  <view wx:if="{{loadError}}" class="error-state">
-    <text class="error-icon">⚠️</text>
-    <text class="error-text">活动信息加载失败</text>
-    <view class="error-retry btn btn-primary btn-sm" bindtap="onRetry">重新加载</view>
+  <!-- 固定返回按钮（在 scroll-view 外部保证始终可见） -->
+  <view class="back-btn" bindtap="goBack">
+    <text class="back-arrow">‹</text>
   </view>
 
-  <scroll-view wx:else scroll-y class="scroll-view" enable-flex>
+  <!-- 加载骨架屏 -->
+  <view wx:if="{{loading}}" class="skeleton-wrap">
+    <view class="skeleton-cover skeleton-shine" />
+    <view class="skeleton-body">
+      <view class="skeleton-line w90 skeleton-shine" style="height:40rpx;margin-bottom:24rpx;" />
+      <view class="skeleton-line w60 skeleton-shine" />
+      <view class="skeleton-line w75 skeleton-shine" />
+      <view class="skeleton-line w50 skeleton-shine" />
+    </view>
+  </view>
+
+  <!-- 加载失败 -->
+  <view wx:elif="{{loadError}}" class="error-state">
+    <text class="error-icon">⚠️</text>
+    <text class="error-text">活动信息加载失败</text>
+    <view class="btn btn-primary btn-sm" style="margin-top:24rpx;" bindtap="onRetry">重新加载</view>
+  </view>
+
+  <!-- 主内容 -->
+  <scroll-view wx:else scroll-y class="scroll-view" enhanced="{{true}}" show-scrollbar="{{false}}">
 
     <!-- 封面图 -->
-    <view class="cover-section" wx:if="{{activity.coverImage}}">
-      <image src="{{activity.coverImage}}" mode="aspectFill" class="cover-image" />
+    <view class="cover-section">
+      <image
+        wx:if="{{activity.coverImage}}"
+        src="{{activity.coverImage}}"
+        mode="aspectFill"
+        class="cover-image"
+      />
+      <view wx:else class="cover-placeholder">
+        <text class="cover-emoji">🎊</text>
+      </view>
       <view class="cover-gradient" />
-    </view>
-    <view class="cover-placeholder" wx:else>
-      <text class="cover-emoji">🎊</text>
-    </view>
-
-    <!-- 返回按钮 -->
-    <view class="back-btn" bindtap="goBack">
-      <text>‹</text>
     </view>
 
     <!-- 主信息卡 -->
-    <view class="main-card card">
+    <view class="main-card">
+
       <!-- 标题 & 状态 -->
       <view class="title-row">
-        <text class="activity-title">{{activity.name}}</text>
+        <text class="activity-title">{{activity.name || '加载中...'}}</text>
         <view class="status-badge {{statusClass}}">
           <view class="pulse-dot" wx:if="{{statusKey === 'active'}}" />
           <text>{{statusText}}</text>
         </view>
       </view>
 
-      <!-- 分隔线 -->
       <view class="divider" />
 
       <!-- 时间 -->
@@ -76,7 +93,7 @@
           <view class="participants-row">
             <text class="participants-num">{{activity.registrationCount}}</text>
             <text class="participants-total" wx:if="{{activity.maxParticipants > 0}}"> / {{activity.maxParticipants}} 人</text>
-            <text class="participants-total" wx:else>人 (不限)</text>
+            <text class="participants-total" wx:else>人（不限）</text>
           </view>
         </view>
         <view class="progress-mini" wx:if="{{activity.maxParticipants > 0}}">
@@ -87,30 +104,29 @@
         </view>
       </view>
 
-      <!-- 邀请码（需要时显示） -->
+      <!-- 邀请码提示 -->
       <view wx:if="{{activity.requireInvite}}" class="invite-banner">
-        <view class="invite-banner-left">
-          <text class="invite-banner-icon">🔑</text>
-          <view>
-            <text class="invite-banner-title">需要邀请码才能报名</text>
-            <view wx:if="{{isCreator && activity.inviteCode}}" class="invite-code-reveal">
-              <text class="invite-code-text">{{showInviteCode ? activity.inviteCode : '••••••'}}</text>
-              <text class="invite-code-eye" bindtap="toggleInviteCode">{{showInviteCode ? '隐藏' : '查看'}}</text>
-              <text class="invite-code-copy" bindtap="copyInviteCode">复制</text>
-            </view>
+        <text class="invite-banner-icon">🔑</text>
+        <view class="invite-banner-info">
+          <text class="invite-banner-title">需要邀请码才能报名</text>
+          <view wx:if="{{isCreator && activity.inviteCode}}" class="invite-code-reveal">
+            <text class="invite-code-text">{{showInviteCode ? activity.inviteCode : '••••••'}}</text>
+            <text class="invite-code-eye" bindtap="toggleInviteCode">{{showInviteCode ? '隐藏' : '查看'}}</text>
+            <text class="invite-code-copy" bindtap="copyInviteCode">复制</text>
           </view>
         </view>
       </view>
 
-      <!-- 提醒内容 -->
+      <!-- 提醒 -->
       <view class="reminder-box" wx:if="{{activity.reminder}}">
         <text class="reminder-icon">💡</text>
         <text class="reminder-text">{{activity.reminder}}</text>
       </view>
+
     </view>
 
-    <!-- 子活动/场次 -->
-    <view class="section-card card" wx:if="{{subActivities.length > 0}}">
+    <!-- 场次选择 -->
+    <view class="section-card" wx:if="{{subActivities.length > 0}}">
       <view class="section-title">选择场次</view>
       <view
         wx:for="{{subActivities}}"
@@ -136,17 +152,17 @@
       </view>
     </view>
 
-    <!-- 活动描述 -->
-    <view class="section-card card" wx:if="{{activity.description}}">
+    <!-- 活动详情 -->
+    <view class="section-card" wx:if="{{activity.description}}">
       <view class="section-title">活动详情</view>
       <text class="desc-text {{descExpanded ? '' : 'desc-collapsed'}}">{{activity.description}}</text>
       <view class="expand-btn" wx:if="{{activity.description && activity.description.length > 120}}" bindtap="toggleDesc">
-        <text>{{descExpanded ? '收起' : '查看更多'}} {{descExpanded ? '↑' : '↓'}}</text>
+        <text>{{descExpanded ? '收起 ↑' : '查看更多 ↓'}}</text>
       </view>
     </view>
 
-    <!-- 报名者头像列表 -->
-    <view class="section-card card" wx:if="{{registrantAvatars.length > 0}}">
+    <!-- 已报名用户 -->
+    <view class="section-card" wx:if="{{registrantAvatars.length > 0}}">
       <view class="section-title">已报名（{{activity.registrationCount}}人）</view>
       <view class="avatar-list">
         <image
@@ -161,42 +177,29 @@
       </view>
     </view>
 
-    <!-- 举报按钮 -->
-    <view class="report-section" wx:if="{{!isCreator}}">
-      <text class="report-btn" bindtap="onReport">举报此活动</text>
-    </view>
-
-    <!-- 管理员操作区 -->
-    <view class="admin-section card" wx:if="{{isCreator}}">
+    <!-- 管理操作 -->
+    <view class="section-card" wx:if="{{isCreator}}">
       <view class="section-title">管理操作</view>
       <view class="admin-actions">
         <view class="admin-action-btn" bindtap="onViewRegistrations">
           <text class="admin-icon">📋</text>
           <text>查看名单</text>
         </view>
-        <view class="admin-action-btn" bindtap="onExportExcel">
-          <text class="admin-icon">📊</text>
-          <text>导出Excel</text>
+        <view class="admin-action-btn" bindtap="onCheckinQR">
+          <text class="admin-icon">✅</text>
+          <text>签到二维码</text>
         </view>
         <view class="admin-action-btn" bindtap="onShareQR">
           <text class="admin-icon">🔗</text>
           <text>分享二维码</text>
         </view>
-        <view class="admin-action-btn" bindtap="onCheckinQR">
-          <text class="admin-icon">✅</text>
-          <text>签到二维码</text>
-        </view>
-        <view class="admin-action-btn" bindtap="onCopyAnnouncement">
-          <text class="admin-icon">📢</text>
-          <text>群公告</text>
-        </view>
-        <view class="admin-action-btn" bindtap="onGeneratePoster">
-          <text class="admin-icon">🖼</text>
-          <text>生成海报</text>
-        </view>
         <view class="admin-action-btn" bindtap="onNotifyAll">
           <text class="admin-icon">🔔</text>
           <text>通知全员</text>
+        </view>
+        <view class="admin-action-btn" bindtap="onEditActivity">
+          <text class="admin-icon">✏️</text>
+          <text>编辑活动</text>
         </view>
         <view class="admin-action-btn danger" bindtap="onOfflineActivity" wx:if="{{activity.status !== 'offline'}}">
           <text class="admin-icon">⏹</text>
@@ -205,12 +208,16 @@
       </view>
     </view>
 
+    <!-- 举报 -->
+    <view class="report-section" wx:if="{{!isCreator && activity.id}}">
+      <text class="report-btn" bindtap="onReport">举报此活动</text>
+    </view>
+
     <view style="height: 200rpx;" />
   </scroll-view>
 
   <!-- 底部操作栏 -->
-  <view class="bottom-bar">
-    <!-- 未报名 -->
+  <view class="bottom-bar" wx:if="{{!loading && !loadError}}">
     <view wx:if="{{!isRegistered && !isCreator}}">
       <button
         class="btn btn-primary btn-block btn-lg"
@@ -219,12 +226,9 @@
       >
         <text wx:if="{{statusKey === 'full'}}">已报满</text>
         <text wx:elif="{{statusKey === 'ended'}}">活动已结束</text>
-        <text wx:elif="{{statusKey === 'upcoming' || statusKey === 'active'}}">立即报名</text>
-        <text wx:else>{{statusText}}</text>
+        <text wx:else>立即报名</text>
       </button>
     </view>
-
-    <!-- 已报名 -->
     <view wx:elif="{{isRegistered && !isCreator}}" class="registered-bar">
       <view class="registered-tag">
         <text class="registered-check">✓</text>
@@ -232,17 +236,15 @@
       </view>
       <button class="btn btn-outline btn-sm" bindtap="onCancelRegistration">取消报名</button>
     </view>
-
-    <!-- 创建者 -->
     <view wx:elif="{{isCreator}}" class="creator-bar">
       <button class="btn btn-outline flex-1" bindtap="onEditActivity">编辑活动</button>
-      <button class="btn btn-primary flex-1" bindtap="onGeneratePoster">生成海报</button>
+      <button class="btn btn-primary flex-1" bindtap="onViewRegistrations">查看名单</button>
     </view>
   </view>
 
   <!-- 时间冲突弹窗 -->
   <view class="mask" wx:if="{{showConflictModal}}" catchtap="">
-    <view class="conflict-modal card">
+    <view class="conflict-modal">
       <text class="conflict-title">⚠️ 时间冲突提示</text>
       <text class="conflict-desc">您已报名的「{{conflictActivity}}」与此场次时间重叠，是否仍要报名？</text>
       <view class="conflict-actions">
@@ -251,4 +253,5 @@
       </view>
     </view>
   </view>
+
 </view>
