@@ -106,7 +106,7 @@
 
         <view class="form-group">
           <view class="form-label">活动地点 <text class="form-required">*</text></view>
-          <view class="location-picker" bindtap="chooseLocation">
+          <view class="location-picker" bindtap="openLocationPicker">
             <view wx:if="{{form.locationName}}" class="location-selected">
               <view>
                 <text class="location-name">{{form.locationName}}</text>
@@ -116,7 +116,7 @@
             </view>
             <view wx:else class="location-empty">
               <text class="location-icon">📍</text>
-              <text class="location-hint">点击选择地点</text>
+              <text class="location-hint">点击选择地点（支持国内 / 海外）</text>
             </view>
           </view>
         </view>
@@ -270,4 +270,11 @@
       </button>
     </view>
   </view>
+
+  <!-- 地点选择弹窗 -->
+  <location-picker
+    show="{{showLocationPicker}}"
+    bind:close="closeLocationPicker"
+    bind:select="onLocationSelect"
+  />
 </view>

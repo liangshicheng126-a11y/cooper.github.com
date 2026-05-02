@@ -20,6 +20,7 @@ Page({
     activityId: null,
     currentStep: 0,
     descriptionLen: 0,
+    showLocationPicker: false,
     steps: ['基本信息', '时间地点', '报名设置'],
     submitting: false,
     today: toPickerValue(new Date()),
@@ -145,19 +146,28 @@ Page({
     })
   },
 
+  openLocationPicker() {
+    this.setData({ showLocationPicker: true })
+  },
+
+  closeLocationPicker() {
+    this.setData({ showLocationPicker: false })
+  },
+
+  onLocationSelect(e) {
+    const { name, address, latitude, longitude } = e.detail
+    this.setData({
+      showLocationPicker: false,
+      'form.locationName':    name,
+      'form.locationAddress': address,
+      'form.latitude':        latitude,
+      'form.longitude':       longitude,
+    })
+    this._updateMapMarkers()
+  },
+
   async chooseLocation() {
-    try {
-      const loc = await chooseLocation()
-      this.setData({
-        'form.locationName': loc.name,
-        'form.locationAddress': loc.address,
-        'form.latitude': loc.latitude,
-        'form.longitude': loc.longitude,
-      })
-      this._updateMapMarkers()
-    } catch (e) {
-      if (!e.cancelled) wx.showToast({ title: '选择地点失败', icon: 'none' })
-    }
+    this.openLocationPicker()
   },
 
   _updateMapMarkers() {

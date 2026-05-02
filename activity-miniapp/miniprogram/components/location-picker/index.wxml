@@ -1,0 +1,69 @@
+<!-- components/location-picker/index.wxml -->
+<view wx:if="{{show}}" class="picker-mask" catchtap="onClose">
+  <view class="picker-panel" catchtap="">
+
+    <!-- 标题栏 -->
+    <view class="panel-header">
+      <text class="panel-title">选择地点</text>
+      <text class="panel-close" catchtap="onClose">✕</text>
+    </view>
+
+    <!-- 模式切换 -->
+    <view class="mode-tabs">
+      <view
+        class="mode-tab {{mode === 'china' ? 'mode-tab--active' : ''}}"
+        bindtap="setModeChina"
+      >🇨🇳 中国地点</view>
+      <view
+        class="mode-tab {{mode === 'intl' ? 'mode-tab--active' : ''}}"
+        bindtap="setModeIntl"
+      >🌏 海外地点</view>
+    </view>
+
+    <!-- 国内：直接调腾讯地图 -->
+    <view wx:if="{{mode === 'china'}}" class="mode-body">
+      <view class="china-tip">调起微信内置地图，支持搜索国内所有地址</view>
+      <button class="btn-pick-china" bindtap="pickChina" loading="{{loading}}">
+        📍 打开地图选择
+      </button>
+    </view>
+
+    <!-- 海外：文字搜索 -->
+    <view wx:else class="mode-body">
+      <view class="search-row">
+        <input
+          class="search-input"
+          placeholder="输入地址关键词，支持中英文"
+          value="{{keyword}}"
+          bindinput="onKeywordInput"
+          confirm-type="search"
+          bindconfirm="doSearch"
+        />
+        <view class="search-btn" bindtap="doSearch">
+          <text wx:if="{{!loading}}">搜索</text>
+          <text wx:else>...</text>
+        </view>
+      </view>
+      <text class="search-tip">例如：서울 강남구、Tokyo Shibuya、Seoul Gangnam</text>
+
+      <!-- 搜索结果 -->
+      <scroll-view scroll-y class="result-list" wx:if="{{results.length > 0}}">
+        <view
+          wx:for="{{results}}"
+          wx:key="place_id"
+          class="result-item"
+          data-idx="{{index}}"
+          bindtap="onSelectResult"
+        >
+          <text class="result-name">{{item.display_name_short}}</text>
+          <text class="result-addr">{{item.display_name}}</text>
+        </view>
+      </scroll-view>
+
+      <view class="no-result" wx:if="{{searched && results.length === 0 && !loading}}">
+        未找到相关地点，请尝试其他关键词
+      </view>
+    </view>
+
+  </view>
+</view>

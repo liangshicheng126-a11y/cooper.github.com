@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS activities (
   end_time         DATETIME NOT NULL COMMENT '结束时间',
   location_name    VARCHAR(200) NOT NULL DEFAULT '' COMMENT '地点名称',
   location_address VARCHAR(500) NOT NULL DEFAULT '' COMMENT '详细地址',
+  location_country VARCHAR(10)  NOT NULL DEFAULT 'CN' COMMENT 'CN=国内 INTL=海外',
   latitude         DECIMAL(10, 6) COMMENT '纬度',
   longitude        DECIMAL(10, 6) COMMENT '经度',
   max_participants INT NOT NULL DEFAULT 0 COMMENT '人数限制（0=不限）',

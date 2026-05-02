@@ -196,7 +196,32 @@ Page({
       wx.showToast({ title: '暂无坐标信息', icon: 'none' })
       return
     }
-    openNavigation(activity.latitude, activity.longitude, activity.locationName)
+    const { activity } = this.data
+    if (!activity.latitude || !activity.longitude) {
+      return wx.showToast({ title: '暂无坐标信息', icon: 'none' })
+    }
+
+    // 海外地址（国内腾讯地图不支持），直接打开网页版地图
+    const isIntl = activity.locationCountry === 'INTL' ||
+      (activity.latitude && (activity.latitude < 3 || activity.latitude > 55 ||
+       activity.longitude < 70 || activity.longitude > 140))
+
+    if (isIntl) {
+      const url = `https://maps.google.com/?q=${activity.latitude},${activity.longitude}`
+      wx.setClipboardData({
+        data: url,
+        success: () => {
+          wx.showModal({
+            title: '海外地址导航',
+            content: `Google Maps 链接已复制到剪贴板：\n${activity.locationName}\n\n可粘贴到浏览器打开导航`,
+            showCancel: false,
+            confirmText: '知道了',
+          })
+        },
+      })
+    } else {
+      openNavigation(activity.latitude, activity.longitude, activity.locationName)
+    }
   },
 
   onViewRegistrations() {

@@ -118,12 +118,12 @@ exports.create = async (req, res, next) => {
     await transaction(async (conn) => {
       await conn.execute(
         `INSERT INTO activities
-          (id, creator_openid, name, description, start_time, end_time, location_name, location_address,
+          (id, creator_openid, name, description, start_time, end_time, location_name, location_address, location_country,
            latitude, longitude, max_participants, category, cover_image, reminder, custom_fields, status, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'upcoming', NOW())`,
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'upcoming', NOW())`,
         [id, req.user.openid, body.name, body.description || '', body.startTime, body.endTime,
-         body.locationName || '', body.locationAddress || '', body.latitude || null,
-         body.longitude || null, body.maxParticipants || 0, body.category || 'other',
+         body.locationName || '', body.locationAddress || '', body.locationCountry || 'CN',
+         body.latitude || null, body.longitude || null, body.maxParticipants || 0, body.category || 'other',
          body.coverImage || '', body.reminder || '', JSON.stringify(body.customFields || [])]
       )
 
@@ -155,10 +155,10 @@ exports.update = async (req, res, next) => {
     const body = req.body
     await query(
       `UPDATE activities SET name=?, description=?, start_time=?, end_time=?, location_name=?,
-       location_address=?, latitude=?, longitude=?, max_participants=?, category=?, cover_image=?,
+       location_address=?, location_country=?, latitude=?, longitude=?, max_participants=?, category=?, cover_image=?,
        reminder=?, custom_fields=?, updated_at=NOW() WHERE id=?`,
       [body.name, body.description || '', body.startTime, body.endTime, body.locationName || '',
-       body.locationAddress || '', body.latitude || null, body.longitude || null,
+       body.locationAddress || '', body.locationCountry || 'CN', body.latitude || null, body.longitude || null,
        body.maxParticipants || 0, body.category || 'other', body.coverImage || '',
        body.reminder || '', JSON.stringify(body.customFields || []), id]
     )
@@ -294,10 +294,11 @@ function formatActivity(a) {
     description: a.description,
     startTime: a.start_time,
     endTime: a.end_time,
-    locationName: a.location_name,
-    locationAddress: a.location_address,
-    latitude: a.latitude,
-    longitude: a.longitude,
+    locationName:      a.location_name,
+    locationAddress:   a.location_address,
+    locationCountry:   a.location_country || 'CN',
+    latitude:          a.latitude,
+    longitude:         a.longitude,
     maxParticipants: a.max_participants,
     registrationCount: a.registration_count || 0,
     category: a.category,
