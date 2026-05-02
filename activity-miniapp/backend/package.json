@@ -4,10 +4,11 @@
   "description": "微信小程序活动报名系统后端",
   "main": "src/app.js",
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js",
+    "start":   "node src/app.js",
+    "cluster": "node src/cluster.js",
+    "dev":     "nodemon src/app.js",
     "migrate": "node src/utils/migrate.js",
-    "seed": "node src/utils/seed.js"
+    "seed":    "node src/utils/seed.js"
   },
   "dependencies": {
     "axios": "^1.6.2",
