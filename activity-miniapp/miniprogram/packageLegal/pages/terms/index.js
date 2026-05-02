@@ -1,5 +1,5 @@
 // pages/terms/index.js
-const i18n = require('../../utils/i18n')
+const i18n = require('../../../utils/i18n')
 const { ZH, EN } = require('./content')
 
 Page({

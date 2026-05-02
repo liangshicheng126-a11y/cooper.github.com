@@ -4,8 +4,6 @@
     "pages/activity-detail/index",
     "pages/create-activity/index",
     "pages/register/index",
-    "pages/privacy/index",
-    "pages/terms/index",
     "pages/my/index",
     "pages/my-published/index",
     "pages/my-registered/index",
@@ -58,6 +56,13 @@
     }
   },
   "requiredPrivateInfos": ["chooseLocation", "getLocation"],
+  "subPackages": [
+    {
+      "root": "packageLegal",
+      "name": "legal",
+      "pages": ["pages/privacy/index", "pages/terms/index"]
+    }
+  ],
   "sitemapLocation": "sitemap.json",
   "lazyCodeLoading": "requiredComponents"
 }

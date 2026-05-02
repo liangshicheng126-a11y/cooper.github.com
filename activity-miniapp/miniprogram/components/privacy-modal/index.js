@@ -30,10 +30,10 @@ Component({
     onMaskTap() { /* 不关闭 */ },
     stop() { /* 阻止冒泡 */ },
     openPrivacy() {
-      wx.navigateTo({ url: '/pages/privacy/index' })
+      wx.navigateTo({ url: '/packageLegal/pages/privacy/index' })
     },
     openTerms() {
-      wx.navigateTo({ url: '/pages/terms/index' })
+      wx.navigateTo({ url: '/packageLegal/pages/terms/index' })
     },
   },
 })

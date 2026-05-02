@@ -117,7 +117,7 @@ Page({
   },
 
   openPrivacyPolicy() {
-    wx.navigateTo({ url: '/pages/privacy/index' })
+    wx.navigateTo({ url: '/packageLegal/pages/privacy/index' })
   },
 
   onLogout() {

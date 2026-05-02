@@ -1,7 +1,7 @@
 {
   "description": "活动报名小程序（根目录导入时自动识别 miniprogram 子目录）",
   "compileType": "miniprogram",
-  "miniprogramRoot": "miniprogram/",
+  "miniprogramRoot": "./miniprogram",
   "appid": "wxa909312a016c6847",
   "setting": {
     "es6": true,
