@@ -13,11 +13,20 @@ const useRepoPrefix =
 
 const pagesBasePath = useRepoPrefix ? `/${repository}` : "";
 
+const isGitHubActions = Boolean(process.env.GITHUB_ACTIONS);
+
 const nextConfig: NextConfig = {
+  // GitHub Pages requires static export; Vercel uses server mode to support API routes
+  ...(isGitHubActions ? { output: "export" } : {}),
   trailingSlash: true,
-  outputFileTracingExcludes: {
-    "/portfolio/[id]": ["./public/photos/**"],
-  },
+  // Only exclude large photo assets from tracing in Vercel (server) mode
+  ...(!isGitHubActions
+    ? {
+        outputFileTracingExcludes: {
+          "/portfolio/[id]": ["./public/photos/**"],
+        },
+      }
+    : {}),
   images: {
     unoptimized: true,
     remotePatterns: [
