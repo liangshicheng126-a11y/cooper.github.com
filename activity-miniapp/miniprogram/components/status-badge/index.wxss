@@ -1,0 +1,15 @@
+/* components/status-badge/index.wxss */
+.badge {
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 22rpx;
+  font-weight: 500;
+  line-height: 1.6;
+}
+.badge--upcoming  { background: #e8f4fd; color: #1890ff; }
+.badge--active    { background: #f6ffed; color: #52c41a; }
+.badge--ended     { background: #f5f5f5; color: #999;    }
+.badge--cancelled { background: #fff1f0; color: #ff4d4f; }
+.badge--full      { background: #fff7e6; color: #fa8c16; }
+.badge--draft     { background: #f9f0ff; color: #722ed1; }

@@ -1,0 +1,10 @@
+<!-- components/progress-bar/index.wxml -->
+<view class="progress-wrap">
+  <view class="progress-info">
+    <text class="progress-label">{{label}}</text>
+    <text class="progress-count">{{current}}/{{total}}</text>
+  </view>
+  <view class="progress-track">
+    <view class="progress-fill progress-fill--{{colorType}}" style="width:{{percent}}%"></view>
+  </view>
+</view>
