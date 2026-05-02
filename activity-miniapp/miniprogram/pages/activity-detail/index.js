@@ -21,6 +21,7 @@ Page({
     registrantAvatars: [],
     isRegistered: false,
     isCreator: false,
+    showInviteCode: false,
     userRegistrationId: null,
     statusKey: '',
     statusText: '',
@@ -188,6 +189,19 @@ Page({
     } finally {
       wx.hideLoading()
     }
+  },
+
+  toggleInviteCode() {
+    this.setData({ showInviteCode: !this.data.showInviteCode })
+  },
+
+  copyInviteCode() {
+    const code = this.data.activity.inviteCode
+    if (!code) return
+    wx.setClipboardData({
+      data: code,
+      success: () => wx.showToast({ title: '邀请码已复制', icon: 'success' }),
+    })
   },
 
   onNavigate() {

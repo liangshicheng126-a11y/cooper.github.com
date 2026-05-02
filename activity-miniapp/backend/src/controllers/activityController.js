@@ -99,6 +99,14 @@ exports.getById = async (req, res, next) => {
       [id]
     )
     const data = { ...formatActivity(activity), recentRegistrants }
+
+    // 创建者才能看到实际邀请码
+    const currentOpenid = req.user?.openid
+    if (activity.require_invite) {
+      data.requireInvite = true
+      data.inviteCode = (currentOpenid === activity.creator_openid) ? activity.invite_code : undefined
+    }
+
     await setCache(cacheKey, data, CACHE_TTL.ACTIVITY_DETAIL)
     res.json({ code: 0, data })
   } catch (e) {
@@ -119,11 +127,14 @@ exports.create = async (req, res, next) => {
       await conn.execute(
         `INSERT INTO activities
           (id, creator_openid, name, description, start_time, end_time, location_name, location_address, location_country,
-           latitude, longitude, max_participants, category, cover_image, reminder, custom_fields, status, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'upcoming', NOW())`,
+           latitude, longitude, max_participants, require_invite, invite_code, category, cover_image, reminder, custom_fields, status, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'upcoming', NOW())`,
         [id, req.user.openid, body.name, body.description || '', body.startTime, body.endTime,
          body.locationName || '', body.locationAddress || '', body.locationCountry || 'CN',
-         body.latitude || null, body.longitude || null, body.maxParticipants || 0, body.category || 'other',
+         body.latitude || null, body.longitude || null, body.maxParticipants || 0,
+         body.requireInvite ? 1 : 0,
+         body.requireInvite ? (body.inviteCode || null) : null,
+         body.category || 'other',
          body.coverImage || '', body.reminder || '', JSON.stringify(body.customFields || [])]
       )
 
@@ -155,11 +166,15 @@ exports.update = async (req, res, next) => {
     const body = req.body
     await query(
       `UPDATE activities SET name=?, description=?, start_time=?, end_time=?, location_name=?,
-       location_address=?, location_country=?, latitude=?, longitude=?, max_participants=?, category=?, cover_image=?,
+       location_address=?, location_country=?, latitude=?, longitude=?, max_participants=?,
+       require_invite=?, invite_code=?, category=?, cover_image=?,
        reminder=?, custom_fields=?, updated_at=NOW() WHERE id=?`,
       [body.name, body.description || '', body.startTime, body.endTime, body.locationName || '',
        body.locationAddress || '', body.locationCountry || 'CN', body.latitude || null, body.longitude || null,
-       body.maxParticipants || 0, body.category || 'other', body.coverImage || '',
+       body.maxParticipants || 0,
+       body.requireInvite ? 1 : 0,
+       body.requireInvite ? (body.inviteCode || null) : null,
+       body.category || 'other', body.coverImage || '',
        body.reminder || '', JSON.stringify(body.customFields || []), id]
     )
     await delCache(`activity:${id}`)
@@ -299,7 +314,8 @@ function formatActivity(a) {
     locationCountry:   a.location_country || 'CN',
     latitude:          a.latitude,
     longitude:         a.longitude,
-    maxParticipants: a.max_participants,
+    maxParticipants:   a.max_participants,
+    requireInvite:     !!a.require_invite,
     registrationCount: a.registration_count || 0,
     category: a.category,
     coverImage: a.cover_image,

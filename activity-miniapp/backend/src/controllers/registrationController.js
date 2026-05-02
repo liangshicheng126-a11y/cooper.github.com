@@ -12,13 +12,23 @@ function hasConflict(s1, e1, s2, e2) {
 
 exports.create = async (req, res, next) => {
   try {
-    const { activityId, subActivityId, customData = {}, forceRegister = false } = req.body
+    const { activityId, subActivityId, customData = {}, forceRegister = false, inviteCode } = req.body
     const { openid } = req.user
 
     const activity = await queryOne('SELECT * FROM activities WHERE id = ?', [activityId])
     if (!activity) return res.status(404).json({ code: 404, message: '活动不存在' })
     if (activity.status === 'offline' || activity.status === 'cancelled') {
       return res.status(400).json({ code: 400, message: '活动已下架或取消' })
+    }
+
+    // ── 邀请码校验 ──────────────────────────────────
+    if (activity.require_invite) {
+      if (!inviteCode || !inviteCode.trim()) {
+        return res.status(403).json({ code: 403, message: '该活动需要邀请码才能报名', requireInvite: true })
+      }
+      if (inviteCode.trim().toUpperCase() !== (activity.invite_code || '').toUpperCase()) {
+        return res.status(403).json({ code: 403, message: '邀请码错误，请重新输入', requireInvite: true })
+      }
     }
 
     // 检查是否已报名

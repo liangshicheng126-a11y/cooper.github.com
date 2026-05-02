@@ -11,6 +11,8 @@ Page({
     fields: [],
     formData: {},
     startTimeText: '',
+    inviteCode: '',
+    inviteCodeError: '',
     submitting: false,
     forceRegister: false,
   },
@@ -56,7 +58,20 @@ Page({
     this.setData({ formData: e.detail.formData })
   },
 
+  onInviteCodeInput(e) {
+    this.setData({ inviteCode: e.detail.value.toUpperCase(), inviteCodeError: '' })
+  },
+
   async onSubmit() {
+    // 邀请码前置校验
+    const { activity, inviteCode } = this.data
+    if (activity.requireInvite) {
+      if (!inviteCode.trim()) {
+        this.setData({ inviteCodeError: '请输入邀请码' })
+        return
+      }
+    }
+
     const form = this.selectComponent('#customForm')
     const { valid, data } = form.validate()
     if (!valid) return
@@ -64,13 +79,13 @@ Page({
     this.setData({ submitting: true })
     try {
       await request.post('/registrations', {
-        activityId: this.data.activityId,
+        activityId:    this.data.activityId,
         subActivityId: this.data.subId,
-        customData: data,
+        customData:    data,
         forceRegister: this.data.forceRegister,
+        inviteCode:    activity.requireInvite ? inviteCode.trim() : undefined,
       })
       wx.showToast({ title: '报名成功 🎉', icon: 'success' })
-      // 申请订阅消息
       const { SUBSCRIBE_TEMPLATES } = require('../../utils/config')
       wx.requestSubscribeMessage({
         tmplIds: [SUBSCRIBE_TEMPLATES.REMIND_24H, SUBSCRIBE_TEMPLATES.REMIND_1H],
@@ -78,7 +93,12 @@ Page({
       })
       setTimeout(() => wx.navigateBack({ delta: 2 }), 1500)
     } catch (e) {
-      wx.showToast({ title: e.message || '报名失败', icon: 'none' })
+      // 邀请码错误时定向提示
+      if (e.requireInvite || e.message?.includes('邀请码')) {
+        this.setData({ inviteCodeError: e.message || '邀请码错误' })
+      } else {
+        wx.showToast({ title: e.message || '报名失败', icon: 'none' })
+      }
     } finally {
       this.setData({ submitting: false })
     }

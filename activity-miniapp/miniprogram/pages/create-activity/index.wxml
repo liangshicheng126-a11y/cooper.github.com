@@ -194,6 +194,42 @@
         </view>
       </view>
 
+      <!-- 邀请码设置 -->
+      <view class="section-card card">
+        <view class="section-title">邀请码设置</view>
+
+        <view class="limit-toggle">
+          <view class="limit-option {{!form.requireInvite ? 'limit-active' : ''}}" bindtap="setNoInvite">
+            <text>🌐 公开报名</text>
+          </view>
+          <view class="limit-option {{form.requireInvite ? 'limit-active' : ''}}" bindtap="setRequireInvite">
+            <text>🔑 需要邀请码</text>
+          </view>
+        </view>
+        <text class="form-hint" style="margin-top:12rpx;display:block">
+          {{form.requireInvite ? '仅持有邀请码的人才能报名' : '任何人都可以直接报名'}}
+        </text>
+
+        <view wx:if="{{form.requireInvite}}" class="invite-code-box">
+          <view class="invite-code-label">
+            <text>邀请码</text>
+            <text class="invite-auto-btn" bindtap="genInviteCode">🎲 随机生成</text>
+          </view>
+          <view class="invite-code-input-row">
+            <input
+              class="form-input invite-code-input"
+              placeholder="自定义邀请码（4~12位字母或数字）"
+              value="{{form.inviteCode}}"
+              bindinput="onInviteCodeInput"
+              maxlength="12"
+              style="text-transform:uppercase;letter-spacing:4rpx;font-weight:600;"
+            />
+            <view class="invite-copy-btn" bindtap="copyInviteCode" wx:if="{{form.inviteCode}}">复制</view>
+          </view>
+          <text class="form-hint">分享给受邀者，他们报名时需要输入此码</text>
+        </view>
+      </view>
+
       <view class="section-card card">
         <view class="section-title">报名信息收集</view>
         <text class="form-hint" style="margin-bottom:24rpx;display:block">选择需要报名者填写的信息</text>

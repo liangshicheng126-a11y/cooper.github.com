@@ -14,6 +14,26 @@
       </view>
     </view>
 
+    <!-- 邀请码输入（需要时显示） -->
+    <view class="form-card card" wx:if="{{activity.requireInvite}}">
+      <view class="invite-header">
+        <text class="invite-icon">🔑</text>
+        <view>
+          <text class="invite-title">需要邀请码</text>
+          <text class="invite-desc">请输入发布者提供的邀请码</text>
+        </view>
+      </view>
+      <input
+        class="invite-input {{inviteCodeError ? 'invite-input--error' : ''}}"
+        placeholder="输入邀请码"
+        value="{{inviteCode}}"
+        bindinput="onInviteCodeInput"
+        maxlength="12"
+        style="text-transform:uppercase;letter-spacing:8rpx;text-align:center;font-size:36rpx;font-weight:700;"
+      />
+      <text class="invite-error" wx:if="{{inviteCodeError}}">{{inviteCodeError}}</text>
+    </view>
+
     <!-- 报名表单 -->
     <view class="form-card card">
       <view class="section-title">填写报名信息</view>

@@ -49,6 +49,8 @@ Page({
       category: 'other',
       hasLimit: false,
       maxParticipants: '',
+      requireInvite: false,
+      inviteCode: '',
       locationName: '',
       locationAddress: '',
       latitude: null,
@@ -221,8 +223,34 @@ Page({
   },
 
   // 报名字段
-  setNoLimit() { this.setData({ 'form.hasLimit': false }) },
+  setNoLimit()  { this.setData({ 'form.hasLimit': false }) },
   setHasLimit() { this.setData({ 'form.hasLimit': true }) },
+
+  setNoInvite()      { this.setData({ 'form.requireInvite': false, 'form.inviteCode': '' }) },
+  setRequireInvite() {
+    const code = this.data.form.inviteCode || this._randomCode()
+    this.setData({ 'form.requireInvite': true, 'form.inviteCode': code })
+  },
+  onInviteCodeInput(e) {
+    this.setData({ 'form.inviteCode': e.detail.value.toUpperCase() })
+  },
+  genInviteCode() {
+    this.setData({ 'form.inviteCode': this._randomCode() })
+  },
+  copyInviteCode() {
+    const code = this.data.form.inviteCode
+    if (!code) return
+    wx.setClipboardData({
+      data: code,
+      success: () => wx.showToast({ title: '已复制邀请码', icon: 'success' }),
+    })
+  },
+  _randomCode() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
+    let code = ''
+    for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)]
+    return code
+  },
 
   isFieldEnabled(key) {
     return this.data.form.customFields.some(f => f.key === key && f._isPreset)
@@ -379,6 +407,8 @@ Page({
       latitude: form.latitude,
       longitude: form.longitude,
       maxParticipants: form.hasLimit ? Number(form.maxParticipants) : 0,
+      requireInvite:   form.requireInvite,
+      inviteCode:      form.requireInvite ? form.inviteCode : undefined,
       customFields: form.customFields.filter(f => f.label).map(f => ({
         key: f.key,
         label: f.label,

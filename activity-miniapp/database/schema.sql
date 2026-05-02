@@ -39,6 +39,8 @@ CREATE TABLE IF NOT EXISTS activities (
   latitude         DECIMAL(10, 6) COMMENT '纬度',
   longitude        DECIMAL(10, 6) COMMENT '经度',
   max_participants INT NOT NULL DEFAULT 0 COMMENT '人数限制（0=不限）',
+  require_invite   TINYINT(1) NOT NULL DEFAULT 0 COMMENT '1=需要邀请码',
+  invite_code      VARCHAR(20) NULL DEFAULT NULL COMMENT '邀请码',
   category         VARCHAR(30) NOT NULL DEFAULT 'other' COMMENT '分类',
   cover_image      VARCHAR(500) NOT NULL DEFAULT '' COMMENT '封面图 URL',
   reminder         VARCHAR(300) NOT NULL DEFAULT '' COMMENT '温馨提示',
