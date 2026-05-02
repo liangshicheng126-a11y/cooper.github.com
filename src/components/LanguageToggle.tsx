@@ -9,13 +9,14 @@ import { usePathname } from "next/navigation";
 const LanguageToggle = () => {
   const { language, setLanguage, mounted } = useTranslation();
   const pathname = usePathname();
+  const showToggle = pathname === "/";
   const [pinged, setPinged] = useState(false);
 
   useEffect(() => {
     if (!mounted) return;
     const t = setTimeout(() => setPinged(true), 2200);
     return () => clearTimeout(t);
-  }, [mounted, pathname]);
+  }, [mounted]);
 
   if (!mounted) return null;
 
@@ -26,7 +27,14 @@ const LanguageToggle = () => {
   const isZh = language === "zh";
 
   return (
-    <div className="hidden xl:block fixed top-8 right-8 z-[60]">
+    <div
+      className={cn(
+        "hidden xl:block fixed top-8 right-8 z-[60] transition-all duration-300",
+        showToggle
+          ? "opacity-100 translate-y-0 pointer-events-auto"
+          : "opacity-0 -translate-y-2 pointer-events-none"
+      )}
+    >
       <div className="relative">
         {/* Ping ring — fires once after page load to catch attention */}
         {pinged && (
