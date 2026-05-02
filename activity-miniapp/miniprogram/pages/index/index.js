@@ -1,9 +1,31 @@
 // pages/index/index.js
 const request = require('../../utils/request')
-const { formatDate, getActivityStatus } = require('../../utils/date')
+const { formatDate } = require('../../utils/date')
 const i18n = require('../../utils/i18n')
 
 const PAGE_SIZE = 10
+
+/** 列表区标题文案 key → i18n */
+const LIST_TITLE_KEYS = {
+  all: 'listTitleAll',
+  active: 'listTitleActive',
+  upcoming: 'listTitleUpcoming',
+  sport: 'listTitleSport',
+  culture: 'listTitleCulture',
+  volunteer: 'listTitleVolunteer',
+  social: 'listTitleSocial',
+}
+
+/** 分类横向标签：图标与 i18n key */
+const CATEGORY_DEF = [
+  { key: 'all', icon: '🌟', labelKey: 'catAll' },
+  { key: 'active', icon: '🟢', labelKey: 'catActive' },
+  { key: 'upcoming', icon: '⏰', labelKey: 'catUpcoming' },
+  { key: 'sport', icon: '⚽', labelKey: 'catSport' },
+  { key: 'culture', icon: '🎭', labelKey: 'catCulture' },
+  { key: 'volunteer', icon: '❤️', labelKey: 'catVolunteer' },
+  { key: 'social', icon: '🎊', labelKey: 'catSocial' },
+]
 
 Page({
   data: {
@@ -17,16 +39,15 @@ Page({
     activeCategory: 'all',
     listTitle: '全部活动',
     langText: 'English',
+    localeRev: 0,
+    searchPlaceholder: '',
+    filterBtnLabel: '',
+    emptyActivities: '',
+    emptySubActivities: '',
+    loadingEllipsis: '',
+    loadedAllFooter: '',
     showPrivacy: false,
-    categories: [
-      { key: 'all', label: '全部', icon: '🌟' },
-      { key: 'active', label: '进行中', icon: '🟢' },
-      { key: 'upcoming', label: '即将开始', icon: '⏰' },
-      { key: 'sport', label: '运动', icon: '⚽' },
-      { key: 'culture', label: '文化', icon: '🎭' },
-      { key: 'volunteer', label: '公益', icon: '❤️' },
-      { key: 'social', label: '社交', icon: '🎊' },
-    ],
+    categories: [],
   },
 
   onLoad() {
@@ -46,9 +67,9 @@ Page({
     if (!app.globalData.privacyAgreed) return
     if (app.globalData.refreshHomeActivityListNextShow) {
       app.globalData.refreshHomeActivityListNextShow = false
-      this.setData({ activeCategory: 'all', listTitle: '全部活动' })
+      this.setData({ activeCategory: 'all' })
     }
-    // 每次页面显示都刷新列表，确保新发布的活动能立即出现在「全部活动」中
+    this._applyLocale()
     this._loadActivities(true)
   },
 
@@ -64,10 +85,52 @@ Page({
 
   // 初始化语言、banner 等非列表内容（只需执行一次）
   _initMeta() {
-    this.setData({ langText: i18n.getLanguage() === 'zh' ? 'English' : '中文' })
+    this._applyLocale()
     this._loadBanners()
   },
 
+  /** 将界面文案、分类、列表日期格式与语言对齐；localeRev 促使活动卡片重算状态文案 */
+  _applyLocale() {
+    const zh = i18n.getLanguage() === 'zh'
+    const bannerList = (this.data.bannerList || []).map((a) => ({
+      ...a,
+      startTimeText: formatDate(a.startTime, zh ? 'MM月DD日' : 'MM-DD'),
+    }))
+    const activities = (this.data.activities || []).map((a) => ({
+      ...a,
+      startTimeText: formatDate(a.startTime, zh ? 'MM月DD日 HH:mm' : 'MM-DD HH:mm'),
+    }))
+    const categories = CATEGORY_DEF.map(({ key, icon, labelKey }) => ({
+      key,
+      icon,
+      label: i18n.t(labelKey),
+    }))
+    const activeKey = this.data.activeCategory || 'all'
+    const lk = LIST_TITLE_KEYS[activeKey] || 'listTitleAll'
+    const localeRev = (this.data.localeRev || 0) + 1
+    this.setData({
+      categories,
+      listTitle: i18n.t(lk),
+      langText: i18n.t('switchLang'),
+      searchPlaceholder: i18n.t('searchPlaceholder'),
+      filterBtnLabel: i18n.t('filterBtn'),
+      emptyActivities: i18n.t('emptyActivities'),
+      emptySubActivities: i18n.t('emptySubActivities'),
+      loadingEllipsis: i18n.t('loadingEllipsis'),
+      loadedAllFooter: i18n.t('loadedAllFooter'),
+      bannerList,
+      activities,
+      localeRev,
+    })
+  },
+
+  _fmtActivityRow(a) {
+    const zh = i18n.getLanguage() === 'zh'
+    return {
+      ...a,
+      startTimeText: formatDate(a.startTime, zh ? 'MM月DD日 HH:mm' : 'MM-DD HH:mm'),
+    }
+  },
   async _loadActivities(reset = false) {
     // reset 时必须允许打断进行中的分页加载，否则会跳过刷新导致看不到刚发布的活动
     if (!reset && (this.data.loading || this.data.loadingMore)) return
@@ -81,10 +144,7 @@ Page({
       const cat = this.data.activeCategory
       if (cat && cat !== 'all') q.category = cat
       const res = await request.get('/activities', q)
-      const list = (res.data?.list || []).map(a => ({
-        ...a,
-        startTimeText: formatDate(a.startTime, 'MM月DD日 HH:mm'),
-      }))
+      const list = (res.data?.list || []).map(a => this._fmtActivityRow({ ...a }))
       this.setData({
         activities: reset ? list : [...this.data.activities, ...list],
         page: page + 1,
@@ -92,7 +152,7 @@ Page({
       })
     } catch (e) {
       console.error('加载活动失败', e)
-      wx.showToast({ title: e.message || '列表加载失败，请下拉重试', icon: 'none', duration: 2500 })
+      wx.showToast({ title: e.message || i18n.t('listLoadFail'), icon: 'none', duration: 2500 })
     } finally {
       this.setData({ loading: false, loadingMore: false, refreshing: false })
     }
@@ -101,10 +161,11 @@ Page({
   async _loadBanners() {
     try {
       const res = await request.get('/activities/featured')
+      const zh = i18n.getLanguage() === 'zh'
       this.setData({
         bannerList: (res.data || []).map(a => ({
           ...a,
-          startTimeText: formatDate(a.startTime, 'MM月DD日'),
+          startTimeText: formatDate(a.startTime, zh ? 'MM月DD日' : 'MM-DD'),
         })),
       })
     } catch (e) {}
@@ -112,11 +173,8 @@ Page({
 
   onCategoryChange(e) {
     const key = e.currentTarget.dataset.key
-    const catMap = {
-      all: '全部活动', active: '进行中的活动', upcoming: '即将开始',
-      sport: '运动活动', culture: '文化活动', volunteer: '公益活动', social: '社交活动',
-    }
-    this.setData({ activeCategory: key, listTitle: catMap[key] || '全部活动' })
+    const lk = LIST_TITLE_KEYS[key] || 'listTitleAll'
+    this.setData({ activeCategory: key, listTitle: i18n.t(lk) })
     this._loadActivities(true)
   },
 
@@ -135,7 +193,7 @@ Page({
   onCreateActivity() {
     const app = getApp()
     if (!app.globalData.token) {
-      wx.showToast({ title: '请先登录', icon: 'none' })
+      wx.showToast({ title: i18n.t('plsLogin'), icon: 'none' })
       return
     }
     wx.navigateTo({ url: '/pages/create-activity/index' })
@@ -143,7 +201,12 @@ Page({
 
   openFilter() {
     wx.showActionSheet({
-      itemList: ['最新发布', '即将开始', '报名人数最多', '附近活动'],
+      itemList: [
+        i18n.t('sortNewest'),
+        i18n.t('sortUpcoming'),
+        i18n.t('sortPopular'),
+        i18n.t('sortNearby'),
+      ],
       success: (res) => {
         const sorts = ['createdAt', 'startTime', 'registrationCount', 'distance']
         // TODO: 应用排序
@@ -155,8 +218,15 @@ Page({
     const app = getApp()
     const newLang = app.globalData.language === 'zh' ? 'en' : 'zh'
     app.setLanguage(newLang)
-    this.setData({ langText: newLang === 'zh' ? 'English' : '中文' })
-    wx.showToast({ title: newLang === 'zh' ? '已切换为中文' : 'Switched to English', icon: 'none' })
+    this._applyLocale()
+    const tabBar = typeof this.getTabBar === 'function' && this.getTabBar()
+    if (tabBar && typeof tabBar.applyLocale === 'function') {
+      tabBar.applyLocale()
+    }
+    wx.showToast({
+      title: i18n.t(newLang === 'zh' ? 'switchedZh' : 'switchedEn'),
+      icon: 'none',
+    })
   },
 
   onRefresh() {
@@ -175,7 +245,7 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: '发现精彩活动，快来报名参与！',
+      title: i18n.t('shareDiscoverTitle'),
       path: '/pages/index/index',
       imageUrl: this.data.bannerList[0]?.coverImage || '',
     }
@@ -183,7 +253,7 @@ Page({
 
   onShareTimeline() {
     return {
-      title: '发现精彩活动，快来报名参与！',
+      title: i18n.t('shareDiscoverTitle'),
       query: '',
       imageUrl: this.data.bannerList[0]?.coverImage || '',
     }

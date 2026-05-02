@@ -34,7 +34,8 @@
         <text class="progress-count">
           <text class="count-num">{{activity.registrationCount}}</text>
           <text class="count-sep">/</text>
-          <text class="count-total">{{activity.maxParticipants}}</text>人
+          <text class="count-total">{{activity.maxParticipants}}</text>
+          <text class="count-unit">{{peopleUnit}}</text>
         </text>
         <text class="progress-pct">{{progressPct}}%</text>
       </view>
@@ -43,7 +44,7 @@
       </view>
     </view>
     <view class="progress-section" wx:else>
-      <text class="no-limit-text">{{activity.registrationCount}} 人已报名 · 不限人数</text>
+      <text class="no-limit-text">{{registeredNoCapLine}}</text>
     </view>
 
     <!-- 底部：发起人 & 时间 -->

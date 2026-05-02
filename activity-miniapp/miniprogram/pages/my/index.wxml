@@ -6,11 +6,11 @@
       <view class="user-info">
         <image src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" class="user-avatar" />
         <view class="user-detail">
-          <text class="user-name">{{userInfo.nickName || '未登录'}}</text>
+          <text class="user-name">{{userInfo.nickName || strNotLogged}}</text>
           <text class="user-sub" wx:if="{{userInfo.openid}}">ID: {{userInfo.openid.slice(0,8)}}...</text>
         </view>
         <view class="user-badge" wx:if="{{isAdmin}}">
-          <text>管理员</text>
+          <text>{{strAdminBadge}}</text>
         </view>
       </view>
 
@@ -18,17 +18,17 @@
       <view class="stats-row">
         <view class="stat-item stat-tap" bindtap="goPublishedList">
           <text class="stat-num">{{myActivitiesCount}}</text>
-          <text class="stat-label">发布的活动</text>
-          <text class="stat-link">列表 ›</text>
+          <text class="stat-label">{{strPublished}}</text>
+          <text class="stat-link">{{strListArrow}}</text>
         </view>
         <view class="stat-divider" />
         <view class="stat-item stat-tap" bindtap="goRegisteredList">
           <text class="stat-num">{{myRegistrationsCount}}</text>
-          <text class="stat-label">参与的活动</text>
-          <text class="stat-link">列表 ›</text>
+          <text class="stat-label">{{strJoined}}</text>
+          <text class="stat-link">{{strListArrow}}</text>
         </view>
       </view>
-      <text class="stats-tip">点此进入对应活动清单</text>
+      <text class="stats-tip">{{strStatsTip}}</text>
     </view>
 
     <!-- 功能菜单 -->
@@ -36,23 +36,23 @@
       <view class="menu-group card">
         <view class="menu-item" bindtap="goAdmin" wx:if="{{isAdmin}}">
           <text class="menu-icon">⚙️</text>
-          <text class="menu-label">管理后台</text>
+          <text class="menu-label">{{strAdminMenu}}</text>
           <text class="menu-arrow">›</text>
         </view>
         <view class="menu-item" bindtap="toggleLanguage">
           <text class="menu-icon">🌐</text>
-          <text class="menu-label">语言切换</text>
+          <text class="menu-label">{{strLanguageMenu}}</text>
           <text class="menu-value">{{langText}}</text>
           <text class="menu-arrow">›</text>
         </view>
         <view class="menu-item" bindtap="openPrivacyPolicy">
           <text class="menu-icon">📄</text>
-          <text class="menu-label">隐私协议</text>
+          <text class="menu-label">{{strPrivacyMenu}}</text>
           <text class="menu-arrow">›</text>
         </view>
         <view class="menu-item danger" bindtap="onLogout">
           <text class="menu-icon">🚪</text>
-          <text class="menu-label">退出登录</text>
+          <text class="menu-label">{{strLogoutMenu}}</text>
           <text class="menu-arrow">›</text>
         </view>
       </view>

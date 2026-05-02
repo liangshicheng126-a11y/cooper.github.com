@@ -1,4 +1,6 @@
 // custom-tab-bar/index.js
+const i18n = require('../utils/i18n')
+
 Component({
   data: {
     selected: 0,
@@ -42,9 +44,30 @@ Component({
       this.setData({ animate: true })
       setTimeout(() => this.setData({ indicatorVisible: true }), 150)
     }, 80)
+
+    this.applyLocale()
   },
 
   methods: {
+    applyLocale() {
+      this.setData({
+        tabs: [
+          {
+            text: i18n.t('discover'),
+            pagePath: '/pages/index/index',
+            icon: '/images/icon-discover.svg',
+            iconActive: '/images/icon-discover-active.svg',
+          },
+          {
+            text: i18n.t('my'),
+            pagePath: '/pages/my/index',
+            icon: '/images/icon-my.svg',
+            iconActive: '/images/icon-my-active.svg',
+          },
+        ],
+      })
+    },
+
     /** 切换 tab */
     onTabTap(e) {
       const index = parseInt(e.currentTarget.dataset.index)

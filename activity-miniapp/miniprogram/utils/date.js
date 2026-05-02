@@ -1,4 +1,6 @@
 // utils/date.js - 日期工具
+const i18n = require('./i18n')
+
 function formatDate(dateStr, format = 'YYYY-MM-DD HH:mm') {
   if (!dateStr) return ''
   const d = new Date(dateStr)
@@ -15,16 +17,38 @@ function formatDate(dateStr, format = 'YYYY-MM-DD HH:mm') {
   return format.replace(/YYYY|MM|DD|HH|mm|ss/g, m => map[m])
 }
 
-function formatRelative(dateStr) {
+/** @param {'zh'|'en'} [lang] 不传则跟随 i18n 当前语言 */
+function formatRelative(dateStr, lang) {
   const d = new Date(dateStr)
   const now = new Date()
   const diff = now - d
   const abs = Math.abs(diff)
+  const lg = lang || i18n.getLanguage()
 
-  if (abs < 60000) return '刚刚'
-  if (abs < 3600000) return `${Math.floor(abs / 60000)}分钟${diff > 0 ? '前' : '后'}`
-  if (abs < 86400000) return `${Math.floor(abs / 3600000)}小时${diff > 0 ? '前' : '后'}`
-  if (abs < 2592000000) return `${Math.floor(abs / 86400000)}天${diff > 0 ? '前' : '后'}`
+  if (lg === 'en') {
+    if (abs < 60000) return i18n.t('timeJustNow')
+    if (abs < 3600000) {
+      const n = Math.floor(abs / 60000)
+      return diff > 0 ? `${n} ${n === 1 ? 'minute' : 'minutes'} ago` : `${n} ${n === 1 ? 'minute' : 'minutes'} from now`
+    }
+    if (abs < 86400000) {
+      const n = Math.floor(abs / 3600000)
+      return diff > 0 ? `${n} ${n === 1 ? 'hour' : 'hours'} ago` : `${n} ${n === 1 ? 'hour' : 'hours'} from now`
+    }
+    if (abs < 2592000000) {
+      const n = Math.floor(abs / 86400000)
+      return diff > 0 ? `${n} ${n === 1 ? 'day' : 'days'} ago` : `${n} ${n === 1 ? 'day' : 'days'} from now`
+    }
+    return formatDate(dateStr, 'MM-DD HH:mm')
+  }
+
+  if (abs < 60000) return i18n.t('timeJustNow')
+  if (abs < 3600000)
+    return `${Math.floor(abs / 60000)}${i18n.t('timeMinutes')}${diff > 0 ? i18n.t('timeBefore') : i18n.t('timeAfter')}`
+  if (abs < 86400000)
+    return `${Math.floor(abs / 3600000)}${i18n.t('timeHours')}${diff > 0 ? i18n.t('timeBefore') : i18n.t('timeAfter')}`
+  if (abs < 2592000000)
+    return `${Math.floor(abs / 86400000)}${i18n.t('timeDays')}${diff > 0 ? i18n.t('timeBefore') : i18n.t('timeAfter')}`
   return formatDate(dateStr, 'MM-DD HH:mm')
 }
 

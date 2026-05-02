@@ -4,7 +4,7 @@
   <view class="top-bar">
     <view class="search-box" bindtap="onSearchTap">
       <text class="search-icon">🔍</text>
-      <text class="search-placeholder">搜索活动名称、地点...</text>
+      <text class="search-placeholder">{{searchPlaceholder}}</text>
     </view>
     <view class="lang-btn" bindtap="toggleLanguage">
       <text class="lang-text">{{langText}}</text>
@@ -53,7 +53,7 @@
   <view class="list-header">
     <text class="section-title">{{listTitle}}</text>
     <view class="filter-btn" bindtap="openFilter">
-      <text>筛选 ⚙</text>
+      <text>{{filterBtnLabel}} ⚙</text>
     </view>
   </view>
 
@@ -81,8 +81,8 @@
     <view wx:elif="{{activities.length === 0 && !loading}}">
       <view class="empty-state">
         <text class="empty-icon">🎉</text>
-        <text class="empty-text">暂无活动</text>
-        <text class="empty-sub">快来发布第一个活动吧</text>
+        <text class="empty-text">{{emptyActivities}}</text>
+        <text class="empty-sub">{{emptySubActivities}}</text>
       </view>
     </view>
 
@@ -90,14 +90,15 @@
       wx:for="{{activities}}"
       wx:key="id"
       activity="{{item}}"
+      locale-rev="{{localeRev}}"
       bind:tap="onActivityTap"
     />
 
     <view wx:if="{{loadingMore}}" class="loading-more">
-      <text>加载中...</text>
+      <text>{{loadingEllipsis}}</text>
     </view>
     <view wx:elif="{{noMore && activities.length > 0}}" class="no-more">
-      <text>— 已加载全部 —</text>
+      <text>{{loadedAllFooter}}</text>
     </view>
   </scroll-view>
 
