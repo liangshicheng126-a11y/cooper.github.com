@@ -1,0 +1,95 @@
+<!-- pages/search/index.wxml -->
+<view class="page">
+
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <view class="back-btn" bindtap="goBack">
+      <text class="back-arrow">‹</text>
+    </view>
+    <view class="search-input-wrap">
+      <text class="search-icon-txt">🔍</text>
+      <input
+        class="search-input"
+        placeholder="搜索活动名称、地点..."
+        placeholder-class="search-placeholder"
+        value="{{keyword}}"
+        bindinput="onInput"
+        bindconfirm="onSearch"
+        focus="{{true}}"
+        confirm-type="search"
+      />
+      <view class="clear-btn" wx:if="{{keyword}}" bindtap="onClear">
+        <text>✕</text>
+      </view>
+    </view>
+    <view class="search-btn-text" bindtap="onSearch">搜索</view>
+  </view>
+
+  <!-- 历史搜索 -->
+  <view class="history-section" wx:if="{{!keyword && history.length > 0 && !loading}}">
+    <view class="section-header">
+      <text class="section-label">历史搜索</text>
+      <view bindtap="clearHistory">
+        <text class="clear-text">清除</text>
+      </view>
+    </view>
+    <view class="tag-wrap">
+      <view
+        wx:for="{{history}}"
+        wx:key="*this"
+        class="history-tag"
+        bindtap="onHistoryTap"
+        data-kw="{{item}}"
+      >
+        <text>{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 热门搜索 -->
+  <view class="hot-section" wx:if="{{!keyword && hotWords.length > 0 && !loading}}">
+    <view class="section-header">
+      <text class="section-label">热门活动</text>
+    </view>
+    <view class="tag-wrap">
+      <view
+        wx:for="{{hotWords}}"
+        wx:key="*this"
+        class="hot-tag"
+        bindtap="onHistoryTap"
+        data-kw="{{item}}"
+      >
+        <text>🔥 {{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 搜索结果 -->
+  <view wx:if="{{searched}}">
+    <!-- 加载中 -->
+    <view wx:if="{{loading}}" class="loading-wrap">
+      <text class="loading-text">搜索中...</text>
+    </view>
+
+    <!-- 无结果 -->
+    <view wx:elif="{{results.length === 0}}" class="empty-state">
+      <text class="empty-icon">🔍</text>
+      <text class="empty-text">未找到"{{keyword}}"相关活动</text>
+      <text class="empty-sub">试试其他关键词吧</text>
+    </view>
+
+    <!-- 结果列表 -->
+    <view wx:else>
+      <view class="result-count">
+        <text>共找到 {{results.length}} 个活动</text>
+      </view>
+      <activity-card
+        wx:for="{{results}}"
+        wx:key="id"
+        activity="{{item}}"
+        bind:tap="onActivityTap"
+      />
+    </view>
+  </view>
+
+</view>

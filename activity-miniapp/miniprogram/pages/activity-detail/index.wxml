@@ -75,22 +75,6 @@
           <text class="info-label">报名人数</text>
           <view class="participants-row">
             <text class="participants-num">{{activity.registrationCount}}</text>
-
-      <!-- 邀请码（需要时显示） -->
-      <view wx:if="{{activity.requireInvite}}" class="invite-banner">
-        <view class="invite-banner-left">
-          <text class="invite-banner-icon">🔑</text>
-          <view>
-            <text class="invite-banner-title">需要邀请码才能报名</text>
-            <!-- 创建者专属：可查看/复制邀请码 -->
-            <view wx:if="{{isCreator && activity.inviteCode}}" class="invite-code-reveal">
-              <text class="invite-code-text">{{showInviteCode ? activity.inviteCode : '••••••'}}</text>
-              <text class="invite-code-eye" bindtap="toggleInviteCode">{{showInviteCode ? '隐藏' : '查看'}}</text>
-              <text class="invite-code-copy" bindtap="copyInviteCode">复制</text>
-            </view>
-          </view>
-        </view>
-      </view>
             <text class="participants-total" wx:if="{{activity.maxParticipants > 0}}"> / {{activity.maxParticipants}} 人</text>
             <text class="participants-total" wx:else>人 (不限)</text>
           </view>
@@ -100,6 +84,21 @@
             <view class="progress-fill-mini {{progressClass}}" style="width:{{progressPct}}%" />
           </view>
           <text class="progress-mini-pct">{{progressPct}}%</text>
+        </view>
+      </view>
+
+      <!-- 邀请码（需要时显示） -->
+      <view wx:if="{{activity.requireInvite}}" class="invite-banner">
+        <view class="invite-banner-left">
+          <text class="invite-banner-icon">🔑</text>
+          <view>
+            <text class="invite-banner-title">需要邀请码才能报名</text>
+            <view wx:if="{{isCreator && activity.inviteCode}}" class="invite-code-reveal">
+              <text class="invite-code-text">{{showInviteCode ? activity.inviteCode : '••••••'}}</text>
+              <text class="invite-code-eye" bindtap="toggleInviteCode">{{showInviteCode ? '隐藏' : '查看'}}</text>
+              <text class="invite-code-copy" bindtap="copyInviteCode">复制</text>
+            </view>
+          </view>
         </view>
       </view>
 

@@ -21,15 +21,24 @@ exports.list = async (req, res, next) => {
   try {
     const page = Math.max(1, parseInt(req.query.page) || 1)
     const size = Math.min(50, Math.max(1, parseInt(req.query.size) || 10))
-    const { category } = req.query
+    const { category, keyword } = req.query
     const offset = (page - 1) * size
-    const cacheKey = `activities:list:${page}:${size}:${category || 'all'}`
+    const cacheKey = keyword
+      ? null  // 搜索不走缓存
+      : `activities:list:${page}:${size}:${category || 'all'}`
 
-    const cached = await getCache(cacheKey)
-    if (cached) return res.json({ code: 0, data: cached })
+    if (cacheKey) {
+      const cached = await getCache(cacheKey)
+      if (cached) return res.json({ code: 0, data: cached })
+    }
 
     let where = "a.status != 'offline'"
     const params = []
+    if (keyword) {
+      where += ' AND (a.name LIKE ? OR a.location_name LIKE ? OR a.description LIKE ?)'
+      const like = `%${keyword}%`
+      params.push(like, like, like)
+    }
     if (category && category !== 'all') {
       if (category === 'active') where += ' AND NOW() BETWEEN a.start_time AND a.end_time'
       else if (category === 'upcoming') where += ' AND a.start_time > NOW()'
@@ -50,7 +59,7 @@ exports.list = async (req, res, next) => {
     `, params)
 
     const result = { list: list.map(formatActivity), total: list.length }
-    await setCache(cacheKey, result, CACHE_TTL.ACTIVITIES)
+    if (cacheKey) await setCache(cacheKey, result, CACHE_TTL.ACTIVITIES)
     res.json({ code: 0, data: result })
   } catch (e) {
     next(e)
