@@ -1,11 +1,8 @@
 <!-- components/location-picker/index.wxml -->
-<wxs src="./helpers.wxs" module="h" />
 <view wx:if="{{show}}" class="picker-root">
-  <!-- 仅上半部分透明遮罩接收关闭，面板区为独立 sibling，避免 input / tab 触点误传到遮罩关闭 -->
   <view class="picker-dim" catchtap="onClose" catchtouchmove="preventTouchBubble" />
   <view class="picker-panel" catchtap="preventTapBubble">
 
-    <!-- ══ 标题栏 ══ -->
     <view class="panel-header">
       <view class="header-left">
         <view wx:if="{{step === 'map'}}" class="back-btn" bindtap="backToSearch">
@@ -17,7 +14,7 @@
       <text class="panel-close" catchtap="onClose">✕</text>
     </view>
 
-    <!-- ══ STEP 1：输入地址 ══ -->
+    <!-- 中国：输入 → 地图微调 -->
     <view wx:if="{{step === 'search'}}" class="step-body">
 
       <view class="mode-tabs">
@@ -42,51 +39,39 @@
               <text wx:else>…</text>
             </view>
           </view>
-          <text class="section-hint">输入后点「定位」，随后在地图上拖拽或点击微调</text>
         </view>
       </view>
 
+      <!-- 海外：仅文本，解析后直接采用 -->
       <view wx:else class="mode-body">
         <view class="text-input-section">
-          <view class="section-label">✏️ 输入完整地址</view>
+          <view class="section-label">✏️ 海外活动地址</view>
           <view class="text-addr-row">
             <input
               class="text-addr-input"
-              placeholder="任意语言粘贴或填写（如韩语、英文地名）"
+              placeholder="输入完整街道地址"
               value="{{textAddress}}"
               bindinput="onTextAddressInput"
               confirm-type="search"
               bindconfirm="geocodeTextAddressIntl"
             />
             <view class="addr-search-btn {{geocoding?'addr-search-btn--loading':''}}" bindtap="geocodeTextAddressIntl">
-              <text wx:if="{{!geocoding}}">定位</text>
+              <text wx:if="{{!geocoding}}">确定</text>
               <text wx:else>…</text>
             </view>
           </view>
-          <text class="section-hint">输入后点「定位」。在海外且配置了 Google Key 时，确认为 Google 图示；未配置则用小程序内置地图预览。</text>
         </view>
       </view>
     </view>
 
-    <!-- ══ STEP 2：地图确认与微调 ══ -->
     <view wx:if="{{step === 'map'}}" class="map-confirm-body">
 
       <view class="confirm-addr-card">
         <text class="confirm-name">{{pendingLocation.name}}</text>
         <text class="confirm-addr">{{pendingLocation.address}}</text>
-        <text class="confirm-hint" wx:if="{{showGoogleStaticMap}}">图示为 Google Maps（微信小程序内原生地图固定为腾讯；海外用静态图对齐 Google）。可用 ± 缩放；改坐标请返回上一步或使用「恢复原位」。</text>
-        <text class="confirm-hint" wx:else>📌 点击地图可移动定位点到精确位置</text>
       </view>
 
-      <image
-        wx:if="{{showGoogleStaticMap}}"
-        class="confirm-map google-static-map"
-        mode="aspectFill"
-        src="{{googleStaticMapUrl}}"
-        binderror="onGoogleStaticImageError"
-      />
       <map
-        wx:else
         id="confirmMap"
         class="confirm-map"
         latitude="{{pendingLocation.latitude}}"
@@ -101,11 +86,7 @@
       <view class="map-controls">
         <view class="map-ctrl-btn" bindtap="zoomIn">＋</view>
         <view class="map-ctrl-btn" bindtap="zoomOut">－</view>
-      </view>
-
-      <view class="coord-bar">
-        <text class="coord-text">📍 {{h.fmtCoord(pendingLocation.latitude, pendingLocation.longitude)}}</text>
-        <view class="coord-reset" bindtap="resetPin" wx:if="{{pinMoved}}">恢复原位</view>
+        <view class="map-ctrl-btn" bindtap="resetPin" wx:if="{{pinMoved}}">↺</view>
       </view>
 
       <view class="confirm-bar">
@@ -115,4 +96,3 @@
 
   </view>
 </view>
-

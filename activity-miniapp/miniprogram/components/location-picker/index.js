@@ -20,13 +20,9 @@ Component({
     mapMarkers: [],
     mapScale: 16,
     pinMoved: false,
-    /** 海外 + 已配 Google Key：用 Static API 图替代 <map>（<map> 在微信内固定为腾讯底图） */
-    showGoogleStaticMap: false,
-    googleStaticMapUrl: '',
   },
 
   methods: {
-    /** 阻止点击/手势穿透到外层面板或滚动穿透底页（占位即可） */
     preventTapBubble() {},
     preventTouchBubble() {},
     onClose() { this.triggerEvent('close') },
@@ -40,6 +36,17 @@ Component({
 
     onTextAddressInput(e) {
       this.setData({ textAddress: e.detail.value })
+    },
+
+    /** 海外：解析后直接采用，不使用地图微调 */
+    _emitIntlSelect(loc) {
+      this.triggerEvent('select', {
+        name:      loc.name,
+        address:   loc.address,
+        latitude:  loc.latitude,
+        longitude: loc.longitude,
+        country:   loc.country || 'INTL',
+      })
     },
 
     geocodeTextAddress() {
@@ -82,7 +89,6 @@ Component({
       return this._nominatimGeocodeAndEnter(addr, { region: 'INTL' })
     },
 
-    /** 海外正向地理编码（Google Maps Geocoding API） */
     _googleForwardGeocodeAndEnter(addr) {
       this.setData({ geocoding: true })
       wx.request({
@@ -93,7 +99,7 @@ Component({
           if (body.status === 'OK' && body.results?.length) {
             const loc = this._locFromGoogleGeocode(body.results[0], addr)
             this.setData({ geocoding: false })
-            if (loc) this._enterMapStep(loc)
+            if (loc) this._emitIntlSelect(loc)
             return
           }
           this.setData({ geocoding: false })
@@ -125,7 +131,7 @@ Component({
       }
     },
 
-    /** 境内无腾讯 Key 时用 OSM；海外在未配置 Google Key 时用 OSM 兜底 */
+    /** 境内无腾讯 Key：OSM→地图；海外：OSM/Google 后直接 select */
     _nominatimGeocodeAndEnter(addr, { countrycodes, region }) {
       this.setData({ geocoding: true })
       const data = { q: addr, format: 'json', addressdetails: 1, limit: 1, 'accept-language': 'zh-CN,ko,en' }
@@ -138,13 +144,17 @@ Component({
           this.setData({ geocoding: false })
           if (Array.isArray(res.data) && res.data.length > 0) {
             const item = res.data[0]
-            this._enterMapStep({
+            const loc = {
               name:      item.display_name.split(',')[0],
               address:   item.display_name,
               latitude:  parseFloat(item.lat),
               longitude: parseFloat(item.lon),
               country:   region,
-            })
+            }
+            if (region !== 'CN') {
+              return this._emitIntlSelect(loc)
+            }
+            this._enterMapStep(loc)
           } else {
             wx.showToast({ title: '未找到该地址，请细化或换一种表述', icon: 'none' })
           }
@@ -156,24 +166,9 @@ Component({
       })
     },
 
-    _buildGoogleStaticMapUrl(lat, lng, zoom) {
-      if (!isGoogleConfigured) return ''
-      const z = Math.max(5, Math.min(20, Math.round(zoom || this.data.mapScale || 16)))
-      const latn = Number(lat)
-      const lngn = Number(lng)
-      if (Number.isNaN(latn) || Number.isNaN(lngn)) return ''
-      const mk = encodeURIComponent(`color:red|${latn},${lngn}`)
-      return `https://maps.googleapis.com/maps/api/staticmap?center=${latn},${lngn}&zoom=${z}&size=640x640&scale=2&markers=${mk}&key=${encodeURIComponent(GOOGLE_MAPS_KEY)}`
-    },
-
+    /** 仅中国：进入地图确认 */
     _enterMapStep(loc) {
       const marker = this._makeMarker(loc.latitude, loc.longitude)
-      const showGoogleStaticMap = Boolean(
-        loc.country && loc.country !== 'CN' && isGoogleConfigured,
-      )
-      const googleStaticMapUrl = showGoogleStaticMap
-        ? this._buildGoogleStaticMapUrl(loc.latitude, loc.longitude, 16)
-        : ''
       this.setData({
         step:             'map',
         pendingLocation:  { ...loc },
@@ -181,8 +176,6 @@ Component({
         mapMarkers:       [marker],
         mapScale:         16,
         pinMoved:         false,
-        showGoogleStaticMap,
-        googleStaticMapUrl,
       })
     },
 
@@ -206,7 +199,6 @@ Component({
     },
 
     onMapTap(e) {
-      if (this.data.showGoogleStaticMap) return
       const { latitude, longitude } = e.detail
       if (!latitude || !longitude) return
       const pending = { ...this.data.pendingLocation, latitude, longitude }
@@ -234,75 +226,25 @@ Component({
             }
           },
         })
-        return
-      }
-      if (pending.country !== 'CN' && isGoogleConfigured) {
-        wx.request({
-          url: 'https://maps.googleapis.com/maps/api/geocode/json',
-          data: { latlng: `${lat},${lng}`, key: GOOGLE_MAPS_KEY, language: 'zh-CN' },
-          success: (res) => {
-            if (res.data?.status !== 'OK' || !res.data.results?.length) return
-            const formatted = res.data.results[0].formatted_address
-            const name = formatted.split(',')[0]?.trim() || formatted
-            this.setData({
-              'pendingLocation.name':    name,
-              'pendingLocation.address': formatted,
-            })
-          },
-        })
       }
     },
 
     onRegionChange() {},
 
     zoomIn() {
-      const ns = Math.min(20, this.data.mapScale + 1)
-      const patch = { mapScale: ns }
-      if (this.data.showGoogleStaticMap) {
-        patch.googleStaticMapUrl = this._buildGoogleStaticMapUrl(
-          this.data.pendingLocation.latitude,
-          this.data.pendingLocation.longitude,
-          ns,
-        )
-      }
-      this.setData(patch)
+      this.setData({ mapScale: Math.min(20, this.data.mapScale + 1) })
     },
 
     zoomOut() {
-      const ns = Math.max(5, this.data.mapScale - 1)
-      const patch = { mapScale: ns }
-      if (this.data.showGoogleStaticMap) {
-        patch.googleStaticMapUrl = this._buildGoogleStaticMapUrl(
-          this.data.pendingLocation.latitude,
-          this.data.pendingLocation.longitude,
-          ns,
-        )
-      }
-      this.setData(patch)
+      this.setData({ mapScale: Math.max(5, this.data.mapScale - 1) })
     },
 
     resetPin() {
       const orig = this.data.originalLocation
-      const patch = {
+      this.setData({
         pendingLocation: { ...orig },
         mapMarkers:      [this._makeMarker(orig.latitude, orig.longitude)],
         pinMoved:        false,
-      }
-      if (this.data.showGoogleStaticMap && orig) {
-        patch.googleStaticMapUrl = this._buildGoogleStaticMapUrl(
-          orig.latitude,
-          orig.longitude,
-          this.data.mapScale,
-        )
-      }
-      this.setData(patch)
-    },
-
-    onGoogleStaticImageError() {
-      wx.showToast({
-        title: '图示加载失败：启用 Maps Static API，并添加 downloadFile 域名',
-        icon: 'none',
-        duration: 3800,
       })
     },
 

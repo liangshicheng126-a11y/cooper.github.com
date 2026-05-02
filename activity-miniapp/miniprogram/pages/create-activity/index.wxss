@@ -98,7 +98,7 @@
 .location-change { font-size: 26rpx; color: #7c3aed; }
 .location-empty { display: flex; align-items: center; gap: 12rpx; justify-content: center; }
 .location-icon  { font-size: 32rpx; opacity: 0.5; }
-.location-hint  { font-size: 28rpx; color: rgba(30,27,75,0.40); }
+.location-ph     { font-size: 28rpx; font-weight: 500; color: #1e1b4b; }
 .map-preview { margin-top: 20rpx; border-radius: 12rpx; overflow: hidden; }
 /* 地点大图预览 */
 .create-map-preview { width: 100%; height: 480rpx; display: block; }
