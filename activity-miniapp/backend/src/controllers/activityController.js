@@ -19,8 +19,10 @@ function getStatus(activity) {
 
 exports.list = async (req, res, next) => {
   try {
-    const { page = 1, size = 10, category } = req.query
-    const offset = (Number(page) - 1) * Number(size)
+    const page = Math.max(1, parseInt(req.query.page) || 1)
+    const size = Math.min(50, Math.max(1, parseInt(req.query.size) || 10))
+    const { category } = req.query
+    const offset = (page - 1) * size
     const cacheKey = `activities:list:${page}:${size}:${category || 'all'}`
 
     const cached = await getCache(cacheKey)
@@ -36,7 +38,6 @@ exports.list = async (req, res, next) => {
         params.push(category)
       }
     }
-    params.push(Number(size), offset)
 
     const list = await query(`
       SELECT a.*, u.nickname AS creator_nickname, u.avatar_url AS creator_avatar,
@@ -45,7 +46,7 @@ exports.list = async (req, res, next) => {
       JOIN users u ON a.creator_openid = u.openid
       WHERE ${where}
       ORDER BY a.created_at DESC
-      LIMIT ? OFFSET ?
+      LIMIT ${size} OFFSET ${offset}
     `, params)
 
     const result = { list: list.map(formatActivity), total: list.length }

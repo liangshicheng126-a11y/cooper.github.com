@@ -1,1 +1,11 @@
 {"level":"warn","message":"⚠️  Redis 不可用，缓存已降级（不影响核心功能）","timestamp":"2026-05-02 14:12:30"}
+{"level":"info","message":"✅ Redis connected","timestamp":"2026-05-02 14:19:13"}
+{"level":"info","message":"✅ MySQL connected","timestamp":"2026-05-02 14:19:13"}
+{"level":"info","message":"✅ Server running on port 3000","timestamp":"2026-05-02 14:19:13"}
+{"level":"error","message":"GET /api/activities - Incorrect arguments to mysqld_stmt_execute","stack":"Error: Incorrect arguments to mysqld_stmt_execute\n    at query (X:\\A\\1\\activity-miniapp\\backend\\src\\config\\db.js:19:29)\n    at exports.list (X:\\A\\1\\activity-miniapp\\backend\\src\\controllers\\activityController.js:41:24)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","timestamp":"2026-05-02 14:19:28"}
+{"level":"info","message":"✅ Redis connected","timestamp":"2026-05-02 14:19:59"}
+{"level":"info","message":"✅ MySQL connected","timestamp":"2026-05-02 14:20:00"}
+{"level":"info","message":"✅ Server running on port 3000","timestamp":"2026-05-02 14:20:00"}
+{"level":"info","message":"✅ Redis connected","timestamp":"2026-05-02 14:21:51"}
+{"level":"info","message":"✅ MySQL connected","timestamp":"2026-05-02 14:21:51"}
+{"level":"info","message":"✅ Server running on port 3000","timestamp":"2026-05-02 14:21:51"}
