@@ -1,0 +1,18 @@
+// components/custom-form/helpers.wxs
+var helpers = {
+  isChecked: function(arr, value) {
+    if (!arr || !arr.length) return false
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i] === value) return true
+    }
+    return false
+  },
+  getSelectIndex: function(val, options) {
+    if (!options || !options.length) return 0
+    for (var i = 0; i < options.length; i++) {
+      if (options[i] === val) return i
+    }
+    return 0
+  },
+}
+module.exports = helpers

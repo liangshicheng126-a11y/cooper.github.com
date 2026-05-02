@@ -1,4 +1,5 @@
 <!-- components/custom-form/index.wxml - 动态自定义表单 -->
+<wxs src="./helpers.wxs" module="h" />
 <view class="custom-form">
   <view wx:for="{{fields}}" wx:key="key" class="form-group">
     <view class="form-label">
@@ -74,13 +75,13 @@
         wx:for="{{item.options}}"
         wx:key="*this"
         wx:for-item="opt"
-        class="option-item {{isChecked(item.key, opt) ? 'option-selected' : ''}}"
+        class="option-item {{h.isChecked(formData[item.key], opt) ? 'option-selected' : ''}}"
         data-key="{{item.key}}"
         data-value="{{opt}}"
         bindtap="onCheckbox"
       >
-        <view class="option-checkbox {{isChecked(item.key, opt) ? 'checkbox-checked' : ''}">
-          <text wx:if="{{isChecked(item.key, opt)}}" class="check-icon">✓</text>
+        <view class="option-checkbox {{h.isChecked(formData[item.key], opt) ? 'checkbox-checked' : ''}}">
+          <text wx:if="{{h.isChecked(formData[item.key], opt)}}" class="check-icon">✓</text>
         </view>
         <text class="option-label">{{opt}}</text>
       </view>
@@ -91,7 +92,7 @@
       wx:elif="{{item.type === 'select'}}"
       mode="selector"
       range="{{item.options}}"
-      value="{{getSelectIndex(item.key, item.options)}}"
+      value="{{h.getSelectIndex(formData[item.key], item.options)}}"
       data-key="{{item.key}}"
       data-options="{{item.options}}"
       bindchange="onPickerChange"
