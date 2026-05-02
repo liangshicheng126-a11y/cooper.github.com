@@ -28,6 +28,8 @@ const schemas = {
     reminder: Joi.string().max(200).allow(''),
     customFields: Joi.array().default([]),
     subActivities: Joi.array().default([]),
+    requireInvite: Joi.boolean().default(false),
+    inviteCode: Joi.string().max(20).allow('').allow(null),
   }),
 
   register: Joi.object({
@@ -35,6 +37,7 @@ const schemas = {
     subActivityId: Joi.string().allow(null).allow(''),
     customData: Joi.object().default({}),
     forceRegister: Joi.boolean().default(false),
+    inviteCode: Joi.string().max(20).allow('').allow(null),
   }),
 }
 
