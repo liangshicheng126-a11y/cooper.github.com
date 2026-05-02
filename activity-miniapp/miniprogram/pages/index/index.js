@@ -44,14 +44,12 @@ Page({
     }
     const app = getApp()
     if (!app.globalData.privacyAgreed) return
-    // 每次页面显示都刷新列表，确保新发布的活动能立即出现
+    if (app.globalData.refreshHomeActivityListNextShow) {
+      app.globalData.refreshHomeActivityListNextShow = false
+      this.setData({ activeCategory: 'all', listTitle: '全部活动' })
+    }
+    // 每次页面显示都刷新列表，确保新发布的活动能立即出现在「全部活动」中
     this._loadActivities(true)
-  },
-
-  _init() {
-    this.setData({ langText: i18n.getLanguage() === 'zh' ? 'English' : '中文' })
-    this._loadActivities(true)
-    this._loadBanners()
   },
 
   onPrivacyConfirm() {
@@ -70,13 +68,9 @@ Page({
     this._loadBanners()
   },
 
-  _init() {
-    this._initMeta()
-    this._loadActivities(true)
-  },
-
   async _loadActivities(reset = false) {
-    if (this.data.loading || this.data.loadingMore) return
+    // reset 时必须允许打断进行中的分页加载，否则会跳过刷新导致看不到刚发布的活动
+    if (!reset && (this.data.loading || this.data.loadingMore)) return
     const page = reset ? 1 : this.data.page
 
     this.setData({ [reset ? 'loading' : 'loadingMore']: true })

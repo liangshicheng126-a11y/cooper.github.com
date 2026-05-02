@@ -11,6 +11,8 @@ App({
     isAdmin: false,
     language: 'zh',
     privacyAgreed: false,
+    /** 发布新活动后为 true：回到发现页时切到「全部」并强制拉列表 */
+    refreshHomeActivityListNextShow: false,
   },
 
   onLaunch() {

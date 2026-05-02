@@ -434,6 +434,7 @@ Page({
         setTimeout(() => wx.navigateBack(), 1500)
       } else {
         const res = await request.post('/activities', payload)
+        getApp().globalData.refreshHomeActivityListNextShow = true
         // 先显示 toast，再立即跳转，toast 会持续显示在详情页
         wx.showToast({ title: '🎉 发布成功！', icon: 'success', duration: 2000 })
         wx.redirectTo({ url: `/pages/activity-detail/index?id=${res.data.id}` })
