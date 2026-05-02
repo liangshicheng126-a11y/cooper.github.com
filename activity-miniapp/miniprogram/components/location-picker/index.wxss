@@ -91,6 +91,7 @@
 .confirm-hint { font-size: 21rpx; color: #7c3aed; display: block; margin-top: 8rpx; }
 
 .confirm-map { flex: 1; width: 100%; min-height: 400rpx; }
+.google-static-map { flex: 1; width: 100%; min-height: 400rpx; background: #e8eaf0; display: block; }
 
 .map-controls {
   position: absolute; right: 24rpx; bottom: 280rpx;

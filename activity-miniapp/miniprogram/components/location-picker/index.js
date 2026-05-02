@@ -20,6 +20,9 @@ Component({
     mapMarkers: [],
     mapScale: 16,
     pinMoved: false,
+    /** 海外 + 已配 Google Key：用 Static API 图替代 <map>（<map> 在微信内固定为腾讯底图） */
+    showGoogleStaticMap: false,
+    googleStaticMapUrl: '',
   },
 
   methods: {
@@ -153,8 +156,24 @@ Component({
       })
     },
 
+    _buildGoogleStaticMapUrl(lat, lng, zoom) {
+      if (!isGoogleConfigured) return ''
+      const z = Math.max(5, Math.min(20, Math.round(zoom || this.data.mapScale || 16)))
+      const latn = Number(lat)
+      const lngn = Number(lng)
+      if (Number.isNaN(latn) || Number.isNaN(lngn)) return ''
+      const mk = encodeURIComponent(`color:red|${latn},${lngn}`)
+      return `https://maps.googleapis.com/maps/api/staticmap?center=${latn},${lngn}&zoom=${z}&size=640x640&scale=2&markers=${mk}&key=${encodeURIComponent(GOOGLE_MAPS_KEY)}`
+    },
+
     _enterMapStep(loc) {
       const marker = this._makeMarker(loc.latitude, loc.longitude)
+      const showGoogleStaticMap = Boolean(
+        loc.country && loc.country !== 'CN' && isGoogleConfigured,
+      )
+      const googleStaticMapUrl = showGoogleStaticMap
+        ? this._buildGoogleStaticMapUrl(loc.latitude, loc.longitude, 16)
+        : ''
       this.setData({
         step:             'map',
         pendingLocation:  { ...loc },
@@ -162,6 +181,8 @@ Component({
         mapMarkers:       [marker],
         mapScale:         16,
         pinMoved:         false,
+        showGoogleStaticMap,
+        googleStaticMapUrl,
       })
     },
 
@@ -185,6 +206,7 @@ Component({
     },
 
     onMapTap(e) {
+      if (this.data.showGoogleStaticMap) return
       const { latitude, longitude } = e.detail
       if (!latitude || !longitude) return
       const pending = { ...this.data.pendingLocation, latitude, longitude }
@@ -233,15 +255,54 @@ Component({
 
     onRegionChange() {},
 
-    zoomIn()  { this.setData({ mapScale: Math.min(20, this.data.mapScale + 1) }) },
-    zoomOut() { this.setData({ mapScale: Math.max(5,  this.data.mapScale - 1) }) },
+    zoomIn() {
+      const ns = Math.min(20, this.data.mapScale + 1)
+      const patch = { mapScale: ns }
+      if (this.data.showGoogleStaticMap) {
+        patch.googleStaticMapUrl = this._buildGoogleStaticMapUrl(
+          this.data.pendingLocation.latitude,
+          this.data.pendingLocation.longitude,
+          ns,
+        )
+      }
+      this.setData(patch)
+    },
+
+    zoomOut() {
+      const ns = Math.max(5, this.data.mapScale - 1)
+      const patch = { mapScale: ns }
+      if (this.data.showGoogleStaticMap) {
+        patch.googleStaticMapUrl = this._buildGoogleStaticMapUrl(
+          this.data.pendingLocation.latitude,
+          this.data.pendingLocation.longitude,
+          ns,
+        )
+      }
+      this.setData(patch)
+    },
 
     resetPin() {
       const orig = this.data.originalLocation
-      this.setData({
+      const patch = {
         pendingLocation: { ...orig },
         mapMarkers:      [this._makeMarker(orig.latitude, orig.longitude)],
         pinMoved:        false,
+      }
+      if (this.data.showGoogleStaticMap && orig) {
+        patch.googleStaticMapUrl = this._buildGoogleStaticMapUrl(
+          orig.latitude,
+          orig.longitude,
+          this.data.mapScale,
+        )
+      }
+      this.setData(patch)
+    },
+
+    onGoogleStaticImageError() {
+      wx.showToast({
+        title: '图示加载失败：启用 Maps Static API，并添加 downloadFile 域名',
+        icon: 'none',
+        duration: 3800,
       })
     },
 

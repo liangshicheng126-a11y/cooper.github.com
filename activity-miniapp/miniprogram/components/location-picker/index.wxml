@@ -63,7 +63,7 @@
               <text wx:else>…</text>
             </view>
           </view>
-          <text class="section-hint">输入后点「定位」，随后在地图上拖拽或点击微调</text>
+          <text class="section-hint">输入后点「定位」。在海外且配置了 Google Key 时，确认为 Google 图示；未配置则用小程序内置地图预览。</text>
         </view>
       </view>
     </view>
@@ -74,10 +74,19 @@
       <view class="confirm-addr-card">
         <text class="confirm-name">{{pendingLocation.name}}</text>
         <text class="confirm-addr">{{pendingLocation.address}}</text>
-        <text class="confirm-hint">📌 点击地图可移动定位点到精确位置</text>
+        <text class="confirm-hint" wx:if="{{showGoogleStaticMap}}">图示为 Google Maps（微信小程序内原生地图固定为腾讯；海外用静态图对齐 Google）。可用 ± 缩放；改坐标请返回上一步或使用「恢复原位」。</text>
+        <text class="confirm-hint" wx:else>📌 点击地图可移动定位点到精确位置</text>
       </view>
 
+      <image
+        wx:if="{{showGoogleStaticMap}}"
+        class="confirm-map google-static-map"
+        mode="aspectFill"
+        src="{{googleStaticMapUrl}}"
+        binderror="onGoogleStaticImageError"
+      />
       <map
+        wx:else
         id="confirmMap"
         class="confirm-map"
         latitude="{{pendingLocation.latitude}}"
