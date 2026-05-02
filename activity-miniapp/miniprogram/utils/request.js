@@ -11,15 +11,29 @@ function showNetworkError() {
   wx.showToast({ title: '网络异常，请重试', icon: 'none' })
 }
 
+/** GET 查询串不传 undefined/null/空串，避免被序列化为 category=undefined 导致服务端按分类过滤为空 */
+function cleanGetQuery(payload) {
+  if (!payload || typeof payload !== 'object') return {}
+  const out = {}
+  Object.keys(payload).forEach((k) => {
+    const v = payload[k]
+    if (v === undefined || v === null) return
+    if (typeof v === 'string' && v.trim() === '') return
+    out[k] = v
+  })
+  return out
+}
+
 async function request(method, url, data = {}, retry = 0) {
   const token = getToken()
   const fullUrl = url.startsWith('http') ? url : `${API_BASE_URL}${url}`
+  const payload = method === 'GET' ? cleanGetQuery(data) : data
 
   return new Promise((resolve, reject) => {
     wx.request({
       url: fullUrl,
       method,
-      data,
+      data: payload,
       header: {
         'Content-Type': 'application/json',
         'Authorization': token ? `Bearer ${token}` : '',

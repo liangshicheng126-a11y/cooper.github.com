@@ -17,11 +17,19 @@ function getStatus(activity) {
   return 'active'
 }
 
+function sanitizeQueryString(v) {
+  if (v === undefined || v === null) return undefined
+  const s = String(v).trim()
+  if (!s || s === 'undefined' || s === 'null' || s === 'all') return undefined
+  return s
+}
+
 exports.list = async (req, res, next) => {
   try {
     const page = Math.max(1, parseInt(req.query.page) || 1)
     const size = Math.min(50, Math.max(1, parseInt(req.query.size) || 10))
-    const { category, keyword } = req.query
+    const category = sanitizeQueryString(req.query.category)
+    const keyword = sanitizeQueryString(req.query.keyword)
     const offset = (page - 1) * size
     const cacheKey = keyword
       ? null  // 搜索不走缓存

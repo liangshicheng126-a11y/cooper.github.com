@@ -77,11 +77,10 @@ Page({
     if (reset) this.setData({ activities: [], noMore: false })
 
     try {
-      const res = await request.get('/activities', {
-        page,
-        size: PAGE_SIZE,
-        category: this.data.activeCategory === 'all' ? undefined : this.data.activeCategory,
-      })
+      const q = { page, size: PAGE_SIZE }
+      const cat = this.data.activeCategory
+      if (cat && cat !== 'all') q.category = cat
+      const res = await request.get('/activities', q)
       const list = (res.data?.list || []).map(a => ({
         ...a,
         startTimeText: formatDate(a.startTime, 'MM月DD日 HH:mm'),
@@ -93,6 +92,7 @@ Page({
       })
     } catch (e) {
       console.error('加载活动失败', e)
+      wx.showToast({ title: e.message || '列表加载失败，请下拉重试', icon: 'none', duration: 2500 })
     } finally {
       this.setData({ loading: false, loadingMore: false, refreshing: false })
     }
