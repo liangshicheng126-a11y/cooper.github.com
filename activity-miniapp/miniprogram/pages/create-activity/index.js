@@ -430,14 +430,13 @@ Page({
     try {
       if (isEdit) {
         await request.put(`/activities/${activityId}`, payload)
-        wx.showToast({ title: '修改成功', icon: 'success' })
+        wx.showToast({ title: '修改成功', icon: 'success', duration: 1500 })
         setTimeout(() => wx.navigateBack(), 1500)
       } else {
         const res = await request.post('/activities', payload)
-        wx.showToast({ title: '发布成功 🎉', icon: 'success' })
-        setTimeout(() => {
-          wx.navigateTo({ url: `/pages/activity-detail/index?id=${res.data.id}` })
-        }, 1500)
+        // 先显示 toast，再立即跳转，toast 会持续显示在详情页
+        wx.showToast({ title: '🎉 发布成功！', icon: 'success', duration: 2000 })
+        wx.redirectTo({ url: `/pages/activity-detail/index?id=${res.data.id}` })
       }
     } catch (e) {
       wx.showToast({ title: e.message || '提交失败', icon: 'none' })
