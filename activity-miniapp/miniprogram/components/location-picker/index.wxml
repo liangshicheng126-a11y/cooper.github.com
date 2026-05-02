@@ -4,11 +4,11 @@
 
     <!-- 标题栏 -->
     <view class="panel-header">
-      <text class="panel-title">选择地点</text>
+      <text class="panel-title">선택 지점 / 选择地点</text>
       <text class="panel-close" catchtap="onClose">✕</text>
     </view>
 
-    <!-- 模式切换 -->
+    <!-- 国内 / 海外 模式切换 -->
     <view class="mode-tabs">
       <view
         class="mode-tab {{mode === 'china' ? 'mode-tab--active' : ''}}"
@@ -30,21 +30,53 @@
 
     <!-- 海外：文字搜索 -->
     <view wx:else class="mode-body">
+
+      <!-- 语言选择 -->
+      <view class="lang-tabs">
+        <view
+          class="lang-tab {{lang === 'ko' ? 'lang-tab--active' : ''}}"
+          bindtap="setLangKo"
+        >🇰🇷 한국어</view>
+        <view
+          class="lang-tab {{lang === 'zh' ? 'lang-tab--active' : ''}}"
+          bindtap="setLangZh"
+        >🇨🇳 中文</view>
+        <view
+          class="lang-tab {{lang === 'en' ? 'lang-tab--active' : ''}}"
+          bindtap="setLangEn"
+        >🌐 English</view>
+      </view>
+
+      <!-- 韩语快捷城市 -->
+      <scroll-view wx:if="{{lang === 'ko'}}" scroll-x class="shortcut-scroll">
+        <view class="shortcut-list">
+          <view
+            wx:for="{{koShortcuts}}"
+            wx:key="*this"
+            class="shortcut-chip"
+            data-kw="{{item}}"
+            bindtap="onShortcut"
+          >{{item}}</view>
+        </view>
+      </scroll-view>
+
+      <!-- 搜索框 -->
       <view class="search-row">
         <input
           class="search-input"
-          placeholder="输入地址关键词，支持中英文"
+          placeholder="{{placeholder}}"
           value="{{keyword}}"
           bindinput="onKeywordInput"
           confirm-type="search"
           bindconfirm="doSearch"
+          focus="{{mode === 'intl'}}"
         />
-        <view class="search-btn" bindtap="doSearch">
-          <text wx:if="{{!loading}}">搜索</text>
-          <text wx:else>...</text>
+        <view class="search-btn {{loading ? 'search-btn--loading' : ''}}" bindtap="doSearch">
+          <text wx:if="{{!loading}}">{{lang === 'ko' ? '검색' : '搜索'}}</text>
+          <view wx:else class="loading-dots"><text>·</text><text>·</text><text>·</text></view>
         </view>
       </view>
-      <text class="search-tip">例如：서울 강남구、Tokyo Shibuya、Seoul Gangnam</text>
+      <text class="search-tip">{{searchTip}}</text>
 
       <!-- 搜索结果 -->
       <scroll-view scroll-y class="result-list" wx:if="{{results.length > 0}}">
@@ -55,14 +87,20 @@
           data-idx="{{index}}"
           bindtap="onSelectResult"
         >
-          <text class="result-name">{{item.display_name_short}}</text>
+          <view class="result-main">
+            <text class="result-name">{{item.primary_name}}</text>
+            <text class="result-badge" wx:if="{{item.country_code}}">{{item.country_flag}}</text>
+          </view>
+          <text class="result-sub" wx:if="{{item.secondary_name}}">{{item.secondary_name}}</text>
           <text class="result-addr">{{item.display_name}}</text>
         </view>
       </scroll-view>
 
       <view class="no-result" wx:if="{{searched && results.length === 0 && !loading}}">
-        未找到相关地点，请尝试其他关键词
+        <text wx:if="{{lang === 'ko'}}">검색 결과가 없습니다. 다른 키워드를 입력해 보세요.</text>
+        <text wx:else>未找到相关地点，请尝试其他关键词</text>
       </view>
+
     </view>
 
   </view>
