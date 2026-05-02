@@ -413,11 +413,58 @@ ${activity.reminder ? `💡 ${activity.reminder}\n` : ''}
   },
 
   onShareAppMessage() {
-    const { activity } = this.data
+    const { activity, activityId, startTimeText } = this.data
+    const title = activity.name
+      ? `${activity.name}${startTimeText ? ' · ' + startTimeText : ''}`
+      : '来参加这个活动吧！'
     return {
-      title: activity.name,
-      path: `/pages/activity-detail/index?id=${this.data.activityId}`,
-      imageUrl: activity.coverImage,
+      title,
+      path: `/pages/activity-detail/index?id=${activityId}`,
+      imageUrl: activity.coverImage || '',
+      promise: new Promise(resolve => {
+        resolve({
+          title,
+          path: `/pages/activity-detail/index?id=${activityId}`,
+          imageUrl: activity.coverImage || '',
+        })
+      }),
     }
+  },
+
+  onShareTimeline() {
+    const { activity, activityId, startTimeText } = this.data
+    return {
+      title: activity.name
+        ? `${activity.name}${startTimeText ? ' · ' + startTimeText : ''}`
+        : '来参加这个活动吧！',
+      query: `id=${activityId}`,
+      imageUrl: activity.coverImage || '',
+    }
+  },
+
+  onCopyLink() {
+    const { activityId, activity } = this.data
+    const text = `【${activity.name || '活动'}】${activity.locationName ? '地点：' + activity.locationName + ' ' : ''}快来报名参加！`
+    wx.setClipboardData({
+      data: text,
+      success: () => wx.showToast({ title: '活动信息已复制', icon: 'success' }),
+    })
+  },
+
+  onShareAction() {
+    const { activity, activityId, startTimeText } = this.data
+    wx.showActionSheet({
+      itemList: ['分享给朋友', '复制活动信息', '生成活动海报'],
+      success: async (res) => {
+        if (res.tapIndex === 0) {
+          // 触发系统分享（由按钮 open-type="share" 处理）
+          wx.showToast({ title: '请点击右上角"..."分享', icon: 'none' })
+        } else if (res.tapIndex === 1) {
+          this.onCopyLink()
+        } else if (res.tapIndex === 2) {
+          wx.navigateTo({ url: `/pages/poster/index?activityId=${activityId}` })
+        }
+      },
+    })
   },
 })

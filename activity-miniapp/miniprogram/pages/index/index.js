@@ -165,4 +165,20 @@ Page({
     this._loadActivities(true)
     wx.stopPullDownRefresh()
   },
+
+  onShareAppMessage() {
+    return {
+      title: '发现精彩活动，快来报名参与！',
+      path: '/pages/index/index',
+      imageUrl: this.data.bannerList[0]?.coverImage || '',
+    }
+  },
+
+  onShareTimeline() {
+    return {
+      title: '发现精彩活动，快来报名参与！',
+      query: '',
+      imageUrl: this.data.bannerList[0]?.coverImage || '',
+    }
+  },
 })
