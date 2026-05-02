@@ -431,11 +431,12 @@ Page({
       if (isEdit) {
         await request.put(`/activities/${activityId}`, payload)
         wx.showToast({ title: '修改成功', icon: 'success' })
+        setTimeout(() => wx.navigateBack(), 1500)
       } else {
         const res = await request.post('/activities', payload)
         wx.showToast({ title: '发布成功 🎉', icon: 'success' })
         setTimeout(() => {
-          wx.redirectTo({ url: `/pages/activity-detail/index?id=${res.data.id}` })
+          wx.navigateTo({ url: `/pages/activity-detail/index?id=${res.data.id}` })
         }, 1500)
       }
     } catch (e) {

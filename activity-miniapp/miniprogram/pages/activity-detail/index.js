@@ -36,6 +36,7 @@ Page({
     showConflictModal: false,
     conflictActivity: '',
     pendingRegisterParams: null,
+    loadError: false,
   },
 
   onLoad(options) {
@@ -91,10 +92,16 @@ Page({
       })
       wx.setNavigationBarTitle({ title: activity.name })
     } catch (e) {
-      wx.showToast({ title: '加载失败', icon: 'none' })
+      wx.showToast({ title: e.message || '加载失败', icon: 'none' })
+      this.setData({ loadError: true })
     } finally {
       wx.hideNavigationBarLoading()
     }
+  },
+
+  onRetry() {
+    this.setData({ loadError: false })
+    this._loadDetail(this.data.activityId)
   },
 
   onSelectSub(e) {

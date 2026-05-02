@@ -1,6 +1,6 @@
 // src/controllers/activityController.js
 const { query, queryOne, transaction } = require('../config/db')
-const { getCache, setCache, delCache, CACHE_TTL } = require('../config/redis')
+const { getCache, setCache, delCache, delCacheByPattern, CACHE_TTL } = require('../config/redis')
 const wxService = require('../services/wxService')
 const { v4: uuidv4 } = require('uuid')
 const logger = require('../utils/logger')
@@ -84,7 +84,7 @@ exports.getById = async (req, res, next) => {
       SELECT a.*, u.nickname AS creator_nickname, u.avatar_url AS creator_avatar,
              (SELECT COUNT(*) FROM registrations r WHERE r.activity_id = a.id AND r.cancelled_at IS NULL) AS registration_count
       FROM activities a
-      JOIN users u ON a.creator_openid = u.openid
+      LEFT JOIN users u ON a.creator_openid = u.openid
       WHERE a.id = ?
     `, [id])
 
@@ -149,7 +149,7 @@ exports.create = async (req, res, next) => {
       }
     })
 
-    await delCache('activities:list')
+    await delCacheByPattern('activities:list*')
     res.status(201).json({ code: 0, data: { id } })
   } catch (e) {
     next(e)
@@ -178,6 +178,7 @@ exports.update = async (req, res, next) => {
        body.reminder || '', JSON.stringify(body.customFields || []), id]
     )
     await delCache(`activity:${id}`)
+    await delCacheByPattern('activities:list*')
 
     // 有变更则通知所有报名者
     const hasChange = body.locationName !== activity.location_name ||
@@ -198,6 +199,7 @@ exports.offline = async (req, res, next) => {
     const { reason } = req.body
     await query("UPDATE activities SET status='offline', offline_reason=?, offline_at=NOW() WHERE id=?", [reason || '', id])
     await delCache(`activity:${id}`)
+    await delCacheByPattern('activities:list*')
     res.json({ code: 0, message: '已下架' })
   } catch (e) {
     next(e)

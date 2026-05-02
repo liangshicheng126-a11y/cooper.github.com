@@ -1,6 +1,14 @@
 <!-- pages/activity-detail/index.wxml -->
 <view class="page">
-  <scroll-view scroll-y class="scroll-view" enable-flex>
+
+  <!-- 加载失败提示 -->
+  <view wx:if="{{loadError}}" class="error-state">
+    <text class="error-icon">⚠️</text>
+    <text class="error-text">活动信息加载失败</text>
+    <view class="error-retry btn btn-primary btn-sm" bindtap="onRetry">重新加载</view>
+  </view>
+
+  <scroll-view wx:else scroll-y class="scroll-view" enable-flex>
 
     <!-- 封面图 -->
     <view class="cover-section" wx:if="{{activity.coverImage}}">
@@ -244,4 +252,5 @@
       </view>
     </view>
   </view>
+  </scroll-view>
 </view>
