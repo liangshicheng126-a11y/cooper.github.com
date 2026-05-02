@@ -12,41 +12,42 @@
   -webkit-backdrop-filter: blur(24px) saturate(200%);
 
   border-top: 1rpx solid rgba(255,255,255,1);
-  box-shadow: 0 -4rpx 28rpx rgba(109,40,217,0.10), 0 -1rpx 0 rgba(124,58,237,0.08);
+  box-shadow: 0 -2rpx 12rpx rgba(30,27,75,0.06);
   z-index: 1000;
   overflow: hidden;
 }
 
-/* ── 顶部微渐变高光线 ── */
+/* ── 顶部细线（去掉大紫条观感） ── */
 .tab-bar__top-line {
   position: absolute; top: 0; left: 0; right: 0;
-  height: 2rpx;
-  background: linear-gradient(90deg, transparent, rgba(124,58,237,0.35), rgba(37,99,235,0.30), transparent);
+  height: 1rpx;
+  background: rgba(30,27,75,0.06);
 }
 
-/* ── 背景光晕（跟随 tab 移动） ── */
+/* ── 背景光晕：left 为 Tab 区域中点，配合 translateX(-50%) 真正居中 ── */
 .tab-bar__glow {
-  position: absolute; top: -60rpx;
-  height: 160rpx; width: 260rpx; border-radius: 50%;
-  opacity: 0.20; filter: blur(28px);
+  position: absolute; top: -48rpx;
+  height: 140rpx; width: 200rpx; border-radius: 50%;
+  opacity: 0.14; filter: blur(22px);
   transition: left 0.38s cubic-bezier(0.34,1.2,0.64,1), opacity 0.3s;
-  background: radial-gradient(circle, #a78bfa 0%, #60a5fa 60%, transparent 80%);
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(124,58,237,0.45) 0%, rgba(96,165,250,0.25) 55%, transparent 75%);
   pointer-events: none;
 }
 
 /* ── 滑动胶囊指示器 ── */
 .tab-bar__indicator {
   position: absolute;
-  top: 6rpx;
-  height: 118rpx;
-  border-radius: 32rpx;
-  background: rgba(124,58,237,0.09);
-  border: 1rpx solid rgba(124,58,237,0.22);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 4rpx 16rpx rgba(124,58,237,0.12), inset 0 1rpx 0 rgba(255,255,255,1);
-  transition: left 0.38s cubic-bezier(0.34,1.2,0.64,1),
-              transform 0.38s cubic-bezier(0.34,1.2,0.64,1);
+  left: 0;
+  top: 8rpx;
+  height: 112rpx;
+  border-radius: 28rpx;
+  box-sizing: border-box;
+  background: rgba(124,58,237,0.07);
+  border: 1rpx solid rgba(124,58,237,0.16);
+  box-shadow: 0 2rpx 10rpx rgba(30,27,75,0.06), inset 0 1rpx 0 rgba(255,255,255,1);
+  transition: transform 0.38s cubic-bezier(0.34,1.2,0.64,1),
+              width 0.38s cubic-bezier(0.34,1.2,0.64,1);
   pointer-events: none; z-index: 0;
 }
 
@@ -89,7 +90,7 @@
 .tab-icon-img--active {
   transform: scale(1.18) translateY(-2rpx);
   opacity: 1;
-  filter: drop-shadow(0 2rpx 8rpx rgba(124,58,237,0.28));
+  filter: drop-shadow(0 2rpx 6rpx rgba(30,27,75,0.12));
 }
 
 /* ── 活跃光晕（图标背后） ── */
@@ -97,8 +98,8 @@
   position: absolute;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  width: 80rpx; height: 80rpx; border-radius: 50%;
-  background: radial-gradient(circle, rgba(124,58,237,0.18) 0%, transparent 70%);
+  width: 76rpx; height: 76rpx; border-radius: 50%;
+  background: radial-gradient(circle, rgba(124,58,237,0.14) 0%, transparent 72%);
   animation: glow-breathe 2.5s ease-in-out infinite;
   pointer-events: none; z-index: 0;
 }
@@ -122,7 +123,7 @@
 .tab-dot {
   width: 8rpx; height: 8rpx; border-radius: 50%;
   background: linear-gradient(135deg, #7c3aed, #2563eb);
-  box-shadow: 0 0 6rpx rgba(124,58,237,0.50);
+  box-shadow: 0 0 4rpx rgba(91,33,182,0.25);
   animation: dot-in 0.25s cubic-bezier(0.34,1.5,0.64,1) both;
 }
 @keyframes dot-in {

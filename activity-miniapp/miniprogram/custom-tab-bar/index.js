@@ -4,8 +4,9 @@ Component({
     selected: 0,
     animate: false,
     indicatorVisible: false,
-    indicatorX: '0px',
-    glowLeft: '-20px',
+    indicatorX: 0,
+    indicatorW: 160,
+    glowCenterPx: 0,
     tabs: [
       {
         text: '发现',
@@ -23,20 +24,24 @@ Component({
   },
 
   attached() {
-    // 延迟触发入场弹出动画
+    let winW = 375
+    try {
+      if (typeof wx.getWindowInfoSync === 'function') {
+        winW = wx.getWindowInfoSync().windowWidth
+      } else {
+        winW = wx.getSystemInfoSync().windowWidth
+      }
+    } catch (e) {
+      winW = 375
+    }
+    this._tabW = winW / 2
+    this._winW = winW
+    this._updateIndicator(this.data.selected, false)
+
     setTimeout(() => {
       this.setData({ animate: true })
       setTimeout(() => this.setData({ indicatorVisible: true }), 150)
     }, 80)
-
-    // 获取屏幕宽度，计算指示器偏移量
-    wx.getSystemInfo({
-      success: (res) => {
-        const w = res.windowWidth
-        this._tabW = w / 2  // 每个 tab 宽度（px）
-        this._updateIndicator(this.data.selected, false)
-      },
-    })
   },
 
   methods: {
@@ -57,24 +62,19 @@ Component({
       }
     },
 
-    /** 计算指示器位置和光晕位置 */
+    /** 指示器宽度、位移与模糊光晕：均以「半个屏幕宽」为单位水平居中对齐到当前 Tab */
     _updateIndicator(index, animate) {
-      const w = this._tabW || 180  // px
-      const x = index * w          // 向右偏移 index × tab宽度
-      const glowOffset = x - (w / 2 - 60) // 光晕居中于当前 tab
+      const w = this._tabW || 187.5
+      const inset = 28
+      const indicatorW = Math.max(96, Math.floor(w - inset * 2))
+      const indicatorX = index * w + (w - indicatorW) / 2
+      const glowCenterPx = index * w + w / 2
 
-      if (!animate) {
-        // 无动画直接跳位
-        this.setData({
-          indicatorX: `${x}px`,
-          glowLeft: `${glowOffset}px`,
-        })
-      } else {
-        this.setData({
-          indicatorX: `${x}px`,
-          glowLeft: `${glowOffset}px`,
-        })
-      }
+      this.setData({
+        indicatorX,
+        indicatorW,
+        glowCenterPx,
+      })
     },
   },
 })
