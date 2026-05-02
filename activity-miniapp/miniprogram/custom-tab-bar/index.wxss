@@ -1,0 +1,222 @@
+/* custom-tab-bar/index.wxss · 毛玻璃底部导航栏 */
+
+/* ══ 外层容器：处理入场动画 ══ */
+.tab-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 1000;
+  transform: translateY(110%);
+  transition: transform 0.5s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.tab-bar--visible {
+  transform: translateY(0);
+}
+
+/* ══ 毛玻璃主体 ══ */
+.tab-bar__body {
+  position: relative;
+  background: rgba(9, 7, 23, 0.84);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  overflow: hidden;
+}
+
+/* ── 顶部高光线 ── */
+.tab-bar__top-line {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1rpx;
+  background: linear-gradient(
+    90deg,
+    transparent 5%,
+    rgba(167,139,250,0.55) 30%,
+    rgba(96,165,250,0.55) 70%,
+    transparent 95%
+  );
+  z-index: 3;
+}
+
+/* ── 背景渐变光晕 ── */
+.tab-bar__glow {
+  position: absolute;
+  bottom: -20rpx;
+  width: 240rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(124,58,237,0.45) 0%, transparent 70%);
+  filter: blur(20rpx);
+  z-index: 0;
+  pointer-events: none;
+  transition: left 0.4s cubic-bezier(0.34, 1.28, 0.64, 1);
+}
+
+/* ── 滑动胶囊指示器 ── */
+.tab-bar__indicator {
+  position: absolute;
+  top: 14rpx;
+  left: 0;
+  width: 50%;
+  height: 60rpx;
+  background: linear-gradient(135deg, rgba(124,58,237,0.25), rgba(37,99,235,0.18));
+  border: 1rpx solid rgba(167,139,250,0.32);
+  border-radius: 100rpx;
+  z-index: 1;
+  pointer-events: none;
+  box-shadow:
+    0 0 24rpx rgba(124,58,237,0.2),
+    inset 0 1rpx 0 rgba(255,255,255,0.1);
+  transition:
+    transform 0.4s cubic-bezier(0.34, 1.28, 0.64, 1),
+    opacity 0.3s ease;
+}
+
+/* ══ Tab 行 ══ */
+.tab-bar__row {
+  display: flex;
+  align-items: stretch;
+  position: relative;
+  z-index: 2;
+}
+
+/* ══ 单个 Tab ══ */
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20rpx 0 14rpx;
+  position: relative;
+  cursor: pointer;
+}
+
+/* 点击缩放反馈 */
+.tab-item:active { opacity: 0.75; }
+
+/* ── 图标容器 ── */
+.icon-wrap {
+  position: relative;
+  width: 52rpx; height: 52rpx;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 8rpx;
+}
+
+/* 图标激活光晕 */
+.icon-glow {
+  position: absolute;
+  inset: -10rpx;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(167,139,250,0.28) 0%, transparent 70%);
+  animation: glow-in 0.3s ease-out both;
+  pointer-events: none;
+}
+
+@keyframes glow-in {
+  from { opacity: 0; transform: scale(0.4); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ══ 指南针图标 ══ */
+.icon-compass {
+  position: relative;
+  width: 48rpx; height: 48rpx;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.icon-compass.icon--active {
+  transform: scale(1.2) rotate(18deg);
+}
+
+.compass-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 3rpx solid rgba(255,255,255,0.22);
+  transition: border-color 0.25s ease;
+}
+.icon-compass.icon--active .compass-ring { border-color: rgba(167,139,250,0.75); }
+
+.compass-ring--outer { width: 46rpx; height: 46rpx; }
+.compass-ring--inner { width: 24rpx; height: 24rpx; }
+
+.compass-needle {
+  position: absolute;
+  width: 0; height: 0;
+  border-left: 6rpx solid transparent;
+  border-right: 6rpx solid transparent;
+  border-bottom: 22rpx solid rgba(255,255,255,0.3);
+  top: 2rpx;
+  transform-origin: bottom center;
+  transition: border-bottom-color 0.25s ease;
+}
+.icon-compass.icon--active .compass-needle { border-bottom-color: #a78bfa; }
+
+/* ══ 人形图标 ══ */
+.icon-profile {
+  position: relative;
+  width: 48rpx; height: 48rpx;
+  display: flex; align-items: flex-end; justify-content: center;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.icon-profile.icon--active {
+  transform: scale(1.2) translateY(-4rpx);
+}
+
+.profile-head {
+  position: absolute;
+  top: 4rpx;
+  width: 22rpx; height: 22rpx;
+  border-radius: 50%;
+  border: 3rpx solid rgba(255,255,255,0.28);
+  transition: border-color 0.25s ease;
+}
+.icon-profile.icon--active .profile-head { border-color: #a78bfa; }
+
+.profile-body {
+  position: absolute;
+  bottom: 2rpx;
+  width: 40rpx; height: 20rpx;
+  border-radius: 50rpx 50rpx 0 0;
+  border: 3rpx solid rgba(255,255,255,0.22);
+  border-bottom: none;
+  transition: border-color 0.25s ease;
+}
+.icon-profile.icon--active .profile-body { border-color: rgba(167,139,250,0.8); }
+
+/* ══ 标签文字 ══ */
+.tab-label {
+  font-size: 22rpx;
+  color: rgba(255,255,255,0.36);
+  letter-spacing: 2rpx;
+  transition: color 0.25s ease;
+  display: block;
+  line-height: 1;
+}
+
+.tab-item--active .tab-label {
+  color: #c4b5fd;
+  font-weight: 700;
+}
+
+/* ══ 激活小点 ══ */
+.tab-dot {
+  width: 8rpx; height: 8rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #a78bfa, #60a5fa);
+  margin-top: 7rpx;
+  box-shadow: 0 0 10rpx rgba(167,139,250,0.7);
+  animation: dot-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes dot-in {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+/* ══ 安全区 ══ */
+.tab-bar__safe {
+  height: env(safe-area-inset-bottom);
+  background: rgba(9, 7, 23, 0.92);
+}

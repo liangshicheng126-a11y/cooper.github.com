@@ -30,6 +30,10 @@ Page({
   },
 
   onShow() {
+    // 同步自定义 tabBar 选中状态
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setSelected(1)
+    }
     this._loadActivities()
   },
 
