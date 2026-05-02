@@ -1,0 +1,27 @@
+<!-- pages/terms/index.wxml -->
+<view class="wrap">
+  <scroll-view scroll-y class="scroll" enable-back-to-top>
+    <view class="hero">
+      <text class="h1">{{locale === 'zh' ? '用户服务条款' : 'Terms of Service'}}</text>
+      <text class="subtitle">{{docTitleSub}}</text>
+      <text class="meta">{{metaLine}}</text>
+    </view>
+
+    <block wx:for="{{sections}}" wx:key="title">
+      <view class="section">
+        <text class="h2">{{item.title}}</text>
+        <block wx:if="{{item.paragraphs && item.paragraphs.length}}">
+          <text wx:for="{{item.paragraphs}}" wx:key="*this" class="para">{{item}}</text>
+        </block>
+        <view wx:if="{{item.bullets}}" class="bullets">
+          <view wx:for="{{item.bullets}}" wx:for-item="line" wx:key="*this" class="bullet-item">
+            <text class="dot">•</text>
+            <text class="line">{{line}}</text>
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <view class="bottom-space" />
+  </scroll-view>
+</view>

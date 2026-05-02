@@ -4,6 +4,8 @@
     "pages/activity-detail/index",
     "pages/create-activity/index",
     "pages/register/index",
+    "pages/privacy/index",
+    "pages/terms/index",
     "pages/my/index",
     "pages/my-published/index",
     "pages/my-registered/index",
