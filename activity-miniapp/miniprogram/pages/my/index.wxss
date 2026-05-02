@@ -1,9 +1,11 @@
 /* pages/my/index.wxss · 毛玻璃"我的"页面 */
-.page {
-  background: linear-gradient(145deg, #0d0b1e 0%, #1a1040 40%, #0d1f3c 100%);
+
+/* 使用原生页面滚动（page 元素自动滚动），不再嵌套 scroll-view */
+.page-wrap {
   min-height: 100vh;
+  padding-bottom: calc(160rpx + env(safe-area-inset-bottom));
+  background: linear-gradient(145deg, #0d0b1e 0%, #1a1040 40%, #0d1f3c 100%);
 }
-.scroll-view { height: 100vh; }
 
 /* ── 用户卡片 ── */
 .user-card {

@@ -192,11 +192,12 @@
   letter-spacing: 2rpx;
 }
 
-/* ══ FAB 发布按钮 ══ */
+/* ══ FAB 发布按钮（页面 2/3 垂直位置） ══ */
 .fab {
   position: fixed;
   right: 40rpx;
-  bottom: calc(120rpx + env(safe-area-inset-bottom));
+  /* 2/3 from top = 1/3 from bottom，减去按钮自身半径居中 */
+  bottom: calc(100vh / 3 - 52rpx);
   width: 104rpx;
   height: 104rpx;
   background: linear-gradient(135deg, #7c3aed, #2563eb);

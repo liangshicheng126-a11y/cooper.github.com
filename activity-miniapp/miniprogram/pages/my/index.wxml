@@ -1,6 +1,5 @@
 <!-- pages/my/index.wxml - 我的页面 -->
-<view class="page">
-  <scroll-view scroll-y class="scroll-view">
+<view class="page-wrap">
     <!-- 用户信息卡 -->
     <view class="user-card">
       <view class="user-bg" />
@@ -120,5 +119,4 @@
     </view>
 
     <view style="height: 60rpx;" />
-  </scroll-view>
 </view>
