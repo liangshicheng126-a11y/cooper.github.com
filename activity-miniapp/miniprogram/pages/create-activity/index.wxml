@@ -44,8 +44,8 @@
 
         <view class="form-group">
           <view class="form-label">活动描述</view>
-          <textarea class="form-textarea" placeholder="介绍活动内容、注意事项等..." value="{{form.description}}" bindinput="onInput" data-key="description" maxlength="500" auto-height />
-          <text class="form-hint">{{descriptionLen}}/500</text>
+          <textarea class="form-textarea" placeholder="介绍活动内容、注意事项等..." value="{{form.description}}" bindinput="onInput" data-key="description" maxlength="5000" auto-height />
+          <text class="form-hint">{{descriptionLen}}/5000</text>
         </view>
 
         <view class="form-group">

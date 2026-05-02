@@ -245,10 +245,11 @@ Page({
       success: () => wx.showToast({ title: '已复制邀请码', icon: 'success' }),
     })
   },
-  _randomCode() {
+  _randomCode(len = 6) {
+    // 排除 0/O/1/I 等易混淆字符，生成易读的邀请码
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
     let code = ''
-    for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)]
+    for (let i = 0; i < len; i++) code += chars[Math.floor(Math.random() * chars.length)]
     return code
   },
 
