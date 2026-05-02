@@ -1,0 +1,33 @@
+// pages/create-activity/helpers.wxs
+var helpers = {
+  descLen: function(str) {
+    return str ? str.length : 0
+  },
+  isFieldEnabled: function(fields, key) {
+    if (!fields || !fields.length) return false
+    for (var i = 0; i < fields.length; i++) {
+      if (fields[i].key === key) return true
+    }
+    return false
+  },
+  isFieldRequired: function(fields, key) {
+    if (!fields || !fields.length) return false
+    for (var i = 0; i < fields.length; i++) {
+      if (fields[i].key === key) return fields[i].required === true
+    }
+    return false
+  },
+  getFieldTypeIdx: function(type, typeList) {
+    var map = { 'text': 0, 'radio': 1, 'checkbox': 2, 'select': 3, 'textarea': 4 }
+    return map[type] !== undefined ? map[type] : 0
+  },
+  getFieldTypeName: function(type) {
+    var map = { 'text': '单行文字', 'radio': '单选', 'checkbox': '多选', 'select': '下拉选择', 'textarea': '多行文字' }
+    return map[type] || '单行文字'
+  },
+  btnLabel: function(step, total, isEdit) {
+    if (step < total - 1) return '下一步'
+    return isEdit ? '保存修改' : '发布活动'
+  },
+}
+module.exports = helpers

@@ -19,6 +19,7 @@ Page({
     isEdit: false,
     activityId: null,
     currentStep: 0,
+    descriptionLen: 0,
     steps: ['基本信息', '时间地点', '报名设置'],
     submitting: false,
     today: toPickerValue(new Date()),
@@ -102,7 +103,9 @@ Page({
 
   onInput(e) {
     const key = e.currentTarget.dataset.key
-    this.setData({ [`form.${key}`]: e.detail.value })
+    const update = { [`form.${key}`]: e.detail.value }
+    if (key === 'description') update.descriptionLen = e.detail.value.length
+    this.setData(update)
   },
 
   onSelectCategory(e) {

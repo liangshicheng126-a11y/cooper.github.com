@@ -1,4 +1,5 @@
 <!-- pages/create-activity/index.wxml - 多步骤创建活动 -->
+<wxs src="./helpers.wxs" module="h" />
 <view class="page">
   <!-- 步骤指示器 -->
   <view class="step-bar">
@@ -44,7 +45,7 @@
         <view class="form-group">
           <view class="form-label">活动描述</view>
           <textarea class="form-textarea" placeholder="介绍活动内容、注意事项等..." value="{{form.description}}" bindinput="onInput" data-key="description" maxlength="500" auto-height />
-          <text class="form-hint">{{(form.description || '').length}}/500</text>
+          <text class="form-hint">{{descriptionLen}}/500</text>
         </view>
 
         <view class="form-group">
@@ -205,21 +206,21 @@
           </view>
           <view class="field-switches">
             <view
-              class="field-switch-btn {{isFieldEnabled(item.key) ? 'switch-on' : ''}}"
+              class="field-switch-btn {{h.isFieldEnabled(form.customFields, item.key) ? 'switch-on' : ''}}"
               data-key="{{item.key}}"
               data-label="{{item.label}}"
               data-type="{{item.type}}"
               bindtap="togglePresetField"
             >
-              <text>{{isFieldEnabled(item.key) ? '已启用' : '启用'}}</text>
+              <text>{{h.isFieldEnabled(form.customFields, item.key) ? '已启用' : '启用'}}</text>
             </view>
             <view
-              wx:if="{{isFieldEnabled(item.key)}}"
-              class="field-required-btn {{isFieldRequired(item.key) ? 'required-on' : ''}}"
+              wx:if="{{h.isFieldEnabled(form.customFields, item.key)}}"
+              class="field-required-btn {{h.isFieldRequired(form.customFields, item.key) ? 'required-on' : ''}}"
               data-key="{{item.key}}"
               bindtap="toggleFieldRequired"
             >
-              <text>{{isFieldRequired(item.key) ? '必填' : '选填'}}</text>
+              <text>{{h.isFieldRequired(form.customFields, item.key) ? '必填' : '选填'}}</text>
             </view>
           </view>
         </view>
@@ -233,9 +234,9 @@
         <view wx:for="{{form.customFields}}" wx:key="idx" wx:if="{{!item._isPreset}}" class="custom-field-item">
           <input class="form-input" placeholder="字段名称（如：衣服尺码）" value="{{item.label}}" data-idx="{{index}}" data-field="label" bindinput="onCustomFieldInput" />
           <view class="custom-field-row mt-12">
-            <picker mode="selector" range="{{fieldTypes}}" value="{{getFieldTypeIdx(item.type)}}" data-idx="{{index}}" bindchange="onFieldTypeChange">
+            <picker mode="selector" range="{{fieldTypes}}" value="{{h.getFieldTypeIdx(item.type, fieldTypes)}}" data-idx="{{index}}" bindchange="onFieldTypeChange">
               <view class="form-input picker-input" style="flex:1;margin-right:16rpx;">
-                <text>{{getFieldTypeName(item.type)}}</text>
+                <text>{{h.getFieldTypeName(item.type)}}</text>
               </view>
             </picker>
             <view class="field-required-btn {{item.required ? 'required-on' : ''}}" data-idx="{{index}}" bindtap="toggleCustomRequired">
@@ -265,7 +266,7 @@
     <view class="btn-row">
       <button class="btn btn-gray" bindtap="prevStep" wx:if="{{currentStep > 0}}">上一步</button>
       <button class="btn btn-primary flex-1" bindtap="nextStep" loading="{{submitting}}">
-        {{currentStep < steps.length - 1 ? '下一步' : (isEdit ? '保存修改' : '发布活动')}}
+        {{h.btnLabel(currentStep, steps.length, isEdit)}}
       </button>
     </view>
   </view>
