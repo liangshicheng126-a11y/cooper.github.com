@@ -7,7 +7,7 @@
   padding-bottom: env(safe-area-inset-bottom);
 
   /* 白色毛玻璃 */
-  background: rgba(255,255,255,0.82);
+  background: rgba(255,255,255,0.84);
   backdrop-filter: blur(24px) saturate(200%);
   -webkit-backdrop-filter: blur(24px) saturate(200%);
 
@@ -17,25 +17,24 @@
   overflow: hidden;
 }
 
-/* 顶部微渐变高光线 */
+/* ── 顶部微渐变高光线 ── */
 .tab-bar__top-line {
   position: absolute; top: 0; left: 0; right: 0;
   height: 2rpx;
-  background: linear-gradient(90deg, transparent, rgba(124,58,237,0.35), rgba(37,99,235,0.35), transparent);
+  background: linear-gradient(90deg, transparent, rgba(124,58,237,0.35), rgba(37,99,235,0.30), transparent);
 }
 
-/* 背景光晕 */
+/* ── 背景光晕（跟随 tab 移动） ── */
 .tab-bar__glow {
   position: absolute; top: -60rpx;
-  height: 160rpx; border-radius: 50%;
-  opacity: 0.25; filter: blur(28px);
+  height: 160rpx; width: 260rpx; border-radius: 50%;
+  opacity: 0.20; filter: blur(28px);
   transition: left 0.38s cubic-bezier(0.34,1.2,0.64,1), opacity 0.3s;
   background: radial-gradient(circle, #a78bfa 0%, #60a5fa 60%, transparent 80%);
   pointer-events: none;
-  width: 260rpx;
 }
 
-/* 滑动胶囊 */
+/* ── 滑动胶囊指示器 ── */
 .tab-bar__indicator {
   position: absolute;
   top: 6rpx;
@@ -46,22 +45,23 @@
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 4rpx 16rpx rgba(124,58,237,0.12), inset 0 1rpx 0 rgba(255,255,255,1);
-  transition: left 0.38s cubic-bezier(0.34,1.2,0.64,1);
+  transition: left 0.38s cubic-bezier(0.34,1.2,0.64,1),
+              transform 0.38s cubic-bezier(0.34,1.2,0.64,1);
   pointer-events: none; z-index: 0;
 }
 
-/* Tab 行 */
+/* ── Tab 行 ── */
 .tab-bar__row {
   position: relative; z-index: 1;
   display: flex; height: 130rpx;
 }
 
-/* 单个 Tab */
+/* ── 单个 Tab ── */
 .tab-item {
   flex: 1; display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   gap: 4rpx; position: relative;
-  padding-top: 8rpx;
+  padding-top: 6rpx;
   transition: transform 0.18s;
 }
 .tab-item--animate { animation: tab-entry 0.4s cubic-bezier(0.34,1.4,0.64,1) both; }
@@ -72,72 +72,45 @@
   to   { transform: translateY(0);     opacity: 1; }
 }
 
-/* 图标容器 */
-.tab-icon {
+/* ── 图标容器（相对定位，承载光晕） ── */
+.tab-icon-wrap {
+  position: relative;
   width: 56rpx; height: 56rpx;
   display: flex; align-items: center; justify-content: center;
-  position: relative;
-  transition: transform 0.25s cubic-bezier(0.34,1.4,0.64,1);
 }
-.tab-item--active .tab-icon {
+
+/* ── 图标图片 ── */
+.tab-icon-img {
+  width: 52rpx; height: 52rpx;
+  position: relative; z-index: 1;
+  transition: transform 0.25s cubic-bezier(0.34,1.4,0.64,1), opacity 0.2s;
+  opacity: 0.65;
+}
+.tab-icon-img--active {
   transform: scale(1.18) translateY(-2rpx);
-  filter: drop-shadow(0 2rpx 8rpx rgba(124,58,237,0.30));
+  opacity: 1;
+  filter: drop-shadow(0 2rpx 8rpx rgba(124,58,237,0.28));
 }
 
-/* SVG-like 指南针图标（发现） */
-.icon-compass {
-  width: 48rpx; height: 48rpx; border-radius: 50%;
-  border: 2.5rpx solid rgba(30,27,75,0.28);
-  position: relative; overflow: hidden;
-  transition: border-color 0.2s;
+/* ── 活跃光晕（图标背后） ── */
+.tab-glow {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80rpx; height: 80rpx; border-radius: 50%;
+  background: radial-gradient(circle, rgba(124,58,237,0.18) 0%, transparent 70%);
+  animation: glow-breathe 2.5s ease-in-out infinite;
+  pointer-events: none; z-index: 0;
 }
-.tab-item--active .icon-compass {
-  border-color: #7c3aed;
-  box-shadow: 0 0 12rpx rgba(124,58,237,0.28);
+@keyframes glow-breathe {
+  0%,100% { transform: translate(-50%,-50%) scale(1);   opacity: 1; }
+  50%      { transform: translate(-50%,-50%) scale(1.3); opacity: 0.55; }
 }
-.compass-north {
-  position: absolute; top: 5rpx; left: 50%; transform: translateX(-50%);
-  width: 0; height: 0;
-  border-left: 7rpx solid transparent;
-  border-right: 7rpx solid transparent;
-  border-bottom: 18rpx solid rgba(30,27,75,0.22);
-  transition: border-bottom-color 0.2s;
-}
-.compass-south {
-  position: absolute; bottom: 5rpx; left: 50%; transform: translateX(-50%);
-  width: 0; height: 0;
-  border-left: 7rpx solid transparent;
-  border-right: 7rpx solid transparent;
-  border-top: 18rpx solid rgba(30,27,75,0.12);
-  transition: border-top-color 0.2s;
-}
-.tab-item--active .compass-north { border-bottom-color: #7c3aed; }
-.tab-item--active .compass-south { border-top-color: rgba(124,58,237,0.40); }
-.compass-dot {
-  position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%,-50%);
-  width: 8rpx; height: 8rpx; border-radius: 50%;
-  background: rgba(30,27,75,0.28); transition: background 0.2s;
-}
-.tab-item--active .compass-dot { background: #7c3aed; }
 
-/* 人物图标（我的） */
-.icon-profile { width: 48rpx; height: 48rpx; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
-.profile-head {
-  width: 22rpx; height: 22rpx; border-radius: 50%;
-  background: rgba(30,27,75,0.22); transition: background 0.2s;
-  margin-bottom: 2rpx;
-}
-.tab-item--active .profile-head { background: #7c3aed; }
-.profile-shoulders {
-  width: 40rpx; height: 16rpx; border-radius: 10rpx 10rpx 0 0;
-  background: rgba(30,27,75,0.22); transition: background 0.2s;
-}
-.tab-item--active .profile-shoulders { background: #7c3aed; }
-
-/* 文字标签 */
+/* ── 文字标签 ── */
 .tab-label {
-  font-size: 22rpx; font-weight: 500; color: rgba(30,27,75,0.45);
+  font-size: 22rpx; font-weight: 500;
+  color: rgba(30,27,75,0.40);
   transition: color 0.2s, font-weight 0.2s;
   letter-spacing: 1rpx;
 }
@@ -145,27 +118,14 @@
   color: #7c3aed; font-weight: 700;
 }
 
-/* 活跃光晕 */
-.tab-glow {
-  position: absolute; top: -10rpx;
-  width: 80rpx; height: 80rpx; border-radius: 50%;
-  background: radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%);
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.3s;
-}
-.tab-item--active .tab-glow { opacity: 1; animation: glow-breathe 2.5s ease-in-out infinite; }
-
-@keyframes glow-breathe {
-  0%,100% { transform: scale(1);   opacity: 0.90; }
-  50%      { transform: scale(1.2); opacity: 0.50; }
-}
-
-/* 激活点 */
+/* ── 激活指示点 ── */
 .tab-dot {
   width: 8rpx; height: 8rpx; border-radius: 50%;
   background: linear-gradient(135deg, #7c3aed, #2563eb);
   box-shadow: 0 0 6rpx rgba(124,58,237,0.50);
-  opacity: 0; transform: scale(0);
-  transition: opacity 0.25s, transform 0.25s cubic-bezier(0.34,1.5,0.64,1);
+  animation: dot-in 0.25s cubic-bezier(0.34,1.5,0.64,1) both;
 }
-.tab-item--active .tab-dot { opacity: 1; transform: scale(1); }
+@keyframes dot-in {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}

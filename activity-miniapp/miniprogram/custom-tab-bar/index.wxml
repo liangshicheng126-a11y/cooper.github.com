@@ -11,7 +11,10 @@
     <view class="tab-bar__glow" style="left: {{glowLeft}};"></view>
 
     <!-- 滑动胶囊指示器 -->
-    <view class="tab-bar__indicator" style="transform: translateX({{indicatorX}}); opacity: {{indicatorVisible ? 1 : 0}};"></view>
+    <view
+      class="tab-bar__indicator"
+      style="transform: translateX({{indicatorX}}); opacity: {{indicatorVisible ? 1 : 0}};"
+    ></view>
 
     <!-- Tab 内容行 -->
     <view class="tab-bar__row">
@@ -22,32 +25,27 @@
         data-index="{{index}}"
         bindtap="onTabTap"
       >
-        <!-- 发现图标 -->
-        <view wx:if="{{index === 0}}" class="icon-wrap">
-          <view class="icon-compass {{selected === 0 ? 'icon--active' : ''}}">
-            <view class="compass-ring compass-ring--outer"></view>
-            <view class="compass-ring compass-ring--inner"></view>
-            <view class="compass-needle"></view>
-          </view>
-          <view wx:if="{{selected === 0}}" class="icon-glow"></view>
+        <!-- 图标区域 -->
+        <view class="tab-icon-wrap">
+          <!-- 活跃光晕 -->
+          <view wx:if="{{selected === index}}" class="tab-glow"></view>
+
+          <!-- 图标图片 -->
+          <image
+            class="tab-icon-img {{selected === index ? 'tab-icon-img--active' : ''}}"
+            src="{{selected === index ? item.iconActive : item.icon}}"
+            mode="aspectFit"
+          />
         </view>
 
-        <!-- 我的图标 -->
-        <view wx:if="{{index === 1}}" class="icon-wrap">
-          <view class="icon-profile {{selected === 1 ? 'icon--active' : ''}}">
-            <view class="profile-head"></view>
-            <view class="profile-body"></view>
-          </view>
-          <view wx:if="{{selected === 1}}" class="icon-glow"></view>
-        </view>
-
+        <!-- 文字标签 -->
         <text class="tab-label">{{item.text}}</text>
+
+        <!-- 激活指示点 -->
         <view wx:if="{{selected === index}}" class="tab-dot"></view>
       </view>
     </view>
 
   </view>
 
-  <!-- 安全区 -->
-  <view class="tab-bar__safe"></view>
 </view>

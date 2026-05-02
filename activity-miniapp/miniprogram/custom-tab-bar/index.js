@@ -7,8 +7,18 @@ Component({
     indicatorX: '0px',
     glowLeft: '-20px',
     tabs: [
-      { text: '发现', pagePath: '/pages/index/index' },
-      { text: '我的',  pagePath: '/pages/my/index'   },
+      {
+        text: '发现',
+        pagePath: '/pages/index/index',
+        icon: '/images/icon-discover.svg',
+        iconActive: '/images/icon-discover-active.svg',
+      },
+      {
+        text: '我的',
+        pagePath: '/pages/my/index',
+        icon: '/images/icon-my.svg',
+        iconActive: '/images/icon-my-active.svg',
+      },
     ],
   },
 
