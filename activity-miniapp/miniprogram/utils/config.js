@@ -18,10 +18,14 @@ const API_BASE_URL = {
   production:  'https://your-domain.com/api',
 }
 
-// 【4】腾讯地图 SDK Key
+// 【4】腾讯地图 SDK Key（中国大陆地址解析 / 地图上微调后的逆解析）
 //   申请地址：https://lbs.qq.com/dev/console/application/mine
 //   创建应用后选"微信小程序"并绑定上方 APP_ID
 const MAP_KEY = 'YOUR_TENCENT_MAP_KEY'
+
+// 【4-b】Google Maps Geocoding API Key（仅在「活动地点 → 海外」正向/逆解析使用，不走腾讯）
+//   控制台启用 Geocoding API；小程序后台添加 request 合法域名：https://maps.googleapis.com
+const GOOGLE_MAPS_KEY = 'YOUR_GOOGLE_MAPS_KEY'
 
 // 【5】订阅消息模板 ID（在微信公众平台 → 功能 → 订阅消息 中查看）
 const SUBSCRIBE_TEMPLATES = {
@@ -37,6 +41,7 @@ module.exports = {
   ENV,
   APP_ID,
   MAP_KEY,
+  GOOGLE_MAPS_KEY,
   SUBSCRIBE_TEMPLATES,
   API_BASE_URL: API_BASE_URL[ENV],
 }

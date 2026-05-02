@@ -1,5 +1,8 @@
 // components/location-picker/index.js
-const { MAP_KEY } = require('../../utils/config')
+const { MAP_KEY, GOOGLE_MAPS_KEY } = require('../../utils/config')
+
+const isTencentConfigured = MAP_KEY && MAP_KEY !== 'YOUR_TENCENT_MAP_KEY'
+const isGoogleConfigured = GOOGLE_MAPS_KEY && GOOGLE_MAPS_KEY !== 'YOUR_GOOGLE_MAPS_KEY'
 
 Component({
   properties: {
@@ -39,7 +42,7 @@ Component({
     geocodeTextAddress() {
       const addr = this.data.textAddress.trim()
       if (!addr) return wx.showToast({ title: '请输入地址', icon: 'none' })
-      if (!MAP_KEY || MAP_KEY === 'YOUR_TENCENT_MAP_KEY') {
+      if (!isTencentConfigured) {
         return this._nominatimGeocodeAndEnter(addr, { countrycodes: 'cn', region: 'CN' })
       }
       this.setData({ geocoding: true })
@@ -70,10 +73,56 @@ Component({
     geocodeTextAddressIntl() {
       const addr = this.data.textAddress.trim()
       if (!addr) return wx.showToast({ title: '请输入地址', icon: 'none' })
+      if (isGoogleConfigured) {
+        return this._googleForwardGeocodeAndEnter(addr)
+      }
       return this._nominatimGeocodeAndEnter(addr, { region: 'INTL' })
     },
 
-    /** 腾讯 Key 缺失时国内用 OSM；海外始终用 OSM */
+    /** 海外正向地理编码（Google Maps Geocoding API） */
+    _googleForwardGeocodeAndEnter(addr) {
+      this.setData({ geocoding: true })
+      wx.request({
+        url: 'https://maps.googleapis.com/maps/api/geocode/json',
+        data: { address: addr, key: GOOGLE_MAPS_KEY, language: 'zh-CN' },
+        success: (res) => {
+          const body = res.data || {}
+          if (body.status === 'OK' && body.results?.length) {
+            const loc = this._locFromGoogleGeocode(body.results[0], addr)
+            this.setData({ geocoding: false })
+            if (loc) this._enterMapStep(loc)
+            return
+          }
+          this.setData({ geocoding: false })
+          if (body.status === 'ZERO_RESULTS') {
+            wx.showToast({ title: '未找到该地址，试试更完整写法', icon: 'none' })
+            return
+          }
+          const msg = (body.error_message || 'Google Geocoding 解析失败').slice(0, 28)
+          wx.showToast({ title: msg, icon: 'none' })
+        },
+        fail: () => {
+          this.setData({ geocoding: false })
+          wx.showToast({ title: '网络错误', icon: 'none' })
+        },
+      })
+    },
+
+    _locFromGoogleGeocode(result, fallbackAddr) {
+      const loc = result?.geometry?.location
+      if (loc == null || loc.lat == null || loc.lng == null) return null
+      const formatted = result.formatted_address || fallbackAddr
+      const primary = formatted.split(',')[0]?.trim() || fallbackAddr
+      return {
+        name:      primary,
+        address:   formatted,
+        latitude:  typeof loc.lat === 'function' ? loc.lat() : Number(loc.lat),
+        longitude: typeof loc.lng === 'function' ? loc.lng() : Number(loc.lng),
+        country:   'INTL',
+      }
+    },
+
+    /** 境内无腾讯 Key 时用 OSM；海外在未配置 Google Key 时用 OSM 兜底 */
     _nominatimGeocodeAndEnter(addr, { countrycodes, region }) {
       this.setData({ geocoding: true })
       const data = { q: addr, format: 'json', addressdetails: 1, limit: 1, 'accept-language': 'zh-CN,ko,en' }
@@ -148,21 +197,38 @@ Component({
     },
 
     _reverseGeocode(lat, lng) {
-      if (!MAP_KEY || MAP_KEY === 'YOUR_TENCENT_MAP_KEY') return
-      if (this.data.pendingLocation.country !== 'CN') return
-      wx.request({
-        url: `https://apis.map.qq.com/ws/geocoder/v1/?location=${lat},${lng}&key=${MAP_KEY}&get_poi=1`,
-        success: (res) => {
-          if (res.data?.status === 0) {
-            const r = res.data.result
-            const name = r.pois?.[0]?.title || r.address_component?.street_number || r.address
+      const pending = this.data.pendingLocation
+      if (pending.country === 'CN' && isTencentConfigured) {
+        wx.request({
+          url: `https://apis.map.qq.com/ws/geocoder/v1/?location=${lat},${lng}&key=${MAP_KEY}&get_poi=1`,
+          success: (res) => {
+            if (res.data?.status === 0) {
+              const r = res.data.result
+              const name = r.pois?.[0]?.title || r.address_component?.street_number || r.address
+              this.setData({
+                'pendingLocation.name':    name || this.data.pendingLocation.name,
+                'pendingLocation.address': r.address || this.data.pendingLocation.address,
+              })
+            }
+          },
+        })
+        return
+      }
+      if (pending.country !== 'CN' && isGoogleConfigured) {
+        wx.request({
+          url: 'https://maps.googleapis.com/maps/api/geocode/json',
+          data: { latlng: `${lat},${lng}`, key: GOOGLE_MAPS_KEY, language: 'zh-CN' },
+          success: (res) => {
+            if (res.data?.status !== 'OK' || !res.data.results?.length) return
+            const formatted = res.data.results[0].formatted_address
+            const name = formatted.split(',')[0]?.trim() || formatted
             this.setData({
-              'pendingLocation.name':    name || this.data.pendingLocation.name,
-              'pendingLocation.address': r.address || this.data.pendingLocation.address,
+              'pendingLocation.name':    name,
+              'pendingLocation.address': formatted,
             })
-          }
-        },
-      })
+          },
+        })
+      }
     },
 
     onRegionChange() {},
