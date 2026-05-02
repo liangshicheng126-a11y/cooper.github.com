@@ -10,21 +10,21 @@
     "pages/poster/index"
   ],
   "window": {
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#0d0b1e",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#f0ecff",
     "navigationBarTitleText": "活动报名",
-    "navigationBarTextStyle": "white",
-    "backgroundColor": "#0d0b1e",
-    "backgroundColorTop": "#0d0b1e",
-    "backgroundColorBottom": "#0d1f3c",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f0ecff",
+    "backgroundColorTop": "#ede9fe",
+    "backgroundColorBottom": "#eff6ff",
     "enablePullDownRefresh": false
   },
   "tabBar": {
     "custom": true,
-    "color": "#6b7280",
-    "selectedColor": "#a78bfa",
-    "backgroundColor": "#090717",
-    "borderStyle": "black",
+    "color": "#9ca3af",
+    "selectedColor": "#7c3aed",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
     "list": [
       {
         "pagePath": "pages/index/index",
