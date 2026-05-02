@@ -1,0 +1,171 @@
+<!-- pages/admin/index.wxml - 管理员后台 -->
+<view class="page">
+  <!-- 顶部 Tab -->
+  <view class="admin-tabs">
+    <view
+      wx:for="{{tabs}}"
+      wx:key="key"
+      class="admin-tab {{activeTab === item.key ? 'tab-active' : ''}}"
+      data-tab="{{item.key}}"
+      bindtap="switchTab"
+    >
+      <text>{{item.label}}</text>
+    </view>
+  </view>
+
+  <scroll-view scroll-y class="scroll-view">
+    <!-- Tab: 报名名单 -->
+    <view wx:if="{{activeTab === 'list'}}">
+      <!-- 活动选择 -->
+      <view class="filter-bar">
+        <picker mode="selector" range="{{myActivities}}" range-key="name" value="{{selectedActivityIdx}}" bindchange="onActivityChange">
+          <view class="activity-picker">
+            <text class="picker-activity-name">{{selectedActivity.name || '选择活动'}}</text>
+            <text class="picker-arrow">▾</text>
+          </view>
+        </picker>
+
+        <!-- 子活动筛选 -->
+        <scroll-view scroll-x class="sub-filter-scroll" wx:if="{{subActivities.length > 0}}">
+          <view class="sub-filter-list">
+            <view
+              class="sub-filter-tag {{selectedSubId === 'all' ? 'tag-active' : ''}}"
+              data-id="all"
+              bindtap="onFilterSub"
+            >全部场次</view>
+            <view
+              wx:for="{{subActivities}}"
+              wx:key="id"
+              wx:for-item="sub"
+              class="sub-filter-tag {{selectedSubId === sub.id ? 'tag-active' : ''}}"
+              data-id="{{sub.id}}"
+              bindtap="onFilterSub"
+            >{{sub.name}}</view>
+          </view>
+        </scroll-view>
+      </view>
+
+      <!-- 搜索 -->
+      <view class="search-bar">
+        <input class="search-input" placeholder="搜索姓名/手机号..." value="{{searchKeyword}}" bindinput="onSearch" />
+        <text class="result-count">共 {{filteredList.length}} 人</text>
+      </view>
+
+      <!-- 脱敏提示 -->
+      <view class="desensitize-tip">
+        <text class="tip-icon">🔒</text>
+        <text class="tip-text">敏感信息已脱敏，点击"查看"按钮显示明文（操作将被记录）</text>
+      </view>
+
+      <!-- 名单列表 -->
+      <view wx:for="{{filteredList}}" wx:key="id" class="registration-item card">
+        <view class="reg-header">
+          <image src="{{item.avatarUrl || '/images/default-avatar.png'}}" class="reg-avatar" />
+          <view class="reg-info">
+            <text class="reg-name">{{item.displayName}}</text>
+            <text class="reg-time">{{item.registrationTimeText}}</text>
+          </view>
+          <view class="reg-checkin {{item.checkinTime ? 'checkin-done' : ''}}" wx:if="{{item.checkinTime}}">
+            <text>✓ 已签到</text>
+          </view>
+          <view class="reg-actions">
+            <text class="action-reveal" data-id="{{item.id}}" bindtap="revealData">查看</text>
+          </view>
+        </view>
+
+        <!-- 自定义字段 -->
+        <view class="reg-fields" wx:if="{{item.expandedFields}}">
+          <view wx:for="{{item.expandedFields}}" wx:key="key" wx:for-item="field" class="field-row">
+            <text class="field-key">{{field.label}}：</text>
+            <text class="field-val">{{field.value}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 底部：导出 -->
+      <view class="export-bar">
+        <button class="btn btn-outline" bindtap="onExportExcel">📊 导出 Excel</button>
+      </view>
+    </view>
+
+    <!-- Tab: 活动分析 -->
+    <view wx:if="{{activeTab === 'analytics'}}">
+      <view class="analytics-card card">
+        <view class="section-title">报名趋势</view>
+        <view class="trend-chart">
+          <view
+            wx:for="{{trendData}}"
+            wx:key="date"
+            class="trend-bar-wrap"
+          >
+            <view class="trend-bar" style="height:{{item.heightPct}}%">
+              <text class="trend-num">{{item.count}}</text>
+            </view>
+            <text class="trend-date">{{item.dateLabel}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="analytics-card card">
+        <view class="section-title">数据概览</view>
+        <view class="overview-grid">
+          <view class="overview-item">
+            <text class="overview-num text-primary">{{analytics.totalRegistrations}}</text>
+            <text class="overview-label">报名总数</text>
+          </view>
+          <view class="overview-item">
+            <text class="overview-num text-success">{{analytics.checkinCount}}</text>
+            <text class="overview-label">已签到</text>
+          </view>
+          <view class="overview-item">
+            <text class="overview-num text-warning">{{analytics.cancelCount}}</text>
+            <text class="overview-label">取消报名</text>
+          </view>
+          <view class="overview-item">
+            <text class="overview-num text-danger">{{analytics.checkinRate}}%</text>
+            <text class="overview-label">到场率</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 字段分布（如性别、地区） -->
+      <view class="analytics-card card" wx:for="{{analytics.fieldStats}}" wx:key="key" wx:for-item="stat">
+        <view class="section-title">{{stat.label}} 分布</view>
+        <view wx:for="{{stat.distribution}}" wx:key="value" wx:for-item="d" class="dist-item">
+          <view class="dist-label-row">
+            <text class="dist-label">{{d.value}}</text>
+            <text class="dist-count">{{d.count}}人 ({{d.pct}}%)</text>
+          </view>
+          <view class="dist-track">
+            <view class="dist-fill" style="width:{{d.pct}}%" />
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Tab: 举报管理 -->
+    <view wx:if="{{activeTab === 'reports'}}">
+      <view wx:for="{{reportList}}" wx:key="id" class="report-item card">
+        <view class="report-header">
+          <text class="report-activity">{{item.activityName}}</text>
+          <view class="report-status {{item.handled ? 'handled' : 'pending-status'}}">
+            <text>{{item.handled ? '已处理' : '待处理'}}</text>
+          </view>
+        </view>
+        <text class="report-reason">举报原因：{{item.reason}}</text>
+        <text class="report-time">{{item.createdAtText}}</text>
+        <view class="report-actions" wx:if="{{!item.handled}}">
+          <button class="btn btn-sm btn-gray" data-id="{{item.activityId}}" bindtap="onIgnoreReport">忽略</button>
+          <button class="btn btn-sm btn-danger" data-id="{{item.activityId}}" bindtap="onOfflineFromReport">下架活动</button>
+        </view>
+      </view>
+
+      <view class="empty-state" wx:if="{{reportList.length === 0}}">
+        <text class="empty-icon">✅</text>
+        <text class="empty-text">暂无举报</text>
+      </view>
+    </view>
+
+    <view style="height: 60rpx;" />
+  </scroll-view>
+</view>

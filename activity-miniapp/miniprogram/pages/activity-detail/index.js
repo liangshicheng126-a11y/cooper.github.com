@@ -1,0 +1,362 @@
+// pages/activity-detail/index.js
+const request = require('../../utils/request')
+const { formatDate, getDurationText, getActivityStatus } = require('../../utils/date')
+const { openNavigation } = require('../../utils/map')
+
+const STATUS_MAP = {
+  active: { text: '进行中', cls: 'badge-active' },
+  upcoming: { text: '未开始', cls: 'badge-upcoming' },
+  ended: { text: '已结束', cls: 'badge-ended' },
+  full: { text: '已报满', cls: 'badge-full' },
+  cancelled: { text: '已取消', cls: 'badge-ended' },
+  offline: { text: '已下架', cls: 'badge-ended' },
+}
+
+Page({
+  data: {
+    activityId: null,
+    activity: {},
+    subActivities: [],
+    selectedSubId: null,
+    registrantAvatars: [],
+    isRegistered: false,
+    isCreator: false,
+    userRegistrationId: null,
+    statusKey: '',
+    statusText: '',
+    statusClass: '',
+    startTimeText: '',
+    endTimeText: '',
+    durationText: '',
+    progressPct: 0,
+    progressClass: '',
+    descExpanded: false,
+    cannotRegister: false,
+    showConflictModal: false,
+    conflictActivity: '',
+    pendingRegisterParams: null,
+  },
+
+  onLoad(options) {
+    const id = options.id
+    this.setData({ activityId: id })
+    this._loadDetail(id)
+  },
+
+  async _loadDetail(id) {
+    wx.showNavigationBarLoading()
+    try {
+      const [actRes, subRes, regRes] = await Promise.all([
+        request.get(`/activities/${id}`),
+        request.get(`/activities/${id}/sub-activities`),
+        request.get(`/activities/${id}/my-registration`),
+      ])
+      const activity = actRes.data
+      const status = getActivityStatus(activity)
+      const { text, cls } = STATUS_MAP[status] || STATUS_MAP.active
+      const pct = activity.maxParticipants > 0
+        ? Math.min(100, Math.round((activity.registrationCount / activity.maxParticipants) * 100))
+        : 0
+      const app = getApp()
+
+      const subActivities = (subRes.data || []).map(s => ({
+        ...s,
+        startTimeText: formatDate(s.startTime, 'MM/DD HH:mm'),
+        endTimeText: formatDate(s.endTime, 'HH:mm'),
+        isFull: s.maxParticipants > 0 && s.registrationCount >= s.maxParticipants,
+      }))
+
+      const defaultSubId = subActivities.length > 0
+        ? (subActivities.find(s => !s.isFull)?.id || null)
+        : null
+
+      this.setData({
+        activity,
+        subActivities,
+        selectedSubId: regRes.data?.subActivityId || defaultSubId,
+        registrantAvatars: (activity.recentRegistrants || []).map(r => r.avatarUrl).slice(0, 8),
+        isRegistered: !!regRes.data,
+        userRegistrationId: regRes.data?.id || null,
+        isCreator: activity.creatorOpenid === app.globalData.openid,
+        statusKey: status,
+        statusText: text,
+        statusClass: cls,
+        startTimeText: formatDate(activity.startTime, 'YYYY年MM月DD日 HH:mm'),
+        endTimeText: formatDate(activity.endTime, 'HH:mm'),
+        durationText: getDurationText(activity.startTime, activity.endTime),
+        progressPct: pct,
+        progressClass: pct >= 90 ? 'fill-danger' : pct >= 60 ? 'fill-warning' : 'fill-primary',
+        cannotRegister: ['ended', 'full', 'cancelled', 'offline'].includes(status),
+      })
+      wx.setNavigationBarTitle({ title: activity.name })
+    } catch (e) {
+      wx.showToast({ title: '加载失败', icon: 'none' })
+    } finally {
+      wx.hideNavigationBarLoading()
+    }
+  },
+
+  onSelectSub(e) {
+    const id = e.currentTarget.dataset.id
+    const sub = this.data.subActivities.find(s => s.id === id)
+    if (sub?.isFull) {
+      wx.showToast({ title: '该场次已报满', icon: 'none' })
+      return
+    }
+    this.setData({ selectedSubId: id })
+  },
+
+  async onRegister() {
+    const { subActivities, selectedSubId, activityId } = this.data
+    if (subActivities.length > 0 && !selectedSubId) {
+      wx.showToast({ title: '请先选择场次', icon: 'none' })
+      return
+    }
+    const app = getApp()
+    if (!app.globalData.token) {
+      await app.wxLogin()
+    }
+
+    // 检查时间冲突
+    try {
+      const conflictRes = await request.get('/registrations/check-conflict', {
+        subActivityId: selectedSubId,
+        activityId,
+      })
+      if (conflictRes.data?.hasConflict) {
+        this.setData({
+          showConflictModal: true,
+          conflictActivity: conflictRes.data.conflictName,
+          pendingRegisterParams: { activityId, subActivityId: selectedSubId, forceRegister: false },
+        })
+        return
+      }
+    } catch (e) {}
+
+    // 有自定义字段，跳转报名页
+    const { activity } = this.data
+    if (activity.customFields?.length) {
+      wx.navigateTo({
+        url: `/pages/register/index?activityId=${activityId}&subId=${selectedSubId || ''}`,
+      })
+    } else {
+      this._submitRegistration({ activityId, subActivityId: selectedSubId, forceRegister: false })
+    }
+  },
+
+  async _submitRegistration(params) {
+    wx.showLoading({ title: '报名中...' })
+    try {
+      await request.post('/registrations', params)
+      this.setData({ isRegistered: true })
+      wx.showToast({ title: '报名成功 🎉', icon: 'success' })
+      // 请求订阅消息权限
+      this._requestSubscribeMessage()
+      this._loadDetail(this.data.activityId)
+    } catch (e) {
+      wx.showToast({ title: e.message || '报名失败', icon: 'none' })
+    } finally {
+      wx.hideLoading()
+    }
+  },
+
+  forceRegister() {
+    const params = { ...this.data.pendingRegisterParams, forceRegister: true }
+    this.setData({ showConflictModal: false })
+    this._submitRegistration(params)
+  },
+
+  cancelConflict() {
+    this.setData({ showConflictModal: false })
+  },
+
+  async onCancelRegistration() {
+    const res = await new Promise(r => wx.showModal({
+      title: '确认取消',
+      content: '确定要取消报名吗？',
+      success: r,
+    }))
+    if (!res.confirm) return
+    wx.showLoading({ title: '取消中...' })
+    try {
+      await request.delete(`/registrations/${this.data.userRegistrationId}`)
+      this.setData({ isRegistered: false, userRegistrationId: null })
+      wx.showToast({ title: '已取消报名', icon: 'success' })
+      this._loadDetail(this.data.activityId)
+    } catch (e) {
+      wx.showToast({ title: '取消失败', icon: 'none' })
+    } finally {
+      wx.hideLoading()
+    }
+  },
+
+  onNavigate() {
+    const { activity } = this.data
+    if (!activity.latitude || !activity.longitude) {
+      wx.showToast({ title: '暂无坐标信息', icon: 'none' })
+      return
+    }
+    openNavigation(activity.latitude, activity.longitude, activity.locationName)
+  },
+
+  onViewRegistrations() {
+    wx.navigateTo({ url: `/pages/admin/index?activityId=${this.data.activityId}&tab=list` })
+  },
+
+  async onExportExcel() {
+    wx.showModal({
+      title: '安全验证',
+      content: '导出完整名单需要短信验证码验证，确认发送？',
+      success: async (res) => {
+        if (!res.confirm) return
+        try {
+          await request.post('/admin/send-verify-code', { activityId: this.data.activityId })
+          wx.showModal({
+            title: '请输入验证码',
+            editable: true,
+            placeholderText: '6位验证码',
+            success: async (r) => {
+              if (!r.confirm || !r.content) return
+              wx.showLoading({ title: '生成中...' })
+              try {
+                const res = await request.post('/admin/export-registrations', {
+                  activityId: this.data.activityId,
+                  code: r.content,
+                })
+                wx.hideLoading()
+                wx.showModal({
+                  title: '导出成功',
+                  content: `下载链接已生成，有效期30分钟`,
+                  confirmText: '复制链接',
+                  success: (m) => {
+                    if (m.confirm) wx.setClipboardData({ data: res.data.downloadUrl })
+                  },
+                })
+              } catch (e) {
+                wx.hideLoading()
+                wx.showToast({ title: e.message || '导出失败', icon: 'none' })
+              }
+            },
+          })
+        } catch (e) {
+          wx.showToast({ title: '发送失败', icon: 'none' })
+        }
+      },
+    })
+  },
+
+  onCopyAnnouncement() {
+    const { activity } = this.data
+    const text = `【活动通知】
+📌 ${activity.name}
+📅 时间：${this.data.startTimeText}
+📍 地点：${activity.locationName || '待定'}
+👥 名额：${activity.maxParticipants > 0 ? `${activity.registrationCount}/${activity.maxParticipants}人` : `${activity.registrationCount}人已报名（不限）`}
+${activity.reminder ? `💡 ${activity.reminder}\n` : ''}
+点击小程序报名 ↓`
+    wx.setClipboardData({
+      data: text,
+      success: () => wx.showToast({ title: '已复制群公告', icon: 'success' }),
+    })
+  },
+
+  onGeneratePoster() {
+    wx.navigateTo({ url: `/pages/poster/index?activityId=${this.data.activityId}` })
+  },
+
+  onCheckinQR() {
+    wx.navigateTo({ url: `/pages/checkin/index?activityId=${this.data.activityId}&mode=admin` })
+  },
+
+  async onShareQR() {
+    wx.showLoading({ title: '生成中...' })
+    try {
+      const res = await request.get(`/activities/${this.data.activityId}/qrcode`)
+      wx.hideLoading()
+      wx.previewImage({ urls: [res.data.qrcodeUrl] })
+    } catch (e) {
+      wx.hideLoading()
+    }
+  },
+
+  async onNotifyAll() {
+    const { activity } = this.data
+    wx.showModal({
+      title: '通知所有报名者',
+      content: `将向 ${activity.registrationCount} 位报名者发送通知，请确认`,
+      editable: true,
+      placeholderText: '输入通知内容（可选）',
+      success: async (res) => {
+        if (!res.confirm) return
+        try {
+          await request.post(`/activities/${this.data.activityId}/notify-all`, {
+            message: res.content,
+          })
+          wx.showToast({ title: '通知已发送', icon: 'success' })
+        } catch (e) {
+          wx.showToast({ title: '发送失败', icon: 'none' })
+        }
+      },
+    })
+  },
+
+  async onOfflineActivity() {
+    wx.showModal({
+      title: '下架活动',
+      content: '下架后所有用户将无法看到此活动，确认下架？',
+      editable: true,
+      placeholderText: '填写下架理由',
+      success: async (res) => {
+        if (!res.confirm) return
+        try {
+          await request.put(`/activities/${this.data.activityId}/offline`, { reason: res.content })
+          wx.showToast({ title: '已下架', icon: 'success' })
+          wx.navigateBack()
+        } catch (e) {}
+      },
+    })
+  },
+
+  onEditActivity() {
+    wx.navigateTo({ url: `/pages/create-activity/index?id=${this.data.activityId}` })
+  },
+
+  async onReport() {
+    wx.showActionSheet({
+      itemList: ['涉嫌诈骗', '色情低俗', '违法违规', '虚假信息', '其他'],
+      success: async (res) => {
+        try {
+          await request.post('/activities/report', {
+            activityId: this.data.activityId,
+            reason: ['涉嫌诈骗', '色情低俗', '违法违规', '虚假信息', '其他'][res.tapIndex],
+          })
+          wx.showToast({ title: '举报已提交，感谢反馈', icon: 'success' })
+        } catch (e) {}
+      },
+    })
+  },
+
+  _requestSubscribeMessage() {
+    wx.requestSubscribeMessage({
+      tmplIds: ['YOUR_TEMPLATE_ID_REMIND_24H', 'YOUR_TEMPLATE_ID_REMIND_1H'],
+      fail: () => {},
+    })
+  },
+
+  toggleDesc() {
+    this.setData({ descExpanded: !this.data.descExpanded })
+  },
+
+  goBack() {
+    wx.navigateBack()
+  },
+
+  onShareAppMessage() {
+    const { activity } = this.data
+    return {
+      title: activity.name,
+      path: `/pages/activity-detail/index?id=${this.data.activityId}`,
+      imageUrl: activity.coverImage,
+    }
+  },
+})

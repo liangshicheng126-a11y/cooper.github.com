@@ -1,0 +1,108 @@
+<!-- pages/index/index.wxml - 首页活动列表 -->
+<view class="page">
+  <!-- 顶部搜索栏 -->
+  <view class="top-bar">
+    <view class="search-box" bindtap="onSearchTap">
+      <text class="search-icon">🔍</text>
+      <text class="search-placeholder">搜索活动名称、地点...</text>
+    </view>
+    <view class="lang-btn" bindtap="toggleLanguage">
+      <text class="lang-text">{{langText}}</text>
+    </view>
+  </view>
+
+  <!-- 隐私协议弹窗 -->
+  <privacy-modal show="{{showPrivacy}}" bind:confirm="onPrivacyConfirm" />
+
+  <!-- 分类标签 -->
+  <scroll-view scroll-x class="category-scroll" show-scrollbar="{{false}}">
+    <view class="category-list">
+      <view
+        wx:for="{{categories}}"
+        wx:key="key"
+        class="category-tag {{activeCategory === item.key ? 'category-active' : ''}}"
+        data-key="{{item.key}}"
+        bindtap="onCategoryChange"
+      >
+        <text>{{item.icon}} {{item.label}}</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- Banner 轮播（精选活动） -->
+  <swiper
+    wx:if="{{bannerList.length > 0}}"
+    class="banner-swiper"
+    autoplay
+    interval="4000"
+    circular
+    indicator-dots
+    indicator-active-color="#4F46E5"
+    indicator-color="rgba(255,255,255,0.5)"
+  >
+    <swiper-item wx:for="{{bannerList}}" wx:key="id" bindtap="onBannerTap" data-id="{{item.id}}">
+      <image src="{{item.coverImage}}" mode="aspectFill" class="banner-img" />
+      <view class="banner-info">
+        <text class="banner-title text-ellipsis">{{item.name}}</text>
+        <text class="banner-time">{{item.startTimeText}}</text>
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <!-- 列表标题 -->
+  <view class="list-header">
+    <text class="section-title">{{listTitle}}</text>
+    <view class="filter-btn" bindtap="openFilter">
+      <text>筛选 ⚙</text>
+    </view>
+  </view>
+
+  <!-- 活动列表 -->
+  <scroll-view
+    scroll-y
+    class="activity-list"
+    refresher-enabled
+    refresher-triggered="{{refreshing}}"
+    bindrefresherrefresh="onRefresh"
+    bindscrolltolower="onScrollToLower"
+    lower-threshold="100"
+  >
+    <view wx:if="{{loading && !activities.length}}" class="skeleton-list">
+      <view wx:for="{{[1,2,3]}}" wx:key="*this" class="skeleton-card">
+        <view class="skeleton-img skeleton-animate" />
+        <view class="skeleton-body">
+          <view class="skeleton-line w80 skeleton-animate" />
+          <view class="skeleton-line w50 skeleton-animate" />
+          <view class="skeleton-line w60 skeleton-animate" />
+        </view>
+      </view>
+    </view>
+
+    <view wx:elif="{{activities.length === 0 && !loading}}">
+      <view class="empty-state">
+        <text class="empty-icon">🎉</text>
+        <text class="empty-text">暂无活动</text>
+        <text class="empty-sub">快来发布第一个活动吧</text>
+      </view>
+    </view>
+
+    <activity-card
+      wx:for="{{activities}}"
+      wx:key="id"
+      activity="{{item}}"
+      bind:tap="onActivityTap"
+    />
+
+    <view wx:if="{{loadingMore}}" class="loading-more">
+      <text>加载中...</text>
+    </view>
+    <view wx:elif="{{noMore && activities.length > 0}}" class="no-more">
+      <text>— 已加载全部 —</text>
+    </view>
+  </scroll-view>
+
+  <!-- 发布活动 FAB -->
+  <view class="fab" bindtap="onCreateActivity">
+    <text class="fab-icon">+</text>
+  </view>
+</view>

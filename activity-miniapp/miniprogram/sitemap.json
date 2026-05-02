@@ -1,0 +1,21 @@
+{
+  "desc": "微信小程序站点地图配置",
+  "rules": [
+    {
+      "action": "allow",
+      "page": "pages/index/index"
+    },
+    {
+      "action": "allow",
+      "page": "pages/activity-detail/index"
+    },
+    {
+      "action": "disallow",
+      "page": "pages/admin/index"
+    },
+    {
+      "action": "disallow",
+      "page": "pages/register/index"
+    }
+  ]
+}

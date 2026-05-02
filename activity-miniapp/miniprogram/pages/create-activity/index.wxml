@@ -1,0 +1,272 @@
+<!-- pages/create-activity/index.wxml - 多步骤创建活动 -->
+<view class="page">
+  <!-- 步骤指示器 -->
+  <view class="step-bar">
+    <view wx:for="{{steps}}" wx:key="idx" class="step-item {{currentStep === index ? 'step-active' : ''}} {{currentStep > index ? 'step-done' : ''}}">
+      <view class="step-circle">
+        <text wx:if="{{currentStep > index}}">✓</text>
+        <text wx:else>{{index + 1}}</text>
+      </view>
+      <text class="step-label">{{item}}</text>
+      <view class="step-line" wx:if="{{index < steps.length - 1}}" />
+    </view>
+  </view>
+
+  <scroll-view scroll-y class="scroll-view">
+    <!-- Step 1: 基本信息 -->
+    <view class="step-content" wx:if="{{currentStep === 0}}">
+      <view class="section-card card">
+        <view class="section-title">基本信息</view>
+
+        <view class="form-group">
+          <view class="form-label">活动名称 <text class="form-required">*</text></view>
+          <input class="form-input" placeholder="给活动起个吸引人的名字" value="{{form.name}}" bindinput="onInput" data-key="name" maxlength="30" />
+          <text class="form-hint">{{form.name.length}}/30</text>
+        </view>
+
+        <view class="form-group">
+          <view class="form-label">活动分类</view>
+          <scroll-view scroll-x class="category-scroll">
+            <view class="cat-list">
+              <view
+                wx:for="{{activityTypes}}"
+                wx:key="key"
+                class="cat-item {{form.category === item.key ? 'cat-active' : ''}}"
+                data-key="{{item.key}}"
+                bindtap="onSelectCategory"
+              >
+                <text>{{item.icon}} {{item.label}}</text>
+              </view>
+            </view>
+          </scroll-view>
+        </view>
+
+        <view class="form-group">
+          <view class="form-label">活动描述</view>
+          <textarea class="form-textarea" placeholder="介绍活动内容、注意事项等..." value="{{form.description}}" bindinput="onInput" data-key="description" maxlength="500" auto-height />
+          <text class="form-hint">{{(form.description || '').length}}/500</text>
+        </view>
+
+        <view class="form-group">
+          <view class="form-label">活动封面</view>
+          <view class="cover-picker" bindtap="chooseCoverImage">
+            <image wx:if="{{form.coverImage}}" src="{{form.coverImage}}" mode="aspectFill" class="cover-preview" />
+            <view wx:else class="cover-placeholder-btn">
+              <text class="cover-plus">+</text>
+              <text class="cover-hint">点击上传封面图</text>
+            </view>
+          </view>
+          <text class="form-hint">建议尺寸 750×420，JPG/PNG 格式</text>
+        </view>
+
+        <view class="form-group">
+          <view class="form-label">温馨提示 <text class="form-hint-inline">（可选）</text></view>
+          <input class="form-input" placeholder="如：请携带身份证、穿运动服..." value="{{form.reminder}}" bindinput="onInput" data-key="reminder" maxlength="100" />
+        </view>
+      </view>
+    </view>
+
+    <!-- Step 2: 时间地点 -->
+    <view class="step-content" wx:if="{{currentStep === 1}}">
+      <view class="section-card card">
+        <view class="section-title">时间设置</view>
+
+        <view class="form-group">
+          <view class="form-label">开始时间 <text class="form-required">*</text></view>
+          <picker mode="date" value="{{startDate}}" start="{{today}}" bindchange="onStartDateChange">
+            <view class="form-input picker-input">
+              <text class="{{startDate ? 'picker-value' : 'picker-placeholder'}}">{{startDate || '选择日期'}}</text>
+            </view>
+          </picker>
+          <picker mode="time" value="{{startTime}}" bindchange="onStartTimeChange">
+            <view class="form-input picker-input mt-12">
+              <text class="{{startTime ? 'picker-value' : 'picker-placeholder'}}">{{startTime || '选择时间'}}</text>
+            </view>
+          </picker>
+        </view>
+
+        <view class="form-group">
+          <view class="form-label">结束时间 <text class="form-required">*</text></view>
+          <picker mode="date" value="{{endDate}}" start="{{startDate || today}}" bindchange="onEndDateChange">
+            <view class="form-input picker-input">
+              <text class="{{endDate ? 'picker-value' : 'picker-placeholder'}}">{{endDate || '选择日期'}}</text>
+            </view>
+          </picker>
+          <picker mode="time" value="{{endTime}}" bindchange="onEndTimeChange">
+            <view class="form-input picker-input mt-12">
+              <text class="{{endTime ? 'picker-value' : 'picker-placeholder'}}">{{endTime || '选择时间'}}</text>
+            </view>
+          </picker>
+        </view>
+      </view>
+
+      <view class="section-card card">
+        <view class="section-title">地点设置</view>
+
+        <view class="form-group">
+          <view class="form-label">活动地点 <text class="form-required">*</text></view>
+          <view class="location-picker" bindtap="chooseLocation">
+            <view wx:if="{{form.locationName}}" class="location-selected">
+              <view>
+                <text class="location-name">{{form.locationName}}</text>
+                <text class="location-addr">{{form.locationAddress}}</text>
+              </view>
+              <text class="location-change">更换</text>
+            </view>
+            <view wx:else class="location-empty">
+              <text class="location-icon">📍</text>
+              <text class="location-hint">点击选择地点</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="map-preview" wx:if="{{form.latitude && form.longitude}}">
+          <map
+            latitude="{{form.latitude}}"
+            longitude="{{form.longitude}}"
+            scale="15"
+            class="mini-map"
+            markers="{{mapMarkers}}"
+            show-location
+          />
+        </view>
+      </view>
+
+      <!-- 子活动/场次 -->
+      <view class="section-card card">
+        <view class="section-title-row">
+          <text class="section-title" style="margin-bottom:0">子活动/场次</text>
+          <text class="add-sub-btn" bindtap="addSubActivity">+ 添加场次</text>
+        </view>
+        <text class="form-hint">适合多天或分组活动，如不需要可跳过</text>
+
+        <view wx:for="{{form.subActivities}}" wx:key="idx" class="sub-form-item">
+          <view class="sub-form-header">
+            <text class="sub-form-title">场次 {{index + 1}}</text>
+            <text class="sub-form-del" data-idx="{{index}}" bindtap="removeSubActivity">删除</text>
+          </view>
+          <input class="form-input" placeholder="场次名称（如：上午场）" value="{{item.name}}" data-idx="{{index}}" data-field="name" bindinput="onSubInput" />
+          <picker mode="date" value="{{item.startDate}}" bindchange="onSubDateChange" data-idx="{{index}}" data-field="startDate">
+            <view class="form-input picker-input mt-12">
+              <text class="{{item.startDate ? 'picker-value' : 'picker-placeholder'}}">{{item.startDate || '开始日期'}}</text>
+            </view>
+          </picker>
+          <picker mode="time" value="{{item.startTime}}" bindchange="onSubTimeChange" data-idx="{{index}}" data-field="startTime">
+            <view class="form-input picker-input mt-12">
+              <text class="{{item.startTime ? 'picker-value' : 'picker-placeholder'}}">{{item.startTime || '开始时间'}}</text>
+            </view>
+          </picker>
+          <picker mode="time" value="{{item.endTime}}" bindchange="onSubTimeChange" data-idx="{{index}}" data-field="endTime">
+            <view class="form-input picker-input mt-12">
+              <text class="{{item.endTime ? 'picker-value' : 'picker-placeholder'}}">{{item.endTime || '结束时间'}}</text>
+            </view>
+          </picker>
+          <input class="form-input mt-12" type="number" placeholder="场次人数限制（留空不限）" value="{{item.maxParticipants}}" data-idx="{{index}}" data-field="maxParticipants" bindinput="onSubInput" />
+        </view>
+      </view>
+    </view>
+
+    <!-- Step 3: 报名设置 -->
+    <view class="step-content" wx:if="{{currentStep === 2}}">
+      <view class="section-card card">
+        <view class="section-title">人数设置</view>
+
+        <view class="form-group">
+          <view class="form-label">报名人数限制</view>
+          <view class="limit-toggle">
+            <view class="limit-option {{!form.hasLimit ? 'limit-active' : ''}}" bindtap="setNoLimit">
+              <text>不限制</text>
+            </view>
+            <view class="limit-option {{form.hasLimit ? 'limit-active' : ''}}" bindtap="setHasLimit">
+              <text>设置上限</text>
+            </view>
+          </view>
+          <input
+            wx:if="{{form.hasLimit}}"
+            class="form-input mt-16"
+            type="number"
+            placeholder="输入最大报名人数"
+            value="{{form.maxParticipants}}"
+            bindinput="onInput"
+            data-key="maxParticipants"
+          />
+        </view>
+      </view>
+
+      <view class="section-card card">
+        <view class="section-title">报名信息收集</view>
+        <text class="form-hint" style="margin-bottom:24rpx;display:block">选择需要报名者填写的信息</text>
+
+        <!-- 预设字段 -->
+        <view wx:for="{{presetFields}}" wx:key="key" class="field-toggle-item">
+          <view class="field-info">
+            <text class="field-name">{{item.label}}</text>
+            <text class="field-desc">{{item.desc}}</text>
+          </view>
+          <view class="field-switches">
+            <view
+              class="field-switch-btn {{isFieldEnabled(item.key) ? 'switch-on' : ''}}"
+              data-key="{{item.key}}"
+              data-label="{{item.label}}"
+              data-type="{{item.type}}"
+              bindtap="togglePresetField"
+            >
+              <text>{{isFieldEnabled(item.key) ? '已启用' : '启用'}}</text>
+            </view>
+            <view
+              wx:if="{{isFieldEnabled(item.key)}}"
+              class="field-required-btn {{isFieldRequired(item.key) ? 'required-on' : ''}}"
+              data-key="{{item.key}}"
+              bindtap="toggleFieldRequired"
+            >
+              <text>{{isFieldRequired(item.key) ? '必填' : '选填'}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 自定义字段 -->
+        <view class="custom-fields-header">
+          <text class="section-title" style="margin-bottom:0">自定义字段</text>
+          <text class="add-field-btn" bindtap="addCustomField">+ 添加</text>
+        </view>
+
+        <view wx:for="{{form.customFields}}" wx:key="idx" wx:if="{{!item._isPreset}}" class="custom-field-item">
+          <input class="form-input" placeholder="字段名称（如：衣服尺码）" value="{{item.label}}" data-idx="{{index}}" data-field="label" bindinput="onCustomFieldInput" />
+          <view class="custom-field-row mt-12">
+            <picker mode="selector" range="{{fieldTypes}}" value="{{getFieldTypeIdx(item.type)}}" data-idx="{{index}}" bindchange="onFieldTypeChange">
+              <view class="form-input picker-input" style="flex:1;margin-right:16rpx;">
+                <text>{{getFieldTypeName(item.type)}}</text>
+              </view>
+            </picker>
+            <view class="field-required-btn {{item.required ? 'required-on' : ''}}" data-idx="{{index}}" bindtap="toggleCustomRequired">
+              <text>{{item.required ? '必填' : '选填'}}</text>
+            </view>
+            <text class="field-del-btn" data-idx="{{index}}" bindtap="removeCustomField">✕</text>
+          </view>
+          <!-- 如果是单选或多选，配置选项 -->
+          <view wx:if="{{item.type === 'radio' || item.type === 'select' || item.type === 'checkbox'}}" class="mt-12">
+            <input class="form-input" placeholder="选项（用逗号分隔，如：S,M,L,XL）" value="{{item.optionsStr}}" data-idx="{{index}}" data-field="optionsStr" bindinput="onCustomFieldInput" />
+          </view>
+        </view>
+      </view>
+
+      <!-- 预览 -->
+      <view class="section-card card" wx:if="{{previewFields.length > 0}}">
+        <view class="section-title">报名表预览</view>
+        <custom-form fields="{{previewFields}}" />
+      </view>
+    </view>
+
+    <view style="height: 200rpx;" />
+  </scroll-view>
+
+  <!-- 底部按钮 -->
+  <view class="bottom-bar">
+    <view class="btn-row">
+      <button class="btn btn-gray" bindtap="prevStep" wx:if="{{currentStep > 0}}">上一步</button>
+      <button class="btn btn-primary flex-1" bindtap="nextStep" loading="{{submitting}}">
+        {{currentStep < steps.length - 1 ? '下一步' : (isEdit ? '保存修改' : '发布活动')}}
+      </button>
+    </view>
+  </view>
+</view>

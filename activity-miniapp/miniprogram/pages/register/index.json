@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "填写报名信息",
+  "usingComponents": {
+    "custom-form": "/components/custom-form/index"
+  }
+}

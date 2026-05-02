@@ -1,0 +1,60 @@
+<!-- pages/poster/index.wxml - AI 海报生成 -->
+<view class="page">
+  <scroll-view scroll-y class="scroll-view">
+    <view class="poster-preview-wrap" wx:if="{{posterUrl}}">
+      <image src="{{posterUrl}}" mode="aspectFit" class="poster-preview" show-menu-by-longpress />
+      <view class="preview-actions">
+        <button class="btn btn-outline btn-sm" bindtap="regenerate" loading="{{generating}}">重新生成</button>
+        <button class="btn btn-primary btn-sm" bindtap="savePoster">保存海报</button>
+        <button class="btn btn-primary btn-sm" bindtap="sharePoster">分享</button>
+      </view>
+    </view>
+
+    <view class="generate-panel card" wx:if="{{!posterUrl}}">
+      <text class="gen-title">AI 活动海报生成</text>
+      <text class="gen-activity-name">{{activityName}}</text>
+
+      <!-- 风格选择 -->
+      <view class="section-title">选择海报风格</view>
+      <view class="style-grid">
+        <view
+          wx:for="{{posterStyles}}"
+          wx:key="key"
+          class="style-item {{selectedStyle === item.key ? 'style-active' : ''}}"
+          data-key="{{item.key}}"
+          bindtap="selectStyle"
+        >
+          <text class="style-emoji">{{item.emoji}}</text>
+          <text class="style-name">{{item.name}}</text>
+        </view>
+      </view>
+
+      <!-- 颜色主题 -->
+      <view class="section-title" style="margin-top:32rpx">颜色主题</view>
+      <view class="color-row">
+        <view
+          wx:for="{{colorThemes}}"
+          wx:key="value"
+          class="color-circle {{selectedColor === item.value ? 'color-active' : ''}}"
+          style="background: {{item.value}}"
+          data-value="{{item.value}}"
+          bindtap="selectColor"
+        />
+      </view>
+
+      <!-- 附加内容 -->
+      <view class="section-title" style="margin-top:32rpx">附加信息</view>
+      <textarea
+        class="form-textarea"
+        placeholder="输入海报附加文案（可选，如：欢迎报名！）"
+        value="{{extraText}}"
+        bindinput="onExtraInput"
+        maxlength="80"
+      />
+
+      <button class="btn btn-primary btn-block btn-lg" style="margin-top:32rpx" bindtap="generatePoster" loading="{{generating}}">
+        {{generating ? 'AI 生成中...' : '✨ 生成海报'}}
+      </button>
+    </view>
+  </scroll-view>
+</view>

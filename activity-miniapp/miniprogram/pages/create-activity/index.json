@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "发布活动",
+  "usingComponents": {
+    "custom-form": "/components/custom-form/index"
+  }
+}

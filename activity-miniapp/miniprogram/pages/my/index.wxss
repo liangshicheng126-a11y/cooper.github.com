@@ -1,0 +1,185 @@
+/* pages/my/index.wxss */
+.page { background: var(--gray-50); min-height: 100vh; }
+.scroll-view { height: 100vh; }
+
+/* 用户卡片 */
+.user-card {
+  background: linear-gradient(135deg, #4F46E5, #7C3AED);
+  padding-bottom: 32rpx;
+  position: relative;
+}
+
+.user-bg {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url('data:image/svg+xml,...') center / cover;
+  opacity: 0.1;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  padding: calc(env(safe-area-inset-top) + 60rpx) 32rpx 28rpx;
+  gap: 24rpx;
+}
+
+.user-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  border: 4rpx solid rgba(255,255,255,0.4);
+  background: var(--gray-200);
+}
+
+.user-detail { flex: 1; }
+.user-name { font-size: 34rpx; font-weight: 700; color: #FFFFFF; display: block; }
+.user-sub { font-size: 22rpx; color: rgba(255,255,255,0.6); display: block; margin-top: 6rpx; }
+
+.user-badge {
+  background: rgba(255,255,255,0.2);
+  padding: 8rpx 20rpx;
+  border-radius: 100rpx;
+  font-size: 22rpx;
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+/* 数据统计 */
+.stats-row {
+  display: flex;
+  background: rgba(255,255,255,0.12);
+  margin: 0 32rpx;
+  border-radius: var(--radius-lg);
+  padding: 24rpx 0;
+  backdrop-filter: blur(8px);
+}
+
+.stat-item {
+  flex: 1;
+  text-align: center;
+}
+
+.stat-num {
+  display: block;
+  font-size: 44rpx;
+  font-weight: 800;
+  color: #FFFFFF;
+}
+
+.stat-label {
+  font-size: 22rpx;
+  color: rgba(255,255,255,0.7);
+  margin-top: 6rpx;
+  display: block;
+}
+
+.stat-divider {
+  width: 1rpx;
+  background: rgba(255,255,255,0.2);
+  margin: 8rpx 0;
+}
+
+/* Tab */
+.tab-bar {
+  display: flex;
+  background: #FFFFFF;
+  box-shadow: var(--shadow-sm);
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 28rpx 0 20rpx;
+  font-size: 28rpx;
+  color: var(--gray-400);
+  position: relative;
+}
+
+.tab-active { color: var(--primary); font-weight: 700; }
+
+.tab-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48rpx;
+  height: 6rpx;
+  background: var(--primary);
+  border-radius: 3rpx;
+}
+
+/* 活动列表项 */
+.list-container { padding: 20rpx 24rpx; }
+
+.my-activity-item {
+  display: flex;
+  margin-bottom: 20rpx;
+  padding: 0;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  transition: transform 0.15s;
+}
+.my-activity-item:active { transform: scale(0.98); }
+
+.item-cover {
+  width: 200rpx;
+  height: 160rpx;
+  flex-shrink: 0;
+}
+
+.item-body {
+  flex: 1;
+  padding: 20rpx 24rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.item-name { font-size: 28rpx; font-weight: 600; color: var(--gray-800); }
+.item-info-row { margin-top: 8rpx; }
+.item-time { font-size: 22rpx; color: var(--gray-400); }
+
+.item-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8rpx;
+}
+
+.status-mini {
+  padding: 6rpx 16rpx;
+  border-radius: 100rpx;
+  font-size: 20rpx;
+  font-weight: 600;
+}
+.status-mini-active { background: #DCFCE7; color: #16A34A; }
+.status-mini-upcoming { background: #FEF3C7; color: #D97706; }
+.status-mini-ended { background: var(--gray-100); color: var(--gray-400); }
+.status-mini-full { background: #FEE2E2; color: #DC2626; }
+
+.item-count { font-size: 22rpx; color: var(--gray-400); }
+.text-gray { color: var(--gray-300); }
+
+/* 功能菜单 */
+.menu-section { padding: 20rpx 24rpx; }
+
+.menu-group { overflow: hidden; }
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 32rpx;
+  border-bottom: 1rpx solid var(--gray-100);
+  transition: background 0.15s;
+}
+.menu-item:last-child { border-bottom: none; }
+.menu-item:active { background: var(--gray-50); }
+
+.menu-icon { font-size: 36rpx; margin-right: 24rpx; }
+.menu-label { font-size: 28rpx; color: var(--gray-700); flex: 1; }
+.menu-value { font-size: 26rpx; color: var(--gray-400); margin-right: 8rpx; }
+.menu-arrow { font-size: 36rpx; color: var(--gray-300); }
+
+.menu-item.danger .menu-label { color: var(--danger); }
+
+.mt-20 { margin-top: 24rpx; }

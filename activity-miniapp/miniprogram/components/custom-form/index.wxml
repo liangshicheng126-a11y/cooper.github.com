@@ -1,0 +1,121 @@
+<!-- components/custom-form/index.wxml - 动态自定义表单 -->
+<view class="custom-form">
+  <view wx:for="{{fields}}" wx:key="key" class="form-group">
+    <view class="form-label">
+      <text>{{item.label}}</text>
+      <text class="form-required" wx:if="{{item.required}}"> *</text>
+    </view>
+
+    <!-- 文本输入 -->
+    <input
+      wx:if="{{item.type === 'text' || item.type === 'name'}}"
+      class="form-input"
+      placeholder="{{item.placeholder || '请输入' + item.label}}"
+      value="{{formData[item.key]}}"
+      data-key="{{item.key}}"
+      bindinput="onInput"
+      maxlength="{{item.maxLength || 50}}"
+    />
+
+    <!-- 手机号 -->
+    <input
+      wx:elif="{{item.type === 'phone'}}"
+      class="form-input"
+      type="number"
+      placeholder="请输入手机号"
+      value="{{formData[item.key]}}"
+      data-key="{{item.key}}"
+      bindinput="onInput"
+      maxlength="11"
+    />
+
+    <!-- 邮箱 -->
+    <input
+      wx:elif="{{item.type === 'email'}}"
+      class="form-input"
+      type="email"
+      placeholder="请输入邮箱地址"
+      value="{{formData[item.key]}}"
+      data-key="{{item.key}}"
+      bindinput="onInput"
+    />
+
+    <!-- 身份证号 -->
+    <input
+      wx:elif="{{item.type === 'idCard'}}"
+      class="form-input"
+      placeholder="请输入身份证号码"
+      value="{{formData[item.key]}}"
+      data-key="{{item.key}}"
+      bindinput="onInput"
+      maxlength="18"
+    />
+
+    <!-- 单选 -->
+    <view wx:elif="{{item.type === 'radio'}}" class="options-group">
+      <view
+        wx:for="{{item.options}}"
+        wx:key="*this"
+        wx:for-item="opt"
+        wx:for-index="oi"
+        class="option-item {{formData[item.key] === opt ? 'option-selected' : ''}}"
+        data-key="{{item.key}}"
+        data-value="{{opt}}"
+        bindtap="onSelect"
+      >
+        <view class="option-radio {{formData[item.key] === opt ? 'radio-checked' : ''}}" />
+        <text class="option-label">{{opt}}</text>
+      </view>
+    </view>
+
+    <!-- 多选 -->
+    <view wx:elif="{{item.type === 'checkbox'}}" class="options-group">
+      <view
+        wx:for="{{item.options}}"
+        wx:key="*this"
+        wx:for-item="opt"
+        class="option-item {{isChecked(item.key, opt) ? 'option-selected' : ''}}"
+        data-key="{{item.key}}"
+        data-value="{{opt}}"
+        bindtap="onCheckbox"
+      >
+        <view class="option-checkbox {{isChecked(item.key, opt) ? 'checkbox-checked' : ''}">
+          <text wx:if="{{isChecked(item.key, opt)}}" class="check-icon">✓</text>
+        </view>
+        <text class="option-label">{{opt}}</text>
+      </view>
+    </view>
+
+    <!-- 下拉选择（如衣服尺码） -->
+    <picker
+      wx:elif="{{item.type === 'select'}}"
+      mode="selector"
+      range="{{item.options}}"
+      value="{{getSelectIndex(item.key, item.options)}}"
+      data-key="{{item.key}}"
+      data-options="{{item.options}}"
+      bindchange="onPickerChange"
+    >
+      <view class="form-input picker-input">
+        <text class="{{formData[item.key] ? 'picker-value' : 'picker-placeholder'}}">
+          {{formData[item.key] || '请选择' + item.label}}
+        </text>
+        <text class="picker-arrow">›</text>
+      </view>
+    </picker>
+
+    <!-- 多行文本 -->
+    <textarea
+      wx:elif="{{item.type === 'textarea'}}"
+      class="form-textarea"
+      placeholder="{{item.placeholder || '请输入' + item.label}}"
+      value="{{formData[item.key]}}"
+      data-key="{{item.key}}"
+      bindinput="onInput"
+      maxlength="{{item.maxLength || 200}}"
+      auto-height
+    />
+
+    <view class="form-error" wx:if="{{errors[item.key]}}">{{errors[item.key]}}</view>
+  </view>
+</view>

@@ -1,0 +1,58 @@
+<!-- components/activity-card/index.wxml -->
+<view class="card activity-card animate-slide-up" bindtap="onTap" data-id="{{activity.id}}">
+  <!-- 封面图 -->
+  <view class="card-cover" wx:if="{{activity.coverImage}}">
+    <image src="{{activity.coverImage}}" mode="aspectFill" class="cover-img" lazy-load />
+    <view class="cover-overlay" />
+  </view>
+
+  <!-- 状态角标 -->
+  <view class="status-corner {{statusClass}}">
+    <view class="pulse-dot" wx:if="{{statusKey === 'active'}}" />
+    <text>{{statusText}}</text>
+  </view>
+
+  <view class="card-body">
+    <!-- 标题行 -->
+    <view class="card-title-row">
+      <text class="card-title text-ellipsis-2">{{activity.name}}</text>
+    </view>
+
+    <!-- 信息行 -->
+    <view class="info-row">
+      <text class="info-icon">📅</text>
+      <text class="info-text">{{startTime}}</text>
+    </view>
+    <view class="info-row" wx:if="{{activity.locationName}}">
+      <text class="info-icon">📍</text>
+      <text class="info-text text-ellipsis">{{activity.locationName}}</text>
+    </view>
+
+    <!-- 进度条 -->
+    <view class="progress-section" wx:if="{{activity.maxParticipants > 0}}">
+      <view class="progress-label row-between">
+        <text class="progress-count">
+          <text class="count-num">{{activity.registrationCount}}</text>
+          <text class="count-sep">/</text>
+          <text class="count-total">{{activity.maxParticipants}}</text>人
+        </text>
+        <text class="progress-pct">{{progressPct}}%</text>
+      </view>
+      <view class="progress-track">
+        <view class="progress-fill {{progressClass}}" style="width:{{progressPct}}%" />
+      </view>
+    </view>
+    <view class="progress-section" wx:else>
+      <text class="no-limit-text">{{activity.registrationCount}} 人已报名 · 不限人数</text>
+    </view>
+
+    <!-- 底部：发起人 & 时间 -->
+    <view class="card-footer">
+      <view class="creator-info">
+        <image src="{{activity.creatorAvatar || '/images/default-avatar.png'}}" class="creator-avatar" />
+        <text class="creator-name">{{activity.creatorNickname}}</text>
+      </view>
+      <text class="publish-time">{{publishTime}}</text>
+    </view>
+  </view>
+</view>

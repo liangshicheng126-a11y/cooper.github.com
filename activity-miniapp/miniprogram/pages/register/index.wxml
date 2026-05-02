@@ -1,0 +1,31 @@
+<!-- pages/register/index.wxml - 报名表单页 -->
+<view class="page">
+  <scroll-view scroll-y class="scroll-view">
+    <!-- 活动简要信息 -->
+    <view class="activity-brief card">
+      <text class="brief-name">{{activity.name}}</text>
+      <view class="brief-row">
+        <text class="brief-icon">📅</text>
+        <text class="brief-time">{{startTimeText}}</text>
+      </view>
+      <view class="brief-row" wx:if="{{subActivity}}">
+        <text class="brief-icon">🎯</text>
+        <text class="brief-time">场次：{{subActivity.name}} · {{subActivity.startTimeText}}</text>
+      </view>
+    </view>
+
+    <!-- 报名表单 -->
+    <view class="form-card card">
+      <view class="section-title">填写报名信息</view>
+      <custom-form id="customForm" fields="{{fields}}" bind:change="onFormChange" />
+    </view>
+
+    <view style="height: 200rpx;" />
+  </scroll-view>
+
+  <view class="bottom-bar">
+    <button class="btn btn-primary btn-block btn-lg" bindtap="onSubmit" loading="{{submitting}}">
+      提交报名
+    </button>
+  </view>
+</view>

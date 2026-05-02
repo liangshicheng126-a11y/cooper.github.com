@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "活动报名",
+  "usingComponents": {
+    "activity-card": "/components/activity-card/index",
+    "privacy-modal": "/components/privacy-modal/index"
+  }
+}

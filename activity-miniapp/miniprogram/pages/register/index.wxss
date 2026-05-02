@@ -1,0 +1,19 @@
+/* pages/register/index.wxss */
+.page { min-height: 100vh; background: var(--gray-50); }
+.scroll-view { height: calc(100vh - 160rpx); }
+
+.activity-brief {
+  margin: 24rpx 24rpx 20rpx;
+  padding: 28rpx 32rpx;
+  border-left: 8rpx solid var(--primary);
+}
+
+.brief-name { font-size: 30rpx; font-weight: 700; color: var(--gray-800); display: block; margin-bottom: 16rpx; }
+.brief-row { display: flex; align-items: center; margin-bottom: 8rpx; }
+.brief-icon { font-size: 26rpx; margin-right: 10rpx; }
+.brief-time { font-size: 26rpx; color: var(--gray-500); }
+
+.form-card {
+  margin: 0 24rpx;
+  padding: 28rpx 32rpx;
+}

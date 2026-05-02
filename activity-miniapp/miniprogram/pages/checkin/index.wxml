@@ -1,0 +1,54 @@
+<!-- pages/checkin/index.wxml - 签到页面 -->
+<view class="page">
+  <!-- 管理员模式：展示二维码 -->
+  <view wx:if="{{mode === 'admin'}}" class="qr-mode">
+    <view class="qr-card card">
+      <text class="qr-title">活动签到二维码</text>
+      <text class="qr-activity-name">{{activityName}}</text>
+      <image src="{{qrcodeUrl}}" class="qr-image" mode="aspectFit" show-menu-by-longpress />
+      <text class="qr-hint">参与者扫描此二维码完成签到</text>
+      <button class="btn btn-outline btn-block mt-24" bindtap="refreshQR">刷新二维码</button>
+      <button class="btn btn-primary btn-block mt-16" bindtap="saveQR">保存到相册</button>
+    </view>
+
+    <!-- 实时签到列表 -->
+    <view class="section-card card">
+      <view class="section-title-row">
+        <text class="section-title" style="margin-bottom:0">已签到 ({{checkinList.length}}/{{totalRegistrations}})</text>
+        <text class="refresh-btn" bindtap="loadCheckinList">刷新</text>
+      </view>
+      <view wx:for="{{checkinList}}" wx:key="id" class="checkin-item">
+        <image src="{{item.avatarUrl || '/images/default-avatar.png'}}" class="checkin-avatar" />
+        <view class="checkin-info">
+          <text class="checkin-name">{{item.name}}</text>
+          <text class="checkin-time">{{item.checkinTimeText}}</text>
+        </view>
+        <text class="checkin-badge">✓</text>
+      </view>
+      <view class="empty-state" wx:if="{{checkinList.length === 0}}">
+        <text class="empty-text">暂无签到记录</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 用户模式：扫码签到 -->
+  <view wx:elif="{{mode === 'user'}}" class="scan-mode">
+    <view wx:if="{{!checkinDone}}" class="scan-pending card">
+      <text class="scan-title">扫码签到</text>
+      <text class="scan-activity">{{activityName}}</text>
+      <view class="scan-icon-wrap">
+        <text class="scan-icon">📸</text>
+      </view>
+      <text class="scan-hint">请在活动现场扫描签到码</text>
+      <button class="btn btn-primary btn-block btn-lg mt-32" bindtap="onScan">扫码签到</button>
+    </view>
+    <view wx:elif="{{checkinDone}}" class="checkin-success card">
+      <view class="success-circle">
+        <text class="success-icon">✓</text>
+      </view>
+      <text class="success-title">签到成功！</text>
+      <text class="success-time">{{checkinTimeText}}</text>
+      <text class="success-activity">{{activityName}}</text>
+    </view>
+  </view>
+</view>
