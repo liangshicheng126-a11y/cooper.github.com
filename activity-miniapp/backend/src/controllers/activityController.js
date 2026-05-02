@@ -24,6 +24,8 @@ function sanitizeQueryString(v) {
   return s
 }
 
+const SORT_FIELDS = ['createdAt', 'startTime', 'registrationCount', 'distance']
+
 exports.list = async (req, res, next) => {
   try {
     const page = Math.max(1, parseInt(req.query.page) || 1)
@@ -31,9 +33,42 @@ exports.list = async (req, res, next) => {
     const category = sanitizeQueryString(req.query.category)
     const keyword = sanitizeQueryString(req.query.keyword)
     const offset = (page - 1) * size
+
+    const sortRaw = sanitizeQueryString(req.query.sort)
+    const sort = SORT_FIELDS.includes(sortRaw) ? sortRaw : 'createdAt'
+    const latQ = parseFloat(req.query.lat)
+    const lngQ = parseFloat(req.query.lng)
+
+    /** 服务端排序与白名单拼装，经纬度仅允许数字常量写入 ORDER BY */
+    let orderBy = 'a.created_at DESC'
+    if (sort === 'startTime') orderBy = 'a.start_time ASC'
+    else if (sort === 'registrationCount') orderBy = 'registration_count DESC'
+    else if (sort === 'distance') {
+      if (
+        Number.isFinite(latQ) &&
+        Number.isFinite(lngQ) &&
+        latQ >= -90 &&
+        latQ <= 90 &&
+        lngQ >= -180 &&
+        lngQ <= 180
+      ) {
+        orderBy = `CASE WHEN a.latitude IS NULL OR a.longitude IS NULL THEN 1 ELSE 0 END ASC, (POW(a.latitude - ${latQ}, 2) + POW(a.longitude - ${lngQ}, 2)) ASC`
+      }
+    }
+
     const cacheKey = keyword
-      ? null  // 搜索不走缓存
-      : `activities:list:${page}:${size}:${category || 'all'}`
+      ? null
+      : `activities:list:${page}:${size}:${category || 'all'}:${sort}${
+          sort === 'distance' &&
+          Number.isFinite(latQ) &&
+          Number.isFinite(lngQ) &&
+          latQ >= -90 &&
+          latQ <= 90 &&
+          lngQ >= -180 &&
+          lngQ <= 180
+            ? `:${latQ.toFixed(3)}:${lngQ.toFixed(3)}`
+            : ''
+        }`
 
     if (cacheKey) {
       const cached = await getCache(cacheKey)
@@ -62,7 +97,7 @@ exports.list = async (req, res, next) => {
       FROM activities a
       LEFT JOIN users u ON a.creator_openid = u.openid
       WHERE ${where}
-      ORDER BY a.created_at DESC
+      ORDER BY ${orderBy}
       LIMIT ${size} OFFSET ${offset}
     `, params)
 

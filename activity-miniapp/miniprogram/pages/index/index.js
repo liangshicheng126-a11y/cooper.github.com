@@ -48,6 +48,10 @@ Page({
     loadedAllFooter: '',
     showPrivacy: false,
     categories: [],
+    /** 列表排序：latest | soon | popular | distance */
+    listSort: 'createdAt',
+    sortUserLat: null,
+    sortUserLng: null,
   },
 
   onLoad() {
@@ -140,9 +144,33 @@ Page({
     if (reset) this.setData({ activities: [], noMore: false })
 
     try {
-      const q = { page, size: PAGE_SIZE }
+      const q = { page, size: PAGE_SIZE, sort: this.data.listSort }
       const cat = this.data.activeCategory
       if (cat && cat !== 'all') q.category = cat
+
+      if (this.data.listSort === 'distance') {
+        let lat = this.data.sortUserLat
+        let lng = this.data.sortUserLng
+        if (reset || lat == null || lng == null) {
+          try {
+            const loc = await new Promise((resolve, reject) => {
+              wx.getLocation({ type: 'gcj02', success: resolve, fail: reject })
+            })
+            lat = loc.latitude
+            lng = loc.longitude
+            this.setData({ sortUserLat: lat, sortUserLng: lng })
+          } catch (e) {
+            wx.showToast({ title: i18n.t('sortNeedLocation'), icon: 'none' })
+            this.setData({ loading: false, loadingMore: false, refreshing: false })
+            return
+          }
+        }
+        if (lat != null && lng != null) {
+          q.lat = lat
+          q.lng = lng
+        }
+      }
+
       const res = await request.get('/activities', q)
       const list = (res.data?.list || []).map(a => this._fmtActivityRow({ ...a }))
       this.setData({
@@ -209,7 +237,13 @@ Page({
       ],
       success: (res) => {
         const sorts = ['createdAt', 'startTime', 'registrationCount', 'distance']
-        // TODO: 应用排序
+        const listSort = sorts[res.tapIndex] || 'createdAt'
+        if (listSort !== 'distance') {
+          this.setData({ listSort, sortUserLat: null, sortUserLng: null })
+        } else {
+          this.setData({ listSort })
+        }
+        this._loadActivities(true)
       },
     })
   },

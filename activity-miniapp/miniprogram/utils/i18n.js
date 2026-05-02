@@ -101,6 +101,7 @@ const translations = {
     offline: '已下架',
     switchedZh: '已切换为中文',
     switchedEn: 'Switched to English',
+    sortNeedLocation: '请允许位置权限以使用「附近」排序',
   },
   en: {
     discover: 'Discover',
@@ -203,6 +204,7 @@ const translations = {
     offline: 'Offline',
     switchedZh: '已切换为中文',
     switchedEn: 'Switched to English',
+    sortNeedLocation: 'Allow location access to sort by distance',
   },
 }
 
