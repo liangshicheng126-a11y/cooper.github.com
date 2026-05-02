@@ -74,40 +74,6 @@ Page({
     wx.navigateTo({ url: '/pages/admin/index' })
   },
 
-  goDataPrivacy() {
-    wx.showModal({
-      title: '数据下载与删除',
-      content: '您可以下载您的所有个人数据，或申请永久删除账号及所有数据。删除操作不可逆，请谨慎操作。',
-      confirmText: '申请删除',
-      cancelText: '下载数据',
-      success: async (res) => {
-        if (res.confirm) {
-          wx.showModal({
-            title: '确认删除',
-            content: '删除后您的所有数据将永久清除，且无法恢复，确认删除？',
-            confirmText: '确认删除',
-            confirmColor: '#EF4444',
-            success: async (r) => {
-              if (r.confirm) {
-                try {
-                  await request.delete('/auth/account')
-                  wx.showToast({ title: '删除申请已提交', icon: 'success' })
-                  this.onLogout()
-                } catch (e) {}
-              }
-            },
-          })
-        } else {
-          try {
-            const dl = await request.post('/auth/export-data')
-            wx.setClipboardData({ data: dl.data.downloadUrl })
-            wx.showToast({ title: '下载链接已复制', icon: 'success' })
-          } catch (e) {}
-        }
-      },
-    })
-  },
-
   toggleLanguage() {
     const app = getApp()
     const newLang = app.globalData.language === 'zh' ? 'en' : 'zh'

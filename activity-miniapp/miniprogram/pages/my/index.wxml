@@ -39,11 +39,6 @@
           <text class="menu-label">管理后台</text>
           <text class="menu-arrow">›</text>
         </view>
-        <view class="menu-item" bindtap="goDataPrivacy">
-          <text class="menu-icon">🔒</text>
-          <text class="menu-label">数据下载与删除</text>
-          <text class="menu-arrow">›</text>
-        </view>
         <view class="menu-item" bindtap="toggleLanguage">
           <text class="menu-icon">🌐</text>
           <text class="menu-label">语言切换</text>
