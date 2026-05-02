@@ -20,6 +20,9 @@ Component({
   },
 
   methods: {
+    /** 阻止点击/手势穿透到外层面板或滚动穿透底页（占位即可） */
+    preventTapBubble() {},
+    preventTouchBubble() {},
     onClose() { this.triggerEvent('close') },
 
     setModeChina() {

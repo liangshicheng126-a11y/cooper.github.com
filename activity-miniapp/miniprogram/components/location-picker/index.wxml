@@ -1,7 +1,9 @@
 <!-- components/location-picker/index.wxml -->
 <wxs src="./helpers.wxs" module="h" />
-<view wx:if="{{show}}" class="picker-mask" catchtap="onClose">
-  <view class="picker-panel" catchtap="">
+<view wx:if="{{show}}" class="picker-root">
+  <!-- 仅上半部分透明遮罩接收关闭，面板区为独立 sibling，避免 input / tab 触点误传到遮罩关闭 -->
+  <view class="picker-dim" catchtap="onClose" catchtouchmove="preventTouchBubble" />
+  <view class="picker-panel" catchtap="preventTapBubble">
 
     <!-- ══ 标题栏 ══ -->
     <view class="panel-header">
@@ -104,3 +106,4 @@
 
   </view>
 </view>
+
