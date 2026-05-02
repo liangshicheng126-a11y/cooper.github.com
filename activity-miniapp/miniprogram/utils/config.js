@@ -8,7 +8,7 @@
 const ENV = 'development'
 
 // 【2】微信小程序 AppID（在微信公众平台 → 开发管理 → 开发设置 中查看）
-const APP_ID = 'YOUR_WECHAT_APP_ID'
+const APP_ID = 'wxa909312a016c6847'
 
 // 【3】后端接口地址
 //   development：电脑本机（手机真机调试时改为局域网 IP，如 http://192.168.1.100:3000/api）
