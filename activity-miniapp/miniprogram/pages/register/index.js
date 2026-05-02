@@ -71,8 +71,9 @@ Page({
       })
       wx.showToast({ title: '报名成功 🎉', icon: 'success' })
       // 申请订阅消息
+      const { SUBSCRIBE_TEMPLATES } = require('../../utils/config')
       wx.requestSubscribeMessage({
-        tmplIds: ['YOUR_TEMPLATE_ID_REMIND_24H', 'YOUR_TEMPLATE_ID_REMIND_1H'],
+        tmplIds: [SUBSCRIBE_TEMPLATES.REMIND_24H, SUBSCRIBE_TEMPLATES.REMIND_1H],
         fail: () => {},
       })
       setTimeout(() => wx.navigateBack({ delta: 2 }), 1500)

@@ -45,7 +45,11 @@ async function authenticate() {
     await pool.execute('SELECT 1')
     logger.info('✅ MySQL connected')
   } catch (e) {
-    logger.error('❌ MySQL connection failed:', e.message)
+    logger.error('❌ MySQL 连接失败：' + e.message)
+    logger.error('   请检查：')
+    logger.error('   1. MySQL 服务是否启动（Windows：任务管理器 → 服务 → MySQL80）')
+    logger.error('   2. backend/.env 中 DB_PASSWORD 是否正确')
+    logger.error('   3. 数据库 activity_miniapp 是否已创建（执行 database/schema.sql）')
     process.exit(1)
   }
 }
