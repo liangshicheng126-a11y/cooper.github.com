@@ -3,6 +3,9 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 
 const PROJECT_IDS = ["p1", "p2", "p3", "p4"] as const;
+
+export const dynamicParams = false;
+
 type PhotographyGroup = {
   year: string;
   dateLabel: string;

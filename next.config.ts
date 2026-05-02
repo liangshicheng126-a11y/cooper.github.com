@@ -14,8 +14,10 @@ const useRepoPrefix =
 const pagesBasePath = useRepoPrefix ? `/${repository}` : "";
 
 const nextConfig: NextConfig = {
-  output: "export",
   trailingSlash: true,
+  outputFileTracingExcludes: {
+    "/portfolio/[id]": ["./public/photos/**"],
+  },
   images: {
     unoptimized: true,
     remotePatterns: [

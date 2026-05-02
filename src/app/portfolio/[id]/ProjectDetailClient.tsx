@@ -26,6 +26,15 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
   const [lightboxPhotos, setLightboxPhotos] = useState<string[] | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
+  useEffect(() => {
+    if (id !== "p3") return;
+    const active = Boolean(lightboxPhotos);
+    document.body.classList.toggle("lightbox-open", active);
+    return () => {
+      document.body.classList.remove("lightbox-open");
+    };
+  }, [lightboxPhotos, id]);
+
   if (!mounted) return null;
 
   const projectKey = id as keyof typeof t.portfolio.projects;
@@ -114,15 +123,6 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
       </div>
     </motion.section>
   );
-
-  useEffect(() => {
-    if (id !== "p3") return;
-    const active = Boolean(lightboxPhotos);
-    document.body.classList.toggle("lightbox-open", active);
-    return () => {
-      document.body.classList.remove("lightbox-open");
-    };
-  }, [lightboxPhotos, id]);
 
   const container = {
     hidden: { opacity: 0 },
