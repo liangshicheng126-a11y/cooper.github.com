@@ -14,76 +14,21 @@
         </view>
       </view>
 
-      <!-- 数据统计 -->
+      <!-- 数据统计：点击进入二级列表页 -->
       <view class="stats-row">
-        <view class="stat-item">
+        <view class="stat-item stat-tap" bindtap="goPublishedList">
           <text class="stat-num">{{myActivitiesCount}}</text>
           <text class="stat-label">发布的活动</text>
+          <text class="stat-link">列表 ›</text>
         </view>
         <view class="stat-divider" />
-        <view class="stat-item">
+        <view class="stat-item stat-tap" bindtap="goRegisteredList">
           <text class="stat-num">{{myRegistrationsCount}}</text>
           <text class="stat-label">参与的活动</text>
-        </view>
-        <view class="stat-divider" />
-        <view class="stat-item">
-          <text class="stat-num">{{checkinCount}}</text>
-          <text class="stat-label">完成签到</text>
+          <text class="stat-link">列表 ›</text>
         </view>
       </view>
-    </view>
-
-    <!-- Tab 切换 -->
-    <view class="tab-bar">
-      <view
-        class="tab-item {{activeTab === 'created' ? 'tab-active' : ''}}"
-        bindtap="switchTab"
-        data-tab="created"
-      >
-        <text>我发布的</text>
-        <view class="tab-indicator" wx:if="{{activeTab === 'created'}}" />
-      </view>
-      <view
-        class="tab-item {{activeTab === 'registered' ? 'tab-active' : ''}}"
-        bindtap="switchTab"
-        data-tab="registered"
-      >
-        <text>我参与的</text>
-        <view class="tab-indicator" wx:if="{{activeTab === 'registered'}}" />
-      </view>
-    </view>
-
-    <!-- 活动列表 -->
-    <view class="list-container">
-      <view wx:if="{{loading}}" class="loading-wrapper">
-        <text>加载中...</text>
-      </view>
-
-      <view wx:elif="{{activities.length === 0}}" class="empty-state">
-        <text class="empty-icon">{{activeTab === 'created' ? '📋' : '🎫'}}</text>
-        <text class="empty-text">{{activeTab === 'created' ? '还没有发布活动' : '还没有参与活动'}}</text>
-        <button class="btn btn-primary btn-sm mt-20" bindtap="{{activeTab === 'created' ? 'goCreate' : 'goDiscover'}}">
-          {{activeTab === 'created' ? '立即发布' : '去发现活动'}}
-        </button>
-      </view>
-
-      <view wx:for="{{activities}}" wx:key="id" class="my-activity-item card" bindtap="onActivityTap" data-id="{{item.activityId || item.id}}">
-        <image src="{{item.coverImage || '/images/default-cover.png'}}" mode="aspectFill" class="item-cover" />
-        <view class="item-body">
-          <text class="item-name text-ellipsis">{{item.name || item.activityName}}</text>
-          <view class="item-info-row">
-            <text class="item-time">📅 {{item.startTimeText}}</text>
-          </view>
-          <view class="item-footer">
-            <view class="status-mini {{item.statusClass}}">
-              <text>{{item.statusText}}</text>
-            </view>
-            <text class="item-count" wx:if="{{activeTab === 'created'}}">{{item.registrationCount}}人报名</text>
-            <text class="item-count" wx:elif="{{item.checkinTime}}">已签到 ✓</text>
-            <text class="item-count text-gray" wx:else>未签到</text>
-          </view>
-        </view>
-      </view>
+      <text class="stats-tip">点此进入对应活动清单</text>
     </view>
 
     <!-- 功能菜单 -->

@@ -1,0 +1,36 @@
+<view class="page">
+  <view wx:if="{{loading}}" class="state-wrap">
+    <text class="state-text">加载中...</text>
+  </view>
+  <view wx:elif="{{activities.length === 0}}" class="state-wrap empty">
+    <text class="empty-icon">🎫</text>
+    <text class="empty-title">还没有参与活动</text>
+    <button class="btn-primary" bindtap="goDiscover">去发现活动</button>
+  </view>
+  <view wx:else class="list-wrap">
+    <view
+      wx:for="{{activities}}"
+      wx:key="registrationId"
+      class="my-activity-item"
+      bindtap="onActivityTap"
+      data-id="{{item.activityId}}"
+    >
+      <image src="{{item.coverImage || '/images/default-cover.png'}}" mode="aspectFill" class="item-cover" />
+      <view class="item-body">
+        <text class="item-name text-ellipsis">{{item.name}}</text>
+        <view class="item-info-row">
+          <text class="item-time">📅 {{item.startTimeText}}</text>
+        </view>
+        <view wx:if="{{item.locationName}}" class="item-loc-row">
+          <text class="item-loc">📍 {{item.locationName}}</text>
+        </view>
+        <view class="item-footer">
+          <view class="status-mini {{item.statusClass}}">
+            <text>{{item.statusText}}</text>
+          </view>
+          <text class="item-meta">报名时间 {{item.registeredAtText}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,33 @@
+<view class="page">
+  <view wx:if="{{loading}}" class="state-wrap">
+    <text class="state-text">加载中...</text>
+  </view>
+  <view wx:elif="{{activities.length === 0}}" class="state-wrap empty">
+    <text class="empty-icon">📋</text>
+    <text class="empty-title">还没有发布活动</text>
+    <button class="btn-primary" bindtap="goCreate">立即发布</button>
+  </view>
+  <view wx:else class="list-wrap">
+    <view
+      wx:for="{{activities}}"
+      wx:key="id"
+      class="my-activity-item"
+      bindtap="onActivityTap"
+      data-id="{{item.id}}"
+    >
+      <image src="{{item.coverImage || '/images/default-cover.png'}}" mode="aspectFill" class="item-cover" />
+      <view class="item-body">
+        <text class="item-name text-ellipsis">{{item.name}}</text>
+        <view class="item-info-row">
+          <text class="item-time">📅 {{item.startTimeText}}</text>
+        </view>
+        <view class="item-footer">
+          <view class="status-mini {{item.statusClass}}">
+            <text>{{item.statusText}}</text>
+          </view>
+          <text class="item-count">{{item.registrationCount}}人报名</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

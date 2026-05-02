@@ -5,6 +5,8 @@
     "pages/create-activity/index",
     "pages/register/index",
     "pages/my/index",
+    "pages/my-published/index",
+    "pages/my-registered/index",
     "pages/admin/index",
     "pages/checkin/index",
     "pages/poster/index",
