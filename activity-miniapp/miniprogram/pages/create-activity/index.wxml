@@ -116,7 +116,7 @@
             </view>
             <view wx:else class="location-empty">
               <text class="location-icon">📍</text>
-              <text class="location-hint">点击选择地点（支持国内 / 海外）</text>
+              <text class="location-hint">点击输入地址并定位（地图上可微调）</text>
             </view>
           </view>
         </view>
