@@ -122,11 +122,19 @@
         </view>
 
         <view class="map-preview" wx:if="{{form.latitude && form.longitude}}">
+          <image
+            wx:if="{{useGoogleStaticMapPreview}}"
+            class="create-map-preview google-static-preview"
+            mode="aspectFill"
+            src="{{googleStaticMapPreviewUrl}}"
+            binderror="onGooglePreviewImageError"
+          />
           <map
+            wx:else
             latitude="{{form.latitude}}"
             longitude="{{form.longitude}}"
             scale="15"
-            class="mini-map"
+            class="create-map-preview mini-map-tencent"
             markers="{{mapMarkers}}"
             show-location
           />

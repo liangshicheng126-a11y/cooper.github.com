@@ -100,7 +100,10 @@
 .location-icon  { font-size: 32rpx; opacity: 0.5; }
 .location-hint  { font-size: 28rpx; color: rgba(30,27,75,0.40); }
 .map-preview { margin-top: 20rpx; border-radius: 12rpx; overflow: hidden; }
-.mini-map    { width: 100%; height: 240rpx; }
+/* 地点大图预览 */
+.create-map-preview { width: 100%; height: 480rpx; display: block; }
+.google-static-preview { background: #e8eaf0; }
+.mini-map-tencent { width: 100%; height: 480rpx; }
 
 /* ── 子活动 ── */
 .section-title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16rpx; }

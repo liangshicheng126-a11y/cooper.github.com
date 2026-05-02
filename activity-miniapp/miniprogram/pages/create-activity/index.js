@@ -1,8 +1,11 @@
 // pages/create-activity/index.js
 const request = require('../../utils/request')
+const { GOOGLE_MAPS_KEY } = require('../../utils/config')
 const { toPickerValue, toPickerTimeValue } = require('../../utils/date')
 const { chooseLocation } = require('../../utils/map')
 const { upload } = require('../../utils/request')
+
+const isGoogleConfigured = GOOGLE_MAPS_KEY && GOOGLE_MAPS_KEY !== 'YOUR_GOOGLE_MAPS_KEY'
 
 const FIELD_TYPES = ['文本', '手机号', '邮箱', '身份证号', '单选', '多选', '下拉选择', '多行文本']
 const FIELD_TYPE_KEYS = ['text', 'phone', 'email', 'idCard', 'radio', 'checkbox', 'select', 'textarea']
@@ -29,6 +32,8 @@ Page({
     endDate: '',
     endTime: '',
     mapMarkers: [],
+    useGoogleStaticMapPreview: false,
+    googleStaticMapPreviewUrl: '',
     activityTypes: [
       { key: 'sport', label: '运动', icon: '⚽' },
       { key: 'culture', label: '文化', icon: '🎭' },
@@ -53,6 +58,7 @@ Page({
       inviteCode: '',
       locationName: '',
       locationAddress: '',
+      locationCountry: 'CN',
       latitude: null,
       longitude: null,
       customFields: [],
@@ -87,6 +93,7 @@ Page({
           maxParticipants: a.maxParticipants > 0 ? String(a.maxParticipants) : '',
           locationName: a.locationName || '',
           locationAddress: a.locationAddress || '',
+          locationCountry: a.locationCountry || 'CN',
           latitude: a.latitude,
           longitude: a.longitude,
           customFields: a.customFields || [],
@@ -96,7 +103,7 @@ Page({
         endDate: toPickerValue(endDt),
         endTime: toPickerTimeValue(endDt),
       })
-      this._updateMapMarkers()
+      this._syncMapPreview()
     } catch (e) {
       wx.showToast({ title: '加载失败', icon: 'none' })
     } finally {
@@ -157,33 +164,69 @@ Page({
   },
 
   onLocationSelect(e) {
-    const { name, address, latitude, longitude } = e.detail
+    const { name, address, latitude, longitude, country } = e.detail
     this.setData({
       showLocationPicker: false,
-      'form.locationName':    name,
-      'form.locationAddress': address,
-      'form.latitude':        latitude,
-      'form.longitude':       longitude,
+      'form.locationName':       name,
+      'form.locationAddress':    address,
+      'form.locationCountry':    country || 'CN',
+      'form.latitude':           latitude,
+      'form.longitude':          longitude,
     })
-    this._updateMapMarkers()
+    this._syncMapPreview()
+  },
+
+  _buildCreatePageStaticPreviewUrl(lat, lng, zoom) {
+    if (!isGoogleConfigured) return ''
+    const z = Math.max(5, Math.min(20, Math.round(zoom || 15)))
+    const latn = Number(lat)
+    const lngn = Number(lng)
+    if (Number.isNaN(latn) || Number.isNaN(lngn)) return ''
+    const mk = encodeURIComponent(`color:red|${latn},${lngn}`)
+    return `https://maps.googleapis.com/maps/api/staticmap?center=${latn},${lngn}&zoom=${z}&size=640x640&scale=2&markers=${mk}&key=${encodeURIComponent(GOOGLE_MAPS_KEY)}`
   },
 
   async chooseLocation() {
     this.openLocationPicker()
   },
 
-  _updateMapMarkers() {
-    const { latitude, longitude, locationName } = this.data.form
-    if (latitude && longitude) {
+  _syncMapPreview() {
+    const { latitude, longitude, locationName, locationCountry } = this.data.form
+    if (!latitude || !longitude) {
       this.setData({
-        mapMarkers: [{
-          id: 1, latitude, longitude,
-          title: locationName,
-          iconPath: '/images/map-marker.png',
-          width: 40, height: 40,
-        }],
+        mapMarkers: [],
+        useGoogleStaticMapPreview: false,
+        googleStaticMapPreviewUrl: '',
       })
+      return
     }
+    const useGoogle = Boolean(locationCountry && locationCountry !== 'CN' && isGoogleConfigured)
+    if (useGoogle) {
+      this.setData({
+        useGoogleStaticMapPreview: true,
+        googleStaticMapPreviewUrl: this._buildCreatePageStaticPreviewUrl(latitude, longitude, 15),
+        mapMarkers: [],
+      })
+      return
+    }
+    this.setData({
+      useGoogleStaticMapPreview: false,
+      googleStaticMapPreviewUrl: '',
+      mapMarkers: [{
+        id: 1, latitude, longitude,
+        title: locationName,
+        iconPath: '/images/map-marker.png',
+        width: 40, height: 40,
+      }],
+    })
+  },
+
+  onGooglePreviewImageError() {
+    wx.showToast({
+      title: '地图图加载失败：检查 Static API 与 downloadFile 域名',
+      icon: 'none',
+      duration: 3500,
+    })
   },
 
   // 子活动
@@ -407,6 +450,7 @@ Page({
       locationAddress: form.locationAddress,
       latitude: form.latitude,
       longitude: form.longitude,
+      locationCountry: form.locationCountry || 'CN',
       maxParticipants: form.hasLimit ? Number(form.maxParticipants) : 0,
       requireInvite:   form.requireInvite,
       inviteCode:      form.requireInvite ? form.inviteCode : undefined,
