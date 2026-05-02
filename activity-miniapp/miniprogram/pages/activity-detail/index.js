@@ -338,6 +338,7 @@ ${activity.reminder ? `💡 ${activity.reminder}\n` : ''}
 
   _requestSubscribeMessage() {
     wx.requestSubscribeMessage({
+      // ⚠️ 替换为你在微信公众平台申请的订阅消息模板 ID
       tmplIds: ['YOUR_TEMPLATE_ID_REMIND_24H', 'YOUR_TEMPLATE_ID_REMIND_1H'],
       fail: () => {},
     })
