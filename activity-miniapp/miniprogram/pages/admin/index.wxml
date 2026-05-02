@@ -45,6 +45,18 @@
         </scroll-view>
       </view>
 
+      <view class="roster-check-bar card" wx:if="{{rosterChoices.length > 1}}">
+        <picker mode="selector" range="{{rosterChoices}}" range-key="title" value="{{rosterPickIdx}}" bindchange="onRosterForCheckChange">
+          <view class="roster-picker-line">
+            <text class="roster-picker-label">对照名册</text>
+            <text class="roster-picker-val">{{rosterChoices[rosterPickIdx].title}}</text>
+            <text class="picker-arrow">▾</text>
+          </view>
+        </picker>
+        <text class="roster-summary" wx:if="{{rosterMatchSummary}}">{{rosterMatchSummary}}</text>
+        <text class="roster-hint">按报名表中带手机号的字段、学号类字段自动比对名册</text>
+      </view>
+
       <!-- 搜索 -->
       <view class="search-bar">
         <input class="search-input" placeholder="搜索姓名/手机号..." value="{{searchKeyword}}" bindinput="onSearch" />
@@ -65,6 +77,7 @@
             <text class="reg-name">{{item.displayName}}</text>
             <text class="reg-time">{{item.registrationTimeText}}</text>
           </view>
+          <text class="reg-roster-tag" wx:if="{{item.rosterCheckLabel}}">{{item.rosterCheckLabel}}</text>
           <view class="reg-checkin {{item.checkinTime ? 'checkin-done' : ''}}" wx:if="{{item.checkinTime}}">
             <text>✓ 已签到</text>
           </view>
@@ -85,6 +98,47 @@
       <!-- 底部：导出 -->
       <view class="export-bar">
         <button class="btn btn-outline" bindtap="onExportExcel">📊 导出 Excel</button>
+      </view>
+    </view>
+
+    <!-- Tab: 学生名册（Excel 导入） -->
+    <view wx:if="{{activeTab === 'roster'}}">
+      <view class="card roster-guide">
+        <view class="section-title">📥 批量导入在校生/名单</view>
+        <text class="guide-p">从学校教务导出的表格中选择文件上传。识别列名包括但不限于：</text>
+        <text class="guide-li">姓名（必填）</text>
+        <text class="guide-li">学号、手机、班级、年级、备注</text>
+        <text class="guide-li">中英文表头皆可；其它列写入「额外信息」以备核对。</text>
+      </view>
+      <view class="card roster-form">
+        <text class="input-label">名册名称</text>
+        <input class="roster-title-input" placeholder="如：机电学院2024级在校生" value="{{newRosterTitle}}" bindinput="onRosterTitleInput" />
+        <button class="btn btn-primary btn-block mt-16" bindtap="tapImportRosterExcel">从聊天中选择 Excel (.xlsx / .xls)</button>
+      </view>
+      <view class="section-title px-24">已导入名册</view>
+      <view wx:for="{{rosters}}" wx:key="id" class="card roster-card">
+        <view class="roster-card-head">
+          <text class="roster-card-title">{{item.title}}</text>
+          <text class="roster-meta">{{item.rowSuccess}} 人 · {{item.sourceFilename}}</text>
+        </view>
+        <view class="roster-card-actions">
+          <button size="mini" class="btn btn-outline" data-id="{{item.id}}" bindtap="tapPreviewRoster">预览前100条</button>
+          <button size="mini" class="btn btn-danger-plain" data-id="{{item.id}}" bindtap="tapDeleteRoster">删除</button>
+        </view>
+      </view>
+      <view class="card" wx:if="{{rosterStudentPreview.length}}">
+        <view class="section-title">预览（{{rosterStudentPreview.length}} / {{rosterPreviewTotal}}）</view>
+        <scroll-view scroll-y class="preview-scroll">
+          <view wx:for="{{rosterStudentPreview}}" wx:key="id" class="preview-row">
+            <text class="p-name">{{item.name}}</text>
+            <text class="p-sub">{{item.studentNo}} {{item.clazz}} {{item.grade}}</text>
+            <text class="p-phone">{{item.phoneMasked}}</text>
+          </view>
+        </scroll-view>
+      </view>
+      <view class="empty-state" wx:if="{{rosters.length === 0}}">
+        <text class="empty-icon">📋</text>
+        <text class="empty-text">暂无名册，请先导入 Excel</text>
       </view>
     </view>
 
