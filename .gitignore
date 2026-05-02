@@ -15,4 +15,7 @@ pnpm-debug.log*
 
 .DS_Store
 Thumbs.db
-.vercel
+
+# 小程序本地密钥（勿提交）
+activity-miniapp/miniprogram/utils/config.local.js
+

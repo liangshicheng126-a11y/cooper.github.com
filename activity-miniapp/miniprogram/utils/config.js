@@ -1,47 +1,51 @@
 // utils/config.js
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// ⚠️  所有需要填写的 ID/Key 都在这里
+// 公共配置；敏感 Key 请写到同目录 config.local.js（见 config.local.example.js）
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+let local = {}
+try {
+  local = require('./config.local.js')
+} catch (e) {
+  if (e.code !== 'MODULE_NOT_FOUND' && !/Cannot find module/i.test(e.message || '')) throw e
+}
+
+/** 非空字符串才覆盖默认值 */
+function pickStr(override, fallback) {
+  if (typeof override !== 'string') return fallback
+  const t = override.trim()
+  return t !== '' ? t : fallback
+}
+
 // 【1】开发 / 生产环境切换
-//   开发阶段保持 'development'，部署上线前改为 'production'
 const ENV = 'development'
 
 // 【2】微信小程序 AppID（在微信公众平台 → 开发管理 → 开发设置 中查看）
 const APP_ID = 'wxa909312a016c6847'
 
 // 【3】后端接口地址
-//   development：电脑本机（手机真机调试时改为局域网 IP，如 http://192.168.1.100:3000/api）
-//   production ：你的服务器域名（必须 HTTPS）
-const API_BASE_URL = {
+const API_BASE_URL_MAP = {
   development: 'http://localhost:3000/api',
   production:  'https://your-domain.com/api',
 }
 
-// 【4】腾讯地图 SDK Key（中国大陆地址解析 / 地图上微调后的逆解析）
-//   申请地址：https://lbs.qq.com/dev/console/application/mine
-//   创建应用后选"微信小程序"并绑定上方 APP_ID
-const MAP_KEY = 'YOUR_TENCENT_MAP_KEY'
+// 【4】【4-b】密钥默认占位；填写 config.local.js 后自动生效
+const MAP_KEY = pickStr(local.MAP_KEY, 'YOUR_TENCENT_MAP_KEY')
+const GOOGLE_MAPS_KEY = pickStr(local.GOOGLE_MAPS_KEY, 'YOUR_GOOGLE_MAPS_KEY')
 
-// 【4-b】Google Maps Geocoding API Key（仅在「活动地点 → 海外」正向/逆解析使用，不走腾讯）
-//   控制台启用 Geocoding API；小程序后台添加 request 合法域名：https://maps.googleapis.com
-const GOOGLE_MAPS_KEY = 'YOUR_GOOGLE_MAPS_KEY'
-
-// 【5】订阅消息模板 ID（在微信公众平台 → 功能 → 订阅消息 中查看）
+// 【5】订阅消息模板 ID
 const SUBSCRIBE_TEMPLATES = {
-  // 活动开始提醒（用户报名后请求授权）
   REMIND_24H: 'YOUR_TEMPLATE_ID_REMIND_24H',
   REMIND_1H:  'YOUR_TEMPLATE_ID_REMIND_1H',
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 以下无需修改
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const API_BASE_URL = pickStr(local.API_BASE_URL, API_BASE_URL_MAP[ENV])
+
 module.exports = {
   ENV,
   APP_ID,
   MAP_KEY,
   GOOGLE_MAPS_KEY,
   SUBSCRIBE_TEMPLATES,
-  API_BASE_URL: API_BASE_URL[ENV],
+  API_BASE_URL,
 }
