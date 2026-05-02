@@ -1,5 +1,6 @@
 // pages/search/index.js
 const request = require('../../utils/request')
+const { getCustomNavbarContentPaddingTop } = require('../../utils/nav')
 const { formatDate, getActivityStatus } = require('../../utils/date')
 
 const HISTORY_KEY = 'search_history'
@@ -14,9 +15,11 @@ Page({
     hotWords: ['音乐节', '马拉松', '志愿活动', '技术分享', '户外露营', '读书会'],
     loading: false,
     searched: false,
+    navBarPaddingTop: 48,
   },
 
   onLoad(options) {
+    this.setData({ navBarPaddingTop: getCustomNavbarContentPaddingTop() })
     const history = wx.getStorageSync(HISTORY_KEY) || []
     this.setData({ history })
     if (options.keyword) {

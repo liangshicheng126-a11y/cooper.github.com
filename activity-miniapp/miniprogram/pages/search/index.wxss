@@ -7,7 +7,10 @@
 /* ── 搜索栏 ── */
 .search-bar {
   display: flex; align-items: center; gap: 12rpx;
-  padding: calc(env(safe-area-inset-top) + 16rpx) 20rpx 16rpx;
+  padding-bottom: 16rpx;
+  padding-left: 20rpx;
+  padding-right: 20rpx;
+  box-sizing: border-box;
   background: rgba(255,255,255,0.82);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);

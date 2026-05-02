@@ -1,9 +1,15 @@
 <!-- pages/activity-detail/index.wxml -->
 <view class="page-wrap">
 
-  <!-- 固定返回按钮 -->
-  <view class="back-btn" bindtap="goBack">
-    <text class="back-arrow">‹</text>
+  <!-- 与胶囊垂直对齐，避免压住状态栏时间 -->
+  <view
+    class="nav-back-slot"
+    style="top: {{navBackTop}}px; height: {{navBackHeight}}px;"
+    bindtap="goBack"
+  >
+    <view class="nav-back-circle">
+      <text class="nav-back-arrow">‹</text>
+    </view>
   </view>
 
   <!-- 骨架屏（加载中） -->

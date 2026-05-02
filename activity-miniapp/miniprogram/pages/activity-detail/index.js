@@ -1,5 +1,6 @@
 // pages/activity-detail/index.js
 const request = require('../../utils/request')
+const { getMenuButtonAnchor } = require('../../utils/nav')
 const { formatDate, getDurationNatural, getActivityStatus } = require('../../utils/date')
 const { openNavigation } = require('../../utils/map')
 
@@ -44,9 +45,17 @@ Page({
     pendingRegisterParams: null,
     loadError: false,
     loading: true,
+    navBackTop: 48,
+    navBackHeight: 32,
   },
 
   onLoad(options) {
+    const anchor = getMenuButtonAnchor()
+    this.setData({
+      navBackTop: anchor.top,
+      navBackHeight: anchor.height,
+    })
+
     const id = options.id
     if (!id) {
       this.setData({ loading: false, loadError: true })

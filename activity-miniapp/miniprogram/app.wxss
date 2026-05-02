@@ -396,3 +396,5 @@ page {
    安全区
 ══════════════════════════════════════ */
 .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+
+/* 自定义导航：返回栏位置请用 utils/nav.js（与胶囊对齐），勿仅用 env(safe-area-inset-top) */

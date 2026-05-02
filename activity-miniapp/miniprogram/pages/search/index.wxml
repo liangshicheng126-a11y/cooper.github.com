@@ -2,7 +2,8 @@
 <view class="page">
 
   <!-- 搜索栏 -->
-  <view class="search-bar">
+  <!-- 与活动详情一致的自定义导航顶距 -->
+  <view class="search-bar" style="padding-top: {{navBarPaddingTop}}px;">
     <view class="back-btn" bindtap="goBack">
       <text class="back-arrow">‹</text>
     </view>
