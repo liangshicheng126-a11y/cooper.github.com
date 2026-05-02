@@ -1,7 +1,11 @@
 // pages/activity-detail/index.js
 const request = require('../../utils/request')
-const { formatDate, getDurationText, getActivityStatus } = require('../../utils/date')
+const { formatDate, getDurationNatural, getActivityStatus } = require('../../utils/date')
 const { openNavigation } = require('../../utils/map')
+
+const CAT_LABEL = {
+  sport: '运动', culture: '文化', volunteer: '公益', social: '社交', other: '其他',
+}
 
 const STATUS_MAP = {
   active: { text: '进行中', cls: 'badge-active' },
@@ -18,7 +22,7 @@ Page({
     activity: {},
     subActivities: [],
     selectedSubId: null,
-    registrantAvatars: [],
+    registrantSlots: [],
     isRegistered: false,
     isCreator: false,
     showInviteCode: false,
@@ -27,8 +31,10 @@ Page({
     statusText: '',
     statusClass: '',
     startTimeText: '',
-    endTimeText: '',
-    durationText: '',
+    scheduleStartFull: '',
+    scheduleEndFull: '',
+    scheduleDurationNatural: '',
+    categoryLabel: '活动',
     progressPct: 0,
     progressClass: '',
     descExpanded: false,
@@ -83,20 +89,27 @@ Page({
         ? (subActivities.find(s => !s.isFull)?.id || null)
         : null
 
+      const scheduleStartFull = formatDate(activity.startTime, 'YYYY年MM月DD日 HH:mm')
+      const scheduleEndFull = formatDate(activity.endTime, 'YYYY年MM月DD日 HH:mm')
+      const scheduleDurationNatural = getDurationNatural(activity.startTime, activity.endTime)
+      const categoryLabel = CAT_LABEL[activity.category] || CAT_LABEL.other
+
       this.setData({
         activity,
         subActivities,
         selectedSubId: regRes.data?.subActivityId || defaultSubId,
-        registrantAvatars: (activity.recentRegistrants || []).map(r => r.avatarUrl).slice(0, 8),
+        registrantSlots: this._buildRegistrantSlots(activity),
         isRegistered: !!regRes.data,
         userRegistrationId: regRes.data?.id || null,
         isCreator: activity.creatorOpenid === app.globalData.openid,
         statusKey: status,
         statusText: text,
         statusClass: cls,
-        startTimeText: formatDate(activity.startTime, 'YYYY年MM月DD日 HH:mm'),
-        endTimeText: formatDate(activity.endTime, 'HH:mm'),
-        durationText: getDurationText(activity.startTime, activity.endTime),
+        startTimeText: scheduleStartFull,
+        scheduleStartFull,
+        scheduleEndFull,
+        scheduleDurationNatural,
+        categoryLabel,
         progressPct: pct,
         progressClass: pct >= 90 ? 'danger' : '',
         cannotRegister: ['ended', 'full', 'cancelled', 'offline'].includes(status),
@@ -115,6 +128,28 @@ Page({
   onRetry() {
     this.setData({ loadError: false })
     this._loadDetail(this.data.activityId)
+  },
+
+  _buildRegistrantSlots(activity) {
+    const raw = activity.recentRegistrants || []
+    const rc = Math.max(0, Number(activity.registrationCount) || 0)
+    const maxShow = Math.min(rc, 8)
+    const slots = []
+    const n = Math.min(raw.length, maxShow)
+    for (let i = 0; i < n; i++) {
+      const r = raw[i] || {}
+      slots.push({
+        key: `a${i}`,
+        avatarUrl: r.avatarUrl || r.avatar_url || '/images/default-avatar.png',
+      })
+    }
+    while (slots.length < maxShow) {
+      slots.push({
+        key: `p${slots.length}`,
+        avatarUrl: '/images/default-avatar.png',
+      })
+    }
+    return slots
   },
 
   onSelectSub(e) {
@@ -439,11 +474,19 @@ ${activity.reminder ? `💡 ${activity.reminder}\n` : ''}
   },
 
   onCopyLink() {
-    const { activityId, activity } = this.data
-    const text = `【${activity.name || '活动'}】${activity.locationName ? '地点：' + activity.locationName + ' ' : ''}快来报名参加！`
+    const { activity, scheduleStartFull, scheduleEndFull } = this.data
+    const loc = activity.locationName
+      ? `${activity.locationName}${activity.locationAddress ? ' ' + activity.locationAddress : ''}`
+      : '待定'
+    const lines = [
+      `【${activity.name || '活动'}】`,
+      `时间：${scheduleStartFull || ''} — ${scheduleEndFull || ''}`,
+      `地点：${loc}`,
+      activity.reminder ? `提醒：${activity.reminder}` : '',
+    ].filter(Boolean)
     wx.setClipboardData({
-      data: text,
-      success: () => wx.showToast({ title: '活动信息已复制', icon: 'success' }),
+      data: lines.join('\n'),
+      success: () => wx.showToast({ title: '活动摘要已复制', icon: 'success' }),
     })
   },
 

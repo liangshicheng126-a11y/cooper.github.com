@@ -65,6 +65,20 @@ function toPickerTimeValue(date) {
   return formatDate(date instanceof Date ? date.toISOString() : date, 'HH:mm')
 }
 
+function getDurationNatural(startStr, endStr) {
+  const start = new Date(startStr)
+  const end = new Date(endStr)
+  const ms = end - start
+  if (!(ms >= 0) || Number.isNaN(ms)) return ''
+  const days = Math.floor(ms / 86400000)
+  const hours = Math.floor((ms % 86400000) / 3600000)
+  const minutes = Math.floor((ms % 3600000) / 60000)
+  if (days >= 1) return `约 ${days} 天`
+  if (hours >= 1) return `约 ${hours} 小时`
+  if (minutes >= 1) return `约 ${minutes} 分钟`
+  return '不足 1 分钟'
+}
+
 // 获取活动状态
 function getActivityStatus(activity) {
   const now = new Date()
@@ -85,6 +99,7 @@ module.exports = {
   isPast,
   isFuture,
   getDurationText,
+  getDurationNatural,
   hasTimeConflict,
   toPickerValue,
   toPickerTimeValue,

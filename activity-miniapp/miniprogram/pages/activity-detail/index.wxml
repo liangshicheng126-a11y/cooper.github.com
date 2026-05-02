@@ -36,22 +36,29 @@
 
     <!-- 主信息卡 -->
     <view class="main-card">
-      <view class="title-row">
-        <text class="activity-title">{{activity.name}}</text>
-        <view class="status-badge {{statusClass}}">
-          <view class="pulse-dot" wx:if="{{statusKey === 'active'}}" />
-          <text>{{statusText}}</text>
+      <view class="hero-title-block">
+        <view class="hero-title-row">
+          <text class="activity-title">{{activity.name}}</text>
         </view>
+        <view class="hero-meta">
+          <text class="category-chip">{{categoryLabel}}</text>
+          <view class="status-badge {{statusClass}}">
+            <view class="pulse-dot" wx:if="{{statusKey === 'active'}}" />
+            <text>{{statusText}}</text>
+          </view>
+        </view>
+        <text class="creator-line" wx:if="{{activity.creatorNickname}}">发起人 · {{activity.creatorNickname}}</text>
       </view>
       <view class="divider" />
 
       <!-- 时间 -->
-      <view class="info-item">
+      <view class="info-item info-item--time">
         <view class="info-icon-wrap bg-blue"><text class="info-emoji">📅</text></view>
         <view class="info-content">
           <text class="info-label">活动时间</text>
-          <text class="info-value">{{startTimeText}}</text>
-          <text class="info-sub" wx:if="{{endTimeText}}">至 {{endTimeText}} · {{durationText}}</text>
+          <text class="info-value info-value--strong">开始 {{scheduleStartFull}}</text>
+          <text class="info-value info-value--end">结束 {{scheduleEndFull}}</text>
+          <text class="info-duration-pill" wx:if="{{scheduleDurationNatural}}">{{scheduleDurationNatural}}</text>
         </view>
       </view>
 
@@ -143,11 +150,20 @@
     </view>
 
     <!-- 已报名用户 -->
-    <view class="section-card" wx:if="{{registrantAvatars.length > 0}}">
-      <view class="section-title">已报名（{{activity.registrationCount}}人）</view>
-      <view class="avatar-list">
-        <image wx:for="{{registrantAvatars}}" wx:key="*this"
-          src="{{item || '/images/default-avatar.png'}}" class="registrant-avatar" />
+    <view class="section-card participants-card" wx:if="{{activity.registrationCount > 0}}">
+      <view class="section-head-row">
+        <view class="section-title section-title--bare">已报名</view>
+        <text class="section-count-pill">{{activity.registrationCount}} 人</text>
+      </view>
+      <text class="participants-hint" wx:if="{{registrantSlots.length}}">展示最近报名者头像（最多 8 位）</text>
+      <view class="avatar-list avatar-list--lg">
+        <image
+          wx:for="{{registrantSlots}}"
+          wx:key="key"
+          src="{{item.avatarUrl}}"
+          mode="aspectFill"
+          class="registrant-avatar"
+        />
         <view class="avatar-more" wx:if="{{activity.registrationCount > 8}}">
           <text>+{{activity.registrationCount - 8}}</text>
         </view>
@@ -179,19 +195,17 @@
       </view>
     </view>
 
-    <!-- 分享 & 举报 -->
-    <view class="share-section">
-      <button class="share-card-btn" open-type="share">
-        <text class="share-card-icon">↗</text>
-        <text class="share-card-text">分享活动</text>
-      </button>
-      <button class="share-card-btn" bindtap="onCopyLink">
-        <text class="share-card-icon">📋</text>
-        <text class="share-card-text">复制信息</text>
-      </button>
-      <view class="share-card-btn report-small" bindtap="onReport" wx:if="{{!isCreator && activity.id}}">
-        <text class="share-card-icon">🚩</text>
-        <text class="share-card-text">举报</text>
+    <!-- 复制 / 举报（不与底部「转发」重复图标入口） -->
+    <view class="extras-bar">
+      <view class="extras-inner">
+        <view class="extras-chip" bindtap="onCopyLink">
+          <text class="extras-chip-ico">📋</text>
+          <text class="extras-chip-txt">复制活动摘要</text>
+        </view>
+        <view class="extras-chip extras-chip--danger" wx:if="{{!isCreator && activity.id}}" bindtap="onReport">
+          <text class="extras-chip-ico">⚑</text>
+          <text class="extras-chip-txt">举报</text>
+        </view>
       </view>
     </view>
 
@@ -213,8 +227,8 @@
       <view class="registered-tag">
         <text class="registered-check">✓</text><text>已报名</text>
       </view>
-      <button class="btn btn-outline btn-sm" open-type="share">分享</button>
-      <button class="btn btn-gray btn-sm" bindtap="onCancelRegistration">取消报名</button>
+      <button class="btn btn-primary btn-sm flex-1" open-type="share">转发给好友</button>
+      <button class="btn btn-gray btn-sm flex-1" bindtap="onCancelRegistration">取消报名</button>
     </view>
     <view wx:elif="{{isCreator}}" class="creator-bar">
       <button class="share-btn" open-type="share">

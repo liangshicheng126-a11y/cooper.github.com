@@ -102,7 +102,7 @@ exports.getById = async (req, res, next) => {
     // 最近报名者头像
     const recentRegistrants = await query(
       `SELECT u.avatar_url AS avatarUrl FROM registrations r
-       JOIN users u ON r.user_openid = u.openid
+       LEFT JOIN users u ON r.user_openid = u.openid
        WHERE r.activity_id = ? AND r.cancelled_at IS NULL
        ORDER BY r.created_at DESC LIMIT 8`,
       [id]
