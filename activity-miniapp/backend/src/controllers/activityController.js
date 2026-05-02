@@ -52,7 +52,7 @@ exports.list = async (req, res, next) => {
       SELECT a.*, u.nickname AS creator_nickname, u.avatar_url AS creator_avatar,
              (SELECT COUNT(*) FROM registrations r WHERE r.activity_id = a.id AND r.cancelled_at IS NULL) AS registration_count
       FROM activities a
-      JOIN users u ON a.creator_openid = u.openid
+      LEFT JOIN users u ON a.creator_openid = u.openid
       WHERE ${where}
       ORDER BY a.created_at DESC
       LIMIT ${size} OFFSET ${offset}

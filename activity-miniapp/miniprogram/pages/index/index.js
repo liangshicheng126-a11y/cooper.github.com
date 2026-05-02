@@ -35,18 +35,17 @@ Page({
       this.setData({ showPrivacy: true })
       return
     }
-    this._init()
+    this._initMeta()
   },
 
   onShow() {
-    // 同步自定义 tabBar 选中状态
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setSelected(0)
     }
     const app = getApp()
-    if (app.globalData.privacyAgreed && !this.data.activities.length) {
-      this._init()
-    }
+    if (!app.globalData.privacyAgreed) return
+    // 每次页面显示都刷新列表，确保新发布的活动能立即出现
+    this._loadActivities(true)
   },
 
   _init() {
@@ -59,7 +58,21 @@ Page({
     const app = getApp()
     app.globalData.privacyAgreed = true
     this.setData({ showPrivacy: false })
-    app._autoLogin().then(() => this._init())
+    app._autoLogin().then(() => {
+      this._initMeta()
+      this._loadActivities(true)
+    })
+  },
+
+  // 初始化语言、banner 等非列表内容（只需执行一次）
+  _initMeta() {
+    this.setData({ langText: i18n.getLanguage() === 'zh' ? 'English' : '中文' })
+    this._loadBanners()
+  },
+
+  _init() {
+    this._initMeta()
+    this._loadActivities(true)
   },
 
   async _loadActivities(reset = false) {

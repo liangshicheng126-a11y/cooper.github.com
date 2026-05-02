@@ -1,12 +1,12 @@
 <!-- pages/activity-detail/index.wxml -->
-<view class="page">
+<view class="page-wrap">
 
-  <!-- 固定返回按钮（在 scroll-view 外部保证始终可见） -->
+  <!-- 固定返回按钮 -->
   <view class="back-btn" bindtap="goBack">
     <text class="back-arrow">‹</text>
   </view>
 
-  <!-- 加载骨架屏 -->
+  <!-- 骨架屏（加载中） -->
   <view wx:if="{{loading}}" class="skeleton-wrap">
     <view class="skeleton-cover skeleton-shine" />
     <view class="skeleton-body">
@@ -24,42 +24,30 @@
     <view class="btn btn-primary btn-sm" style="margin-top:24rpx;" bindtap="onRetry">重新加载</view>
   </view>
 
-  <!-- 主内容 -->
-  <scroll-view wx:else scroll-y class="scroll-view" enhanced="{{true}}" show-scrollbar="{{false}}">
+  <!-- ===== 正文内容（原生滚动） ===== -->
+  <block wx:else>
 
     <!-- 封面图 -->
     <view class="cover-section">
-      <image
-        wx:if="{{activity.coverImage}}"
-        src="{{activity.coverImage}}"
-        mode="aspectFill"
-        class="cover-image"
-      />
-      <view wx:else class="cover-placeholder">
-        <text class="cover-emoji">🎊</text>
-      </view>
+      <image wx:if="{{activity.coverImage}}" src="{{activity.coverImage}}" mode="aspectFill" class="cover-image" />
+      <view wx:else class="cover-placeholder"><text class="cover-emoji">🎊</text></view>
       <view class="cover-gradient" />
     </view>
 
     <!-- 主信息卡 -->
     <view class="main-card">
-
-      <!-- 标题 & 状态 -->
       <view class="title-row">
-        <text class="activity-title">{{activity.name || '加载中...'}}</text>
+        <text class="activity-title">{{activity.name}}</text>
         <view class="status-badge {{statusClass}}">
           <view class="pulse-dot" wx:if="{{statusKey === 'active'}}" />
           <text>{{statusText}}</text>
         </view>
       </view>
-
       <view class="divider" />
 
       <!-- 时间 -->
       <view class="info-item">
-        <view class="info-icon-wrap bg-blue">
-          <text class="info-emoji">📅</text>
-        </view>
+        <view class="info-icon-wrap bg-blue"><text class="info-emoji">📅</text></view>
         <view class="info-content">
           <text class="info-label">活动时间</text>
           <text class="info-value">{{startTimeText}}</text>
@@ -69,9 +57,7 @@
 
       <!-- 地点 -->
       <view class="info-item" bindtap="onNavigate" wx:if="{{activity.locationName}}">
-        <view class="info-icon-wrap bg-green">
-          <text class="info-emoji">📍</text>
-        </view>
+        <view class="info-icon-wrap bg-green"><text class="info-emoji">📍</text></view>
         <view class="info-content flex-1">
           <text class="info-label">活动地点</text>
           <text class="info-value">{{activity.locationName}}</text>
@@ -85,9 +71,7 @@
 
       <!-- 人数 -->
       <view class="info-item">
-        <view class="info-icon-wrap bg-purple">
-          <text class="info-emoji">👥</text>
-        </view>
+        <view class="info-icon-wrap bg-purple"><text class="info-emoji">👥</text></view>
         <view class="info-content flex-1">
           <text class="info-label">报名人数</text>
           <view class="participants-row">
@@ -122,18 +106,15 @@
         <text class="reminder-icon">💡</text>
         <text class="reminder-text">{{activity.reminder}}</text>
       </view>
-
     </view>
 
-    <!-- 场次选择 -->
+    <!-- 场次 -->
     <view class="section-card" wx:if="{{subActivities.length > 0}}">
       <view class="section-title">选择场次</view>
       <view
-        wx:for="{{subActivities}}"
-        wx:key="id"
+        wx:for="{{subActivities}}" wx:key="id"
         class="sub-item {{selectedSubId === item.id ? 'sub-selected' : ''}} {{item.isFull ? 'sub-disabled' : ''}}"
-        data-id="{{item.id}}"
-        bindtap="onSelectSub"
+        data-id="{{item.id}}" bindtap="onSelectSub"
       >
         <view class="sub-left">
           <view class="sub-radio {{selectedSubId === item.id ? 'radio-checked' : ''}}" />
@@ -165,12 +146,8 @@
     <view class="section-card" wx:if="{{registrantAvatars.length > 0}}">
       <view class="section-title">已报名（{{activity.registrationCount}}人）</view>
       <view class="avatar-list">
-        <image
-          wx:for="{{registrantAvatars}}"
-          wx:key="*this"
-          src="{{item || '/images/default-avatar.png'}}"
-          class="registrant-avatar"
-        />
+        <image wx:for="{{registrantAvatars}}" wx:key="*this"
+          src="{{item || '/images/default-avatar.png'}}" class="registrant-avatar" />
         <view class="avatar-more" wx:if="{{activity.registrationCount > 8}}">
           <text>+{{activity.registrationCount - 8}}</text>
         </view>
@@ -182,28 +159,22 @@
       <view class="section-title">管理操作</view>
       <view class="admin-actions">
         <view class="admin-action-btn" bindtap="onViewRegistrations">
-          <text class="admin-icon">📋</text>
-          <text>查看名单</text>
+          <text class="admin-icon">📋</text><text>查看名单</text>
         </view>
         <view class="admin-action-btn" bindtap="onCheckinQR">
-          <text class="admin-icon">✅</text>
-          <text>签到二维码</text>
+          <text class="admin-icon">✅</text><text>签到二维码</text>
         </view>
         <view class="admin-action-btn" bindtap="onShareQR">
-          <text class="admin-icon">🔗</text>
-          <text>分享二维码</text>
+          <text class="admin-icon">🔗</text><text>分享二维码</text>
         </view>
         <view class="admin-action-btn" bindtap="onNotifyAll">
-          <text class="admin-icon">🔔</text>
-          <text>通知全员</text>
+          <text class="admin-icon">🔔</text><text>通知全员</text>
         </view>
         <view class="admin-action-btn" bindtap="onEditActivity">
-          <text class="admin-icon">✏️</text>
-          <text>编辑活动</text>
+          <text class="admin-icon">✏️</text><text>编辑活动</text>
         </view>
         <view class="admin-action-btn danger" bindtap="onOfflineActivity" wx:if="{{activity.status !== 'offline'}}">
-          <text class="admin-icon">⏹</text>
-          <text>下架活动</text>
+          <text class="admin-icon">⏹</text><text>下架活动</text>
         </view>
       </view>
     </view>
@@ -224,20 +195,15 @@
       </view>
     </view>
 
-    <view style="height: 200rpx;" />
-  </scroll-view>
+  </block>
 
-  <!-- 底部操作栏 -->
+  <!-- 底部操作栏（固定） -->
   <view class="bottom-bar" wx:if="{{!loading && !loadError}}">
     <view wx:if="{{!isRegistered && !isCreator}}" class="bottom-main-row">
       <button class="share-btn" open-type="share">
         <text class="share-btn-icon">↗</text>
       </button>
-      <button
-        class="btn btn-primary flex-1 btn-lg"
-        bindtap="onRegister"
-        disabled="{{cannotRegister}}"
-      >
+      <button class="btn btn-primary flex-1 btn-lg" bindtap="onRegister" disabled="{{cannotRegister}}">
         <text wx:if="{{statusKey === 'full'}}">已报满</text>
         <text wx:elif="{{statusKey === 'ended'}}">活动已结束</text>
         <text wx:else>立即报名</text>
@@ -245,8 +211,7 @@
     </view>
     <view wx:elif="{{isRegistered && !isCreator}}" class="registered-bar">
       <view class="registered-tag">
-        <text class="registered-check">✓</text>
-        <text>已报名</text>
+        <text class="registered-check">✓</text><text>已报名</text>
       </view>
       <button class="btn btn-outline btn-sm" open-type="share">分享</button>
       <button class="btn btn-gray btn-sm" bindtap="onCancelRegistration">取消报名</button>

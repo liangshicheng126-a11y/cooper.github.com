@@ -98,7 +98,7 @@ Page({
         endTimeText: formatDate(activity.endTime, 'HH:mm'),
         durationText: getDurationText(activity.startTime, activity.endTime),
         progressPct: pct,
-        progressClass: pct >= 90 ? 'fill-danger' : pct >= 60 ? 'fill-warning' : 'fill-primary',
+        progressClass: pct >= 90 ? 'danger' : '',
         cannotRegister: ['ended', 'full', 'cancelled', 'offline'].includes(status),
         loading: false,
       })
@@ -229,10 +229,6 @@ Page({
     if (!activity.latitude || !activity.longitude) {
       wx.showToast({ title: '暂无坐标信息', icon: 'none' })
       return
-    }
-    const { activity } = this.data
-    if (!activity.latitude || !activity.longitude) {
-      return wx.showToast({ title: '暂无坐标信息', icon: 'none' })
     }
 
     // 海外地址（国内腾讯地图不支持），直接打开网页版地图
