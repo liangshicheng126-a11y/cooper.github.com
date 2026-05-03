@@ -3,7 +3,8 @@ const Joi = require('joi')
 
 function validate(schema, source = 'body') {
   return (req, res, next) => {
-    const { error } = schema.validate(req[source], { abortEarly: false })
+    // stripUnknown：未在 schema 声明的字段不触发 400（兼容缺 locationCountry 等旧版）；不把 value 写回 body，原字段仍留给控制器
+    const { error } = schema.validate(req[source], { abortEarly: false, stripUnknown: true })
     if (error) {
       const message = error.details.map(d => d.message).join('; ')
       return res.status(400).json({ code: 400, message })
