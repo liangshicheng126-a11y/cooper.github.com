@@ -6,7 +6,7 @@
       <text class="qr-title">活动现场核验码</text>
       <text class="qr-activity-name">{{activityName}}</text>
       <image src="{{qrcodeUrl}}" class="qr-image" mode="aspectFit" show-menu-by-longpress />
-      <text class="qr-hint">参与者扫描此二维码完成签到</text>
+      <text class="qr-hint">请参与者使用微信「扫一扫」扫描本二维码完成签到；码每小时更新，可点刷新</text>
       <button class="btn btn-outline btn-block mt-24" bindtap="refreshQR">刷新二维码</button>
       <button class="btn btn-primary btn-block mt-16" bindtap="saveQR">保存到相册</button>
     </view>
@@ -39,7 +39,7 @@
       <view class="scan-icon-wrap">
         <text class="scan-icon">📸</text>
       </view>
-      <text class="scan-hint">请在活动现场扫描签到码</text>
+      <text class="scan-hint">请使用微信右上角「扫一扫」扫描主办方出示的现场二维码；亦可请他人用微信扫描你的手机截图（勿在小程序内扫链接码）。</text>
       <button class="btn btn-primary btn-block btn-lg mt-32" bindtap="onScan">扫码签到</button>
     </view>
     <view wx:elif="{{checkinDone}}" class="checkin-success card">

@@ -227,7 +227,7 @@
     <!-- 已报名者：扫码签到（扫描主办方核验码） -->
     <view class="section-card registrant-checkin-card" wx:if="{{isRegistered && !isCreator}}">
       <view class="section-title">现场签到</view>
-      <text class="registrant-checkin-hint">到场后请使用下方入口，扫描主办方出示的二维码完成签到。</text>
+      <text class="registrant-checkin-hint">到场后请打开微信主界面「扫一扫」，扫描主办方出示的现场签到二维码即可自动完成签到。</text>
       <view class="admin-action-btn registrant-checkin-btn" bindtap="onRegistrantCheckin">
         <text class="admin-icon">📷</text><text>签到二维码</text>
       </view>

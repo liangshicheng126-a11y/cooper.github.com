@@ -2,8 +2,10 @@
 const { query, queryOne, transaction } = require('../config/db')
 const { getCache, setCache, delCache, delCacheByPattern, CACHE_TTL } = require('../config/redis')
 const wxService = require('../services/wxService')
+const { genCheckinToken } = require('../utils/checkinToken')
 const { v4: uuidv4 } = require('uuid')
 const logger = require('../utils/logger')
+const QRCode = require('qrcode')
 
 // 工具函数：活动可见性（发现广场以外入口：详情缓存、场次接口等）
 function viewerCanSeeActivitySnapshot({ moderationStatus, creatorOpenid, dbStatus }, viewerOid = '') {
@@ -359,11 +361,21 @@ exports.getCheckinQRCode = async (req, res, next) => {
     if (!activity || activity.creator_openid !== req.user.openid) {
       return res.status(403).json({ code: 403, message: '无权限' })
     }
-    const qrcode = await wxService.generateMiniQRCode(`activityId=${id}&type=checkin`)
+    const token = genCheckinToken(id)
+    const queryStr = `activityId=${id}&token=${token}`
+    const urlLink = await wxService.generateUrlLink({
+      path: 'pages/checkin/index',
+      query: queryStr,
+    })
+    const qrcodeUrl = await QRCode.toDataURL(urlLink, {
+      width: 640,
+      margin: 2,
+      errorCorrectionLevel: 'M',
+    })
     const total = await queryOne(
       'SELECT COUNT(*) AS cnt FROM registrations WHERE activity_id = ? AND cancelled_at IS NULL', [id]
     )
-    res.json({ code: 0, data: { qrcodeUrl: qrcode, totalRegistrations: total.cnt } })
+    res.json({ code: 0, data: { qrcodeUrl, totalRegistrations: total.cnt } })
   } catch (e) {
     next(e)
   }

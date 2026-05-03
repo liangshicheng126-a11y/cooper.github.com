@@ -164,6 +164,28 @@ async function notifyAdmins(message) {
   }
 }
 
+/** 生成 URL Link（https://wxaurl.cn/...），可用普通二维码承载；微信原生扫一扫可打开小程序并带上 query */
+async function generateUrlLink({ path, query }) {
+  const accessToken = await getAccessToken()
+  const { data } = await axios.post(
+    `https://api.weixin.qq.com/wxa/generate_urllink?access_token=${accessToken}`,
+    {
+      path,
+      query,
+      env_version: process.env.WX_MINI_ENV_VERSION || 'release',
+      is_expire: false,
+    }
+  )
+  if (data.errcode && data.errcode !== 0) {
+    logger.warn('[generate_urllink]', data.errcode, data.errmsg)
+    throw new Error(data.errmsg || '生成签到链接失败')
+  }
+  if (!data.url_link) {
+    throw new Error('微信未返回 url_link')
+  }
+  return data.url_link
+}
+
 // 生成小程序码
 async function generateMiniQRCode(scene) {
   try {
@@ -193,4 +215,5 @@ module.exports = {
   notifyAllRegistrants,
   notifyAdmins,
   generateMiniQRCode,
+  generateUrlLink,
 }
