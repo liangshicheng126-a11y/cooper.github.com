@@ -16,7 +16,7 @@ function validate(schema, source = 'body') {
 
 const schemas = {
   createActivity: Joi.object({
-    name: Joi.string().min(2).max(60).required(),
+    name: Joi.string().min(1).max(60).required(),
     description: Joi.string().max(5000).allow(''),
     startTime: Joi.string().isoDate().required(),
     endTime: Joi.string().isoDate().required(),
