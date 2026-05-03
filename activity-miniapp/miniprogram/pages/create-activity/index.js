@@ -468,6 +468,10 @@ Page({
       wx.showToast({ title: '封面上传未完成，请稍候或重新选择封面', icon: 'none' })
       return
     }
+    if (!String(form.locationName || '').trim()) {
+      wx.showToast({ title: '请选择活动地点', icon: 'none' })
+      return
+    }
     this.setData({ submitting: true })
     const normCoord = (v) => {
       if (v === '' || v === undefined || v === null) return null
@@ -506,14 +510,15 @@ Page({
         locationName: s.locationName || form.locationName,
       })),
     }
+    const body = JSON.parse(JSON.stringify(payload))
 
     try {
       if (isEdit) {
-        await request.put(`/activities/${activityId}`, payload)
+        await request.put(`/activities/${activityId}`, body)
         wx.showToast({ title: '修改成功', icon: 'success', duration: 1500 })
         setTimeout(() => wx.navigateBack(), 1500)
       } else {
-        const res = await request.post('/activities', payload)
+        const res = await request.post('/activities', body)
         const newId = res.data.id
         getApp().globalData.refreshHomeActivityListNextShow = true
         wx.showModal({

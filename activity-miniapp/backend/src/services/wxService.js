@@ -63,6 +63,9 @@ async function checkText(content) {
 /** 上架前：聚合所有可读文本分段送检 + 封面图 */
 async function moderateActivityPublish(payload) {
   if (skipContentModeration()) return
+  // 海外地址为用户任意原文，msg_sec_check 对外文/门牌等易误判或误拦截，不再送检地点相关字段
+  const isIntl = String(payload.locationCountry || 'CN').toUpperCase() === 'INTL'
+
   const parts = []
   const push = (v) => {
     if (v == null) return
@@ -73,8 +76,10 @@ async function moderateActivityPublish(payload) {
   push(payload.name)
   push(payload.description)
   push(payload.reminder)
-  push(payload.locationName)
-  push(payload.locationAddress)
+  if (!isIntl) {
+    push(payload.locationName)
+    push(payload.locationAddress)
+  }
 
   const fields = Array.isArray(payload.customFields) ? payload.customFields : []
   for (const f of fields) {
@@ -88,7 +93,7 @@ async function moderateActivityPublish(payload) {
   const subs = Array.isArray(payload.subActivities) ? payload.subActivities : []
   for (const s of subs) {
     push(s.name)
-    push(s.locationName)
+    if (!isIntl) push(s.locationName)
   }
 
   const blob = parts.join('\n')
