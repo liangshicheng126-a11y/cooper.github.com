@@ -16,6 +16,9 @@ function parseSceneQuery(qs) {
   return out
 }
 
+/** 主办方核验码定时刷新（与后端小时 token 对齐，避免长时间挂页后码失效） */
+const ADMIN_QR_REFRESH_MS = 30 * 60 * 1000
+
 Page({
   data: {
     activityId: null,
@@ -48,8 +51,45 @@ Page({
 
     this._loadActivityInfo()
     if (this.data.mode === 'admin') {
+      this._adminFirstShow = true
       this._loadQRCode()
       this.loadCheckinList()
+      this._startAdminQrAutoRefresh()
+    }
+  },
+
+  onShow() {
+    if (this.data.mode !== 'admin' || !this.data.activityId) return
+    if (this._adminFirstShow) {
+      this._adminFirstShow = false
+      return
+    }
+    this._loadQRCode({ silent: true })
+    this.loadCheckinList()
+    this._startAdminQrAutoRefresh()
+  },
+
+  onUnload() {
+    this._stopAdminQrAutoRefresh()
+  },
+
+  onHide() {
+    this._stopAdminQrAutoRefresh()
+  },
+
+  _startAdminQrAutoRefresh() {
+    this._stopAdminQrAutoRefresh()
+    this._adminQrTimer = setInterval(() => {
+      if (this.data.mode !== 'admin' || !this.data.activityId) return
+      this._loadQRCode({ silent: true })
+      this.loadCheckinList()
+    }, ADMIN_QR_REFRESH_MS)
+  },
+
+  _stopAdminQrAutoRefresh() {
+    if (this._adminQrTimer) {
+      clearInterval(this._adminQrTimer)
+      this._adminQrTimer = null
     }
   },
 
@@ -124,14 +164,27 @@ Page({
     } catch (e) {}
   },
 
-  async _loadQRCode() {
+  async _loadQRCode(opts = {}) {
+    const { silent } = opts
+    const firstPaint = !this.data.qrcodeUrl
+    if (firstPaint && !silent) {
+      wx.showLoading({ title: '生成核验码...', mask: true })
+    }
     try {
       const res = await request.get(`/activities/${this.data.activityId}/checkin-qrcode`)
       this.setData({
         qrcodeUrl: res.data.qrcodeUrl,
         totalRegistrations: res.data.totalRegistrations || 0,
       })
-    } catch (e) {}
+    } catch (e) {
+      if (!silent) {
+        wx.showToast({ title: e.message || '核验码生成失败', icon: 'none' })
+      }
+    } finally {
+      if (firstPaint && !silent) {
+        wx.hideLoading()
+      }
+    }
   },
 
   async loadCheckinList() {
@@ -146,9 +199,11 @@ Page({
     } catch (e) {}
   },
 
-  refreshQR() {
-    this._loadQRCode()
-    wx.showToast({ title: '已刷新', icon: 'success' })
+  async refreshQR() {
+    await this._loadQRCode()
+    if (this.data.qrcodeUrl) {
+      wx.showToast({ title: '已重新生成', icon: 'success' })
+    }
   },
 
   saveQR() {
