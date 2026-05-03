@@ -1,7 +1,6 @@
 {
   "navigationBarTitleText": "发布活动",
   "usingComponents": {
-    "custom-form": "/components/custom-form/index",
-    "location-picker": "/components/location-picker/index"
+    "custom-form": "/components/custom-form/index"
   }
 }

@@ -1,9 +1,6 @@
 // pages/create-activity/index.js
 const request = require('../../utils/request')
-const { GOOGLE_MAPS_KEY } = require('../../utils/config')
 const { toPickerValue, toPickerTimeValue } = require('../../utils/date')
-
-const isGoogleConfigured = GOOGLE_MAPS_KEY && GOOGLE_MAPS_KEY !== 'YOUR_GOOGLE_MAPS_KEY'
 
 const FIELD_TYPES = ['文本', '手机号', '邮箱', '身份证号', '单选', '多选', '下拉选择', '多行文本']
 const FIELD_TYPE_KEYS = ['text', 'phone', 'email', 'idCard', 'radio', 'checkbox', 'select', 'textarea']
@@ -21,17 +18,13 @@ Page({
     activityId: null,
     currentStep: 0,
     descriptionLen: 0,
-    showLocationPicker: false,
-    steps: ['基本信息', '时间地点', '报名设置'],
+    steps: ['基本信息', '时间与场次', '报名设置'],
     submitting: false,
     today: toPickerValue(new Date()),
     startDate: '',
     startTime: '',
     endDate: '',
     endTime: '',
-    mapMarkers: [],
-    useGoogleStaticMapPreview: false,
-    googleStaticMapPreviewUrl: '',
     activityTypes: [
       { key: 'sport', label: '运动', icon: '⚽' },
       { key: 'culture', label: '文化', icon: '🎭' },
@@ -54,16 +47,11 @@ Page({
       maxParticipants: '',
       requireInvite: false,
       inviteCode: '',
-      locationName: '',
-      locationAddress: '',
-      locationCountry: 'CN',
-      latitude: null,
-      longitude: null,
       customFields: [],
       subActivities: [],
     },
     previewFields: [],
-    /** 本页封面预览用本地临时路径；上传成功后仍保留，避免域名未配时远程图加载失败导致预览消失 */
+    /** 本页封面预览用本地临时路径；上传成功后仍保留，避免域名未配时远程图加载失败 */
     coverTempPath: '',
   },
 
@@ -92,11 +80,6 @@ Page({
           category: a.category || 'other',
           hasLimit: a.maxParticipants > 0,
           maxParticipants: a.maxParticipants > 0 ? String(a.maxParticipants) : '',
-          locationName: a.locationName || '',
-          locationAddress: a.locationAddress || '',
-          locationCountry: a.locationCountry || 'CN',
-          latitude: a.latitude,
-          longitude: a.longitude,
           customFields: a.customFields || [],
         },
         startDate: toPickerValue(startDt),
@@ -104,7 +87,6 @@ Page({
         endDate: toPickerValue(endDt),
         endTime: toPickerTimeValue(endDt),
       })
-      this._syncMapPreview()
     } catch (e) {
       wx.showToast({ title: '加载失败', icon: 'none' })
     } finally {
@@ -136,7 +118,6 @@ Page({
     this.setData({ endTime: e.detail.value })
   },
 
-  /** 无本地临时图、仅远程 URL 且加载失败时提示配置 downloadFile 域名 */
   onCoverImageError() {
     if (this.data.coverTempPath) return
     wx.showToast({
@@ -157,7 +138,6 @@ Page({
         wx.showLoading({ title: '上传中...' })
         try {
           const uploadRes = await request.upload('/upload/image', tempFile)
-          // 不清除 coverTempPath：预览继续用本地图；coverImage 存 COS URL 供提交。线上 URL 未进 downloadFile 域名时 image 组件会拉取失败。
           this.setData({ 'form.coverImage': uploadRes.data.url })
         } catch (e) {
           wx.showToast({ title: '上传失败，可重新点击封面重试', icon: 'none' })
@@ -168,98 +148,9 @@ Page({
     })
   },
 
-  openLocationPicker() {
-    this.setData({ showLocationPicker: true })
-  },
-
-  closeLocationPicker() {
-    this.setData({ showLocationPicker: false })
-  },
-
-  onLocationSelect(e) {
-    const { name, address, latitude, longitude, country } = e.detail
-    if ((country || '') === 'INTL') {
-      console.log('[create-activity][intl-location]', {
-        name,
-        address,
-        addressLength: typeof address === 'string' ? address.length : 0,
-        country,
-      })
-    }
-    const lat = latitude != null && latitude !== '' && Number.isFinite(Number(latitude))
-      ? Number(latitude)
-      : null
-    const lng = longitude != null && longitude !== '' && Number.isFinite(Number(longitude))
-      ? Number(longitude)
-      : null
-    this.setData({
-      showLocationPicker: false,
-      'form.locationName':       name,
-      'form.locationAddress':    address,
-      'form.locationCountry':    country || 'CN',
-      'form.latitude':           lat,
-      'form.longitude':          lng,
-    })
-    this._syncMapPreview()
-  },
-
-  _buildCreatePageStaticPreviewUrl(lat, lng, zoom) {
-    if (!isGoogleConfigured) return ''
-    const z = Math.max(5, Math.min(20, Math.round(zoom || 15)))
-    const latn = Number(lat)
-    const lngn = Number(lng)
-    if (Number.isNaN(latn) || Number.isNaN(lngn)) return ''
-    const mk = encodeURIComponent(`color:red|${latn},${lngn}`)
-    return `https://maps.googleapis.com/maps/api/staticmap?center=${latn},${lngn}&zoom=${z}&size=640x640&scale=2&markers=${mk}&key=${encodeURIComponent(GOOGLE_MAPS_KEY)}`
-  },
-
-  async chooseLocation() {
-    this.openLocationPicker()
-  },
-
-  _syncMapPreview() {
-    const { latitude, longitude, locationName, locationCountry } = this.data.form
-    if (!latitude || !longitude) {
-      this.setData({
-        mapMarkers: [],
-        useGoogleStaticMapPreview: false,
-        googleStaticMapPreviewUrl: '',
-      })
-      return
-    }
-    const useGoogle = Boolean(locationCountry && locationCountry !== 'CN' && isGoogleConfigured)
-    if (useGoogle) {
-      this.setData({
-        useGoogleStaticMapPreview: true,
-        googleStaticMapPreviewUrl: this._buildCreatePageStaticPreviewUrl(latitude, longitude, 15),
-        mapMarkers: [],
-      })
-      return
-    }
-    this.setData({
-      useGoogleStaticMapPreview: false,
-      googleStaticMapPreviewUrl: '',
-      mapMarkers: [{
-        id: 1, latitude, longitude,
-        title: locationName,
-        iconPath: '/images/map-marker.png',
-        width: 40, height: 40,
-      }],
-    })
-  },
-
-  onGooglePreviewImageError() {
-    wx.showToast({
-      title: '地图图加载失败：检查 Static API 与 downloadFile 域名',
-      icon: 'none',
-      duration: 3500,
-    })
-  },
-
-  // 子活动
   addSubActivity() {
     const subs = [...this.data.form.subActivities, {
-      name: '', startDate: '', startTime: '', endTime: '', maxParticipants: '', locationName: '',
+      name: '', startDate: '', startTime: '', endTime: '', maxParticipants: '',
     }]
     this.setData({ 'form.subActivities': subs })
   },
@@ -292,7 +183,6 @@ Page({
     this.setData({ 'form.subActivities': subs })
   },
 
-  // 报名字段
   setNoLimit()  { this.setData({ 'form.hasLimit': false }) },
   setHasLimit() { this.setData({ 'form.hasLimit': true }) },
 
@@ -316,7 +206,6 @@ Page({
     })
   },
   _randomCode(len = 6) {
-    // 排除 0/O/1/I 等易混淆字符，生成易读的邀请码
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
     let code = ''
     for (let i = 0; i < len; i++) code += chars[Math.floor(Math.random() * chars.length)]
@@ -433,10 +322,6 @@ Page({
         wx.showToast({ title: '请选择结束时间', icon: 'none' })
         return false
       }
-      if (!form.locationName) {
-        wx.showToast({ title: '请选择活动地点', icon: 'none' })
-        return false
-      }
       const start = new Date(`${startDate} ${startTime}`)
       const end = new Date(`${endDate} ${endTime}`)
       if (end <= start) {
@@ -468,16 +353,7 @@ Page({
       wx.showToast({ title: '封面上传未完成，请稍候或重新选择封面', icon: 'none' })
       return
     }
-    if (!String(form.locationName || '').trim()) {
-      wx.showToast({ title: '请选择活动地点', icon: 'none' })
-      return
-    }
     this.setData({ submitting: true })
-    const normCoord = (v) => {
-      if (v === '' || v === undefined || v === null) return null
-      const n = Number(v)
-      return Number.isFinite(n) ? n : null
-    }
     const payload = {
       name: form.name.trim(),
       description: form.description,
@@ -486,14 +362,14 @@ Page({
       category: form.category,
       startTime: `${startDate}T${startTime}:00`,
       endTime: `${endDate}T${endTime}:00`,
-      locationName: form.locationName,
-      locationAddress: form.locationAddress,
-      latitude: normCoord(form.latitude),
-      longitude: normCoord(form.longitude),
-      locationCountry: form.locationCountry || 'CN',
+      locationName: '',
+      locationAddress: '',
+      latitude: null,
+      longitude: null,
+      locationCountry: 'CN',
       maxParticipants: form.hasLimit ? Number(form.maxParticipants) : 0,
-      requireInvite:   form.requireInvite,
-      inviteCode:      form.requireInvite ? form.inviteCode : undefined,
+      requireInvite: form.requireInvite,
+      inviteCode: form.requireInvite ? form.inviteCode : undefined,
       customFields: form.customFields.filter(f => f.label).map(f => ({
         key: f.key,
         label: f.label,
@@ -507,7 +383,7 @@ Page({
         startTime: `${s.startDate || startDate}T${s.startTime || startTime}:00`,
         endTime: `${s.startDate || startDate}T${s.endTime || endTime}:00`,
         maxParticipants: s.maxParticipants ? Number(s.maxParticipants) : 0,
-        locationName: s.locationName || form.locationName,
+        locationName: '',
       })),
     }
     const body = JSON.parse(JSON.stringify(payload))

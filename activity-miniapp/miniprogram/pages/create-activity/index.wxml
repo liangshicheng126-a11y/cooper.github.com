@@ -73,7 +73,7 @@
       </view>
     </view>
 
-    <!-- Step 2: 时间地点 -->
+    <!-- Step 2: 时间与场次 -->
     <view class="step-content" wx:if="{{currentStep === 1}}">
       <view class="section-card card">
         <view class="section-title">时间设置</view>
@@ -104,46 +104,6 @@
               <text class="{{endTime ? 'picker-value' : 'picker-placeholder'}}">{{endTime || '选择时间'}}</text>
             </view>
           </picker>
-        </view>
-      </view>
-
-      <view class="section-card card">
-        <view class="section-title">地点设置</view>
-
-        <view class="form-group">
-          <view class="form-label">活动地点 <text class="form-required">*</text></view>
-          <view class="location-picker" bindtap="openLocationPicker">
-            <view wx:if="{{form.locationName}}" class="location-selected">
-              <view>
-                <text class="location-name">{{form.locationName}}</text>
-                <text class="location-addr">{{form.locationAddress}}</text>
-              </view>
-              <text class="location-change">更换</text>
-            </view>
-            <view wx:else class="location-empty">
-              <text class="location-icon">📍</text>
-              <text class="location-ph">选择活动地点</text>
-            </view>
-          </view>
-        </view>
-
-        <view class="map-preview" wx:if="{{form.latitude && form.longitude}}">
-          <image
-            wx:if="{{useGoogleStaticMapPreview}}"
-            class="create-map-preview google-static-preview"
-            mode="aspectFill"
-            src="{{googleStaticMapPreviewUrl}}"
-            binderror="onGooglePreviewImageError"
-          />
-          <map
-            wx:else
-            latitude="{{form.latitude}}"
-            longitude="{{form.longitude}}"
-            scale="15"
-            class="create-map-preview mini-map-tencent"
-            markers="{{mapMarkers}}"
-            show-location
-          />
         </view>
       </view>
 
@@ -320,11 +280,4 @@
       </button>
     </view>
   </view>
-
-  <!-- 地点选择弹窗 -->
-  <location-picker
-    show="{{showLocationPicker}}"
-    bind:close="closeLocationPicker"
-    bind:select="onLocationSelect"
-  />
 </view>

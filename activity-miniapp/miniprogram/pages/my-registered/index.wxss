@@ -73,9 +73,7 @@
 }
 
 .item-info-row { margin-top: 8rpx; }
-.item-loc-row { margin-top: 6rpx; }
 .item-time { font-size: 22rpx; color: rgba(30,27,75,0.45); }
-.item-loc { font-size: 22rpx; color: rgba(124,58,237,0.75); }
 
 .item-footer {
   display: flex;

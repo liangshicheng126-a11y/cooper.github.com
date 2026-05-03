@@ -53,10 +53,10 @@
   },
   "permission": {
     "scope.userLocation": {
-      "desc": "您的位置信息将用于活动地点导航及就近搜索"
+      "desc": "您的位置信息将用于就近搜索附近活动"
     }
   },
-  "requiredPrivateInfos": ["chooseLocation", "getLocation"],
+  "requiredPrivateInfos": ["getLocation"],
   "subPackages": [
     {
       "root": "packageLegal",

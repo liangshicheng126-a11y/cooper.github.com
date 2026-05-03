@@ -13,7 +13,7 @@
           <text class="policy-title">📋 我们收集的信息</text>
           <text class="policy-text">• 微信基础信息（昵称、头像）：用于展示您的身份</text>
           <text class="policy-text">• 活动报名信息（姓名、手机号等）：仅用于活动统计，对非活动创建者加密隐藏</text>
-          <text class="policy-text">• 位置信息（可选）：仅用于活动地点导航，不做持久化存储</text>
+          <text class="policy-text">• 位置信息（可选）：仅用于就近搜索活动，不做持久化存储</text>
         </view>
 
         <view class="policy-section">

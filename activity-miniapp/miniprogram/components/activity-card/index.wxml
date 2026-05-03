@@ -23,10 +23,6 @@
       <text class="info-icon">📅</text>
       <text class="info-text">{{startTime}}</text>
     </view>
-    <view class="info-row" wx:if="{{activity.locationName}}">
-      <text class="info-icon">📍</text>
-      <text class="info-text text-ellipsis">{{activity.locationName}}</text>
-    </view>
 
     <!-- 进度条 -->
     <view class="progress-section" wx:if="{{activity.maxParticipants > 0}}">

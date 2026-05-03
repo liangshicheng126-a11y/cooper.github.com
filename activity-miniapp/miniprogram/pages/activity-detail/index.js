@@ -2,7 +2,6 @@
 const request = require('../../utils/request')
 const { getMenuButtonAnchor } = require('../../utils/nav')
 const { formatDate, getDurationNatural, getActivityStatus } = require('../../utils/date')
-const { openNavigation } = require('../../utils/map')
 
 const CAT_LABEL = {
   sport: '运动', culture: '文化', volunteer: '公益', social: '社交', other: '其他',
@@ -303,36 +302,6 @@ Page({
     })
   },
 
-  onNavigate() {
-    const { activity } = this.data
-    if (!activity.latitude || !activity.longitude) {
-      wx.showToast({ title: '暂无坐标信息', icon: 'none' })
-      return
-    }
-
-    // 海外地址（国内腾讯地图不支持），直接打开网页版地图
-    const isIntl = activity.locationCountry === 'INTL' ||
-      (activity.latitude && (activity.latitude < 3 || activity.latitude > 55 ||
-       activity.longitude < 70 || activity.longitude > 140))
-
-    if (isIntl) {
-      const url = `https://maps.google.com/?q=${activity.latitude},${activity.longitude}`
-      wx.setClipboardData({
-        data: url,
-        success: () => {
-          wx.showModal({
-            title: '海外地址导航',
-            content: `Google Maps 链接已复制到剪贴板：\n${activity.locationName}\n\n可粘贴到浏览器打开导航`,
-            showCancel: false,
-            confirmText: '知道了',
-          })
-        },
-      })
-    } else {
-      openNavigation(activity.latitude, activity.longitude, activity.locationName)
-    }
-  },
-
   onViewRegistrations() {
     wx.navigateTo({ url: `/pages/admin/index?activityId=${this.data.activityId}&tab=list` })
   },
@@ -384,7 +353,6 @@ Page({
     const text = `【活动通知】
 📌 ${activity.name}
 📅 时间：${this.data.startTimeText}
-📍 地点：${activity.locationName || '待定'}
 👥 名额：${activity.maxParticipants > 0 ? `${activity.registrationCount}/${activity.maxParticipants}人` : `${activity.registrationCount}人已报名（不限）`}
 ${activity.reminder ? `💡 ${activity.reminder}\n` : ''}
 点击小程序报名 ↓`
@@ -523,13 +491,9 @@ ${activity.reminder ? `💡 ${activity.reminder}\n` : ''}
 
   onCopyLink() {
     const { activity, scheduleStartFull, scheduleEndFull } = this.data
-    const loc = activity.locationName
-      ? `${activity.locationName}${activity.locationAddress ? ' ' + activity.locationAddress : ''}`
-      : '待定'
     const lines = [
       `【${activity.name || '活动'}】`,
       `时间：${scheduleStartFull || ''} — ${scheduleEndFull || ''}`,
-      `地点：${loc}`,
       activity.reminder ? `提醒：${activity.reminder}` : '',
     ].filter(Boolean)
     wx.setClipboardData({
