@@ -17,6 +17,9 @@ exports.create = async (req, res, next) => {
 
     const activity = await queryOne('SELECT * FROM activities WHERE id = ?', [activityId])
     if (!activity) return res.status(404).json({ code: 404, message: '活动不存在' })
+    if ((activity.moderation_status || 'passed') !== 'passed') {
+      return res.status(400).json({ code: 400, message: '活动未公开或暂不可报名' })
+    }
     if (activity.status === 'offline' || activity.status === 'cancelled') {
       return res.status(400).json({ code: 400, message: '活动已下架或取消' })
     }

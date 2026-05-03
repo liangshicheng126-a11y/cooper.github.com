@@ -5,6 +5,14 @@ const wxService = require('../services/wxService')
 const { v4: uuidv4 } = require('uuid')
 const logger = require('../utils/logger')
 
+// 工具函数：活动可见性（发现广场以外入口：详情缓存、场次接口等）
+function viewerCanSeeActivitySnapshot({ moderationStatus, creatorOpenid, dbStatus }, viewerOid = '') {
+  const mod = moderationStatus || 'passed'
+  if (mod !== 'passed' && viewerOid !== creatorOpenid) return false
+  if (dbStatus && ['offline', 'frozen'].includes(dbStatus) && viewerOid !== creatorOpenid) return false
+  return true
+}
+
 // 工具函数：获取活动状态
 function getStatus(activity) {
   const now = new Date()
@@ -75,7 +83,8 @@ exports.list = async (req, res, next) => {
       if (cached) return res.json({ code: 0, data: cached })
     }
 
-    let where = "a.status != 'offline'"
+    let where =
+      "a.status NOT IN ('offline','frozen') AND COALESCE(a.moderation_status, 'passed') = 'passed'"
     const params = []
     if (keyword) {
       where += ' AND (a.name LIKE ? OR a.location_name LIKE ? OR a.description LIKE ?)'
@@ -115,7 +124,8 @@ exports.featured = async (req, res, next) => {
     if (cached) return res.json({ code: 0, data: cached })
     const list = await query(`
       SELECT a.*, (SELECT COUNT(*) FROM registrations r WHERE r.activity_id = a.id AND r.cancelled_at IS NULL) AS registration_count
-      FROM activities a WHERE a.status != 'offline' AND a.start_time > NOW()
+      FROM activities a WHERE a.status NOT IN ('offline','frozen')
+        AND COALESCE(a.moderation_status, 'passed') = 'passed' AND a.start_time > NOW()
       ORDER BY registration_count DESC LIMIT 5
     `)
     await setCache('activities:featured', list.map(formatActivity), CACHE_TTL.FEATURED)
@@ -128,9 +138,24 @@ exports.featured = async (req, res, next) => {
 exports.getById = async (req, res, next) => {
   try {
     const { id } = req.params
+    const viewerOid = req.user?.openid || ''
     const cacheKey = `activity:${id}`
+
     const cached = await getCache(cacheKey)
-    if (cached) return res.json({ code: 0, data: cached })
+    if (cached) {
+      const okCache = viewerCanSeeActivitySnapshot(
+        {
+          moderationStatus: cached.moderationStatus,
+          creatorOpenid: cached.creatorOpenid,
+          dbStatus: cached.dbStatus || cached.rawStatus,
+        },
+        viewerOid,
+      )
+      if (!okCache) {
+        return res.status(404).json({ code: 404, message: '活动不存在或未公开' })
+      }
+      return res.json({ code: 0, data: cached })
+    }
 
     const activity = await queryOne(`
       SELECT a.*, u.nickname AS creator_nickname, u.avatar_url AS creator_avatar,
@@ -141,6 +166,19 @@ exports.getById = async (req, res, next) => {
     `, [id])
 
     if (!activity) return res.status(404).json({ code: 404, message: '活动不存在' })
+
+    if (
+      !viewerCanSeeActivitySnapshot(
+        {
+          moderationStatus: activity.moderation_status || 'passed',
+          creatorOpenid: activity.creator_openid,
+          dbStatus: activity.status,
+        },
+        viewerOid,
+      )
+    ) {
+      return res.status(404).json({ code: 404, message: '活动不存在或未公开' })
+    }
 
     // 最近报名者头像
     const recentRegistrants = await query(
@@ -171,17 +209,15 @@ exports.create = async (req, res, next) => {
     const body = req.body
     const id = uuidv4()
 
-    // 内容安全检查
-    await wxService.checkText(body.name + ' ' + (body.description || ''))
-    if (body.coverImage) await wxService.checkImage(body.coverImage)
+    await wxService.moderateActivityPublish(body)
 
     await transaction(async (conn) => {
       await conn.execute(
         `INSERT INTO activities
           (id, creator_openid, name, description, start_time, end_time, location_name, location_address, location_country,
            latitude, longitude, max_participants, require_invite, invite_code, category, cover_image, reminder,
-           wx_group_chat_name, wx_group_chat_qrcode_url, custom_fields, status, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '', '', ?, 'upcoming', NOW())`,
+           wx_group_chat_name, wx_group_chat_qrcode_url, custom_fields, moderation_status, status, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '', '', ?, 'passed', 'upcoming', NOW())`,
         [id, req.user.openid, body.name, body.description || '', body.startTime, body.endTime,
          body.locationName || '', body.locationAddress || '', body.locationCountry || 'CN',
          body.latitude || null, body.longitude || null, body.maxParticipants || 0,
@@ -218,11 +254,12 @@ exports.update = async (req, res, next) => {
     if (activity.creator_openid !== req.user.openid) return res.status(403).json({ code: 403, message: '无权限' })
 
     const body = req.body
+    await wxService.moderateActivityPublish(body)
     await query(
       `UPDATE activities SET name=?, description=?, start_time=?, end_time=?, location_name=?,
        location_address=?, location_country=?, latitude=?, longitude=?, max_participants=?,
        require_invite=?, invite_code=?, category=?, cover_image=?,
-       reminder=?, custom_fields=?, updated_at=NOW() WHERE id=?`,
+       reminder=?, custom_fields=?, moderation_status='passed', updated_at=NOW() WHERE id=?`,
       [body.name, body.description || '', body.startTime, body.endTime, body.locationName || '',
        body.locationAddress || '', body.locationCountry || 'CN', body.latitude || null, body.longitude || null,
        body.maxParticipants || 0,
@@ -263,6 +300,25 @@ exports.offline = async (req, res, next) => {
 exports.getSubActivities = async (req, res, next) => {
   try {
     const { id } = req.params
+    const a = await queryOne(
+      'SELECT creator_openid, moderation_status, status FROM activities WHERE id = ?',
+      [id]
+    )
+    if (!a) return res.status(404).json({ code: 404, message: '活动不存在' })
+    const viewer = req.user?.openid || ''
+    if (
+      !viewerCanSeeActivitySnapshot(
+        {
+          moderationStatus: a.moderation_status || 'passed',
+          creatorOpenid: a.creator_openid,
+          dbStatus: a.status,
+        },
+        viewer,
+      )
+    ) {
+      return res.status(404).json({ code: 404, message: '活动不存在或未公开' })
+    }
+
     const subs = await query(
       `SELECT s.*, (SELECT COUNT(*) FROM registrations r WHERE r.sub_activity_id = s.id AND r.cancelled_at IS NULL) AS registration_count
        FROM sub_activities s WHERE s.activity_id = ? ORDER BY s.start_time`,
@@ -364,6 +420,7 @@ exports.patchWxGroupChat = async (req, res, next) => {
         : ''
 
     if (!name) name = (activity.name || '').slice(0, 200)
+    await wxService.checkText(name)
     if (url) await wxService.checkImage(url)
 
     await query(
@@ -414,6 +471,8 @@ function formatActivity(a) {
     wxGroupChatName:       a.wx_group_chat_name || '',
     wxGroupChatQrcodeUrl:  a.wx_group_chat_qrcode_url || '',
     customFields: (() => { try { return JSON.parse(a.custom_fields || '[]') } catch(e) { return [] } })(),
+    moderationStatus: a.moderation_status || 'passed',
+    dbStatus: a.status,
     status: getStatus(a),
     creatorOpenid: a.creator_openid,
     creatorNickname: a.creator_nickname,

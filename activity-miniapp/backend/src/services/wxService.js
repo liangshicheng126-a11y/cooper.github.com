@@ -4,6 +4,10 @@ const { getCache, setCache } = require('../config/redis')
 const { query } = require('../config/db')
 const logger = require('../utils/logger')
 
+function skipContentModeration() {
+  return process.env.NODE_ENV === 'development' || process.env.SKIP_CONTENT_MODERATION === '1'
+}
+
 async function getAccessToken() {
   const cached = await getCache('wx:access_token')
   if (cached) return cached
@@ -22,39 +26,99 @@ async function getAccessToken() {
   throw new Error('获取 access_token 失败: ' + data.errmsg)
 }
 
-// 文本内容安全检测
-async function checkText(content) {
-  if (process.env.NODE_ENV === 'development') return true
+/** 微信 msg_sec_check 单段长度限制较严，分段送检 */
+const MSG_SEC_CHUNK = 800
+
+async function msgSecCheckSingle(content) {
+  const trimmed = typeof content === 'string' ? content.trim() : ''
+  if (!trimmed || skipContentModeration()) return
   try {
     const token = await getAccessToken()
     const { data } = await axios.post(
       `https://api.weixin.qq.com/wxa/msg_sec_check?access_token=${token}`,
-      { content }
+      { content: trimmed.slice(0, 2490) }
     )
-    if (data.errcode !== 0) throw new Error(`内容违规: ${data.errmsg}`)
-    return true
+    if (data.errcode !== 0) {
+      logger.warn('[msg_sec_check]', data.errcode, data.errmsg)
+      throw new Error(`内容未通过安全检查：${data.errmsg || '请修改后重新提交'}`)
+    }
   } catch (e) {
-    logger.warn('Text check failed:', e.message)
-    if (e.message.includes('违规')) throw e
-    return true
+    if (e.message.includes('安全检查')) throw e
+    logger.error('msg_sec_check failed:', e.message)
+    throw new Error('内容安全校验服务暂不可用，请稍后重试')
   }
+}
+
+// 文本内容安全检测（整块；长文请用 moderateActivityPublish）
+async function checkText(content) {
+  if (!content || skipContentModeration()) return true
+  const s = typeof content === 'string' ? content : String(content)
+  for (let i = 0; i < s.length; i += MSG_SEC_CHUNK) {
+    const piece = s.slice(i, i + MSG_SEC_CHUNK).trim()
+    if (piece) await msgSecCheckSingle(piece)
+  }
+  return true
+}
+
+/** 上架前：聚合所有可读文本分段送检 + 封面图 */
+async function moderateActivityPublish(payload) {
+  if (skipContentModeration()) return
+  const parts = []
+  const push = (v) => {
+    if (v == null) return
+    const t = String(v).trim()
+    if (t) parts.push(t)
+  }
+
+  push(payload.name)
+  push(payload.description)
+  push(payload.reminder)
+  push(payload.locationName)
+  push(payload.locationAddress)
+
+  const fields = Array.isArray(payload.customFields) ? payload.customFields : []
+  for (const f of fields) {
+    push(f.label)
+    if (Array.isArray(f.options)) f.options.forEach((o) => push(o))
+    else if (typeof f.optionsStr === 'string') {
+      f.optionsStr.split(/[,，]/).map(s => s.trim()).filter(Boolean).forEach(push)
+    }
+  }
+
+  const subs = Array.isArray(payload.subActivities) ? payload.subActivities : []
+  for (const s of subs) {
+    push(s.name)
+    push(s.locationName)
+  }
+
+  const blob = parts.join('\n')
+  for (let i = 0; i < blob.length; i += MSG_SEC_CHUNK) {
+    const piece = blob.slice(i, i + MSG_SEC_CHUNK).trim()
+    if (piece) await msgSecCheckSingle(piece)
+  }
+
+  const cover = (payload.coverImage || '').trim()
+  if (cover) await checkImage(cover)
 }
 
 // 图片安全检测
 async function checkImage(imageUrl) {
-  if (process.env.NODE_ENV === 'development') return true
+  if (!imageUrl || skipContentModeration()) return true
   try {
     const token = await getAccessToken()
     const { data } = await axios.post(
       `https://api.weixin.qq.com/wxa/img_sec_check?access_token=${token}`,
       { media_url: imageUrl }
     )
-    if (data.errcode !== 0) throw new Error(`图片违规: ${data.errmsg}`)
+    if (data.errcode !== 0) {
+      logger.warn('[img_sec_check]', data.errcode, data.errmsg)
+      throw new Error(`图片未通过安全检查：${data.errmsg || '请更换封面后重试'}`)
+    }
     return true
   } catch (e) {
-    logger.warn('Image check failed:', e.message)
-    if (e.message.includes('违规')) throw e
-    return true
+    if (e.message.includes('安全检查')) throw e
+    logger.error('img_sec_check failed:', e.message)
+    throw new Error('图片安全校验服务暂不可用，请稍后重试')
   }
 }
 
@@ -119,4 +183,14 @@ async function generateMiniQRCode(scene) {
   }
 }
 
-module.exports = { getAccessToken, checkText, checkImage, sendSubscribeMessage, notifyAllRegistrants, notifyAdmins, generateMiniQRCode }
+module.exports = {
+  getAccessToken,
+  skipContentModeration,
+  checkText,
+  checkImage,
+  moderateActivityPublish,
+  sendSubscribeMessage,
+  notifyAllRegistrants,
+  notifyAdmins,
+  generateMiniQRCode,
+}

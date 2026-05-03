@@ -16,7 +16,9 @@ cron.schedule('*/10 * * * *', async () => {
     const activities24h = await query(
       `SELECT a.id, a.name, a.start_time FROM activities a
        WHERE a.start_time BETWEEN ? AND ?
-       AND a.status != 'offline' AND a.reminded_24h = 0`,
+       AND a.status NOT IN ('offline','frozen')
+       AND COALESCE(a.moderation_status, 'passed') = 'passed'
+       AND a.reminded_24h = 0`,
       [now.toISOString(), in24h.toISOString()]
     )
 
@@ -29,7 +31,9 @@ cron.schedule('*/10 * * * *', async () => {
     const activities1h = await query(
       `SELECT a.id, a.name, a.start_time FROM activities a
        WHERE a.start_time BETWEEN ? AND ?
-       AND a.status != 'offline' AND a.reminded_1h = 0`,
+       AND a.status NOT IN ('offline','frozen')
+       AND COALESCE(a.moderation_status, 'passed') = 'passed'
+       AND a.reminded_1h = 0`,
       [now.toISOString(), in1h.toISOString()]
     )
 
