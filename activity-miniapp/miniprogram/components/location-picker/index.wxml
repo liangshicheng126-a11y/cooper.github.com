@@ -42,22 +42,21 @@
         </view>
       </view>
 
-      <!-- 海外：仅文本，解析后直接采用 -->
+      <!-- 海外：仅文本保存，不调地理编码 -->
       <view wx:else class="mode-body">
         <view class="text-input-section">
           <view class="section-label">✏️ 海外活动地址</view>
           <view class="text-addr-row">
             <input
               class="text-addr-input"
-              placeholder="输入完整街道地址"
+              placeholder="输入活动地址全文"
               value="{{textAddress}}"
               bindinput="onTextAddressInput"
-              confirm-type="search"
-              bindconfirm="geocodeTextAddressIntl"
+              confirm-type="done"
+              bindconfirm="confirmIntlTextOnly"
             />
-            <view class="addr-search-btn {{geocoding?'addr-search-btn--loading':''}}" bindtap="geocodeTextAddressIntl">
-              <text wx:if="{{!geocoding}}">确定</text>
-              <text wx:else>…</text>
+            <view class="addr-search-btn" bindtap="confirmIntlTextOnly">
+              <text>确定</text>
             </view>
           </view>
         </view>

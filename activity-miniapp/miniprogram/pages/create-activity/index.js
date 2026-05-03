@@ -165,13 +165,19 @@ Page({
 
   onLocationSelect(e) {
     const { name, address, latitude, longitude, country } = e.detail
+    const lat = latitude != null && latitude !== '' && Number.isFinite(Number(latitude))
+      ? Number(latitude)
+      : null
+    const lng = longitude != null && longitude !== '' && Number.isFinite(Number(longitude))
+      ? Number(longitude)
+      : null
     this.setData({
       showLocationPicker: false,
       'form.locationName':       name,
       'form.locationAddress':    address,
       'form.locationCountry':    country || 'CN',
-      'form.latitude':           latitude,
-      'form.longitude':          longitude,
+      'form.latitude':           lat,
+      'form.longitude':          lng,
     })
     this._syncMapPreview()
   },

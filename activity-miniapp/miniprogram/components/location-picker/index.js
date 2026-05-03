@@ -1,8 +1,7 @@
 // components/location-picker/index.js
-const { MAP_KEY, GOOGLE_MAPS_KEY } = require('../../utils/config')
+const { MAP_KEY } = require('../../utils/config')
 
 const isTencentConfigured = MAP_KEY && MAP_KEY !== 'YOUR_TENCENT_MAP_KEY'
-const isGoogleConfigured = GOOGLE_MAPS_KEY && GOOGLE_MAPS_KEY !== 'YOUR_GOOGLE_MAPS_KEY'
 
 Component({
   properties: {
@@ -38,15 +37,30 @@ Component({
       this.setData({ textAddress: e.detail.value })
     },
 
-    /** 海外：解析后直接采用，不使用地图微调 */
-    _emitIntlSelect(loc) {
+    _emitIntlSelect({ name, address, latitude = null, longitude = null, country = 'INTL' }) {
+      const lat =
+        latitude != null && latitude !== '' && Number.isFinite(Number(latitude))
+          ? Number(latitude)
+          : null
+      const lng =
+        longitude != null && longitude !== '' && Number.isFinite(Number(longitude))
+          ? Number(longitude)
+          : null
       this.triggerEvent('select', {
-        name:      loc.name,
-        address:   loc.address,
-        latitude:  loc.latitude,
-        longitude: loc.longitude,
-        country:   loc.country || 'INTL',
+        name,
+        address,
+        latitude: lat,
+        longitude: lng,
+        country,
       })
+    },
+
+    /** 海外：不校验、不解析，纯文本后直接回到上一页（由外层关闭弹层） */
+    confirmIntlTextOnly() {
+      const addr = this.data.textAddress.trim()
+      if (!addr) return wx.showToast({ title: '请输入地址', icon: 'none' })
+      const name = addr.length > 48 ? `${addr.slice(0, 48)}…` : addr
+      this._emitIntlSelect({ name, address: addr, country: 'INTL' })
     },
 
     geocodeTextAddress() {
@@ -80,59 +94,9 @@ Component({
       })
     },
 
-    geocodeTextAddressIntl() {
-      const addr = this.data.textAddress.trim()
-      if (!addr) return wx.showToast({ title: '请输入地址', icon: 'none' })
-      if (isGoogleConfigured) {
-        return this._googleForwardGeocodeAndEnter(addr)
-      }
-      return this._nominatimGeocodeAndEnter(addr, { region: 'INTL' })
-    },
-
-    _googleForwardGeocodeAndEnter(addr) {
-      this.setData({ geocoding: true })
-      wx.request({
-        url: 'https://maps.googleapis.com/maps/api/geocode/json',
-        data: { address: addr, key: GOOGLE_MAPS_KEY, language: 'zh-CN' },
-        success: (res) => {
-          const body = res.data || {}
-          if (body.status === 'OK' && body.results?.length) {
-            const loc = this._locFromGoogleGeocode(body.results[0], addr)
-            this.setData({ geocoding: false })
-            if (loc) this._emitIntlSelect(loc)
-            return
-          }
-          this.setData({ geocoding: false })
-          if (body.status === 'ZERO_RESULTS') {
-            wx.showToast({ title: '未找到该地址，试试更完整写法', icon: 'none' })
-            return
-          }
-          const msg = (body.error_message || 'Google Geocoding 解析失败').slice(0, 28)
-          wx.showToast({ title: msg, icon: 'none' })
-        },
-        fail: () => {
-          this.setData({ geocoding: false })
-          wx.showToast({ title: '网络错误', icon: 'none' })
-        },
-      })
-    },
-
-    _locFromGoogleGeocode(result, fallbackAddr) {
-      const loc = result?.geometry?.location
-      if (loc == null || loc.lat == null || loc.lng == null) return null
-      const formatted = result.formatted_address || fallbackAddr
-      const primary = formatted.split(',')[0]?.trim() || fallbackAddr
-      return {
-        name:      primary,
-        address:   formatted,
-        latitude:  typeof loc.lat === 'function' ? loc.lat() : Number(loc.lat),
-        longitude: typeof loc.lng === 'function' ? loc.lng() : Number(loc.lng),
-        country:   'INTL',
-      }
-    },
-
-    /** 境内无腾讯 Key：OSM→地图；海外：OSM/Google 后直接 select */
+    /** 仅中国区无腾讯 Key 时：OSM 解析后进入地图 */
     _nominatimGeocodeAndEnter(addr, { countrycodes, region }) {
+      if (region !== 'CN') return
       this.setData({ geocoding: true })
       const data = { q: addr, format: 'json', addressdetails: 1, limit: 1, 'accept-language': 'zh-CN,ko,en' }
       if (countrycodes) data.countrycodes = countrycodes
@@ -144,17 +108,13 @@ Component({
           this.setData({ geocoding: false })
           if (Array.isArray(res.data) && res.data.length > 0) {
             const item = res.data[0]
-            const loc = {
+            this._enterMapStep({
               name:      item.display_name.split(',')[0],
               address:   item.display_name,
               latitude:  parseFloat(item.lat),
               longitude: parseFloat(item.lon),
               country:   region,
-            }
-            if (region !== 'CN') {
-              return this._emitIntlSelect(loc)
-            }
-            this._enterMapStep(loc)
+            })
           } else {
             wx.showToast({ title: '未找到该地址，请细化或换一种表述', icon: 'none' })
           }
@@ -166,7 +126,6 @@ Component({
       })
     },
 
-    /** 仅中国：进入地图确认 */
     _enterMapStep(loc) {
       const marker = this._makeMarker(loc.latitude, loc.longitude)
       this.setData({
