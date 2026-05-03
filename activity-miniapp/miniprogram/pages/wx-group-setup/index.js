@@ -91,7 +91,7 @@ Page({
 
     this.setData({ submitting: true })
     try {
-      await request.patch(`/activities/${activityId}/wx-group`, {
+      await request.put(`/activities/${activityId}/wx-group`, {
         wxGroupChatName: nameTrim.slice(0, 200),
         wxGroupChatQrcodeUrl: (wxGroupChatQrcodeUrl || '').trim(),
       })

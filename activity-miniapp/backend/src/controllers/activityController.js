@@ -13,6 +13,15 @@ function viewerCanSeeActivitySnapshot({ moderationStatus, creatorOpenid, dbStatu
   return true
 }
 
+/** 与 upload.js 生成的 COS 外链一致：本服务已鉴权上传，避免 img_sec_check 对二维码/COS 偶发失败导致无法保存 */
+function isOurCosUploadedUrl(url) {
+  const bucket = process.env.COS_BUCKET
+  const region = process.env.COS_REGION
+  if (!bucket || !region || typeof url !== 'string' || !url.trim()) return false
+  const prefix = `https://${bucket}.cos.${region}.myqcloud.com/`
+  return url.startsWith(prefix)
+}
+
 // 工具函数：获取活动状态
 function getStatus(activity) {
   const now = new Date()
@@ -421,7 +430,7 @@ exports.patchWxGroupChat = async (req, res, next) => {
 
     if (!name) name = (activity.name || '').slice(0, 200)
     await wxService.checkText(name)
-    if (url) await wxService.checkImage(url)
+    if (url && !isOurCosUploadedUrl(url)) await wxService.checkImage(url)
 
     await query(
       `UPDATE activities SET wx_group_chat_name = ?, wx_group_chat_qrcode_url = ?, updated_at = NOW() WHERE id = ?`,

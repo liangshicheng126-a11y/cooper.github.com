@@ -35,6 +35,7 @@ async function request(method, url, data = {}, retry = 0) {
     wx.request({
       url: fullUrl,
       method,
+      timeout: HTTP_TIMEOUT_MS,
       data: payload,
       header: {
         'Content-Type': 'application/json',
