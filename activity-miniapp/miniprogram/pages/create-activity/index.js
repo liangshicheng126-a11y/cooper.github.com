@@ -461,6 +461,11 @@ Page({
     }
     this.setData({ submitting: true })
     const { form, startDate, startTime, endDate, endTime, isEdit, activityId } = this.data
+    const normCoord = (v) => {
+      if (v === '' || v === undefined || v === null) return null
+      const n = Number(v)
+      return Number.isFinite(n) ? n : null
+    }
     const payload = {
       name: form.name.trim(),
       description: form.description,
@@ -471,8 +476,8 @@ Page({
       endTime: `${endDate}T${endTime}:00`,
       locationName: form.locationName,
       locationAddress: form.locationAddress,
-      latitude: form.latitude,
-      longitude: form.longitude,
+      latitude: normCoord(form.latitude),
+      longitude: normCoord(form.longitude),
       locationCountry: form.locationCountry || 'CN',
       maxParticipants: form.hasLimit ? Number(form.maxParticipants) : 0,
       requireInvite:   form.requireInvite,

@@ -20,8 +20,9 @@ const schemas = {
     endTime: Joi.string().isoDate().required(),
     locationName: Joi.string().max(200).allow(''),
     locationAddress: Joi.string().max(500).allow(''),
-    latitude: Joi.number().allow(null),
-    longitude: Joi.number().allow(null),
+    // 海外纯文本地址无坐标；部分客户端会传 "" 而非 null，需 empty 否则 Joi 报 number 类型错误
+    latitude: Joi.number().allow(null).empty(''),
+    longitude: Joi.number().allow(null).empty(''),
     locationCountry: Joi.string().max(10).default('CN'),
     maxParticipants: Joi.number().integer().min(0).default(0),
     category: Joi.string().max(20).default('other'),
