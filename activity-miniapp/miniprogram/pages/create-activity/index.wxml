@@ -51,7 +51,7 @@
         <view class="form-group">
           <view class="form-label">活动封面</view>
           <view class="cover-picker" bindtap="chooseCoverImage">
-            <image wx:if="{{form.coverImage}}" src="{{form.coverImage}}" mode="aspectFill" class="cover-preview" />
+            <image wx:if="{{coverTempPath || form.coverImage}}" src="{{coverTempPath || form.coverImage}}" mode="aspectFill" class="cover-preview" />
             <view wx:else class="cover-placeholder-btn">
               <text class="cover-plus">+</text>
               <text class="cover-hint">点击上传封面图</text>

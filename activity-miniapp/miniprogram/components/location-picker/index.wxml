@@ -42,20 +42,21 @@
         </view>
       </view>
 
-      <!-- 海外：仅文本保存，不调地理编码 -->
+      <!-- 海外：自由文本，不解析、不校验格式 -->
       <view wx:else class="mode-body">
         <view class="text-input-section">
           <view class="section-label">✏️ 海外活动地址</view>
-          <view class="text-addr-row">
-            <input
-              class="text-addr-input"
-              placeholder="输入活动地址全文"
-              value="{{textAddress}}"
-              bindinput="onTextAddressInput"
-              confirm-type="done"
-              bindconfirm="confirmIntlTextOnly"
-            />
-            <view class="addr-search-btn" bindtap="confirmIntlTextOnly">
+          <textarea
+            class="text-addr-textarea"
+            placeholder="可输入任意文字（多行、门牌、地标等），不做地址校验与解析"
+            value="{{textAddress}}"
+            maxlength="500"
+            auto-height
+            bindinput="onTextAddressInput"
+          />
+          <view class="intl-actions">
+            <text class="intl-hint">提交时按原文保存，最长 500 字</text>
+            <view class="addr-search-btn addr-search-btn--intl" bindtap="confirmIntlTextOnly">
               <text>确定</text>
             </view>
           </view>

@@ -55,12 +55,21 @@ Component({
       })
     },
 
-    /** 海外：不校验、不解析，纯文本后直接回到上一页（由外层关闭弹层） */
+    /** 海外：不解析、不地理编码；原文登记（仅按库表长度截断），并打日志 */
     confirmIntlTextOnly() {
-      const addr = this.data.textAddress.trim()
-      if (!addr) return wx.showToast({ title: '请输入地址', icon: 'none' })
-      const name = addr.length > 48 ? `${addr.slice(0, 48)}…` : addr
-      this._emitIntlSelect({ name, address: addr, country: 'INTL' })
+      const raw = this.data.textAddress
+      if (raw.length === 0) {
+        return wx.showToast({ title: '请输入地址', icon: 'none' })
+      }
+      const address = raw.length > 500 ? raw.slice(0, 500) : raw
+      const name = address.length > 200 ? address.slice(0, 200) : address
+      console.log('[location-picker][intl] 海外地址原文登记', {
+        addressLength: address.length,
+        nameLength: name.length,
+        address,
+        name,
+      })
+      this._emitIntlSelect({ name, address, country: 'INTL' })
     },
 
     geocodeTextAddress() {

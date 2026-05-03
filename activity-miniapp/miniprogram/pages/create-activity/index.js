@@ -63,6 +63,8 @@ Page({
       subActivities: [],
     },
     previewFields: [],
+    /** 封面刚选中、上传完成前的本地临时路径，用于即时预览 */
+    coverTempPath: '',
   },
 
   onLoad(options) {
@@ -80,6 +82,7 @@ Page({
       const startDt = new Date(a.startTime)
       const endDt = new Date(a.endTime)
       this.setData({
+        coverTempPath: '',
         form: {
           ...this.data.form,
           name: a.name,
@@ -140,12 +143,16 @@ Page({
       sourceType: ['album', 'camera'],
       success: async (res) => {
         const tempFile = res.tempFiles[0].tempFilePath
+        this.setData({ coverTempPath: tempFile })
         wx.showLoading({ title: '上传中...' })
         try {
           const uploadRes = await request.upload('/upload/image', tempFile)
-          this.setData({ 'form.coverImage': uploadRes.data.url })
+          this.setData({
+            coverTempPath: '',
+            'form.coverImage': uploadRes.data.url,
+          })
         } catch (e) {
-          wx.showToast({ title: '上传失败', icon: 'none' })
+          wx.showToast({ title: '上传失败，可重新点击封面重试', icon: 'none' })
         } finally {
           wx.hideLoading()
         }
@@ -163,6 +170,14 @@ Page({
 
   onLocationSelect(e) {
     const { name, address, latitude, longitude, country } = e.detail
+    if ((country || '') === 'INTL') {
+      console.log('[create-activity][intl-location]', {
+        name,
+        address,
+        addressLength: typeof address === 'string' ? address.length : 0,
+        country,
+      })
+    }
     const lat = latitude != null && latitude !== '' && Number.isFinite(Number(latitude))
       ? Number(latitude)
       : null
@@ -440,6 +455,10 @@ Page({
   },
 
   async _submit() {
+    if (this.data.coverTempPath) {
+      wx.showToast({ title: '封面上传未完成，请稍候或重新选择封面', icon: 'none' })
+      return
+    }
     this.setData({ submitting: true })
     const { form, startDate, startTime, endDate, endTime, isEdit, activityId } = this.data
     const payload = {
