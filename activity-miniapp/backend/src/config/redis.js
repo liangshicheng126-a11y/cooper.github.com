@@ -105,6 +105,11 @@ async function getCacheOrLoad(key, loader, ttl = 300) {
   return promise
 }
 
+/** Redis 是否可用（scene 签到等能力依赖） */
+function cacheAvailable() {
+  return client.isOpen && client.isReady
+}
+
 module.exports = {
   client,
   getCache,
@@ -114,4 +119,5 @@ module.exports = {
   incrCache,
   getCacheOrLoad,
   CACHE_TTL,
+  cacheAvailable,
 }

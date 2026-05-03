@@ -45,7 +45,7 @@
       <view class="scan-icon-wrap">
         <text class="scan-icon">📸</text>
       </view>
-      <text class="scan-hint">请使用微信右上角「扫一扫」扫描主办方出示的现场二维码；亦可请他人用微信扫描你的手机截图（勿在小程序内扫链接码）。</text>
+      <text class="scan-hint">请使用微信右上角「扫一扫」扫描主办方出示的现场小程序码或海报码（个人主体为小程序码）；亦可请他人用微信扫描你的手机截图（勿在小程序内扫 wxaurl 链接码）。</text>
       <button class="btn btn-primary btn-block btn-lg mt-32" bindtap="onScan">扫码签到</button>
     </view>
     <view wx:elif="{{checkinDone}}" class="checkin-success card">

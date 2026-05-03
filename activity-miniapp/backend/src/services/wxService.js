@@ -186,6 +186,37 @@ async function generateUrlLink({ path, query }) {
   return data.url_link
 }
 
+/**
+ * 无数量限制小程序码（scene 最多 32 字符，仅 [0-9a-zA-Z] 等）。
+ * 个人主体无法用 URL Link 时，用短 scene + 服务端 Redis 映射 activityId/token。
+ */
+async function generateUnlimitedWxacodeBuffer(scene) {
+  const accessToken = await getAccessToken()
+  const sceneStr = String(scene).replace(/[^0-9A-Za-z]/g, '').slice(0, 32)
+  if (!sceneStr) throw new Error('scene 无效')
+  const { data } = await axios.post(
+    `https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=${accessToken}`,
+    {
+      scene: sceneStr,
+      page: 'pages/checkin/index',
+      width: 430,
+      env_version: process.env.WX_MINI_ENV_VERSION || 'release',
+    },
+    { responseType: 'arraybuffer' }
+  )
+  const buf = Buffer.from(data)
+  if (buf.length > 0 && buf[0] === 0x7b) {
+    try {
+      const j = JSON.parse(buf.toString('utf8'))
+      throw new Error(j.errmsg || `微信错误 ${j.errcode}`)
+    } catch (e) {
+      if (e instanceof SyntaxError) return buf
+      throw e
+    }
+  }
+  return buf
+}
+
 // 生成小程序码
 async function generateMiniQRCode(scene) {
   try {
@@ -216,4 +247,5 @@ module.exports = {
   notifyAdmins,
   generateMiniQRCode,
   generateUrlLink,
+  generateUnlimitedWxacodeBuffer,
 }

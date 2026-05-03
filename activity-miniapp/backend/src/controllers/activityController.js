@@ -1,6 +1,7 @@
 // src/controllers/activityController.js
+const crypto = require('crypto')
 const { query, queryOne, transaction } = require('../config/db')
-const { getCache, setCache, delCache, delCacheByPattern, CACHE_TTL } = require('../config/redis')
+const { getCache, setCache, delCache, delCacheByPattern, CACHE_TTL, cacheAvailable } = require('../config/redis')
 const wxService = require('../services/wxService')
 const { genCheckinToken } = require('../utils/checkinToken')
 const { parseJsonArray } = require('../utils/parseJsonField')
@@ -405,12 +406,40 @@ exports.getCheckinQRCode = async (req, res, next) => {
     }
     const token = genCheckinToken(id)
     const queryStr = `activityId=${id}&token=${token}`
-    const urlLink = await wxService.generateUrlLink({
-      path: 'pages/checkin/index',
-      query: queryStr,
-    })
     const opts = { width: 640, margin: 2, errorCorrectionLevel: 'M' }
-    const pngBuffer = await QRCode.toBuffer(urlLink, opts)
+    let pngBuffer
+    const forceMinicode = process.env.CHECKIN_QR_MODE === 'minicode'
+
+    if (!forceMinicode) {
+      try {
+        const urlLink = await wxService.generateUrlLink({
+          path: 'pages/checkin/index',
+          query: queryStr,
+        })
+        pngBuffer = await QRCode.toBuffer(urlLink, opts)
+      } catch (e) {
+        logger.warn('[getCheckinQRCode] URL Link 不可用（多为个人主体），改无限制小程序码', e.message)
+        if (!cacheAvailable()) {
+          return res.status(503).json({
+            code: 503,
+            message: '个人主体需使用小程序码签到，请先启动 Redis 后再生成核验码',
+          })
+        }
+        const sceneKey = crypto.randomBytes(8).toString('hex')
+        await setCache(`checkin:scene:${sceneKey}`, { activityId: id, token }, 7200)
+        pngBuffer = await wxService.generateUnlimitedWxacodeBuffer(sceneKey)
+      }
+    } else {
+      if (!cacheAvailable()) {
+        return res.status(503).json({
+          code: 503,
+          message: 'CHECKIN_QR_MODE=minicode 需要 Redis',
+        })
+      }
+      const sceneKey = crypto.randomBytes(8).toString('hex')
+      await setCache(`checkin:scene:${sceneKey}`, { activityId: id, token }, 7200)
+      pngBuffer = await wxService.generateUnlimitedWxacodeBuffer(sceneKey)
+    }
     let qrcodeUrl
     if (isCosReady()) {
       try {

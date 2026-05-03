@@ -117,7 +117,42 @@ Page({
   },
 
   async _entryFromScene(encodedScene) {
-    const scene = decodeURIComponent(encodedScene)
+    const scene = decodeURIComponent(encodedScene).trim()
+
+    // 个人主体：小程序码 scene 为 16 位 hex，后端 Redis 映射 activityId + token
+    if (/^[0-9a-fA-F]{16}$/.test(scene)) {
+      const code = scene.toLowerCase()
+      this.setData({ mode: 'user' })
+      try {
+        await this._ensureLoggedIn()
+      } catch (e) {
+        wx.showToast({ title: '请先登录后再签到', icon: 'none' })
+      }
+      let activityId
+      let token
+      try {
+        const res = await request.get(`/checkin/scene/${code}`)
+        activityId = res.data?.activityId
+        token = res.data?.token
+      } catch (e) {
+        await this._loadActivityInfo()
+        return
+      }
+      if (!activityId || !token) {
+        wx.showToast({ title: '无效的签到码', icon: 'none' })
+        await this._loadActivityInfo()
+        return
+      }
+      this.setData({ activityId })
+      await this._handleScanCheckin(activityId, token)
+      await this._loadActivityInfo()
+      if (this.data.checkinDone) {
+        const name = this.data.activityName || '活动'
+        wx.setNavigationBarTitle({ title: name + ' · 签到' })
+      }
+      return
+    }
+
     const params = parseSceneQuery(scene)
     const activityId = params.activityId
     this.setData({ activityId: activityId || null, mode: 'user' })

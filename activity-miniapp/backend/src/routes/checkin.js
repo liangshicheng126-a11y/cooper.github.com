@@ -3,6 +3,7 @@ const router = require('express').Router()
 const { auth } = require('../middleware/auth')
 const c = require('../controllers/checkinController')
 
+router.get('/scene/:code',  c.resolveCheckinScene)
 router.post('/',            auth, c.checkin)
 router.get('/:activityId',  auth, c.getCheckinQRData)
 
