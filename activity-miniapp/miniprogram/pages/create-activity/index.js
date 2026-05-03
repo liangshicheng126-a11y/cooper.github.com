@@ -63,7 +63,7 @@ Page({
       subActivities: [],
     },
     previewFields: [],
-    /** 封面刚选中、上传完成前的本地临时路径，用于即时预览 */
+    /** 本页封面预览用本地临时路径；上传成功后仍保留，避免域名未配时远程图加载失败导致预览消失 */
     coverTempPath: '',
   },
 
@@ -136,6 +136,16 @@ Page({
     this.setData({ endTime: e.detail.value })
   },
 
+  /** 无本地临时图、仅远程 URL 且加载失败时提示配置 downloadFile 域名 */
+  onCoverImageError() {
+    if (this.data.coverTempPath) return
+    wx.showToast({
+      title: '请将封面图域名加入小程序 downloadFile 合法域名',
+      icon: 'none',
+      duration: 3000,
+    })
+  },
+
   async chooseCoverImage() {
     wx.chooseMedia({
       count: 1,
@@ -147,10 +157,8 @@ Page({
         wx.showLoading({ title: '上传中...' })
         try {
           const uploadRes = await request.upload('/upload/image', tempFile)
-          this.setData({
-            coverTempPath: '',
-            'form.coverImage': uploadRes.data.url,
-          })
+          // 不清除 coverTempPath：预览继续用本地图；coverImage 存 COS URL 供提交。线上 URL 未进 downloadFile 域名时 image 组件会拉取失败。
+          this.setData({ 'form.coverImage': uploadRes.data.url })
         } catch (e) {
           wx.showToast({ title: '上传失败，可重新点击封面重试', icon: 'none' })
         } finally {
@@ -455,12 +463,12 @@ Page({
   },
 
   async _submit() {
-    if (this.data.coverTempPath) {
+    const { coverTempPath, form, startDate, startTime, endDate, endTime, isEdit, activityId } = this.data
+    if (coverTempPath && !form.coverImage) {
       wx.showToast({ title: '封面上传未完成，请稍候或重新选择封面', icon: 'none' })
       return
     }
     this.setData({ submitting: true })
-    const { form, startDate, startTime, endDate, endTime, isEdit, activityId } = this.data
     const normCoord = (v) => {
       if (v === '' || v === undefined || v === null) return null
       const n = Number(v)
