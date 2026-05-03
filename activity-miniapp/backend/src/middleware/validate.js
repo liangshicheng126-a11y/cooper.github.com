@@ -22,6 +22,7 @@ const schemas = {
     locationAddress: Joi.string().max(500).allow(''),
     latitude: Joi.number().allow(null),
     longitude: Joi.number().allow(null),
+    locationCountry: Joi.string().max(10).default('CN'),
     maxParticipants: Joi.number().integer().min(0).default(0),
     category: Joi.string().max(20).default('other'),
     coverImage: Joi.string().uri().allow('').allow(null),

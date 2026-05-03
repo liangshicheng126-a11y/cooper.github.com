@@ -121,6 +121,29 @@
       </view>
     </view>
 
+    <!-- 活动交流群 -->
+    <view
+      wx:if="{{hasWxGroupQr && wxGroupVisible}}"
+      id="wx-group-card"
+      class="section-card wx-group-card {{wxGroupHighlight ? 'wx-group-card--highlight' : ''}}"
+    >
+      <view class="section-head-row">
+        <view class="section-title section-title--bare">活动交流群（自愿加入）</view>
+      </view>
+      <text class="wx-group-name" wx:if="{{activity.wxGroupChatName}}">「{{activity.wxGroupChatName}}」</text>
+      <image
+        class="wx-group-qrcode"
+        src="{{activity.wxGroupChatQrcodeUrl}}"
+        mode="widthFix"
+        show-menu-by-longpress
+      />
+      <text class="wx-group-hint">长按二维码识别，是否加群请自行判断</text>
+    </view>
+    <view class="section-card wx-group-teaser" wx:elif="{{hasWxGroupQr && !wxGroupVisible}}">
+      <text class="section-title section-title--bare">活动交流群</text>
+      <text class="wx-group-teaser-desc">群主已上传群二维码，报名成功后可在此处自愿扫码加入。</text>
+    </view>
+
     <!-- 场次 -->
     <view class="section-card" wx:if="{{subActivities.length > 0}}">
       <view class="section-title">选择场次</view>
@@ -191,6 +214,9 @@
         </view>
         <view class="admin-action-btn" bindtap="onNotifyAll">
           <text class="admin-icon">🔔</text><text>通知全员</text>
+        </view>
+        <view class="admin-action-btn" bindtap="goWxGroupSetup">
+          <text class="admin-icon">👥</text><text>交流群设置</text>
         </view>
         <view class="admin-action-btn" bindtap="onEditActivity">
           <text class="admin-icon">✏️</text><text>编辑活动</text>

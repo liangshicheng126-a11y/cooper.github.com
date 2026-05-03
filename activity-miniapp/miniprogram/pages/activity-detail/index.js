@@ -47,6 +47,9 @@ Page({
     loading: true,
     navBackTop: 48,
     navBackHeight: 32,
+    wxGroupHighlight: false,
+    hasWxGroupQr: false,
+    wxGroupVisible: false,
   },
 
   onLoad(options) {
@@ -54,6 +57,7 @@ Page({
     this.setData({
       navBackTop: anchor.top,
       navBackHeight: anchor.height,
+      wxGroupHighlight: options.fromRegister === '1',
     })
 
     const id = options.id
@@ -103,6 +107,11 @@ Page({
       const scheduleDurationNatural = getDurationNatural(activity.startTime, activity.endTime)
       const categoryLabel = CAT_LABEL[activity.category] || CAT_LABEL.other
 
+      const qrUrl = activity.wxGroupChatQrcodeUrl ? String(activity.wxGroupChatQrcodeUrl).trim() : ''
+      const hasWxGroupQr = !!qrUrl
+      const loggedInOid = app.globalData.openid || ''
+      const wxGroupVisible = hasWxGroupQr && (!!regRes.data || activity.creatorOpenid === loggedInOid)
+
       this.setData({
         activity,
         subActivities,
@@ -111,6 +120,8 @@ Page({
         isRegistered: !!regRes.data,
         userRegistrationId: regRes.data?.id || null,
         isCreator: activity.creatorOpenid === app.globalData.openid,
+        hasWxGroupQr,
+        wxGroupVisible,
         statusKey: status,
         statusText: text,
         statusClass: cls,
@@ -125,6 +136,11 @@ Page({
         loading: false,
       })
       wx.setNavigationBarTitle({ title: activity.name })
+
+      const shouldScrollWx = this.data.wxGroupHighlight && hasWxGroupQr && wxGroupVisible
+      if (shouldScrollWx) {
+        wx.nextTick(() => this._scrollToWxGroup())
+      }
     } catch (e) {
       console.error('[activity-detail] 加载失败:', e)
       wx.showToast({ title: e.message || '加载失败', icon: 'none' })
@@ -137,6 +153,25 @@ Page({
   onRetry() {
     this.setData({ loadError: false })
     this._loadDetail(this.data.activityId)
+  },
+
+  _scrollToWxGroup() {
+    wx.createSelectorQuery()
+      .in(this)
+      .select('#wx-group-card')
+      .boundingClientRect()
+      .selectViewport()
+      .scrollOffset()
+      .exec((res) => {
+        const rect = res[0]
+        const scroll = res[1]
+        if (rect && scroll) {
+          wx.pageScrollTo({
+            scrollTop: scroll.scrollTop + rect.top - 120,
+            duration: 280,
+          })
+        }
+      })
   },
 
   _buildRegistrantSlots(activity) {
@@ -418,6 +453,10 @@ ${activity.reminder ? `💡 ${activity.reminder}\n` : ''}
 
   onEditActivity() {
     wx.navigateTo({ url: `/pages/create-activity/index?id=${this.data.activityId}` })
+  },
+
+  goWxGroupSetup() {
+    wx.navigateTo({ url: `/pages/wx-group-setup/index?id=${this.data.activityId}` })
   },
 
   async onReport() {

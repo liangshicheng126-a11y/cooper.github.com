@@ -10,7 +10,8 @@
     "pages/admin/index",
     "pages/checkin/index",
     "pages/poster/index",
-    "pages/search/index"
+    "pages/search/index",
+    "pages/wx-group-setup/index"
   ],
   "window": {
     "backgroundTextStyle": "dark",

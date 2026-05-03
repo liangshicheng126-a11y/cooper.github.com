@@ -179,15 +179,17 @@ exports.create = async (req, res, next) => {
       await conn.execute(
         `INSERT INTO activities
           (id, creator_openid, name, description, start_time, end_time, location_name, location_address, location_country,
-           latitude, longitude, max_participants, require_invite, invite_code, category, cover_image, reminder, custom_fields, status, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'upcoming', NOW())`,
+           latitude, longitude, max_participants, require_invite, invite_code, category, cover_image, reminder,
+           wx_group_chat_name, wx_group_chat_qrcode_url, custom_fields, status, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '', '', ?, 'upcoming', NOW())`,
         [id, req.user.openid, body.name, body.description || '', body.startTime, body.endTime,
          body.locationName || '', body.locationAddress || '', body.locationCountry || 'CN',
          body.latitude || null, body.longitude || null, body.maxParticipants || 0,
          body.requireInvite ? 1 : 0,
          body.requireInvite ? (body.inviteCode || null) : null,
          body.category || 'other',
-         body.coverImage || '', body.reminder || '', JSON.stringify(body.customFields || [])]
+         body.coverImage || '', body.reminder || '',
+         JSON.stringify(body.customFields || [])]
       )
 
       // 插入子活动
@@ -342,6 +344,41 @@ exports.report = async (req, res, next) => {
   }
 }
 
+/** 仅更新交流群名称与二维码（不影响编辑活动表单） */
+exports.patchWxGroupChat = async (req, res, next) => {
+  try {
+    const { id } = req.params
+    const activity = await queryOne('SELECT * FROM activities WHERE id = ?', [id])
+    if (!activity) return res.status(404).json({ code: 404, message: '活动不存在' })
+    if (activity.creator_openid !== req.user.openid) {
+      return res.status(403).json({ code: 403, message: '无权限' })
+    }
+
+    let name =
+      typeof req.body.wxGroupChatName === 'string'
+        ? req.body.wxGroupChatName.trim().slice(0, 200)
+        : ''
+    let url =
+      typeof req.body.wxGroupChatQrcodeUrl === 'string'
+        ? req.body.wxGroupChatQrcodeUrl.trim().slice(0, 800)
+        : ''
+
+    if (!name) name = (activity.name || '').slice(0, 200)
+    if (url) await wxService.checkImage(url)
+
+    await query(
+      `UPDATE activities SET wx_group_chat_name = ?, wx_group_chat_qrcode_url = ?, updated_at = NOW() WHERE id = ?`,
+      [name, url, id]
+    )
+    await delCache(`activity:${id}`)
+    await delCacheByPattern('activities:list*')
+
+    res.json({ code: 0, message: '已保存' })
+  } catch (e) {
+    next(e)
+  }
+}
+
 exports.myRegistration = async (req, res, next) => {
   try {
     const { id } = req.params
@@ -374,6 +411,8 @@ function formatActivity(a) {
     category: a.category,
     coverImage: a.cover_image,
     reminder: a.reminder,
+    wxGroupChatName:       a.wx_group_chat_name || '',
+    wxGroupChatQrcodeUrl:  a.wx_group_chat_qrcode_url || '',
     customFields: (() => { try { return JSON.parse(a.custom_fields || '[]') } catch(e) { return [] } })(),
     status: getStatus(a),
     creatorOpenid: a.creator_openid,

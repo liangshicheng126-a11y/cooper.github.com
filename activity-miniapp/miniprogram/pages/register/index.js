@@ -91,7 +91,10 @@ Page({
         tmplIds: [SUBSCRIBE_TEMPLATES.REMIND_24H, SUBSCRIBE_TEMPLATES.REMIND_1H],
         fail: () => {},
       })
-      setTimeout(() => wx.navigateBack({ delta: 2 }), 1500)
+      const aid = this.data.activityId
+      setTimeout(() => {
+        wx.redirectTo({ url: `/pages/activity-detail/index?id=${aid}&fromRegister=1` })
+      }, 1200)
     } catch (e) {
       // 邀请码错误时定向提示
       if (e.requireInvite || e.message?.includes('邀请码')) {

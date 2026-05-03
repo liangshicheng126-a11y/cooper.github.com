@@ -43,8 +43,10 @@ CREATE TABLE IF NOT EXISTS activities (
   invite_code      VARCHAR(20) NULL DEFAULT NULL COMMENT '邀请码',
   category         VARCHAR(30) NOT NULL DEFAULT 'other' COMMENT '分类',
   cover_image      VARCHAR(500) NOT NULL DEFAULT '' COMMENT '封面图 URL',
-  reminder         VARCHAR(300) NOT NULL DEFAULT '' COMMENT '温馨提示',
-  custom_fields    JSON COMMENT '自定义报名字段模板',
+  reminder               VARCHAR(300) NOT NULL DEFAULT '' COMMENT '温馨提示',
+  wx_group_chat_name     VARCHAR(200) NOT NULL DEFAULT '' COMMENT '交流群展示名称',
+  wx_group_chat_qrcode_url VARCHAR(800) NOT NULL DEFAULT '' COMMENT '微信群二维码图片 URL',
+  custom_fields          JSON COMMENT '自定义报名字段模板',
   status           ENUM('upcoming','active','ended','full','cancelled','offline','frozen')
                    NOT NULL DEFAULT 'upcoming' COMMENT '活动状态',
   offline_reason   VARCHAR(500) COMMENT '下架理由',

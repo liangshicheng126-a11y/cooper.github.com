@@ -1,0 +1,77 @@
+.page {
+  min-height: 100vh;
+  padding: 32rpx 24rpx 80rpx;
+  box-sizing: border-box;
+  background: linear-gradient(145deg, #ede9fe 0%, #faf5ff 45%, #eff6ff 100%);
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 28rpx;
+  padding: 36rpx 28rpx;
+  box-shadow: 0 8rpx 28rpx rgba(120, 80, 220, 0.1);
+}
+
+.hint {
+  display: block;
+  font-size: 26rpx;
+  color: #6d28d9;
+  opacity: 0.85;
+  line-height: 1.5;
+  margin-bottom: 32rpx;
+}
+
+.field {
+  margin-bottom: 36rpx;
+}
+
+.label {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1e1b4b;
+  margin-bottom: 16rpx;
+}
+
+.input {
+  width: 100%;
+  padding: 20rpx 24rpx;
+  font-size: 28rpx;
+  border-radius: 16rpx;
+  background: #f5f3ff;
+  box-sizing: border-box;
+}
+
+.upload-row {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  margin-bottom: 16rpx;
+}
+
+.pick-btn {
+  flex: none;
+}
+
+.clear {
+  font-size: 26rpx;
+  color: #7c3aed;
+  text-decoration: underline;
+}
+
+.preview {
+  width: 100%;
+  max-width: 400rpx;
+  border-radius: 16rpx;
+  margin-top: 8rpx;
+}
+
+.mini-hint {
+  font-size: 24rpx;
+  color: #9ca3af;
+}
+
+.save-btn {
+  margin-top: 16rpx;
+  border-radius: 44rpx;
+}

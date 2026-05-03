@@ -484,10 +484,22 @@ Page({
         setTimeout(() => wx.navigateBack(), 1500)
       } else {
         const res = await request.post('/activities', payload)
+        const newId = res.data.id
         getApp().globalData.refreshHomeActivityListNextShow = true
-        // 先显示 toast，再立即跳转，toast 会持续显示在详情页
-        wx.showToast({ title: '🎉 发布成功！', icon: 'success', duration: 2000 })
-        wx.redirectTo({ url: `/pages/activity-detail/index?id=${res.data.id}` })
+        wx.showModal({
+          title: '发布成功',
+          content: '是否设置微信群，方便报名者自愿扫码加入交流群？可同时自定义群在本页的展示名称（默认与活动标题一致）。',
+          confirmText: '去设置',
+          cancelText: '暂不',
+          success: (m) => {
+            if (m.confirm) {
+              wx.redirectTo({ url: `/pages/wx-group-setup/index?id=${newId}&fromPublish=1` })
+            } else {
+              wx.showToast({ title: '🎉 发布成功！', icon: 'success', duration: 1800 })
+              wx.redirectTo({ url: `/pages/activity-detail/index?id=${newId}` })
+            }
+          },
+        })
       }
     } catch (e) {
       wx.showToast({ title: e.message || '提交失败', icon: 'none' })

@@ -99,6 +99,7 @@ module.exports = {
   get: (url, data) => request('GET', url, data),
   post: (url, data) => request('POST', url, data),
   put: (url, data) => request('PUT', url, data),
+  patch: (url, data) => request('PATCH', url, data),
   delete: (url, data) => request('DELETE', url, data),
   upload,
 }

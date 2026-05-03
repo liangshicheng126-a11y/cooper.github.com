@@ -44,6 +44,7 @@ App({
         this.globalData.token = token
         const res = await request.get('/auth/profile')
         this.globalData.userInfo = res.data
+        this.globalData.openid = res.data.openid || null
         this.globalData.isAdmin = res.data.isAdmin || false
       } else {
         await this.wxLogin()
