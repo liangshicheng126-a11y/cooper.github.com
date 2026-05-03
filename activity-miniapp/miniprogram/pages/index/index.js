@@ -1,7 +1,7 @@
 // pages/index/index.js
 const request = require('../../utils/request')
-const { formatDate } = require('../../utils/date')
 const i18n = require('../../utils/i18n')
+const { withListRowTimes, bannerRowStartTime } = require('../../utils/activityFormat')
 
 const PAGE_SIZE = 10
 
@@ -93,17 +93,13 @@ Page({
     this._loadBanners()
   },
 
-  /** 将界面文案、分类、列表日期格式与语言对齐；localeRev 促使活动卡片重算状态文案 */
+  /** 将界面文案、分类与语言对齐；仅在语言切换时刷新 localeRev 与已缓存列表的日期格式，避免每次 onShow 整表重算 */
   _applyLocale() {
-    const zh = i18n.getLanguage() === 'zh'
-    const bannerList = (this.data.bannerList || []).map((a) => ({
-      ...a,
-      startTimeText: formatDate(a.startTime, zh ? 'MM月DD日' : 'MM-DD'),
-    }))
-    const activities = (this.data.activities || []).map((a) => ({
-      ...a,
-      startTimeText: formatDate(a.startTime, zh ? 'MM月DD日 HH:mm' : 'MM-DD HH:mm'),
-    }))
+    const cur = i18n.getLanguage()
+    const first = this._i18nSyncedLang === undefined
+    const langChanged = first || this._i18nSyncedLang !== cur
+    this._i18nSyncedLang = cur
+
     const categories = CATEGORY_DEF.map(({ key, icon, labelKey }) => ({
       key,
       icon,
@@ -111,8 +107,8 @@ Page({
     }))
     const activeKey = this.data.activeCategory || 'all'
     const lk = LIST_TITLE_KEYS[activeKey] || 'listTitleAll'
-    const localeRev = (this.data.localeRev || 0) + 1
-    this.setData({
+
+    const patch = {
       categories,
       listTitle: i18n.t(lk),
       langText: i18n.t('switchLang'),
@@ -122,26 +118,30 @@ Page({
       emptySubActivities: i18n.t('emptySubActivities'),
       loadingEllipsis: i18n.t('loadingEllipsis'),
       loadedAllFooter: i18n.t('loadedAllFooter'),
-      bannerList,
-      activities,
-      localeRev,
-    })
+    }
+
+    if (langChanged) {
+      patch.bannerList = (this.data.bannerList || []).map((a) => ({
+        ...a,
+        startTimeText: bannerRowStartTime(a.startTime),
+      }))
+      patch.activities = (this.data.activities || []).map(withListRowTimes)
+      patch.localeRev = (this.data.localeRev || 0) + 1
+    }
+
+    this.setData(patch)
   },
 
-  _fmtActivityRow(a) {
-    const zh = i18n.getLanguage() === 'zh'
-    return {
-      ...a,
-      startTimeText: formatDate(a.startTime, zh ? 'MM月DD日 HH:mm' : 'MM-DD HH:mm'),
-    }
-  },
   async _loadActivities(reset = false) {
     // reset 时必须允许打断进行中的分页加载，否则会跳过刷新导致看不到刚发布的活动
     if (!reset && (this.data.loading || this.data.loadingMore)) return
     const page = reset ? 1 : this.data.page
 
-    this.setData({ [reset ? 'loading' : 'loadingMore']: true })
-    if (reset) this.setData({ activities: [], noMore: false })
+    if (reset) {
+      this.setData({ loading: true, activities: [], noMore: false })
+    } else {
+      this.setData({ loadingMore: true })
+    }
 
     try {
       const q = { page, size: PAGE_SIZE, sort: this.data.listSort }
@@ -172,7 +172,7 @@ Page({
       }
 
       const res = await request.get('/activities', q)
-      const list = (res.data?.list || []).map(a => this._fmtActivityRow({ ...a }))
+      const list = (res.data?.list || []).map((a) => withListRowTimes({ ...a }))
       this.setData({
         activities: reset ? list : [...this.data.activities, ...list],
         page: page + 1,
@@ -189,11 +189,10 @@ Page({
   async _loadBanners() {
     try {
       const res = await request.get('/activities/featured')
-      const zh = i18n.getLanguage() === 'zh'
       this.setData({
-        bannerList: (res.data || []).map(a => ({
+        bannerList: (res.data || []).map((a) => ({
           ...a,
-          startTimeText: formatDate(a.startTime, zh ? 'MM月DD日' : 'MM-DD'),
+          startTimeText: bannerRowStartTime(a.startTime),
         })),
       })
     } catch (e) {}

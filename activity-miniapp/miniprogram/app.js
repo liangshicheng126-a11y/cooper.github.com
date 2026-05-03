@@ -1,5 +1,4 @@
 // app.js
-const { API_BASE_URL } = require('./utils/config')
 const request = require('./utils/request')
 const i18n = require('./utils/i18n')
 

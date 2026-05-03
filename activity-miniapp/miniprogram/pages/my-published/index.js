@@ -1,6 +1,7 @@
 // pages/my-published/index.js
 const request = require('../../utils/request')
-const { formatDate, getActivityStatus } = require('../../utils/date')
+const { getActivityStatus } = require('../../utils/date')
+const { listRowStartTime } = require('../../utils/activityFormat')
 
 const STATUS_MAP = {
   active: { text: '进行中', cls: 'status-mini-active' },
@@ -30,12 +31,16 @@ Page({
     this.setData({ loading: true })
     try {
       const res = await request.get('/activities/my-created')
-      const list = (res.data || []).map(a => ({
-        ...a,
-        startTimeText: formatDate(a.startTime, 'MM月DD日 HH:mm'),
-        statusText: STATUS_MAP[getActivityStatus(a)]?.text || '',
-        statusClass: STATUS_MAP[getActivityStatus(a)]?.cls || '',
-      }))
+      const list = (res.data || []).map((a) => {
+        const statusKey = getActivityStatus(a)
+        const meta = STATUS_MAP[statusKey] || {}
+        return {
+          ...a,
+          startTimeText: listRowStartTime(a.startTime),
+          statusText: meta.text || '',
+          statusClass: meta.cls || '',
+        }
+      })
       this.setData({ activities: list, loading: false })
     } catch (e) {
       this.setData({ loading: false, activities: [] })

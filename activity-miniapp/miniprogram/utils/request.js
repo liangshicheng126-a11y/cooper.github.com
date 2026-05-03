@@ -2,6 +2,8 @@
 const { API_BASE_URL } = require('./config')
 
 const MAX_RETRY = 2
+/** wx.request / uploadFile 超时（毫秒），避免弱网无限挂起 */
+const HTTP_TIMEOUT_MS = 30000
 
 function getToken() {
   return wx.getStorageSync('token') || ''
@@ -81,6 +83,7 @@ function upload(url, filePath, name = 'file', formData = {}) {
       filePath,
       name,
       formData,
+      timeout: HTTP_TIMEOUT_MS,
       header: { 'Authorization': token ? `Bearer ${token}` : '' },
       success: (res) => {
         try {

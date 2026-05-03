@@ -1,7 +1,8 @@
 // pages/search/index.js
 const request = require('../../utils/request')
 const { getCustomNavbarContentPaddingTop } = require('../../utils/nav')
-const { formatDate, getActivityStatus } = require('../../utils/date')
+const { getActivityStatus } = require('../../utils/date')
+const { withListRowTimes } = require('../../utils/activityFormat')
 
 const HISTORY_KEY = 'search_history'
 const STATUS_TEXT = { active: '进行中', upcoming: '未开始', ended: '已结束', full: '已报满' }
@@ -58,20 +59,18 @@ Page({
     this.setData({ loading: true, searched: true })
     try {
       const res = await request.get('/activities', { keyword: kw, size: 30 })
-      const list = (res.data?.list || []).map(a => {
-        const status = getActivityStatus(a)
+      const list = (res.data?.list || []).map((a) => {
+        const row = withListRowTimes({ ...a })
+        const status = getActivityStatus(row)
         return {
-          ...a,
-          startTimeText: formatDate(a.startTime, 'MM月DD日 HH:mm'),
+          ...row,
           statusText: STATUS_TEXT[status] || status,
           statusClass: STATUS_CLASS[status] || '',
         }
       })
-      this.setData({ results: list })
-      // 保存历史
-      const history = [kw, ...(this.data.history.filter(h => h !== kw))].slice(0, 10)
+      const history = [kw, ...(this.data.history.filter((h) => h !== kw))].slice(0, 10)
       wx.setStorageSync(HISTORY_KEY, history)
-      this.setData({ history })
+      this.setData({ results: list, history })
     } catch (e) {
       wx.showToast({ title: '搜索失败', icon: 'none' })
     } finally {

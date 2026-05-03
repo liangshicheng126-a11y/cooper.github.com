@@ -1,6 +1,7 @@
 // pages/my-registered/index.js
 const request = require('../../utils/request')
-const { formatDate, getActivityStatus } = require('../../utils/date')
+const { getActivityStatus } = require('../../utils/date')
+const { listRowStartTime } = require('../../utils/activityFormat')
 
 const STATUS_MAP = {
   active: { text: '进行中', cls: 'status-mini-active' },
@@ -37,13 +38,14 @@ Page({
           endTime: r.endTime,
         }
         const key = getActivityStatus(pseudo)
+        const meta = STATUS_MAP[key] || {}
         return {
           ...r,
           name: r.activityName,
-          startTimeText: formatDate(r.startTime, 'MM月DD日 HH:mm'),
-          registeredAtText: formatDate(r.created_at, 'MM月DD日 HH:mm'),
-          statusText: STATUS_MAP[key]?.text || '',
-          statusClass: STATUS_MAP[key]?.cls || '',
+          startTimeText: listRowStartTime(r.startTime),
+          registeredAtText: listRowStartTime(r.created_at || r.createdAt),
+          statusText: meta.text || '',
+          statusClass: meta.cls || '',
         }
       })
       this.setData({ activities: list, loading: false })

@@ -2,8 +2,6 @@
 const request = require('../../utils/request')
 const { GOOGLE_MAPS_KEY } = require('../../utils/config')
 const { toPickerValue, toPickerTimeValue } = require('../../utils/date')
-const { chooseLocation } = require('../../utils/map')
-const { upload } = require('../../utils/request')
 
 const isGoogleConfigured = GOOGLE_MAPS_KEY && GOOGLE_MAPS_KEY !== 'YOUR_GOOGLE_MAPS_KEY'
 
@@ -144,7 +142,7 @@ Page({
         const tempFile = res.tempFiles[0].tempFilePath
         wx.showLoading({ title: '上传中...' })
         try {
-          const uploadRes = await upload('/upload/image', tempFile)
+          const uploadRes = await request.upload('/upload/image', tempFile)
           this.setData({ 'form.coverImage': uploadRes.data.url })
         } catch (e) {
           wx.showToast({ title: '上传失败', icon: 'none' })
