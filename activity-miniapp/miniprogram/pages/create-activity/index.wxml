@@ -73,7 +73,7 @@
       </view>
     </view>
 
-    <!-- Step 2: 时间与场次 -->
+    <!-- Step 2: 时间地点 -->
     <view class="step-content" wx:if="{{currentStep === 1}}">
       <view class="section-card card">
         <view class="section-title">时间设置</view>
@@ -104,6 +104,28 @@
               <text class="{{endTime ? 'picker-value' : 'picker-placeholder'}}">{{endTime || '选择时间'}}</text>
             </view>
           </picker>
+        </view>
+      </view>
+
+      <view class="section-card card">
+        <view class="section-title">地点设置</view>
+        <text class="form-hint" style="margin-bottom:20rpx;display:block">手动填写后随活动保存，将在详情页、列表等处展示</text>
+        <view class="form-group">
+          <view class="form-label">地点名称 <text class="form-hint-inline">（选填）</text></view>
+          <input class="form-input" placeholder="如：市图书馆报告厅" value="{{form.locationName}}" bindinput="onInput" data-key="locationName" maxlength="200" />
+        </view>
+        <view class="form-group">
+          <view class="form-label">详细地址 <text class="form-hint-inline">（选填）</text></view>
+          <textarea
+            class="form-textarea form-textarea--addr"
+            placeholder="街道、门牌、楼层、附近地标、交通方式等"
+            value="{{form.locationAddress}}"
+            bindinput="onInput"
+            data-key="locationAddress"
+            maxlength="500"
+            auto-height
+          />
+          <text class="form-hint">{{form.locationAddress.length}}/500</text>
         </view>
       </view>
 

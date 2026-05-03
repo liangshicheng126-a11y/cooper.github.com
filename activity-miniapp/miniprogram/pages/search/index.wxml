@@ -11,7 +11,7 @@
       <text class="search-icon-txt">🔍</text>
       <input
         class="search-input"
-        placeholder="搜索活动名称..."
+        placeholder="搜索活动名称、地点..."
         placeholder-class="search-placeholder"
         value="{{keyword}}"
         bindinput="onInput"

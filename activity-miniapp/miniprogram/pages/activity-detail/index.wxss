@@ -177,12 +177,14 @@
   flex-shrink: 0;
 }
 .bg-blue   { background: rgba(99,102,241,.12); }
+.bg-green  { background: rgba(16,185,129,.12); }
 .bg-purple { background: rgba(124,58,237,.12); }
 .info-emoji { font-size: 34rpx; }
 .info-content { flex: 1; min-width: 0; }
 .info-label  { font-size: 24rpx; color: #7c3aed; opacity: .75; display: block; margin-bottom: 4rpx; }
 .info-value  { font-size: 30rpx; color: #1e1b4b; font-weight: 600; display: block; line-height: 1.45; }
 .info-sub    { font-size: 24rpx; color: #64748b; display: block; margin-top: 6rpx; line-height: 1.45; }
+.info-copy-hint { font-size: 22rpx; color: #7c3aed; opacity: 0.85; margin-top: 10rpx; }
 .info-item--time .info-content .info-label { margin-bottom: 12rpx; }
 
 .info-value--strong {
@@ -270,6 +272,7 @@
 .sub-info  { flex: 1; }
 .sub-name  { font-size: 30rpx; color: #1e1b4b; font-weight: 600; display: block; }
 .sub-time  { font-size: 24rpx; color: #64748b; display: block; margin-top: 6rpx; }
+.sub-location { font-size: 24rpx; color: #7c3aed; display: block; margin-top: 4rpx; }
 .sub-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6rpx; margin-left: 12rpx; }
 .sub-count { font-size: 28rpx; font-weight: 700; }
 .sub-status{ font-size: 22rpx; color: #ef4444; }

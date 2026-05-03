@@ -87,9 +87,9 @@ exports.list = async (req, res, next) => {
       "a.status NOT IN ('offline','frozen') AND COALESCE(a.moderation_status, 'passed') = 'passed'"
     const params = []
     if (keyword) {
-      where += ' AND (a.name LIKE ? OR a.location_name LIKE ? OR a.description LIKE ?)'
+      where += ' AND (a.name LIKE ? OR a.location_name LIKE ? OR a.location_address LIKE ? OR a.description LIKE ?)'
       const like = `%${keyword}%`
-      params.push(like, like, like)
+      params.push(like, like, like, like)
     }
     if (category && category !== 'all') {
       if (category === 'active') where += ' AND NOW() BETWEEN a.start_time AND a.end_time'

@@ -68,6 +68,17 @@
         </view>
       </view>
 
+      <!-- 地点（手动填写，无导航坐标时可复制） -->
+      <view class="info-item" bindtap="onCopyLocation" wx:if="{{activity.locationName || activity.locationAddress}}">
+        <view class="info-icon-wrap bg-green"><text class="info-emoji">📍</text></view>
+        <view class="info-content flex-1">
+          <text class="info-label">活动地点</text>
+          <text class="info-value" wx:if="{{activity.locationName}}">{{activity.locationName}}</text>
+          <text class="info-sub" wx:if="{{activity.locationAddress}}">{{activity.locationAddress}}</text>
+          <text class="info-sub info-copy-hint">轻触复制完整地址</text>
+        </view>
+      </view>
+
       <!-- 人数 -->
       <view class="info-item">
         <view class="info-icon-wrap bg-purple"><text class="info-emoji">👥</text></view>
@@ -143,6 +154,7 @@
           <view class="sub-info">
             <text class="sub-name">{{item.name}}</text>
             <text class="sub-time">{{item.startTimeText}} ~ {{item.endTimeText}}</text>
+            <text class="sub-location" wx:if="{{item.locationName}}">📍 {{item.locationName}}</text>
           </view>
         </view>
         <view class="sub-right">

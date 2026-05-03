@@ -141,7 +141,7 @@ exports.myRegistrations = async (req, res, next) => {
     const regs = await query(
       `SELECT r.id AS registrationId, a.id AS activityId, a.name AS activityName,
               a.start_time AS startTime, a.end_time AS endTime, a.cover_image AS coverImage,
-              a.location_name AS locationName, a.status, r.checkin_time AS checkinTime, r.created_at
+              a.location_name AS locationName, a.location_address AS locationAddress, a.status, r.checkin_time AS checkinTime, r.created_at
        FROM registrations r
        JOIN activities a ON r.activity_id = a.id
        WHERE r.user_openid = ? AND r.cancelled_at IS NULL

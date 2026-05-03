@@ -84,6 +84,7 @@
 .cover-placeholder-btn { display: flex; flex-direction: column; align-items: center; gap: 12rpx; }
 .cover-plus { font-size: 80rpx; color: rgba(124,58,237,0.25); line-height: 1; }
 .cover-hint { font-size: 26rpx; color: rgba(30,27,75,0.40); }
+.form-textarea--addr { min-height: 200rpx; box-sizing: border-box; }
 
 /* ── 子活动 ── */
 .section-title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16rpx; }

@@ -302,6 +302,16 @@ Page({
     })
   },
 
+  onCopyLocation() {
+    const { activity } = this.data
+    const parts = [activity.locationName, activity.locationAddress].filter((s) => s && String(s).trim())
+    if (!parts.length) return
+    wx.setClipboardData({
+      data: parts.join('\n'),
+      success: () => wx.showToast({ title: '地址已复制', icon: 'success' }),
+    })
+  },
+
   onViewRegistrations() {
     wx.navigateTo({ url: `/pages/admin/index?activityId=${this.data.activityId}&tab=list` })
   },
@@ -350,10 +360,11 @@ Page({
 
   onCopyAnnouncement() {
     const { activity } = this.data
+    const locLine = [activity.locationName, activity.locationAddress].filter((s) => s && String(s).trim()).join(' ')
     const text = `【活动通知】
 📌 ${activity.name}
 📅 时间：${this.data.startTimeText}
-👥 名额：${activity.maxParticipants > 0 ? `${activity.registrationCount}/${activity.maxParticipants}人` : `${activity.registrationCount}人已报名（不限）`}
+${locLine ? `📍 地点：${locLine}\n` : ''}👥 名额：${activity.maxParticipants > 0 ? `${activity.registrationCount}/${activity.maxParticipants}人` : `${activity.registrationCount}人已报名（不限）`}
 ${activity.reminder ? `💡 ${activity.reminder}\n` : ''}
 点击小程序报名 ↓`
     wx.setClipboardData({
@@ -491,9 +502,11 @@ ${activity.reminder ? `💡 ${activity.reminder}\n` : ''}
 
   onCopyLink() {
     const { activity, scheduleStartFull, scheduleEndFull } = this.data
+    const loc = [activity.locationName, activity.locationAddress].filter((s) => s && String(s).trim()).join(' ')
     const lines = [
       `【${activity.name || '活动'}】`,
       `时间：${scheduleStartFull || ''} — ${scheduleEndFull || ''}`,
+      loc ? `地点：${loc}` : '',
       activity.reminder ? `提醒：${activity.reminder}` : '',
     ].filter(Boolean)
     wx.setClipboardData({

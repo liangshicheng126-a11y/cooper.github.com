@@ -21,6 +21,9 @@
         <view class="item-info-row">
           <text class="item-time">📅 {{item.startTimeText}}</text>
         </view>
+        <view wx:if="{{item.locationName || item.locationAddress}}" class="item-loc-row">
+          <text class="item-loc">📍 {{item.locationName || item.locationAddress}}</text>
+        </view>
         <view class="item-footer">
           <view class="status-mini {{item.statusClass}}">
             <text>{{item.statusText}}</text>
