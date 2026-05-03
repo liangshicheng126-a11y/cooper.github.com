@@ -370,7 +370,6 @@ Page({
       locationAddress: (form.locationAddress || '').trim().slice(0, 500),
       latitude: null,
       longitude: null,
-      locationCountry: 'CN',
       maxParticipants: form.hasLimit ? Number(form.maxParticipants) : 0,
       requireInvite: form.requireInvite,
       inviteCode: form.requireInvite ? form.inviteCode : undefined,

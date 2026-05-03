@@ -1,9 +1,10 @@
 // src/middleware/validate.js - 请求校验
 const Joi = require('joi')
 
+// POST/PUT 活动体校验。提示 "xxx" is not allowed 来自 Joi：未知字段 + 未设置 stripUnknown，或 schema 未声明该字段。
+// 小程序不再传 locationCountry，避免线上旧版 middleware 未升级时发布失败；控制器仍用 body.locationCountry || 'CN'。
 function validate(schema, source = 'body') {
   return (req, res, next) => {
-    // stripUnknown：未在 schema 声明的字段不触发 400（兼容缺 locationCountry 等旧版）；不把 value 写回 body，原字段仍留给控制器
     const { error } = schema.validate(req[source], { abortEarly: false, stripUnknown: true })
     if (error) {
       const message = error.details.map(d => d.message).join('; ')
