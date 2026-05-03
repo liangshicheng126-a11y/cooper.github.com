@@ -3,6 +3,7 @@
 const path = require('path')
 const XLSX = require('xlsx')
 const { query, queryOne, transaction } = require('../config/db')
+const { parseJsonObject } = require('../utils/parseJsonField')
 const { encrypt, decrypt, maskPhone } = require('../utils/crypto')
 const logger = require('../utils/logger')
 
@@ -342,10 +343,7 @@ exports.checkActivityAgainstRoster = async (req, res, next) => {
 
     const results = []
     for (const reg of regs) {
-      let custom = {}
-      try {
-        custom = JSON.parse(reg.custom_data || '{}')
-      } catch (_) {}
+      const custom = parseJsonObject(reg.custom_data, {})
 
       const plainParts = []
       for (const v of Object.values(custom)) {

@@ -1,5 +1,6 @@
 // src/controllers/registrationController.js
 const { query, queryOne, transaction } = require('../config/db')
+const { parseJsonArray } = require('../utils/parseJsonField')
 const { encrypt, decrypt } = require('../utils/crypto')
 const { delCache } = require('../config/redis')
 const { v4: uuidv4 } = require('uuid')
@@ -71,7 +72,7 @@ exports.create = async (req, res, next) => {
       // 加密敏感字段
       const encryptedData = {}
       for (const [k, v] of Object.entries(customData)) {
-        const field = JSON.parse(activity.custom_fields || '[]').find(f => f.key === k)
+        const field = parseJsonArray(activity.custom_fields, []).find(f => f.key === k)
         const sensitive = ['phone', 'email', 'idCard', 'name'].includes(field?.type || field?.key)
         encryptedData[k] = sensitive ? encrypt(String(v)) : v
       }

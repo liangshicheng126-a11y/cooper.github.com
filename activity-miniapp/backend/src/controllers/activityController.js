@@ -3,6 +3,7 @@ const { query, queryOne, transaction } = require('../config/db')
 const { getCache, setCache, delCache, delCacheByPattern, CACHE_TTL } = require('../config/redis')
 const wxService = require('../services/wxService')
 const { genCheckinToken } = require('../utils/checkinToken')
+const { parseJsonArray } = require('../utils/parseJsonField')
 const { v4: uuidv4 } = require('uuid')
 const logger = require('../utils/logger')
 const QRCode = require('qrcode')
@@ -531,7 +532,7 @@ function formatActivity(a) {
     reminder: a.reminder,
     wxGroupChatName:       a.wx_group_chat_name || '',
     wxGroupChatQrcodeUrl:  a.wx_group_chat_qrcode_url || '',
-    customFields: (() => { try { return JSON.parse(a.custom_fields || '[]') } catch(e) { return [] } })(),
+    customFields: parseJsonArray(a.custom_fields, []),
     moderationStatus: a.moderation_status || 'passed',
     dbStatus: a.status,
     status: getStatus(a),

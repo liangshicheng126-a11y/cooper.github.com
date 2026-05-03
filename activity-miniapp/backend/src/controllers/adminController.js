@@ -1,5 +1,6 @@
 // src/controllers/adminController.js
 const { query, queryOne } = require('../config/db')
+const { parseJsonArray, parseJsonObject } = require('../utils/parseJsonField')
 const { decrypt, maskPhone, maskIdCard, maskEmail, maskName, genVerifyCode } = require('../utils/crypto')
 const { getCache, setCache, delCache } = require('../config/redis')
 const XLSX = require('xlsx')
@@ -23,10 +24,9 @@ exports.getRegistrations = async (req, res, next) => {
       [activityId]
     )
 
-    const customFields = JSON.parse(activity.custom_fields || '[]')
+    const customFields = parseJsonArray(activity.custom_fields, [])
     const result = regs.map(r => {
-      let customData = {}
-      try { customData = JSON.parse(r.custom_data || '{}') } catch (e) {}
+      const customData = parseJsonObject(r.custom_data, {})
 
       // 脱敏处理
       const maskedData = {}
@@ -70,9 +70,8 @@ exports.revealRegistration = async (req, res, next) => {
       return res.status(403).json({ code: 403, message: '无权限' })
     }
 
-    let customData = {}
-    try { customData = JSON.parse(reg.custom_data || '{}') } catch (e) {}
-    const customFields = JSON.parse(reg.custom_fields || '[]')
+    const customData = parseJsonObject(reg.custom_data, {})
+    const customFields = parseJsonArray(reg.custom_fields, [])
 
     const decryptedData = {}
     const fieldLabels = {}
@@ -129,13 +128,12 @@ exports.exportRegistrations = async (req, res, next) => {
     if (subActivityId) { sql += ' AND r.sub_activity_id = ?'; params.push(subActivityId) }
 
     const regs = await query(sql, params)
-    const customFields = JSON.parse(activity.custom_fields || '[]')
+    const customFields = parseJsonArray(activity.custom_fields, [])
 
     // 构建 Excel 数据
     const headers = ['序号', '昵称', '报名时间', '签到时间', ...customFields.map(f => f.label)]
     const rows = regs.map((r, idx) => {
-      let customData = {}
-      try { customData = JSON.parse(r.custom_data || '{}') } catch (e) {}
+      const customData = parseJsonObject(r.custom_data, {})
       const decrypted = {}
       for (const [k, v] of Object.entries(customData)) {
         decrypted[k] = decrypt(v) || v
