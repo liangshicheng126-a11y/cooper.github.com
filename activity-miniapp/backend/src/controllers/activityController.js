@@ -7,6 +7,7 @@ const { parseJsonArray } = require('../utils/parseJsonField')
 const { v4: uuidv4 } = require('uuid')
 const logger = require('../utils/logger')
 const QRCode = require('qrcode')
+const { uploadPngBuffer, isCosReady } = require('../utils/cosUploadBuffer')
 
 // 工具函数：活动可见性（发现广场以外入口：详情缓存、场次接口等）
 function viewerCanSeeActivitySnapshot({ moderationStatus, creatorOpenid, dbStatus }, viewerOid = '') {
@@ -408,11 +409,20 @@ exports.getCheckinQRCode = async (req, res, next) => {
       path: 'pages/checkin/index',
       query: queryStr,
     })
-    const qrcodeUrl = await QRCode.toDataURL(urlLink, {
-      width: 640,
-      margin: 2,
-      errorCorrectionLevel: 'M',
-    })
+    const opts = { width: 640, margin: 2, errorCorrectionLevel: 'M' }
+    const pngBuffer = await QRCode.toBuffer(urlLink, opts)
+    let qrcodeUrl
+    if (isCosReady()) {
+      try {
+        const key = `checkin-qr/${id}/${uuidv4()}.png`
+        qrcodeUrl = await uploadPngBuffer(pngBuffer, key)
+      } catch (cosErr) {
+        logger.warn('[getCheckinQRCode] COS 上传失败，改回 DataURL', cosErr.message)
+        qrcodeUrl = `data:image/png;base64,${pngBuffer.toString('base64')}`
+      }
+    } else {
+      qrcodeUrl = `data:image/png;base64,${pngBuffer.toString('base64')}`
+    }
     const total = await queryOne(
       'SELECT COUNT(*) AS cnt FROM registrations WHERE activity_id = ? AND cancelled_at IS NULL', [id]
     )
