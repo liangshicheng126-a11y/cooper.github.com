@@ -106,19 +106,32 @@ Page({
       const scheduleDurationNatural = getDurationNatural(activity.startTime, activity.endTime)
       const categoryLabel = CAT_LABEL[activity.category] || CAT_LABEL.other
 
-      const qrUrl = activity.wxGroupChatQrcodeUrl ? String(activity.wxGroupChatQrcodeUrl).trim() : ''
+      let activityForView = activity
+      if (activity.creatorOpenid === app.globalData.openid) {
+        const list = Array.isArray(activity.recentCheckins) ? activity.recentCheckins : []
+        activityForView = {
+          ...activity,
+          checkinCount: activity.checkinCount ?? 0,
+          recentCheckins: list.map((r) => ({
+            ...r,
+            checkinTimeText: formatDate(r.checkinTime, 'YYYY-MM-DD HH:mm:ss'),
+          })),
+        }
+      }
+
+      const qrUrl = activityForView.wxGroupChatQrcodeUrl ? String(activityForView.wxGroupChatQrcodeUrl).trim() : ''
       const hasWxGroupQr = !!qrUrl
       const loggedInOid = app.globalData.openid || ''
-      const wxGroupVisible = hasWxGroupQr && (!!regRes.data || activity.creatorOpenid === loggedInOid)
+      const wxGroupVisible = hasWxGroupQr && (!!regRes.data || activityForView.creatorOpenid === loggedInOid)
 
       this.setData({
-        activity,
+        activity: activityForView,
         subActivities,
         selectedSubId: regRes.data?.subActivityId || defaultSubId,
-        registrantSlots: this._buildRegistrantSlots(activity),
+        registrantSlots: this._buildRegistrantSlots(activityForView),
         isRegistered: !!regRes.data,
         userRegistrationId: regRes.data?.id || null,
-        isCreator: activity.creatorOpenid === app.globalData.openid,
+        isCreator: activityForView.creatorOpenid === app.globalData.openid,
         hasWxGroupQr,
         wxGroupVisible,
         statusKey: status,
@@ -134,7 +147,7 @@ Page({
         cannotRegister: ['ended', 'full', 'cancelled', 'offline'].includes(status),
         loading: false,
       })
-      wx.setNavigationBarTitle({ title: activity.name })
+      wx.setNavigationBarTitle({ title: activityForView.name })
 
       const shouldScrollWx = this.data.wxGroupHighlight && hasWxGroupQr && wxGroupVisible
       if (shouldScrollWx) {
@@ -146,6 +159,13 @@ Page({
       this.setData({ loadError: true, loading: false })
     } finally {
       wx.hideNavigationBarLoading()
+    }
+  },
+
+  onShow() {
+    if (!this.data.activityId || this.data.loading || this.data.loadError) return
+    if (this.data.isCreator) {
+      this._loadDetail(this.data.activityId)
     }
   },
 

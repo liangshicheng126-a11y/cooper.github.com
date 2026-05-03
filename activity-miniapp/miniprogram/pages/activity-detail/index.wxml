@@ -196,6 +196,31 @@
       </view>
     </view>
 
+    <!-- 发布者：现场签到明细（报名者扫码后在此查看） -->
+    <view class="section-card creator-checkin-card" wx:if="{{isCreator && activity.registrationCount > 0}}">
+      <view class="section-head-row">
+        <view class="section-title section-title--bare">现场签到</view>
+        <text class="section-count-pill">{{activity.checkinCount || 0}} / {{activity.registrationCount}} 已签到</text>
+      </view>
+      <text class="participants-hint" wx:if="{{!(activity.recentCheckins && activity.recentCheckins.length)}}">
+        暂无签到记录；报名者可使用微信「扫一扫」扫描您的核验码完成签到
+      </text>
+      <view
+        wx:for="{{activity.recentCheckins || []}}"
+        wx:key="id"
+        class="checkin-detail-row"
+      >
+        <image class="checkin-detail-avatar" src="{{item.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill" />
+        <view class="checkin-detail-mid">
+          <text class="checkin-detail-name">{{item.name}}</text>
+          <text class="checkin-detail-time">签到时间 {{item.checkinTimeText}}</text>
+        </view>
+      </view>
+      <text class="checkin-more-hint" wx:if="{{activity.checkinCount > 20}}">
+        仅展示最近 20 条，完整时刻表可在「查看名单」中浏览
+      </text>
+    </view>
+
     <!-- 管理操作 -->
     <view class="section-card" wx:if="{{isCreator}}">
       <view class="section-title">管理操作</view>

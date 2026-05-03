@@ -146,6 +146,33 @@ exports.featured = async (req, res, next) => {
   }
 }
 
+/** 仅活动创建者使用：签到人数 + 最近签到记录（不写进详情 Redis，避免泄露） */
+async function fetchCreatorCheckinSummary(activityId) {
+  const row = await queryOne(
+    `SELECT COUNT(*) AS cnt FROM registrations
+     WHERE activity_id = ? AND cancelled_at IS NULL AND checkin_time IS NOT NULL`,
+    [activityId]
+  )
+  const rows = await query(
+    `SELECT r.id, u.nickname AS name, u.avatar_url AS avatarUrl, r.checkin_time AS checkinTime
+     FROM registrations r
+     JOIN users u ON r.user_openid = u.openid
+     WHERE r.activity_id = ? AND r.checkin_time IS NOT NULL AND r.cancelled_at IS NULL
+     ORDER BY r.checkin_time DESC
+     LIMIT 20`,
+    [activityId]
+  )
+  return {
+    checkinCount: Number(row?.cnt) || 0,
+    recentCheckins: rows.map((r) => ({
+      id: r.id,
+      name: r.name || '用户',
+      avatarUrl: r.avatarUrl || '',
+      checkinTime: r.checkinTime,
+    })),
+  }
+}
+
 exports.getById = async (req, res, next) => {
   try {
     const { id } = req.params
@@ -165,7 +192,13 @@ exports.getById = async (req, res, next) => {
       if (!okCache) {
         return res.status(404).json({ code: 404, message: '活动不存在或未公开' })
       }
-      return res.json({ code: 0, data: cached })
+      const out = { ...cached }
+      if (viewerOid && viewerOid === cached.creatorOpenid) {
+        const summary = await fetchCreatorCheckinSummary(id)
+        out.checkinCount = summary.checkinCount
+        out.recentCheckins = summary.recentCheckins
+      }
+      return res.json({ code: 0, data: out })
     }
 
     const activity = await queryOne(`
@@ -209,7 +242,14 @@ exports.getById = async (req, res, next) => {
     }
 
     await setCache(cacheKey, data, CACHE_TTL.ACTIVITY_DETAIL)
-    res.json({ code: 0, data })
+
+    const out = { ...data }
+    if (currentOpenid && currentOpenid === activity.creator_openid) {
+      const summary = await fetchCreatorCheckinSummary(id)
+      out.checkinCount = summary.checkinCount
+      out.recentCheckins = summary.recentCheckins
+    }
+    res.json({ code: 0, data: out })
   } catch (e) {
     next(e)
   }
