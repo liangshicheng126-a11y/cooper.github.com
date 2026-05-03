@@ -39,8 +39,10 @@ Page({
     if (!id) return
     try {
       const res = await request.get(`/activities/${id}`)
-      this.setData({ activityName: res.data.name })
-      wx.setNavigationBarTitle({ title: res.data.name + ' · 签到' })
+      const name = res.data.name || '活动'
+      const barSuffix = this.data.mode === 'admin' ? ' · 核验' : ' · 签到'
+      this.setData({ activityName: name })
+      wx.setNavigationBarTitle({ title: name + barSuffix })
     } catch (e) {}
   },
 

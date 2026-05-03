@@ -377,8 +377,14 @@ ${activity.reminder ? `💡 ${activity.reminder}\n` : ''}
     wx.navigateTo({ url: `/pages/poster/index?activityId=${this.data.activityId}` })
   },
 
+  /** 发布者：出示核验码 + 签到名单 */
   onCheckinQR() {
     wx.navigateTo({ url: `/pages/checkin/index?activityId=${this.data.activityId}&mode=admin` })
+  },
+
+  /** 报名者：跳转扫码签到（扫主办方核验码） */
+  onRegistrantCheckin() {
+    wx.navigateTo({ url: `/pages/checkin/index?activityId=${this.data.activityId}&mode=user` })
   },
 
   async onShareQR() {

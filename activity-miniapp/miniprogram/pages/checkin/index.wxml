@@ -3,7 +3,7 @@
   <!-- 管理员模式：展示二维码 -->
   <view wx:if="{{mode === 'admin'}}" class="qr-mode">
     <view class="qr-card card">
-      <text class="qr-title">活动签到二维码</text>
+      <text class="qr-title">活动现场核验码</text>
       <text class="qr-activity-name">{{activityName}}</text>
       <image src="{{qrcodeUrl}}" class="qr-image" mode="aspectFit" show-menu-by-longpress />
       <text class="qr-hint">参与者扫描此二维码完成签到</text>
