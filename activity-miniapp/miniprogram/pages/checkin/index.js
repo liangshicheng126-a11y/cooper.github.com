@@ -1,6 +1,7 @@
 // pages/checkin/index.js
 const request = require('../../utils/request')
 const { formatDate } = require('../../utils/date')
+const { dataUrlToLocalFile } = require('../../utils/qrImage')
 
 function parseSceneQuery(qs) {
   const out = {}
@@ -172,8 +173,19 @@ Page({
     }
     try {
       const res = await request.get(`/activities/${this.data.activityId}/checkin-qrcode`)
+      const raw = res.data?.qrcodeUrl
+      if (!raw) {
+        if (!silent) wx.showToast({ title: '未获取到二维码', icon: 'none' })
+        return
+      }
+      let displayUrl = raw
+      try {
+        displayUrl = await dataUrlToLocalFile(raw, this.data.activityId)
+      } catch (err) {
+        console.warn('[checkin] dataUrl 落盘失败，尝试直接使用:', err)
+      }
       this.setData({
-        qrcodeUrl: res.data.qrcodeUrl,
+        qrcodeUrl: displayUrl,
         totalRegistrations: res.data.totalRegistrations || 0,
       })
     } catch (e) {
@@ -185,6 +197,11 @@ Page({
         wx.hideLoading()
       }
     }
+  },
+
+  onQrImageError(e) {
+    console.error('[checkin] 二维码图加载失败', e.detail)
+    wx.showToast({ title: '二维码显示失败，请点手动刷新', icon: 'none' })
   },
 
   async loadCheckinList() {
