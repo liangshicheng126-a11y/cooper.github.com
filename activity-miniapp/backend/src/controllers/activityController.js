@@ -280,32 +280,33 @@ exports.create = async (req, res, next) => {
     await wxService.moderateActivityPublish(body)
 
     await transaction(async (conn) => {
-      /** INSERT … SET：避免 VALUES 占位符个数与列数难核对导致 MySQL 1136 */
+      /** INSERT … VALUES（显式列名）：部分环境下 INSERT SET + 占位符会得到 MySQL ER_WRONG_VALUE_COUNT_ON_ROW（1136） */
       await conn.execute(
-        `INSERT INTO activities SET
-          id=?,
-          creator_openid=?,
-          name=?,
-          description=?,
-          start_time=?,
-          end_time=?,
-          location_name=?,
-          location_address=?,
-          location_country=?,
-          latitude=?,
-          longitude=?,
-          max_participants=?,
-          require_invite=?,
-          invite_code=?,
-          category=?,
-          cover_image=?,
-          reminder=?,
-          wx_group_chat_name=?,
-          wx_group_chat_qrcode_url=?,
-          custom_fields=?,
-          moderation_status=?,
-          status=?,
-          created_at=?`,
+        `INSERT INTO activities (
+          id,
+          creator_openid,
+          name,
+          description,
+          start_time,
+          end_time,
+          location_name,
+          location_address,
+          location_country,
+          latitude,
+          longitude,
+          max_participants,
+          require_invite,
+          invite_code,
+          category,
+          cover_image,
+          reminder,
+          wx_group_chat_name,
+          wx_group_chat_qrcode_url,
+          custom_fields,
+          moderation_status,
+          status,
+          created_at
+        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
         [
           id,
           req.user.openid,
@@ -337,15 +338,16 @@ exports.create = async (req, res, next) => {
       for (const sub of (body.subActivities || [])) {
         const subId = uuidv4()
         await conn.execute(
-          `INSERT INTO sub_activities SET
-            id=?,
-            activity_id=?,
-            name=?,
-            start_time=?,
-            end_time=?,
-            location_name=?,
-            max_participants=?,
-            created_at=?`,
+          `INSERT INTO sub_activities (
+            id,
+            activity_id,
+            name,
+            start_time,
+            end_time,
+            location_name,
+            max_participants,
+            created_at
+          ) VALUES (?,?,?,?,?,?,?,?)`,
           [
             subId,
             id,
