@@ -326,8 +326,8 @@ Page({
         wx.showToast({ title: '请选择结束时间', icon: 'none' })
         return false
       }
-      const start = new Date(`${startDate} ${startTime}`)
-      const end = new Date(`${endDate} ${endTime}`)
+      const start = new Date(`${startDate}T${startTime}:00`)
+      const end = new Date(`${endDate}T${endTime}:00`)
       if (end <= start) {
         wx.showToast({ title: '结束时间需晚于开始时间', icon: 'none' })
         return false
@@ -357,6 +357,8 @@ Page({
       wx.showToast({ title: '封面上传未完成，请稍候或重新选择封面', icon: 'none' })
       return
     }
+    if (this._submitBusy) return
+    this._submitBusy = true
     this.setData({ submitting: true })
     const payload = {
       name: form.name.trim(),
@@ -425,9 +427,10 @@ Page({
           },
         })
       }
-    } catch (e) {
-      wx.showToast({ title: e.message || '提交失败', icon: 'none' })
+    } catch (_) {
+      // 业务错误已由 utils/request 内 wx.showToast 提示；此处避免重复 toast
     } finally {
+      this._submitBusy = false
       this.setData({ submitting: false })
     }
   },
