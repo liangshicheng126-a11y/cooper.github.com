@@ -33,9 +33,8 @@ exports.login = async (req, res, next) => {
     if (!user) {
       // 新用户注册
       await query(
-        `INSERT INTO users (openid, nickname, avatar_url, privacy_agreed_at, created_at)
-         VALUES (?, ?, ?, NOW(), NOW())`,
-        [openid, '微信用户', '', ]
+        `INSERT INTO users SET openid=?, nickname=?, avatar_url=?, privacy_agreed_at=?, created_at=?`,
+        [openid, '微信用户', '', new Date(), new Date()]
       )
       user = await queryOne('SELECT * FROM users WHERE openid = ?', [openid])
     }

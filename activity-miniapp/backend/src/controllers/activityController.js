@@ -266,12 +266,32 @@ exports.create = async (req, res, next) => {
     await wxService.moderateActivityPublish(body)
 
     await transaction(async (conn) => {
+      /** INSERT … SET：避免 VALUES 占位符个数与列数难核对导致 MySQL 1136 */
       await conn.execute(
-        `INSERT INTO activities
-          (id, creator_openid, name, description, start_time, end_time, location_name, location_address, location_country,
-           latitude, longitude, max_participants, require_invite, invite_code, category, cover_image, reminder,
-           wx_group_chat_name, wx_group_chat_qrcode_url, custom_fields, moderation_status, status, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        `INSERT INTO activities SET
+          id=?,
+          creator_openid=?,
+          name=?,
+          description=?,
+          start_time=?,
+          end_time=?,
+          location_name=?,
+          location_address=?,
+          location_country=?,
+          latitude=?,
+          longitude=?,
+          max_participants=?,
+          require_invite=?,
+          invite_code=?,
+          category=?,
+          cover_image=?,
+          reminder=?,
+          wx_group_chat_name=?,
+          wx_group_chat_qrcode_url=?,
+          custom_fields=?,
+          moderation_status=?,
+          status=?,
+          created_at=?`,
         [
           id,
           req.user.openid,
@@ -303,9 +323,25 @@ exports.create = async (req, res, next) => {
       for (const sub of (body.subActivities || [])) {
         const subId = uuidv4()
         await conn.execute(
-          `INSERT INTO sub_activities (id, activity_id, name, start_time, end_time, location_name, max_participants, created_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-          [subId, id, sub.name, sub.startTime, sub.endTime, sub.locationName || '', sub.maxParticipants || 0, new Date()]
+          `INSERT INTO sub_activities SET
+            id=?,
+            activity_id=?,
+            name=?,
+            start_time=?,
+            end_time=?,
+            location_name=?,
+            max_participants=?,
+            created_at=?`,
+          [
+            subId,
+            id,
+            sub.name,
+            sub.startTime,
+            sub.endTime,
+            sub.locationName || '',
+            sub.maxParticipants || 0,
+            new Date(),
+          ]
         )
       }
     })

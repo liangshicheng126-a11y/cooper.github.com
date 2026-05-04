@@ -78,9 +78,15 @@ exports.create = async (req, res, next) => {
       }
 
       await conn.execute(
-        `INSERT INTO registrations (id, activity_id, sub_activity_id, user_openid, custom_data, force_registered, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, NOW())`,
-        [id, activityId, subActivityId || null, openid, JSON.stringify(encryptedData), forceRegister ? 1 : 0]
+        `INSERT INTO registrations SET
+           id=?,
+           activity_id=?,
+           sub_activity_id=?,
+           user_openid=?,
+           custom_data=?,
+           force_registered=?,
+           created_at=?`,
+        [id, activityId, subActivityId || null, openid, JSON.stringify(encryptedData), forceRegister ? 1 : 0, new Date()]
       )
     })
 
