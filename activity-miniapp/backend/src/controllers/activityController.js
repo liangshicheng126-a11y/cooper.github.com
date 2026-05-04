@@ -271,7 +271,7 @@ exports.create = async (req, res, next) => {
           (id, creator_openid, name, description, start_time, end_time, location_name, location_address, location_country,
            latitude, longitude, max_participants, require_invite, invite_code, category, cover_image, reminder,
            wx_group_chat_name, wx_group_chat_qrcode_url, custom_fields, moderation_status, status, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`,
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           id,
           req.user.openid,
@@ -295,6 +295,7 @@ exports.create = async (req, res, next) => {
           JSON.stringify(body.customFields || []),
           'passed',
           'upcoming',
+          new Date(),
         ]
       )
 
@@ -303,8 +304,8 @@ exports.create = async (req, res, next) => {
         const subId = uuidv4()
         await conn.execute(
           `INSERT INTO sub_activities (id, activity_id, name, start_time, end_time, location_name, max_participants, created_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?, NOW())`,
-          [subId, id, sub.name, sub.startTime, sub.endTime, sub.locationName || '', sub.maxParticipants || 0]
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+          [subId, id, sub.name, sub.startTime, sub.endTime, sub.locationName || '', sub.maxParticipants || 0, new Date()]
         )
       }
     })
