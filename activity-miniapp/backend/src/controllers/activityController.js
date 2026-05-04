@@ -10,11 +10,20 @@ const logger = require('../utils/logger')
 const QRCode = require('qrcode')
 const { uploadPngBuffer, isCosReady } = require('../utils/cosUploadBuffer')
 
-// 工具函数：活动可见性（发现广场以外入口：详情缓存、场次接口等）
-function viewerCanSeeActivitySnapshot({ moderationStatus, creatorOpenid, dbStatus }, viewerOid = '') {
+/** 发布后人工审核：默认 pending，仅 moderation_status=passed 会在发现广场展示。AUTO_APPROVE_ACTIVITY_PUBLISH=1/true 时跳过审核（多用于本地调试） */
+function initialPublishModerationStatus() {
+  const v = String(process.env.AUTO_APPROVE_ACTIVITY_PUBLISH || '').toLowerCase()
+  if (v === '1' || v === 'true' || v === 'yes') return 'passed'
+  return 'pending'
+}
+
+// viewerIsAdmin：平台管理员可预览待审核/下架等非公开活动（用于后台审核）
+function viewerCanSeeActivitySnapshot({ moderationStatus, creatorOpenid, dbStatus }, viewerOid = '', viewerIsAdmin = false) {
   const mod = moderationStatus || 'passed'
-  if (mod !== 'passed' && viewerOid !== creatorOpenid) return false
-  if (dbStatus && ['offline', 'frozen'].includes(dbStatus) && viewerOid !== creatorOpenid) return false
+  if (mod !== 'passed' && viewerOid !== creatorOpenid && !viewerIsAdmin) return false
+  if (dbStatus && ['offline', 'frozen'].includes(dbStatus) && viewerOid !== creatorOpenid && !viewerIsAdmin) {
+    return false
+  }
   return true
 }
 
@@ -180,6 +189,7 @@ exports.getById = async (req, res, next) => {
   try {
     const { id } = req.params
     const viewerOid = req.user?.openid || ''
+    const viewerAdmin = !!req.user?.isAdmin
     const cacheKey = `activity:${id}`
 
     const cached = await getCache(cacheKey)
@@ -191,6 +201,7 @@ exports.getById = async (req, res, next) => {
           dbStatus: cached.dbStatus || cached.rawStatus,
         },
         viewerOid,
+        viewerAdmin,
       )
       if (!okCache) {
         return res.status(404).json({ code: 404, message: '活动不存在或未公开' })
@@ -222,6 +233,7 @@ exports.getById = async (req, res, next) => {
           dbStatus: activity.status,
         },
         viewerOid,
+        viewerAdmin,
       )
     ) {
       return res.status(404).json({ code: 404, message: '活动不存在或未公开' })
@@ -262,6 +274,7 @@ exports.create = async (req, res, next) => {
   try {
     const body = req.body
     const id = uuidv4()
+    const modStatus = initialPublishModerationStatus()
 
     await wxService.moderateActivityPublish(body)
 
@@ -313,7 +326,7 @@ exports.create = async (req, res, next) => {
           '',
           '',
           JSON.stringify(body.customFields || []),
-          'passed',
+          modStatus,
           'upcoming',
           new Date(),
         ]
@@ -347,7 +360,8 @@ exports.create = async (req, res, next) => {
     })
 
     await delCacheByPattern('activities:list*')
-    res.status(201).json({ code: 0, data: { id } })
+    await delCache('activities:featured')
+    res.status(201).json({ code: 0, data: { id, moderationStatus: modStatus } })
   } catch (e) {
     next(e)
   }
@@ -361,22 +375,24 @@ exports.update = async (req, res, next) => {
     if (activity.creator_openid !== req.user.openid) return res.status(403).json({ code: 403, message: '无权限' })
 
     const body = req.body
+    const modStatus = initialPublishModerationStatus()
     await wxService.moderateActivityPublish(body)
     await query(
       `UPDATE activities SET name=?, description=?, start_time=?, end_time=?, location_name=?,
        location_address=?, location_country=?, latitude=?, longitude=?, max_participants=?,
        require_invite=?, invite_code=?, category=?, cover_image=?,
-       reminder=?, custom_fields=?, moderation_status='passed', updated_at=NOW() WHERE id=?`,
+       reminder=?, custom_fields=?, moderation_status=?, updated_at=NOW() WHERE id=?`,
       [body.name, body.description || '', body.startTime, body.endTime, body.locationName || '',
        body.locationAddress || '', body.locationCountry || 'CN', body.latitude || null, body.longitude || null,
        body.maxParticipants || 0,
        body.requireInvite ? 1 : 0,
        body.requireInvite ? (body.inviteCode || null) : null,
        body.category || 'other', body.coverImage || '',
-       body.reminder || '', JSON.stringify(body.customFields || []), id]
+       body.reminder || '', JSON.stringify(body.customFields || []), modStatus, id]
     )
     await delCache(`activity:${id}`)
     await delCacheByPattern('activities:list*')
+    await delCache('activities:featured')
 
     // 有变更则通知所有报名者
     const hasChange = body.locationName !== activity.location_name ||
@@ -385,7 +401,7 @@ exports.update = async (req, res, next) => {
       await wxService.notifyAllRegistrants(id, `活动「${body.name}」信息已更新，请注意查看最新时间/地点。`)
     }
 
-    res.json({ code: 0, message: '修改成功' })
+    res.json({ code: 0, message: '修改成功', data: { moderationStatus: modStatus } })
   } catch (e) {
     next(e)
   }
@@ -398,6 +414,7 @@ exports.offline = async (req, res, next) => {
     await query("UPDATE activities SET status='offline', offline_reason=?, offline_at=NOW() WHERE id=?", [reason || '', id])
     await delCache(`activity:${id}`)
     await delCacheByPattern('activities:list*')
+    await delCache('activities:featured')
     res.json({ code: 0, message: '已下架' })
   } catch (e) {
     next(e)
@@ -413,6 +430,7 @@ exports.getSubActivities = async (req, res, next) => {
     )
     if (!a) return res.status(404).json({ code: 404, message: '活动不存在' })
     const viewer = req.user?.openid || ''
+    const viewerAdmin = !!req.user?.isAdmin
     if (
       !viewerCanSeeActivitySnapshot(
         {
@@ -421,6 +439,7 @@ exports.getSubActivities = async (req, res, next) => {
           dbStatus: a.status,
         },
         viewer,
+        viewerAdmin,
       )
     ) {
       return res.status(404).json({ code: 404, message: '活动不存在或未公开' })
@@ -626,6 +645,7 @@ function formatActivity(a) {
     wxGroupChatQrcodeUrl:  a.wx_group_chat_qrcode_url || '',
     customFields: parseJsonArray(a.custom_fields, []),
     moderationStatus: a.moderation_status || 'passed',
+    offlineReason: a.offline_reason || '',
     dbStatus: a.status,
     status: getStatus(a),
     creatorOpenid: a.creator_openid,
@@ -634,3 +654,6 @@ function formatActivity(a) {
     createdAt: a.created_at,
   }
 }
+
+exports.formatActivity = formatActivity
+exports.initialPublishModerationStatus = initialPublishModerationStatus

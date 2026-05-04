@@ -55,6 +55,17 @@
         </view>
         <text class="creator-line" wx:if="{{activity.creatorNickname}}">发起人 · {{activity.creatorNickname}}</text>
       </view>
+
+      <view class="moderation-banner moderation-pending" wx:if="{{isCreator && activity.moderationStatus === 'pending'}}">
+        <text class="moderation-banner-title">审核中</text>
+        <text class="moderation-banner-desc">通过后本活动将出现在「发现」广场，其他用户才可报名。</text>
+      </view>
+      <view class="moderation-banner moderation-reject" wx:if="{{isCreator && activity.moderationStatus === 'rejected'}}">
+        <text class="moderation-banner-title">未通过审核</text>
+        <text class="moderation-banner-desc" wx:if="{{activity.offlineReason}}">{{activity.offlineReason}}</text>
+        <text class="moderation-banner-desc" wx:else>请修改活动信息后重新提交，如有疑问请联系平台。</text>
+      </view>
+
       <view class="divider" />
 
       <!-- 时间 -->

@@ -197,6 +197,35 @@
       </view>
     </view>
 
+    <!-- Tab: 平台活动审核（ADMIN_OPENIDS 账号） -->
+    <view wx:if="{{activeTab === 'moderate'}}">
+      <view class="moderate-intro card" wx:if="{{isPlatformAdmin}}">
+        <text class="moderate-intro-text">待审核的活动不会出现在「发现」广场；通过后方可被报名。</text>
+      </view>
+      <view wx:if="{{!isPlatformAdmin}}" class="empty-state card">
+        <text class="empty-icon">🔒</text>
+        <text class="empty-text">仅平台管理员可审核活动（请在服务端配置 ADMIN_OPENIDS）</text>
+      </view>
+
+      <view wx:if="{{isPlatformAdmin}}">
+        <view wx:for="{{pendingModerations}}" wx:key="id" class="card moderate-card">
+          <view class="moderate-head" bindtap="tapPendingActivityDetail" data-id="{{item.id}}">
+            <text class="moderate-title">{{item.name}}</text>
+            <text class="moderate-meta">{{item.startTimeText}} · {{item.category}}</text>
+          </view>
+          <text class="moderate-creator" wx:if="{{item.creatorNickname}}">发起人：{{item.creatorNickname}}</text>
+          <view class="moderate-actions">
+            <button class="btn btn-sm btn-outline" bindtap="onModerationReject" data-id="{{item.id}}">驳回</button>
+            <button class="btn btn-sm btn-primary" bindtap="onModerationPass" data-id="{{item.id}}">通过</button>
+          </view>
+        </view>
+        <view class="empty-state" wx:if="{{pendingModerations.length === 0}}">
+          <text class="empty-icon">✅</text>
+          <text class="empty-text">暂无待审核活动</text>
+        </view>
+      </view>
+    </view>
+
     <!-- Tab: 举报管理 -->
     <view wx:if="{{activeTab === 'reports'}}">
       <view wx:for="{{reportList}}" wx:key="id" class="report-item card">

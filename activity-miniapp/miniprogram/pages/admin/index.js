@@ -6,12 +6,9 @@ const { maskPhone, maskIdCard, maskName } = require('../../utils/crypto')
 Page({
   data: {
     activeTab: 'list',
-    tabs: [
-      { key: 'list', label: '报名名单' },
-      { key: 'roster', label: '学生名册' },
-      { key: 'analytics', label: '数据分析' },
-      { key: 'reports', label: '举报管理' },
-    ],
+    tabs: [],
+    isPlatformAdmin: false,
+    pendingModerations: [],
     myActivities: [],
     selectedActivityIdx: 0,
     selectedActivity: {},
@@ -46,6 +43,20 @@ Page({
   },
 
   async _bootstrapAdmin(options) {
+    const app = getApp()
+    const isPlatformAdmin = !!app.globalData.isAdmin
+    const tabs = [
+      { key: 'list', label: '报名名单' },
+      { key: 'roster', label: '学生名册' },
+      { key: 'analytics', label: '数据分析' },
+    ]
+    if (isPlatformAdmin) tabs.push({ key: 'moderate', label: '活动审核' })
+    tabs.push({ key: 'reports', label: '举报管理' })
+    let activeTab = options.tab || this.data.activeTab
+    if (activeTab === 'moderate' && !isPlatformAdmin) activeTab = 'list'
+
+    this.setData({ tabs, isPlatformAdmin, activeTab })
+
     await this._loadMyActivities()
     if (options.activityId) {
       const idx = this.data.myActivities.findIndex(a => a.id === options.activityId)
@@ -57,8 +68,8 @@ Page({
         await this._loadRegistrations()
       }
     }
-    if (options.tab) this.setData({ activeTab: options.tab })
     await this._loadSubActivities()
+    if (activeTab === 'moderate' && isPlatformAdmin) await this._loadModerationPending()
   },
 
   switchTab(e) {
@@ -70,6 +81,79 @@ Page({
     if (tab === 'roster') {
       this._loadRosters()
     }
+    if (tab === 'moderate') {
+      this._loadModerationPending()
+    }
+  },
+
+  async _loadModerationPending() {
+    if (!this.data.isPlatformAdmin) return
+    wx.showNavigationBarLoading()
+    try {
+      const body = await request.get('/admin/moderation/pending')
+      const list = (body.data || []).map((a) => ({
+        ...a,
+        startTimeText: formatDate(a.startTime, 'MM-DD HH:mm'),
+      }))
+      this.setData({ pendingModerations: list })
+    } catch (e) {
+      this.setData({ pendingModerations: [] })
+    } finally {
+      wx.hideNavigationBarLoading()
+    }
+  },
+
+  onModerationPass(e) {
+    const id = e.currentTarget.dataset.id
+    wx.showModal({
+      title: '通过审核',
+      content: '确认将该活动上架至「发现」广场？',
+      success: async (r) => {
+        if (!r.confirm) return
+        wx.showLoading({ title: '处理中…' })
+        try {
+          await request.post(`/admin/moderation/activities/${id}/decide`, { decision: 'pass' })
+          wx.hideLoading()
+          wx.showToast({ title: '已通过', icon: 'success' })
+          await this._loadModerationPending()
+        } catch (err) {
+          wx.hideLoading()
+          wx.showToast({ title: err.message || '操作失败', icon: 'none' })
+        }
+      },
+    })
+  },
+
+  onModerationReject(e) {
+    const id = e.currentTarget.dataset.id
+    wx.showModal({
+      title: '驳回审核',
+      content: '可填写驳回原因（选填）；留空则使用默认说明。',
+      editable: true,
+      placeholderText: '驳回原因（选填）',
+      success: async (r) => {
+        if (!r.confirm) return
+        wx.showLoading({ title: '处理中…' })
+        try {
+          await request.post(`/admin/moderation/activities/${id}/decide`, {
+            decision: 'reject',
+            note: r.content || '',
+          })
+          wx.hideLoading()
+          wx.showToast({ title: '已驳回', icon: 'none' })
+          await this._loadModerationPending()
+        } catch (err) {
+          wx.hideLoading()
+          wx.showToast({ title: err.message || '操作失败', icon: 'none' })
+        }
+      },
+    })
+  },
+
+  tapPendingActivityDetail(e) {
+    const id = e.currentTarget.dataset.id
+    if (!id) return
+    wx.navigateTo({ url: `/pages/activity-detail/index?id=${id}` })
   },
 
   async _loadMyActivities() {

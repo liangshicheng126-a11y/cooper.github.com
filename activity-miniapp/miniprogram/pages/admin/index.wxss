@@ -19,6 +19,16 @@
 }
 .tab-active { color: #7c3aed; font-weight: 700; border-bottom: 3rpx solid #7c3aed; }
 
+/* ── 活动审核（平台管理员） ── */
+.moderate-intro { margin: 20rpx 24rpx; padding: 20rpx 24rpx; }
+.moderate-intro-text { font-size: 24rpx; color: rgba(30,27,75,0.65); line-height: 1.55; }
+.moderate-card { margin: 0 24rpx 20rpx; padding: 24rpx; }
+.moderate-head { padding-bottom: 12rpx; }
+.moderate-title { font-size: 30rpx; font-weight: 700; color: #1e1b4b; display: block; }
+.moderate-meta { font-size: 24rpx; color: rgba(30,27,75,0.5); margin-top: 6rpx; display: block; }
+.moderate-creator { font-size: 24rpx; color: #64748b; margin-bottom: 20rpx; display: block; }
+.moderate-actions { display: flex; gap: 16rpx; justify-content: flex-end; }
+
 /* ── 筛选栏 ── */
 .filter-bar {
   background: rgba(255,255,255,0.60);

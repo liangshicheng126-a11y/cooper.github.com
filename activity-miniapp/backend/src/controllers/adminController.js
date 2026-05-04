@@ -2,7 +2,7 @@
 const { query, queryOne } = require('../config/db')
 const { parseJsonArray, parseJsonObject } = require('../utils/parseJsonField')
 const { decrypt, maskPhone, maskIdCard, maskEmail, maskName, genVerifyCode } = require('../utils/crypto')
-const { getCache, setCache, delCache } = require('../config/redis')
+const { getCache, setCache, delCache, delCacheByPattern } = require('../config/redis')
 const XLSX = require('xlsx')
 const logger = require('../utils/logger')
 
@@ -247,6 +247,59 @@ exports.getCheckins = async (req, res, next) => {
       [activityId]
     )
     res.json({ code: 0, data: list })
+  } catch (e) {
+    next(e)
+  }
+}
+
+/** 平台管理员：待人工审核的活动（发现广场仅展示已通过） */
+exports.listModerationPending = async (req, res, next) => {
+  try {
+    const { formatActivity } = require('./activityController')
+    const rows = await query(
+      `
+      SELECT a.*, u.nickname AS creator_nickname, u.avatar_url AS creator_avatar,
+             (SELECT COUNT(*) FROM registrations r WHERE r.activity_id = a.id AND r.cancelled_at IS NULL) AS registration_count
+      FROM activities a
+      LEFT JOIN users u ON a.creator_openid = u.openid
+      WHERE COALESCE(a.moderation_status, 'passed') = 'pending'
+        AND a.status NOT IN ('offline','cancelled')
+      ORDER BY a.created_at DESC
+      LIMIT 200`,
+    )
+    res.json({ code: 0, data: rows.map((r) => formatActivity(r)) })
+  } catch (e) {
+    next(e)
+  }
+}
+
+/** decision: pass | reject；reject 时可传 note → offline_reason（发起人可见简短说明） */
+exports.decideModeration = async (req, res, next) => {
+  try {
+    const { id } = req.params
+    const { decision, note } = req.body || {}
+    const dec = typeof decision === 'string' ? decision.trim() : ''
+    if (!['pass', 'reject'].includes(dec)) {
+      return res.status(400).json({ code: 400, message: 'decision 须为 pass 或 reject' })
+    }
+    const exists = await queryOne('SELECT id FROM activities WHERE id = ?', [id])
+    if (!exists) return res.status(404).json({ code: 404, message: '活动不存在' })
+
+    if (dec === 'pass') {
+      await query(`UPDATE activities SET moderation_status='passed', updated_at=NOW() WHERE id=?`, [id])
+    } else {
+      const reason =
+        typeof note === 'string' && note.trim() ? note.trim().slice(0, 500) : '审核未通过'
+      await query(
+        `UPDATE activities SET moderation_status='rejected', offline_reason=?, updated_at=NOW() WHERE id=?`,
+        [reason, id],
+      )
+    }
+
+    await delCache(`activity:${id}`)
+    await delCacheByPattern('activities:list*')
+    await delCache('activities:featured')
+    res.json({ code: 0, message: dec === 'pass' ? '已通过审核' : '已驳回' })
   } catch (e) {
     next(e)
   }

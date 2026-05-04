@@ -393,16 +393,26 @@ Page({
 
     try {
       if (isEdit) {
-        await request.put(`/activities/${activityId}`, body)
-        wx.showToast({ title: '修改成功', icon: 'success', duration: 1500 })
-        setTimeout(() => wx.navigateBack(), 1500)
+        const res = await request.put(`/activities/${activityId}`, body)
+        const needReview = res.data?.moderationStatus === 'pending'
+        wx.showToast({
+          title: needReview ? '已保存，审核通过后同步至发现广场' : '修改成功',
+          icon: 'success',
+          duration: needReview ? 2200 : 1500,
+        })
+        setTimeout(() => wx.navigateBack(), needReview ? 2200 : 1500)
       } else {
         const res = await request.post('/activities', body)
         const newId = res.data.id
+        const pending = res.data?.moderationStatus === 'pending'
         getApp().globalData.refreshHomeActivityListNextShow = true
+        const intro = pending
+          ? '活动已存入系统，管理员审核通过后将出现在「发现」广场，报名者即可查看并报名。\n\n'
+          : ''
         wx.showModal({
           title: '发布成功',
-          content: '是否设置微信群，方便报名者自愿扫码加入交流群？可同时自定义群在本页的展示名称（默认与活动标题一致）。',
+          content:
+            `${intro}是否设置微信群，方便报名者自愿扫码加入交流群？可同时自定义群在本页的展示名称（默认与活动标题一致）。`,
           confirmText: '去设置',
           cancelText: '暂不',
           success: (m) => {

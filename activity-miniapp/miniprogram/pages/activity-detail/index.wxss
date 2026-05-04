@@ -96,6 +96,34 @@
   overflow: visible;
 }
 
+/* 审核提示（仅发起人） */
+.moderation-banner {
+  margin: 24rpx -8rpx 0;
+  padding: 22rpx 24rpx;
+  border-radius: 20rpx;
+}
+.moderation-pending {
+  background: linear-gradient(135deg, rgba(254, 243, 199, 0.85) 0%, rgba(253, 230, 138, 0.55) 100%);
+  border: 1rpx solid rgba(217, 119, 6, 0.22);
+}
+.moderation-reject {
+  background: linear-gradient(135deg, rgba(254, 226, 226, 0.85) 0%, rgba(252, 165, 165, 0.4) 100%);
+  border: 1rpx solid rgba(239, 68, 68, 0.2);
+}
+.moderation-banner-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #1e1b4b;
+  margin-bottom: 8rpx;
+}
+.moderation-banner-desc {
+  display: block;
+  font-size: 24rpx;
+  color: rgba(30, 27, 75, 0.72);
+  line-height: 1.5;
+}
+
 /* ===== section card ===== */
 .section-card {
   margin: 0 20rpx 20rpx;

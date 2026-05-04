@@ -1,7 +1,7 @@
 // src/routes/admin.js
 const router = require('express').Router()
 const multer = require('multer')
-const { auth } = require('../middleware/auth')
+const { auth, adminOnly } = require('../middleware/auth')
 const auditLog = require('../middleware/auditLog')
 const c = require('../controllers/adminController')
 const roster = require('../controllers/schoolRosterController')
@@ -14,6 +14,9 @@ const rosterExcel = multer({
     else cb(new Error('仅支持 Excel：.xlsx / .xls'))
   },
 })
+
+router.get('/moderation/pending',               auth, adminOnly, c.listModerationPending)
+router.post('/moderation/activities/:id/decide', auth, adminOnly, c.decideModeration)
 
 router.get('/activities/:activityId/registrations', auth, c.getRegistrations)
 router.post('/registrations/:id/reveal',            auth, auditLog('REVEAL_DATA'), c.revealRegistration)

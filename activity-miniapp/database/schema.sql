@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS activities (
                    NOT NULL DEFAULT 'upcoming' COMMENT '活动状态',
   offline_reason   VARCHAR(500) COMMENT '下架理由',
   offline_at       DATETIME COMMENT '下架时间',
-  moderation_status ENUM('pending','passed','rejected') NOT NULL DEFAULT 'passed' COMMENT '仅 passed 在发现/搜索中公开展示（微信内容安全等）',
+  moderation_status ENUM('pending','passed','rejected') NOT NULL DEFAULT 'pending' COMMENT '仅 passed 出现在发现广场；pending 待人审；rejected 仅发起人可见',
   reminded_24h     TINYINT(1) NOT NULL DEFAULT 0 COMMENT '已发送24小时提醒',
   reminded_1h      TINYINT(1) NOT NULL DEFAULT 0 COMMENT '已发送1小时提醒',
   created_at       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
