@@ -1,5 +1,6 @@
 // src/controllers/activityController.js
 const crypto = require('crypto')
+const mysql2 = require('mysql2')
 const { query, queryOne, transaction } = require('../config/db')
 const { getCache, setCache, delCache, delCacheByPattern, CACHE_TTL, cacheAvailable } = require('../config/redis')
 const wxService = require('../services/wxService')
@@ -280,8 +281,33 @@ exports.create = async (req, res, next) => {
     await wxService.moderateActivityPublish(body)
 
     await transaction(async (conn) => {
-      /** INSERT … VALUES（显式列名）：部分环境下 INSERT SET + 占位符会得到 MySQL ER_WRONG_VALUE_COUNT_ON_ROW（1136） */
-      await conn.execute(
+      /** 使用 mysql.format + query（文本协议）；部分环境里 conn.execute（二进制预处理）会与服务器组合触发 ER_WRONG_VALUE_COUNT_ON_ROW（1136）。 */
+      const activityParams = [
+        id,
+        req.user.openid,
+        body.name,
+        body.description || '',
+        body.startTime,
+        body.endTime,
+        body.locationName || '',
+        body.locationAddress || '',
+        body.locationCountry || 'CN',
+        body.latitude || null,
+        body.longitude || null,
+        body.maxParticipants || 0,
+        body.requireInvite ? 1 : 0,
+        body.requireInvite ? (body.inviteCode || null) : null,
+        body.category || 'other',
+        body.coverImage || '',
+        body.reminder || '',
+        '',
+        '',
+        JSON.stringify(body.customFields || []),
+        modStatus,
+        'upcoming',
+        new Date(),
+      ]
+      const activitySql = mysql2.format(
         `INSERT INTO activities (
           id,
           creator_openid,
@@ -307,37 +333,23 @@ exports.create = async (req, res, next) => {
           status,
           created_at
         ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-        [
-          id,
-          req.user.openid,
-          body.name,
-          body.description || '',
-          body.startTime,
-          body.endTime,
-          body.locationName || '',
-          body.locationAddress || '',
-          body.locationCountry || 'CN',
-          body.latitude || null,
-          body.longitude || null,
-          body.maxParticipants || 0,
-          body.requireInvite ? 1 : 0,
-          body.requireInvite ? (body.inviteCode || null) : null,
-          body.category || 'other',
-          body.coverImage || '',
-          body.reminder || '',
-          '',
-          '',
-          JSON.stringify(body.customFields || []),
-          modStatus,
-          'upcoming',
-          new Date(),
-        ]
+        activityParams,
       )
+      await conn.query(activitySql)
 
-      // 插入子活动
       for (const sub of (body.subActivities || [])) {
         const subId = uuidv4()
-        await conn.execute(
+        const subParams = [
+          subId,
+          id,
+          sub.name,
+          sub.startTime,
+          sub.endTime,
+          sub.locationName || '',
+          sub.maxParticipants || 0,
+          new Date(),
+        ]
+        const subSql = mysql2.format(
           `INSERT INTO sub_activities (
             id,
             activity_id,
@@ -348,17 +360,9 @@ exports.create = async (req, res, next) => {
             max_participants,
             created_at
           ) VALUES (?,?,?,?,?,?,?,?)`,
-          [
-            subId,
-            id,
-            sub.name,
-            sub.startTime,
-            sub.endTime,
-            sub.locationName || '',
-            sub.maxParticipants || 0,
-            new Date(),
-          ]
+          subParams,
         )
+        await conn.query(subSql)
       }
     })
 
@@ -367,6 +371,14 @@ exports.create = async (req, res, next) => {
     res.status(201).json({ code: 0, data: { id, moderationStatus: modStatus } })
   } catch (e) {
     if (respondIfMissingModerationStatus(e, res)) return
+    if (e.errno) {
+      logger.error('[activities.create.mysql]', {
+        errno: e.errno,
+        code: e.code,
+        sqlMessage: e.sqlMessage,
+        sqlSnippet: typeof e.sql === 'string' ? e.sql.slice(0, 500) : undefined,
+      })
+    }
     next(e)
   }
 }
