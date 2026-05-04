@@ -271,15 +271,31 @@ exports.create = async (req, res, next) => {
           (id, creator_openid, name, description, start_time, end_time, location_name, location_address, location_country,
            latitude, longitude, max_participants, require_invite, invite_code, category, cover_image, reminder,
            wx_group_chat_name, wx_group_chat_qrcode_url, custom_fields, moderation_status, status, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '', '', ?, 'passed', 'upcoming', NOW())`,
-        [id, req.user.openid, body.name, body.description || '', body.startTime, body.endTime,
-         body.locationName || '', body.locationAddress || '', body.locationCountry || 'CN',
-         body.latitude || null, body.longitude || null, body.maxParticipants || 0,
-         body.requireInvite ? 1 : 0,
-         body.requireInvite ? (body.inviteCode || null) : null,
-         body.category || 'other',
-         body.coverImage || '', body.reminder || '',
-         JSON.stringify(body.customFields || [])]
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`,
+        [
+          id,
+          req.user.openid,
+          body.name,
+          body.description || '',
+          body.startTime,
+          body.endTime,
+          body.locationName || '',
+          body.locationAddress || '',
+          body.locationCountry || 'CN',
+          body.latitude || null,
+          body.longitude || null,
+          body.maxParticipants || 0,
+          body.requireInvite ? 1 : 0,
+          body.requireInvite ? (body.inviteCode || null) : null,
+          body.category || 'other',
+          body.coverImage || '',
+          body.reminder || '',
+          '',
+          '',
+          JSON.stringify(body.customFields || []),
+          'passed',
+          'upcoming',
+        ]
       )
 
       // 插入子活动
