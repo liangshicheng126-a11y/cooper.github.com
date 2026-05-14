@@ -3,7 +3,7 @@ const { query, queryOne } = require('../config/db')
 const { parseJsonArray, parseJsonObject } = require('../utils/parseJsonField')
 const { decrypt, maskPhone, maskIdCard, maskEmail, maskName, genVerifyCode } = require('../utils/crypto')
 const { getCache, setCache, delCache, delCacheByPattern } = require('../config/redis')
-const XLSX = require('xlsx')
+const ExcelJS = require('exceljs')
 const logger = require('../utils/logger')
 
 exports.getRegistrations = async (req, res, next) => {
@@ -147,10 +147,10 @@ exports.exportRegistrations = async (req, res, next) => {
       ]
     })
 
-    const wb = XLSX.utils.book_new()
-    const ws = XLSX.utils.aoa_to_sheet([headers, ...rows])
-    XLSX.utils.book_append_sheet(wb, ws, '报名名单')
-    const buf = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' })
+    const wb = new ExcelJS.Workbook()
+    const ws = wb.addWorksheet('报名名单')
+    ws.addRows([headers, ...rows])
+    const buf = Buffer.from(await wb.xlsx.writeBuffer())
 
     // 实际应上传到 COS 并返回下载链接
     // 简化版：返回 base64

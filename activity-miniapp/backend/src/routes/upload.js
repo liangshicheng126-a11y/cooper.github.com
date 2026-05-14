@@ -2,14 +2,9 @@
 const router = require('express').Router()
 const multer = require('multer')
 const { auth } = require('../middleware/auth')
-const COS = require('cos-nodejs-sdk-v5')
+const { uploadBuffer } = require('../utils/cosUploadBuffer')
 const { v4: uuidv4 } = require('uuid')
 const path = require('path')
-
-const cos = new COS({
-  SecretId: process.env.TENCENT_SECRET_ID,
-  SecretKey: process.env.TENCENT_SECRET_KEY,
-})
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -32,16 +27,7 @@ router.post('/image', auth, upload.single('file'), async (req, res, next) => {
       return res.json({ code: 0, data: { url: `https://placeholder.com/750x420.jpg?key=${key}` } })
     }
 
-    await new Promise((resolve, reject) => {
-      cos.putObject({
-        Bucket: process.env.COS_BUCKET,
-        Region: process.env.COS_REGION,
-        Key: key,
-        Body: req.file.buffer,
-        ContentType: req.file.mimetype,
-      }, (err) => err ? reject(err) : resolve())
-    })
-    const url = `https://${process.env.COS_BUCKET}.cos.${process.env.COS_REGION}.myqcloud.com/${key}`
+    const url = await uploadBuffer(req.file.buffer, key, req.file.mimetype)
     res.json({ code: 0, data: { url } })
   } catch (e) {
     next(e)

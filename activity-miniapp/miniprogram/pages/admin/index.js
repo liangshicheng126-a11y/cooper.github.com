@@ -438,7 +438,7 @@ Page({
     wx.chooseMessageFile({
       count: 1,
       type: 'file',
-      extension: ['xlsx', 'xls'],
+      extension: ['xlsx'],
       success: async (res) => {
         const tf = res.tempFiles[0]
         if (!tf) return

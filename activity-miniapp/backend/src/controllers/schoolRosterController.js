@@ -1,7 +1,7 @@
 // schoolRosterController.js — 学校/院系学生名册 Excel 导入与报名核对
 
 const path = require('path')
-const XLSX = require('xlsx')
+const ExcelJS = require('exceljs')
 const { query, queryOne, transaction } = require('../config/db')
 const { parseJsonObject } = require('../utils/parseJsonField')
 const { encrypt, decrypt, maskPhone } = require('../utils/crypto')
@@ -69,6 +69,42 @@ function normalizeStudentNo(s) {
   return String(s || '').trim().replace(/\s/g, '').toUpperCase()
 }
 
+function cellText(cell) {
+  if (!cell) return ''
+  const v = cell.value
+  if (v === null || v === undefined) return ''
+  if (v instanceof Date) return v.toISOString().slice(0, 10)
+  if (typeof v === 'object') {
+    if (v.text !== undefined) return String(v.text)
+    if (v.result !== undefined) return String(v.result)
+    if (Array.isArray(v.richText)) return v.richText.map((x) => x.text || '').join('')
+    if (v.hyperlink && v.text) return String(v.text)
+  }
+  return String(v)
+}
+
+function worksheetToObjects(ws) {
+  const headers = []
+  ws.getRow(1).eachCell({ includeEmpty: true }, (cell, col) => {
+    headers[col] = cellText(cell).trim()
+  })
+
+  const rows = []
+  ws.eachRow({ includeEmpty: false }, (row, rowNumber) => {
+    if (rowNumber === 1) return
+    const item = {}
+    let hasValue = false
+    headers.forEach((header, col) => {
+      if (!header) return
+      const value = cellText(row.getCell(col)).trim()
+      item[header] = value
+      if (value) hasValue = true
+    })
+    if (hasValue) rows.push(item)
+  })
+  return rows
+}
+
 async function bulkInsert(conn, rosterId, items) {
   for (let i = 0; i < items.length; i += INSERT_CHUNK) {
     const chunk = items.slice(i, i + INSERT_CHUNK)
@@ -97,19 +133,18 @@ async function bulkInsert(conn, rosterId, items) {
 exports.importExcel = async (req, res, next) => {
   try {
     if (!req.file?.buffer?.length) {
-      return res.status(400).json({ code: 400, message: '请上传 Excel 文件（.xlsx / .xls）' })
+      return res.status(400).json({ code: 400, message: '请上传 Excel 文件（.xlsx）' })
     }
     const title = String(req.body?.title || '未命名名册').trim().slice(0, 200)
     const filename = path.basename(req.file.originalname || 'import.xlsx')
-    let wb
+    const wb = new ExcelJS.Workbook()
     try {
-      wb = XLSX.read(req.file.buffer, { type: 'buffer' })
+      await wb.xlsx.load(req.file.buffer)
     } catch (e) {
       return res.status(400).json({ code: 400, message: '无法解析该 Excel，请检查后重试' })
     }
-    const sheetName = wb.SheetNames[0]
-    const ws = wb.Sheets[sheetName]
-    const rows = XLSX.utils.sheet_to_json(ws, { defval: '', raw: false, blankrows: false })
+    const ws = wb.worksheets[0]
+    const rows = ws ? worksheetToObjects(ws) : []
 
     if (!rows.length) {
       return res.status(400).json({ code: 400, message: '第一个工作表无数据行，请检查 Excel' })

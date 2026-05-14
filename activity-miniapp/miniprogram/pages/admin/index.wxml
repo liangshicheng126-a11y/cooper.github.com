@@ -113,7 +113,7 @@
       <view class="card roster-form">
         <text class="input-label">名册名称</text>
         <input class="roster-title-input" placeholder="如：机电学院2024级在校生" value="{{newRosterTitle}}" bindinput="onRosterTitleInput" />
-        <button class="btn btn-primary btn-block mt-16" bindtap="tapImportRosterExcel">从聊天中选择 Excel (.xlsx / .xls)</button>
+        <button class="btn btn-primary btn-block mt-16" bindtap="tapImportRosterExcel">从聊天中选择 Excel (.xlsx)</button>
       </view>
       <view class="section-title px-24">已导入名册</view>
       <view wx:for="{{rosters}}" wx:key="id" class="card roster-card">

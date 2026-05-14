@@ -26,7 +26,10 @@ client.on('connect', () => {
   logger.info('✅ Redis connected')
 })
 
-client.connect().catch(() => {})
+function connectRedis() {
+  if (client.isOpen) return Promise.resolve(client)
+  return client.connect().catch(() => null)
+}
 
 // ── TTL 配置（秒） ──────────────────────────────────────────
 const CACHE_TTL = {
@@ -112,6 +115,7 @@ function cacheAvailable() {
 
 module.exports = {
   client,
+  connectRedis,
   getCache,
   setCache,
   delCache,

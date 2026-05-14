@@ -10,8 +10,8 @@ const rosterExcel = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 8 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
-    if (/\.(xlsx|xls)$/i.test(file.originalname || '')) cb(null, true)
-    else cb(new Error('仅支持 Excel：.xlsx / .xls'))
+    if (/\.xlsx$/i.test(file.originalname || '')) cb(null, true)
+    else cb(new Error('仅支持 Excel：.xlsx'))
   },
 })
 

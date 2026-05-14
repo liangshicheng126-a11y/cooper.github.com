@@ -6,8 +6,7 @@ const helmet    = require('helmet')
 const rateLimit = require('express-rate-limit')
 const logger    = require('./utils/logger')
 const db        = require('./config/db')
-require('./config/redis')
-require('./jobs/reminderJob')
+const { connectRedis } = require('./config/redis')
 
 const app = express()
 
@@ -92,10 +91,20 @@ app.use((err, req, res, next) => {
   })
 })
 
-const PORT = process.env.PORT || 3000
-app.listen(PORT, async () => {
-  await db.authenticate()
-  logger.info(`✅ Server running on port ${PORT}`)
-})
+async function start() {
+  await connectRedis()
+  require('./jobs/reminderJob')
+  const PORT = process.env.PORT || 3000
+  const server = app.listen(PORT, async () => {
+    await db.authenticate()
+    logger.info(`✅ Server running on port ${PORT}`)
+  })
+  return server
+}
+
+if (require.main === module) {
+  start()
+}
 
 module.exports = app
+module.exports.start = start

@@ -69,7 +69,7 @@ function getPoolStats() {
 }
 
 // 连接池告警：空闲连接不足 20% 时输出警告
-setInterval(() => {
+const poolMonitor = setInterval(() => {
   try {
     const s = getPoolStats()
     const usageRate = (s.total - s.free) / s.limit
@@ -81,6 +81,7 @@ setInterval(() => {
     }
   } catch (_) {}
 }, 10000)
+poolMonitor.unref?.()
 
 async function authenticate() {
   try {
