@@ -1,0 +1,413 @@
+{
+  "corpus_size": 82,
+  "seed_papers": [
+    {
+      "title": "Cultural Visual Symbols in Intangible Cultural Heritage Branding and Their Effects on Cultural Identity and Brand Preference: Implications for Cultural Sustainability",
+      "doi": "10.3390/su18073200",
+      "authors": [
+        "Jiajia Zhao",
+        "Lixian Xie",
+        "Ziyang Huang"
+      ]
+    },
+    {
+      "title": "An intelligent model for visual communication in modern art",
+      "doi": "10.1007/s44163-026-00937-6",
+      "authors": [
+        "Haiyan Zhang"
+      ]
+    }
+  ],
+  "top_keywords": [
+    [
+      "computer science",
+      46
+    ],
+    [
+      "psychology",
+      41
+    ],
+    [
+      "business",
+      40
+    ],
+    [
+      "advertising",
+      35
+    ],
+    [
+      "marketing",
+      29
+    ],
+    [
+      "artificial intelligence",
+      22
+    ],
+    [
+      "political science",
+      21
+    ],
+    [
+      "social psychology",
+      21
+    ],
+    [
+      "sociology",
+      18
+    ],
+    [
+      "brand management",
+      15
+    ],
+    [
+      "value (mathematics)",
+      14
+    ],
+    [
+      "aesthetics",
+      14
+    ],
+    [
+      "art",
+      14
+    ],
+    [
+      "context (archaeology)",
+      13
+    ],
+    [
+      "human–computer interaction",
+      12
+    ],
+    [
+      "engineering",
+      11
+    ],
+    [
+      "brand equity",
+      11
+    ],
+    [
+      "cultural heritage",
+      10
+    ],
+    [
+      "structural equation modeling",
+      10
+    ],
+    [
+      "mathematics",
+      10
+    ]
+  ],
+  "top_keyword_pairs": [
+    [
+      "advertising | business",
+      35
+    ],
+    [
+      "business | marketing",
+      29
+    ],
+    [
+      "advertising | marketing",
+      27
+    ],
+    [
+      "business | psychology",
+      26
+    ],
+    [
+      "advertising | psychology",
+      24
+    ],
+    [
+      "artificial intelligence | computer science",
+      22
+    ],
+    [
+      "psychology | social psychology",
+      21
+    ],
+    [
+      "marketing | psychology",
+      20
+    ],
+    [
+      "computer science | psychology",
+      18
+    ],
+    [
+      "advertising | brand management",
+      15
+    ],
+    [
+      "brand management | business",
+      15
+    ],
+    [
+      "business | computer science",
+      15
+    ],
+    [
+      "business | social psychology",
+      15
+    ],
+    [
+      "business | political science",
+      15
+    ],
+    [
+      "brand management | marketing",
+      14
+    ],
+    [
+      "computer science | marketing",
+      14
+    ],
+    [
+      "advertising | computer science",
+      13
+    ],
+    [
+      "advertising | social psychology",
+      13
+    ],
+    [
+      "advertising | political science",
+      13
+    ],
+    [
+      "psychology | value (mathematics)",
+      12
+    ]
+  ],
+  "graphs": [
+    {
+      "name": "keywords",
+      "nodes": 122,
+      "edges": 833,
+      "top_nodes": [
+        [
+          "computer science",
+          76
+        ],
+        [
+          "psychology",
+          73
+        ],
+        [
+          "business",
+          70
+        ],
+        [
+          "advertising",
+          64
+        ],
+        [
+          "marketing",
+          58
+        ],
+        [
+          "social psychology",
+          46
+        ],
+        [
+          "sociology",
+          44
+        ],
+        [
+          "political science",
+          42
+        ],
+        [
+          "art",
+          36
+        ],
+        [
+          "artificial intelligence",
+          35
+        ],
+        [
+          "aesthetics",
+          35
+        ],
+        [
+          "value (mathematics)",
+          32
+        ]
+      ]
+    },
+    {
+      "name": "authors",
+      "nodes": 212,
+      "edges": 296,
+      "top_nodes": [
+        [
+          "Jia Wei",
+          6
+        ],
+        [
+          "Jiangjie Huang",
+          6
+        ],
+        [
+          "Meng‐Ting Yao",
+          6
+        ],
+        [
+          "Wei Li",
+          6
+        ],
+        [
+          "Yongchuan Tang",
+          6
+        ],
+        [
+          "Yongxing He",
+          6
+        ],
+        [
+          "Zejian Li",
+          6
+        ],
+        [
+          "Ahmed A. Elngar",
+          6
+        ],
+        [
+          "Amar Fathy",
+          6
+        ],
+        [
+          "Basma Moustafa",
+          6
+        ],
+        [
+          "Mohamed Arafa",
+          6
+        ],
+        [
+          "Mohamed Shaban",
+          6
+        ]
+      ]
+    },
+    {
+      "name": "institutions",
+      "nodes": 116,
+      "edges": 166,
+      "top_nodes": [
+        [
+          "Hamburg University of Technology",
+          10
+        ],
+        [
+          "Universität Hamburg",
+          10
+        ],
+        [
+          "Columbia University",
+          7
+        ],
+        [
+          "Complexity Science Hub Vienna",
+          7
+        ],
+        [
+          "Kavli Institute for Particle Astrophysics and Cosmology",
+          7
+        ],
+        [
+          "Medical University of Vienna",
+          7
+        ],
+        [
+          "Stanford University",
+          7
+        ],
+        [
+          "University of Chicago",
+          7
+        ],
+        [
+          "University of Pennsylvania",
+          7
+        ],
+        [
+          "University of the Arts",
+          7
+        ],
+        [
+          "Adam Smith Institute",
+          6
+        ],
+        [
+          "Babeș-Bolyai University",
+          6
+        ]
+      ]
+    },
+    {
+      "name": "countries",
+      "nodes": 22,
+      "edges": 26,
+      "top_nodes": [
+        [
+          "DE",
+          6
+        ],
+        [
+          "CN",
+          6
+        ],
+        [
+          "AU",
+          5
+        ],
+        [
+          "GB",
+          5
+        ],
+        [
+          "PT",
+          4
+        ],
+        [
+          "FI",
+          4
+        ],
+        [
+          "NL",
+          3
+        ],
+        [
+          "RO",
+          3
+        ],
+        [
+          "US",
+          3
+        ],
+        [
+          "TW",
+          1
+        ],
+        [
+          "IN",
+          1
+        ],
+        [
+          "ES",
+          1
+        ]
+      ]
+    }
+  ],
+  "images": {
+    "keyword": "X:\\A\\1\\vos_data\\output\\network_keywords.png",
+    "author": "X:\\A\\1\\vos_data\\output\\network_authors.png",
+    "institution": "X:\\A\\1\\vos_data\\output\\network_institutions.png",
+    "country": "X:\\A\\1\\vos_data\\output\\network_countries.png"
+  }
+}

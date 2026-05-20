@@ -1,0 +1,2831 @@
+[
+  {
+    "id": "https://openalex.org/W7140275685",
+    "title": "Cultural Visual Symbols in Intangible Cultural Heritage Branding and Their Effects on Cultural Identity and Brand Preference: Implications for Cultural Sustainability",
+    "year": 2026,
+    "doi": "10.3390/su18073200",
+    "authors": [
+      "Jiajia Zhao",
+      "Lixian Xie",
+      "Ziyang Huang"
+    ],
+    "institutions": [
+      "Hanyang University"
+    ],
+    "countries": [
+      "KR"
+    ],
+    "keywords": [
+      "Intangible cultural heritage",
+      "Cultural identity",
+      "Cultural heritage",
+      "Cultural heritage management",
+      "Semiotics",
+      "Cultural analysis",
+      "Sustainability",
+      "Structural equation modeling",
+      "Empirical research"
+    ],
+    "journal": "Sustainability",
+    "seed": true
+  },
+  {
+    "id": "https://openalex.org/W7135417015",
+    "title": "An intelligent model for visual communication in modern art",
+    "year": 2026,
+    "doi": "10.1007/s44163-026-00937-6",
+    "authors": [
+      "Haiyan Zhang"
+    ],
+    "institutions": [
+      "Lanzhou Jiaotong University"
+    ],
+    "countries": [
+      "CN"
+    ],
+    "keywords": [
+      "Visual communication",
+      "Communication design",
+      "Convolutional neural network",
+      "Preprocessor",
+      "Cluster analysis",
+      "Ambiguity",
+      "Grid",
+      "Statistical model",
+      "Visualization"
+    ],
+    "journal": "Discover Artificial Intelligence",
+    "seed": true
+  },
+  {
+    "id": "https://openalex.org/W2105846236",
+    "title": "A new criterion for assessing discriminant validity in variance-based structural equation modeling",
+    "year": 2014,
+    "doi": "10.1007/s11747-014-0403-8",
+    "authors": [
+      "Jörg Henseler",
+      "Christian M. Ringle",
+      "Marko Sarstedt"
+    ],
+    "institutions": [
+      "Universidade Nova de Lisboa",
+      "University of Twente",
+      "Universität Hamburg",
+      "Hamburg University of Technology",
+      "University of Newcastle Australia",
+      "Otto-von-Guericke University Magdeburg"
+    ],
+    "countries": [
+      "PT",
+      "NL",
+      "DE",
+      "AU"
+    ],
+    "keywords": [
+      "Structural equation modeling",
+      "Discriminant validity",
+      "Discriminant",
+      "Latent variable",
+      "Variance (accounting)",
+      "Linear discriminant analysis",
+      "Partial least squares regression",
+      "Statistics",
+      "Mathematics",
+      "Monte Carlo method",
+      "Econometrics",
+      "Computer science",
+      "Artificial intelligence",
+      "Psychometrics"
+    ],
+    "journal": "Journal of the Academy of Marketing Science",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4328137216",
+    "title": "A perspective on using partial least squares structural equation modelling in data articles",
+    "year": 2023,
+    "doi": "10.1016/j.dib.2023.109074",
+    "authors": [
+      "Christian M. Ringle",
+      "Marko Sarstedt",
+      "Noemi Sinkovics",
+      "Rudolf R. Sinkovics"
+    ],
+    "institutions": [
+      "Universität Hamburg",
+      "Hamburg University of Technology",
+      "Babeș-Bolyai University",
+      "Ludwig-Maximilians-Universität München",
+      "Adam Smith Institute",
+      "University of Glasgow",
+      "Lappeenranta-Lahti University of Technology"
+    ],
+    "countries": [
+      "DE",
+      "RO",
+      "GB",
+      "FI"
+    ],
+    "keywords": [
+      "Structural equation modeling",
+      "Perspective (graphical)",
+      "Computer science",
+      "Partial least squares regression",
+      "Metric (unit)",
+      "Publication",
+      "Data mining",
+      "Data science",
+      "Information retrieval",
+      "Artificial intelligence",
+      "Machine learning",
+      "Law",
+      "Engineering",
+      "Political science"
+    ],
+    "journal": "Data in Brief",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W3044960932",
+    "title": "Artificial intelligence in the creative industries: a review",
+    "year": 2021,
+    "doi": "10.1007/s10462-021-10039-7",
+    "authors": [
+      "Nantheera Anantrasirichai",
+      "David Bull"
+    ],
+    "institutions": [
+      "University of Bristol"
+    ],
+    "countries": [
+      "GB"
+    ],
+    "keywords": [
+      "Context (archaeology)",
+      "Categorization",
+      "Generative grammar",
+      "Applications of artificial intelligence",
+      "Creativity",
+      "Deep learning",
+      "Focus (optics)",
+      "Reinforcement learning"
+    ],
+    "journal": "Artificial Intelligence Review",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W3035604015",
+    "title": "Perceived authenticity of traditional branded restaurants (China): impacts on perceived quality, perceived value, and behavioural intentions",
+    "year": 2020,
+    "doi": "10.1080/13683500.2020.1776687",
+    "authors": [
+      "Qian Chen",
+      "Rong Huang",
+      "Bing Hou"
+    ],
+    "institutions": [
+      "Yangzhou University",
+      "University of Plymouth"
+    ],
+    "countries": [
+      "CN",
+      "GB"
+    ],
+    "keywords": [
+      "Value (mathematics)",
+      "Marketing",
+      "Advertising",
+      "Quality (philosophy)",
+      "China",
+      "Perceived quality",
+      "Business",
+      "Psychology",
+      "Consumer behaviour",
+      "Perception",
+      "Geography",
+      "Brand awareness",
+      "Mathematics"
+    ],
+    "journal": "Current Issues in Tourism",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4308579274",
+    "title": "Communication in Human–AI Co-Creation: Perceptual Analysis of Paintings Generated by Text-to-Image System",
+    "year": 2022,
+    "doi": "10.3390/app122211312",
+    "authors": [
+      "Yanru Lyu",
+      "Xinxin Wang",
+      "Rungtai Lin",
+      "Jun Wu"
+    ],
+    "institutions": [
+      "Beijing Technology and Business University",
+      "Beijing International Studies University",
+      "National Taiwan University of Arts",
+      "Shenzhen University"
+    ],
+    "countries": [
+      "CN",
+      "TW"
+    ],
+    "keywords": [
+      "Perception",
+      "Painting",
+      "Mainstream",
+      "Visual arts",
+      "Task (project management)",
+      "Art",
+      "Natural (archaeology)",
+      "Value (mathematics)",
+      "Phenomenon",
+      "Aesthetics",
+      "Psychology",
+      "Computer science",
+      "Epistemology",
+      "Engineering",
+      "Philosophy",
+      "History"
+    ],
+    "journal": "Applied Sciences",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W3176919888",
+    "title": "Modern Art Education and Teaching Based on Artificial Intelligence",
+    "year": 2021,
+    "doi": "10.1142/s021926592141005x",
+    "authors": [
+      "Wen Zhang",
+      "Achyut Shankar",
+      "A. Antonidoss"
+    ],
+    "institutions": [
+      "Zhejiang Industry Polytechnic College",
+      "Amity University",
+      "Hindustan Institute of Technology and Science"
+    ],
+    "countries": [
+      "CN",
+      "IN"
+    ],
+    "keywords": [
+      "Computer science",
+      "Carving",
+      "Visual arts education",
+      "Painting",
+      "Learning styles",
+      "Artificial intelligence",
+      "Mathematics education",
+      "Multimedia",
+      "Visual arts",
+      "Mathematics",
+      "The arts",
+      "Art"
+    ],
+    "journal": "Journal of Interconnection Networks",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W2616189804",
+    "title": "New brand logo design: customers’ preference for brand name and icon",
+    "year": 2017,
+    "doi": "10.1057/s41262-017-0046-4",
+    "authors": [
+      "Sabrina Bresciani",
+      "Paolo Del Ponte"
+    ],
+    "institutions": [
+      "University of St.Gallen"
+    ],
+    "countries": [
+      "CH"
+    ],
+    "keywords": [
+      "Logos Bible Software",
+      "Icon",
+      "Logo (programming language)",
+      "Advertising",
+      "Extant taxon",
+      "Brand management",
+      "Attractiveness",
+      "Marketing",
+      "Business",
+      "Computer science",
+      "Art",
+      "Aesthetics"
+    ],
+    "journal": "Journal of Brand Management",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W3172712781",
+    "title": "Computer-Aided Interaction of Visual Communication Technology and Art in New Media Scenes",
+    "year": 2021,
+    "doi": "10.14733/cadaps.2022.s3.75-84",
+    "authors": [
+      "Ruoyao Wang"
+    ],
+    "institutions": [],
+    "countries": [],
+    "keywords": [
+      "Media arts",
+      "Visual media",
+      "Computer science",
+      "Computer graphics (images)",
+      "Visual communication",
+      "Human–computer interaction",
+      "Computer vision",
+      "Multimedia",
+      "Visual arts",
+      "Art"
+    ],
+    "journal": "Computer-Aided Design and Applications",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4210290536",
+    "title": "Exploring relationship among semiotic product packaging, brand experience dimensions, brand trust and purchase intentions in an Asian emerging market",
+    "year": 2022,
+    "doi": "10.1108/apjml-10-2021-0718",
+    "authors": [
+      "Mahima Shukla",
+      "Richa Misra",
+      "Deepak Singh"
+    ],
+    "institutions": [
+      "Amity University",
+      "Jaipuria Institute of Management"
+    ],
+    "countries": [
+      "IN"
+    ],
+    "keywords": [
+      "Semiotics",
+      "Marketing",
+      "Originality",
+      "Brand management",
+      "Product (mathematics)",
+      "Advertising",
+      "Brand awareness",
+      "Business",
+      "Brand equity",
+      "Structural equation modeling",
+      "Qualitative research",
+      "Sociology",
+      "Computer science",
+      "Mathematics"
+    ],
+    "journal": "Asia Pacific Journal of Marketing and Logistics",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4310991061",
+    "title": "Examining purchase intention for luxury fashion: integrating theory of reasoned action, with affect-behavior-cognition (ABC) model, identity and social identity theories",
+    "year": 2022,
+    "doi": "10.1108/yc-07-2022-1557",
+    "authors": [
+      "Mei Mei Lau",
+      "Peggy M. L. Ng",
+      "Elaine Ah Heung Chan",
+      "Cherry Tin Yan Cheung"
+    ],
+    "institutions": [
+      "Hong Kong Polytechnic University"
+    ],
+    "countries": [
+      "HK"
+    ],
+    "keywords": [
+      "Affect (linguistics)",
+      "Psychology",
+      "Theory of reasoned action",
+      "Attractiveness",
+      "Social psychology",
+      "Social cognitive theory",
+      "Purchasing",
+      "Identity (music)",
+      "Social identity theory",
+      "Originality",
+      "Action (physics)",
+      "Cognition",
+      "Advertising",
+      "Marketing",
+      "Social group",
+      "Business"
+    ],
+    "journal": "Young Consumers Insight and Ideas for Responsible Marketers",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4280593997",
+    "title": "Visual communication via the design of food and beverage packaging",
+    "year": 2022,
+    "doi": "10.1186/s41235-022-00391-9",
+    "authors": [
+      "Charles Spence",
+      "George Van Doorn"
+    ],
+    "institutions": [
+      "University of Oxford",
+      "Federation University"
+    ],
+    "countries": [
+      "GB",
+      "AU"
+    ],
+    "keywords": [
+      "Typeface",
+      "Semiotics",
+      "Package design",
+      "Sophistication",
+      "Communication design",
+      "Crossmodal",
+      "Meaning (existential)",
+      "Gastronomy",
+      "Taste",
+      "Marketing",
+      "Psychology",
+      "Cognitive psychology",
+      "Advertising",
+      "Computer science",
+      "Business",
+      "Aesthetics",
+      "Visual perception",
+      "Linguistics",
+      "Engineering",
+      "Geography",
+      "Art",
+      "Perception",
+      "Engineering drawing"
+    ],
+    "journal": "Cognitive Research Principles and Implications",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4320495368",
+    "title": "Exploring the mechanism of consumer purchase intention in a traditional culture based on the theory of planned behavior",
+    "year": 2023,
+    "doi": "10.3389/fpsyg.2023.1110191",
+    "authors": [
+      "Zupan Zong",
+      "Xinyu Liu",
+      "Huijing Gao"
+    ],
+    "institutions": [
+      "Shenzhen University"
+    ],
+    "countries": [
+      "CN"
+    ],
+    "keywords": [
+      "Psychology",
+      "Theory of planned behavior",
+      "Purchasing",
+      "Value (mathematics)",
+      "Consumer behaviour",
+      "Cultural identity",
+      "Social psychology",
+      "Hofstede's cultural dimensions theory",
+      "Identity (music)",
+      "Product (mathematics)",
+      "Structural equation modeling",
+      "Marketing",
+      "Empowerment",
+      "Advertising",
+      "Business",
+      "Control (management)",
+      "Aesthetics",
+      "Economics"
+    ],
+    "journal": "Frontiers in Psychology",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W3173309444",
+    "title": "What makes a corporate heritage brand authentic for consumers? A semiotic approach",
+    "year": 2021,
+    "doi": "10.1057/s41262-021-00243-9",
+    "authors": [
+      "Anne Rindell",
+      "Fernando Pinto Santos"
+    ],
+    "institutions": [
+      "Hanken School of Economics",
+      "Instituto Português de Administração de Marketing"
+    ],
+    "countries": [
+      "FI",
+      "PT"
+    ],
+    "keywords": [
+      "Corporate branding",
+      "Brand management",
+      "Credibility",
+      "Brand equity",
+      "Marketing",
+      "Business",
+      "Employer branding",
+      "Corporate social responsibility",
+      "Semiotics",
+      "Corporate communication",
+      "Consistency (knowledge bases)",
+      "Advertising",
+      "Sociology",
+      "Public relations",
+      "Political science",
+      "Product management",
+      "New product development"
+    ],
+    "journal": "Journal of Brand Management",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4406947263",
+    "title": "A Multifaceted Vision of the Human-AI Collaboration: A Comprehensive Review",
+    "year": 2025,
+    "doi": "10.1109/access.2025.3536095",
+    "authors": [
+      "Maite Puerta-Beldarrain",
+      "Oihane Gómez–Carmona",
+      "Rubén Sánchez",
+      "Diego Casado–Mansilla",
+      "Diego López–de–Ipiña",
+      "Liming Chen"
+    ],
+    "institutions": [
+      "Universidad de Deusto",
+      "Dalian University of Technology"
+    ],
+    "countries": [
+      "ES",
+      "CN"
+    ],
+    "keywords": [
+      "Computer science",
+      "Data science",
+      "Artificial intelligence",
+      "Human–computer interaction"
+    ],
+    "journal": "IEEE Access",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4315781068",
+    "title": "Intangible cultural heritage souvenirs: image congruity and brand influence on tourists’ purchase intention",
+    "year": 2023,
+    "doi": "10.1108/tr-04-2022-0196",
+    "authors": [
+      "Yanbing Guo",
+      "Zhuanfa Zhu"
+    ],
+    "institutions": [
+      "Shanxi University of Finance and Economics",
+      "Shanxi University"
+    ],
+    "countries": [
+      "CN"
+    ],
+    "keywords": [
+      "Antecedent (behavioral psychology)",
+      "Originality",
+      "Intangible cultural heritage",
+      "Advertising",
+      "Psychology",
+      "Situational ethics",
+      "Tourism",
+      "Value (mathematics)",
+      "Entertainment",
+      "Object (grammar)",
+      "Destination image",
+      "Perception",
+      "Marketing",
+      "Perspective (graphical)",
+      "Likert scale",
+      "Social psychology",
+      "Cultural heritage",
+      "Business",
+      "Creativity",
+      "Political science"
+    ],
+    "journal": "Tourism Review",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4396676116",
+    "title": "Values, Attitudes and the Behaviour Paradigm: A Systematic Literature Review",
+    "year": 2024,
+    "doi": "10.1177/09716858241236902",
+    "authors": [
+      "Zeynab Nazirova",
+      "Bori Simonovits"
+    ],
+    "institutions": [
+      "Eötvös Loránd University"
+    ],
+    "countries": [
+      "HU"
+    ],
+    "keywords": [
+      "Situational ethics",
+      "Value (mathematics)",
+      "Psychology",
+      "Social psychology",
+      "Perspective (graphical)",
+      "Empirical research",
+      "Context (archaeology)",
+      "Scale (ratio)",
+      "Human values",
+      "Epistemology",
+      "Sociology",
+      "Social science",
+      "Computer science"
+    ],
+    "journal": "Journal of Human Values",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4361000678",
+    "title": "The decision-making process regarding the continuance intention of using branded apps: an integrated approach to the PAM and the TPB",
+    "year": 2023,
+    "doi": "10.1108/ijchm-03-2022-0331",
+    "authors": [
+      "Sun-Ae Cho",
+      "Yu Jung Jennifer Jeon"
+    ],
+    "institutions": [
+      "Far East University"
+    ],
+    "countries": [
+      "KR"
+    ],
+    "keywords": [
+      "Continuance",
+      "Theory of planned behavior",
+      "Loyalty",
+      "Structural equation modeling",
+      "Marketing",
+      "Psychology",
+      "Originality",
+      "Technology acceptance model",
+      "Process (computing)",
+      "Usability",
+      "Control (management)",
+      "Business",
+      "Knowledge management",
+      "Computer science",
+      "Social psychology",
+      "Human–computer interaction"
+    ],
+    "journal": "International Journal of Contemporary Hospitality Management",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W2466545747",
+    "title": "Intangible Cultural Heritage: The New Frontier of Destination Branding",
+    "year": 2014,
+    "doi": "10.1007/978-3-319-10951-0_147",
+    "authors": [
+      "Jason Ryan"
+    ],
+    "institutions": [],
+    "countries": [],
+    "keywords": [
+      "Cultural heritage management",
+      "Cultural heritage",
+      "Intangible cultural heritage",
+      "Tourism",
+      "Convention",
+      "Natural heritage",
+      "Cultural tourism",
+      "Political science",
+      "Universal value",
+      "Destinations",
+      "Geography",
+      "Environmental ethics",
+      "Economy",
+      "World heritage",
+      "Tourism geography",
+      "Law"
+    ],
+    "journal": "Developments in marketing science: proceedings of the Academy of Marketing Science",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4404183800",
+    "title": "Empirical study of Neo-Chinese fashion consumer behaviour from the perspectives of cultural identity and emotional self-regulation mechanism",
+    "year": 2024,
+    "doi": "10.1108/apjml-07-2024-1004",
+    "authors": [
+      "Hu Meng",
+      "Xinran Xu",
+      "Tianyue Tian"
+    ],
+    "institutions": [
+      "Sichuan University"
+    ],
+    "countries": [
+      "CN"
+    ],
+    "keywords": [
+      "Mechanism (biology)",
+      "Identity (music)",
+      "Psychology",
+      "Social psychology",
+      "Empirical research",
+      "Cultural identity",
+      "Consumer behaviour",
+      "Sociology",
+      "Business",
+      "Aesthetics",
+      "Epistemology",
+      "Art"
+    ],
+    "journal": "Asia Pacific Journal of Marketing and Logistics",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4385492728",
+    "title": "Evaluations of Guangzhou’s brand building through intangible cultural heritage: a brand equity model",
+    "year": 2023,
+    "doi": "10.1057/s41254-023-00310-9",
+    "authors": [
+      "Jiayin Zhang",
+      "Min Wang",
+      "Yinbin Lin"
+    ],
+    "institutions": [
+      "Peking University",
+      "South China Normal University"
+    ],
+    "countries": [
+      "CN"
+    ],
+    "keywords": [
+      "Brand equity",
+      "Brand management",
+      "Brand awareness",
+      "Corporate branding",
+      "Brand loyalty",
+      "Advertising",
+      "Place branding",
+      "Business",
+      "Marketing",
+      "Reputation",
+      "Brand extension",
+      "Promotion (chess)",
+      "Loyalty",
+      "Tourism",
+      "Sociology",
+      "Political science"
+    ],
+    "journal": "Place Branding and Public Diplomacy",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W1606579464",
+    "title": "Cultural Meanings of Brands and Consumption: A Window into the Cultural Psychology of Globalization",
+    "year": 2011,
+    "doi": "10.1111/j.1751-9004.2011.00349.x",
+    "authors": [
+      "Carlos J. Torelli",
+      "Shirley Y. Y. Cheng"
+    ],
+    "institutions": [
+      "University of Minnesota",
+      "University of Minnesota System",
+      "Twin Cities Orthopedics",
+      "Hong Kong Baptist University"
+    ],
+    "countries": [
+      "US",
+      "HK"
+    ],
+    "keywords": [
+      "Globalization",
+      "Cultural psychology",
+      "Consumption (sociology)",
+      "Cultural identity",
+      "Psychology",
+      "Cultural globalization",
+      "Social psychology",
+      "Cultural homogenization",
+      "Consumer behaviour",
+      "Identity (music)",
+      "Sociology",
+      "Cultural diversity",
+      "Cultural analysis",
+      "Aesthetics",
+      "Social science",
+      "Political science",
+      "Anthropology"
+    ],
+    "journal": "Social and Personality Psychology Compass",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W3033830516",
+    "title": "Color associations in abstract semantic domains",
+    "year": 2020,
+    "doi": "10.1016/j.cognition.2020.104306",
+    "authors": [
+      "Douglas Guilbeault",
+      "Ethan O. Nadler",
+      "Mark Chu",
+      "Donald Ruggiero Lo Sardo",
+      "Aabir Abubaker Kar",
+      "Bhargav Srinivasa Desikan"
+    ],
+    "institutions": [
+      "University of Pennsylvania",
+      "Kavli Institute for Particle Astrophysics and Cosmology",
+      "Stanford University",
+      "University of the Arts",
+      "Columbia University",
+      "Complexity Science Hub Vienna",
+      "Medical University of Vienna",
+      "University of Chicago"
+    ],
+    "countries": [
+      "US",
+      "AT"
+    ],
+    "keywords": [
+      "Embodied cognition",
+      "WordNet",
+      "Psychology",
+      "Metaphor",
+      "Perception",
+      "Semantics (computer science)",
+      "Cognition",
+      "Cognitive semantics",
+      "Affect (linguistics)",
+      "Linguistics",
+      "Coherence (philosophical gambling strategy)",
+      "Color term",
+      "Cognitive psychology",
+      "Cognitive linguistics",
+      "Cognitive science",
+      "Natural language processing",
+      "Computer science",
+      "Artificial intelligence",
+      "Communication"
+    ],
+    "journal": "Cognition",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W3133673151",
+    "title": "Pathways to Global versus Local Brand Preferences: The Roles of Cultural Identity and Brand Perceptions in Emerging African Markets",
+    "year": 2021,
+    "doi": "10.1080/08911762.2021.1886385",
+    "authors": [
+      "Abena A. Yeboah-Banin",
+      "Emmanuel Silva Quaye"
+    ],
+    "institutions": [
+      "University of Ghana",
+      "University of the Witwatersrand"
+    ],
+    "countries": [
+      "GH",
+      "ZA"
+    ],
+    "keywords": [
+      "Preference",
+      "Perception",
+      "Identity (music)",
+      "Brand preference",
+      "Value (mathematics)",
+      "Structural equation modeling",
+      "Advertising",
+      "Cultural identity",
+      "Brand equity",
+      "Marketing",
+      "Brand identity",
+      "Business",
+      "Brand awareness",
+      "Psychology",
+      "Social psychology",
+      "Economics"
+    ],
+    "journal": "Journal of Global Marketing",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W2999852018",
+    "title": "Multinational Luxury Brands’ Communication Strategies on International and Local Social Media: Comparing Twitter and Weibo",
+    "year": 2020,
+    "doi": "10.1080/08961530.2019.1710736",
+    "authors": [
+      "Rang Wang",
+      "Shu-Ting Huang",
+      "Natascha G. Pérez-Ríos"
+    ],
+    "institutions": [
+      "University of Florida"
+    ],
+    "countries": [
+      "US"
+    ],
+    "keywords": [
+      "Multinational corporation",
+      "Indulgence",
+      "Collectivism",
+      "Individualism",
+      "Social media",
+      "Context (archaeology)",
+      "Advertising",
+      "Business",
+      "Marketing",
+      "Political science",
+      "Computer science",
+      "Geography",
+      "World Wide Web"
+    ],
+    "journal": "Journal of International Consumer Marketing",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4200067809",
+    "title": "A Study of Big-Data-Driven Data Visualization and Visual Communication Design Patterns",
+    "year": 2021,
+    "doi": "10.1155/2021/6704937",
+    "authors": [
+      "Weiming Zhu"
+    ],
+    "institutions": [
+      "Zhejiang Sci-Tech University"
+    ],
+    "countries": [
+      "CN"
+    ],
+    "keywords": [
+      "Computer science",
+      "Visualization",
+      "Schema (genetic algorithms)",
+      "Big data",
+      "Data science",
+      "Service (business)",
+      "Visual reasoning",
+      "Artificial intelligence",
+      "Representation (politics)",
+      "Visual communication",
+      "Human–computer interaction",
+      "Data mining",
+      "Information retrieval",
+      "Multimedia"
+    ],
+    "journal": "Scientific Programming",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4297901106",
+    "title": "A Theory of Marketing’s Contribution to Customers’ Perceived Value",
+    "year": 2022,
+    "doi": "10.1177/23949643221118152",
+    "authors": [
+      "Shekhar Misra",
+      "Kiran Pedada",
+      "Ashish Sinha"
+    ],
+    "institutions": [
+      "Grenoble Ecole de Management",
+      "University of Manitoba"
+    ],
+    "countries": [
+      "FR",
+      "CA"
+    ],
+    "keywords": [
+      "Marketing",
+      "Relationship marketing",
+      "Marketing management",
+      "Value (mathematics)",
+      "Return on marketing investment",
+      "Marketing research",
+      "Business",
+      "Marketing strategy",
+      "Business value",
+      "Marketing mix",
+      "Customer lifetime value",
+      "Value proposition",
+      "Marketing science",
+      "Economics",
+      "Customer retention",
+      "Microeconomics",
+      "Computer science"
+    ],
+    "journal": "Journal of Creating Value",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W2943565283",
+    "title": "Food As a Collective Heritage Brand in the Era of Globalization",
+    "year": 2018,
+    "doi": "10.1017/s0940739118000322",
+    "authors": [
+      "Julia Csergo"
+    ],
+    "institutions": [
+      "Université du Québec à Montréal"
+    ],
+    "countries": [
+      "CA"
+    ],
+    "keywords": [
+      "Safeguarding",
+      "Intangible cultural heritage",
+      "Cultural heritage",
+      "Globalization",
+      "Cultural heritage management",
+      "Political science",
+      "Business",
+      "Gastronomy",
+      "Economy",
+      "Law",
+      "Tourism",
+      "Economics"
+    ],
+    "journal": "International Journal of Cultural Property",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W3165887354",
+    "title": "[Retracted] Intelligent Environmental Art Design Combining Big Data and Artificial Intelligence",
+    "year": 2021,
+    "doi": "10.1155/2021/1606262",
+    "authors": [
+      "Yanxia Li"
+    ],
+    "institutions": [
+      "Xi'an Jiaotong University"
+    ],
+    "countries": [
+      "CN"
+    ],
+    "keywords": [
+      "Computer science",
+      "Curriculum",
+      "Context (archaeology)",
+      "Quality (philosophy)",
+      "Design thinking",
+      "Field (mathematics)",
+      "Artificial intelligence",
+      "Knowledge management",
+      "Human–computer interaction",
+      "Psychology",
+      "Pedagogy",
+      "Mathematics"
+    ],
+    "journal": "Complexity",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4224985743",
+    "title": "Accessing the Influence of Community Experience on Brand Loyalty Toward Virtual Brand Community: Developing Country Perspective",
+    "year": 2022,
+    "doi": "10.3389/fpsyg.2022.865646",
+    "authors": [
+      "Zhounan Huangfu",
+      "Yaohui Ruan",
+      "Jing Zhao",
+      "Qiaqia Wang",
+      "Lei Zhou"
+    ],
+    "institutions": [
+      "Zhoukou Normal University",
+      "Valaya Alongkorn Rajabhat University",
+      "Srinakharinwirot University",
+      "Zhengzhou Normal University",
+      "Henan University of Engineering"
+    ],
+    "countries": [
+      "CN",
+      "TH"
+    ],
+    "keywords": [
+      "Brand community",
+      "Brand loyalty",
+      "Perspective (graphical)",
+      "Loyalty",
+      "Advertising",
+      "Virtual community",
+      "Brand management",
+      "Entertainment",
+      "Business",
+      "Brand awareness",
+      "Marketing",
+      "Psychology",
+      "The Internet",
+      "Computer science",
+      "World Wide Web",
+      "Political science"
+    ],
+    "journal": "Frontiers in Psychology",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4313270104",
+    "title": "Image Pre-Processing based Sign Language Recognition using Convolutional Neural Network",
+    "year": 2022,
+    "doi": "10.1109/icirca54612.2022.9985726",
+    "authors": [
+      "T. Tamilvizhi",
+      "R Surendran",
+      "Geetha Rani K"
+    ],
+    "institutions": [
+      "Saveetha University",
+      "Bharath University"
+    ],
+    "countries": [
+      "IN"
+    ],
+    "keywords": [
+      "Sign language",
+      "Computer science",
+      "Convolutional neural network",
+      "Python (programming language)",
+      "Speech recognition",
+      "Closed captioning",
+      "Psychology",
+      "Artificial intelligence",
+      "Linguistics",
+      "Image (mathematics)"
+    ],
+    "journal": "2022 4th International Conference on Inventive Research in Computing Applications (ICIRCA)",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4280622418",
+    "title": "Brand love and ethnic identification: the mediating role of brand attachment among African American consumers",
+    "year": 2022,
+    "doi": "10.1108/jcm-06-2020-3922",
+    "authors": [
+      "Rozbeh Madadi",
+      "Ivonne M. Torres",
+      "Reza Fazli-Salehi",
+      "Miguel Ángel Zúñiga"
+    ],
+    "institutions": [
+      "Georgia State University",
+      "Middle Georgia State College",
+      "New Mexico State University",
+      "St. Cloud State University",
+      "Morgan State University"
+    ],
+    "countries": [
+      "US"
+    ],
+    "keywords": [
+      "Ethnic group",
+      "Optimal distinctiveness theory",
+      "Structural equation modeling",
+      "Psychology",
+      "Advertising",
+      "Mediation",
+      "Identification (biology)",
+      "Social psychology",
+      "Business",
+      "Sociology"
+    ],
+    "journal": "Journal of Consumer Marketing",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W3087927859",
+    "title": "China's old brands: commercial heritage and creative nostalgia",
+    "year": 2020,
+    "doi": "10.1017/s1479591420000455",
+    "authors": [
+      "Thomas David DuBois"
+    ],
+    "institutions": [
+      "Beijing Normal University"
+    ],
+    "countries": [
+      "CN"
+    ],
+    "keywords": [
+      "China",
+      "Novelty",
+      "Politics",
+      "Scarcity",
+      "Nature versus nurture",
+      "Irony",
+      "Advertising",
+      "Aesthetics",
+      "Political science",
+      "Sociology",
+      "Art",
+      "Business",
+      "Market economy",
+      "Economics",
+      "Law",
+      "Literature",
+      "Psychology",
+      "Anthropology",
+      "Social psychology"
+    ],
+    "journal": "International Journal of Asian Studies",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4286501626",
+    "title": "An Intelligent Face Recognition Technology for IoT-Based Smart City Application Using Condition-CNN with Foraging Learning PSO Model",
+    "year": 2022,
+    "doi": "10.1142/s0218001422560183",
+    "authors": [
+      "Surendran Rajendran",
+      "Arun Mozhi Selvi Sundarapandi",
+      "Anbazhagan Krishnamurthy",
+      "Tamilvizhi Thanarajan"
+    ],
+    "institutions": [
+      "Saveetha University",
+      "Government Medical College Thoothukudi"
+    ],
+    "countries": [
+      "IN"
+    ],
+    "keywords": [
+      "Computer science",
+      "Artificial intelligence",
+      "Convolutional neural network",
+      "Particle swarm optimization",
+      "Facial recognition system",
+      "Machine learning",
+      "Process (computing)",
+      "Face (sociological concept)",
+      "Internet of Things",
+      "Deep learning",
+      "Pattern recognition (psychology)",
+      "Computer security"
+    ],
+    "journal": "International Journal of Pattern Recognition and Artificial Intelligence",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4383550774",
+    "title": "The Global Competition of the Intangible. UNESCO as a Producer of Heritage Brands",
+    "year": 2023,
+    "doi": "10.1080/2159032x.2023.2226572",
+    "authors": [
+      "Beatriz Santamarina Campos"
+    ],
+    "institutions": [
+      "Universitat de València"
+    ],
+    "countries": [
+      "ES"
+    ],
+    "keywords": [
+      "Intangible cultural heritage",
+      "Cultural heritage management",
+      "Context (archaeology)",
+      "Cultural heritage",
+      "Industrial heritage",
+      "Politics",
+      "Economy",
+      "Tourism",
+      "Competition (biology)",
+      "Political science",
+      "Sociology",
+      "Law",
+      "Economics",
+      "History",
+      "Archaeology"
+    ],
+    "journal": "Heritage & Society",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W2972363709",
+    "title": "Comparison of deep learning techniques on content based image retrieval",
+    "year": 2019,
+    "doi": "10.1142/s0217732319502857",
+    "authors": [
+      "Meenakshi Garg",
+      "Manisha Malhotra",
+      "Harpal Singh"
+    ],
+    "institutions": [
+      "Chandigarh University",
+      "Centre for Environment Concerns"
+    ],
+    "countries": [
+      "IN"
+    ],
+    "keywords": [
+      "Computer science",
+      "Image retrieval",
+      "Content-based image retrieval",
+      "Metadata",
+      "Classifier (UML)",
+      "Artificial intelligence",
+      "Pattern recognition (psychology)",
+      "Information retrieval",
+      "Deep learning",
+      "Artificial neural network",
+      "Fuzzy logic",
+      "Automatic image annotation",
+      "Database",
+      "Image (mathematics)",
+      "World Wide Web"
+    ],
+    "journal": "Modern Physics Letters A",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4313815807",
+    "title": "Living Visual Communication Design Toward to Sustainable Development: Conceptual Framework and Ecological Strategies",
+    "year": 2022,
+    "doi": "10.18280/ijdne.170607",
+    "authors": [
+      "Наталія Скляренко",
+      "Marina V. Kolosnichenko",
+      "Anna S. Didukh",
+      "Олена Колосніченко",
+      "Tetiana V. Remenieva"
+    ],
+    "institutions": [
+      "Kyiv National University of Technologies and Design",
+      "Lviv Polytechnic National University"
+    ],
+    "countries": [
+      "UA"
+    ],
+    "keywords": [
+      "Visual communication",
+      "Communication design",
+      "Computer science",
+      "Visualization",
+      "Context (archaeology)",
+      "Human–computer interaction",
+      "Sustainable development",
+      "Landscaping",
+      "Systems engineering",
+      "Engineering",
+      "Management science",
+      "Artificial intelligence",
+      "Multimedia",
+      "Ecology",
+      "Geography"
+    ],
+    "journal": "International Journal of Design & Nature and Ecodynamics",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4401031030",
+    "title": "Emoji marketing: Toward a theory of brand paralinguistics",
+    "year": 2024,
+    "doi": "10.1016/j.ijresmar.2024.06.002",
+    "authors": [
+      "Jacob Almaguer",
+      "Reto Felix",
+      "Colleen M. Harmeling"
+    ],
+    "institutions": [
+      "Salisbury University",
+      "The University of Texas Rio Grande Valley",
+      "Florida State University",
+      "Florida A&M University - Florida State University College of Engineering"
+    ],
+    "countries": [
+      "US"
+    ],
+    "keywords": [
+      "Emoji",
+      "Business",
+      "Marketing",
+      "Advertising",
+      "Brand management",
+      "Computer science",
+      "Social media",
+      "World Wide Web"
+    ],
+    "journal": "International Journal of Research in Marketing",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4404717339",
+    "title": "Application of big data and artificial intelligence in visual communication art design",
+    "year": 2024,
+    "doi": "10.7717/peerj-cs.2492",
+    "authors": [
+      "Ailing Zhang"
+    ],
+    "institutions": [
+      "Shijiazhuang University"
+    ],
+    "countries": [
+      "CN"
+    ],
+    "keywords": [
+      "Big data",
+      "Computer science",
+      "Cluster analysis",
+      "Convolutional neural network",
+      "Artificial intelligence",
+      "Variety (cybernetics)",
+      "Data science",
+      "Data mining"
+    ],
+    "journal": "PeerJ Computer Science",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4401346422",
+    "title": "World heritage brand: the importance of trust and authenticity to visitors' perceived world heritage site value",
+    "year": 2024,
+    "doi": "10.1108/jchmsd-04-2023-0037",
+    "authors": [
+      "Ana Sousa",
+      "Paula Rodrigues"
+    ],
+    "institutions": [
+      "Institute of Mechanical Engineering and Industrial Mangement",
+      "Lusíada University of Porto",
+      "University of Aveiro",
+      "Universidade do Porto"
+    ],
+    "countries": [
+      "PT"
+    ],
+    "keywords": [
+      "World heritage",
+      "Value (mathematics)",
+      "Cultural heritage management",
+      "Heritage tourism",
+      "Values",
+      "Tourism",
+      "Cultural heritage",
+      "Advertising",
+      "Industrial heritage",
+      "Business",
+      "Aesthetics",
+      "Geography",
+      "Art",
+      "Archaeology",
+      "Computer science"
+    ],
+    "journal": "Journal of Cultural Heritage Management and Sustainable Development",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4400872872",
+    "title": "Study on the Psychological Effects of Intangible Cultural Heritage Advertising with Different Degrees of Situational Involvement",
+    "year": 2024,
+    "doi": "10.3390/bs14070623",
+    "authors": [
+      "Ruiying Kuang",
+      "Changping Hu",
+      "Shiyu Huo",
+      "Yitian Shi",
+      "Xinai Tang",
+      "Lulu Mao"
+    ],
+    "institutions": [
+      "Changsha University",
+      "Xiangtan University",
+      "Hunan University of Finance and Economics"
+    ],
+    "countries": [
+      "CN"
+    ],
+    "keywords": [
+      "Situational ethics",
+      "Psychology",
+      "Intangible cultural heritage",
+      "Advertising",
+      "Social psychology",
+      "Cultural heritage",
+      "Political science",
+      "Business"
+    ],
+    "journal": "Behavioral Sciences",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4407129836",
+    "title": "On the road to Mecca: Branding discourses and national identity on coffee shop signage",
+    "year": 2025,
+    "doi": "10.1371/journal.pone.0309829",
+    "authors": [
+      "Abduljalil Nasr Hazaea",
+      "Mutahar Qassem"
+    ],
+    "institutions": [
+      "Najran University"
+    ],
+    "countries": [
+      "SA"
+    ],
+    "keywords": [
+      "Glocalization",
+      "Linguistic landscape",
+      "Sociology",
+      "Critical discourse analysis",
+      "Discourse analysis",
+      "Construct (python library)",
+      "Globalization",
+      "National identity",
+      "Identity (music)",
+      "Linguistics",
+      "Advertising",
+      "Political science",
+      "Aesthetics",
+      "Ideology",
+      "Politics",
+      "Business",
+      "Law"
+    ],
+    "journal": "PLoS ONE",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4408018381",
+    "title": "Enhancing Accuracy in Image Recognization for Deepfake Images Using Convolutional Networks Comparing with K-Nearest Neighbors (KNN) Algorithm",
+    "year": 2025,
+    "doi": "10.1109/icmsci62561.2025.10894352",
+    "authors": [
+      "C. S.",
+      "R Surendran",
+      "N Madhusundar."
+    ],
+    "institutions": [
+      "Saveetha University"
+    ],
+    "countries": [
+      "IN"
+    ],
+    "keywords": [
+      "Computer science",
+      "k-nearest neighbors algorithm",
+      "Image (mathematics)",
+      "Artificial intelligence",
+      "Pattern recognition (psychology)",
+      "Algorithm"
+    ],
+    "journal": "",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W1942743811",
+    "title": "Toward a Contextualized Cultural Framework",
+    "year": 2013,
+    "doi": "10.1007/978-94-007-5574-1_2",
+    "authors": [
+      "Maritza R. Salazar",
+      "Marissa L. Shuffler",
+      "Wendy L. Bedwell",
+      "Eduardo Salas"
+    ],
+    "institutions": [
+      "Claremont Graduate University",
+      "University of Central Florida"
+    ],
+    "countries": [
+      "US"
+    ],
+    "keywords": [
+      "Value (mathematics)",
+      "Social psychology",
+      "Psychology",
+      "Knowledge management",
+      "Computer science"
+    ],
+    "journal": "Advances in group decision and negotiation/Advances in group decision and negotation",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4402636104",
+    "title": "Application of Artificial Intelligence Technologies in Visual Communication Design",
+    "year": 2024,
+    "doi": "10.62517/jike.202404205",
+    "authors": [
+      "Ma Jintian"
+    ],
+    "institutions": [
+      "Changchun Discovery Sciences (China)"
+    ],
+    "countries": [
+      "CN"
+    ],
+    "keywords": [
+      "Visual communication",
+      "Computer science",
+      "Artificial intelligence",
+      "Human–computer interaction",
+      "Multimedia"
+    ],
+    "journal": "Journal of intelligence and knowledge engineering.",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4417404849",
+    "title": "Cross-Dataset Generalization and Domain Adaptation for Offline Signature Verification using ArcFace",
+    "year": 2025,
+    "doi": "10.1109/icidca66325.2025.11280551",
+    "authors": [
+      "Femila Irene G",
+      "R Surendran"
+    ],
+    "institutions": [
+      "Saveetha University"
+    ],
+    "countries": [
+      "IN"
+    ],
+    "keywords": [
+      "Signature (topology)",
+      "Generalization",
+      "Biometrics",
+      "Signature recognition",
+      "Pattern recognition (psychology)",
+      "Bengali",
+      "Domain (mathematical analysis)",
+      "Matching (statistics)"
+    ],
+    "journal": "",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W2937917138",
+    "title": "An Empirical Analysis of Brand as Symbol, Perceived Transaction Value, Perceived Acquisition Value and Customer Loyalty Using Structural Equation Modeling",
+    "year": 2019,
+    "doi": "10.3390/su11072116",
+    "authors": [
+      "Huang Ning Lee",
+      "An Sheng Lee",
+      "Yo‐Wen Liang"
+    ],
+    "institutions": [
+      "Toko University",
+      "National Chiayi University",
+      "Ming Chi University of Technology"
+    ],
+    "countries": [
+      "TW"
+    ],
+    "keywords": [
+      "Structural equation modeling",
+      "Confirmatory factor analysis",
+      "Brand loyalty",
+      "Latent variable",
+      "Marketing",
+      "Database transaction",
+      "Path analysis (statistics)",
+      "Loyalty",
+      "Consumption (sociology)",
+      "Business",
+      "Brand management",
+      "Loyalty business model",
+      "Advertising",
+      "Service (business)",
+      "Computer science",
+      "Service quality",
+      "Statistics",
+      "Mathematics"
+    ],
+    "journal": "Sustainability",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W3005790988",
+    "title": "Cultural equity: knowledge and outcomes aspects",
+    "year": 2020,
+    "doi": "10.1108/imr-12-2018-0366",
+    "authors": [
+      "Carlos J. Torelli",
+      "Hyewon Oh",
+      "Jennifer L. Stoner"
+    ],
+    "institutions": [
+      "University of Illinois Urbana-Champaign",
+      "University of North Dakota"
+    ],
+    "countries": [
+      "US"
+    ],
+    "keywords": [
+      "Brand equity",
+      "Marketing",
+      "Brand management",
+      "Originality",
+      "Embeddedness",
+      "Business",
+      "Equity (law)",
+      "Hofstede's cultural dimensions theory",
+      "Brand awareness",
+      "Advertising",
+      "Sociology",
+      "Psychology",
+      "Social psychology",
+      "Political science",
+      "Social science",
+      "Creativity"
+    ],
+    "journal": "International Marketing Review",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4386976166",
+    "title": "The application of big data technology in the art of visual communication design with information technology",
+    "year": 2023,
+    "doi": "10.2478/amns.2023.2.00370",
+    "authors": [
+      "Peitian Tao",
+      "Wenyan Wang"
+    ],
+    "institutions": [
+      "Nanchang Institute of Science & Technology"
+    ],
+    "countries": [
+      "CN"
+    ],
+    "keywords": [
+      "Visual communication",
+      "Computer science",
+      "Communication design",
+      "Artificial intelligence",
+      "Big data",
+      "Image (mathematics)",
+      "Translation (biology)",
+      "Generative grammar",
+      "Computer vision",
+      "Multimedia",
+      "Data mining"
+    ],
+    "journal": "Applied Mathematics and Nonlinear Sciences",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4399053503",
+    "title": "Enhancing visual communication through representation learning",
+    "year": 2024,
+    "doi": "10.3389/fnins.2024.1368733",
+    "authors": [
+      "YuHan Wei",
+      "Chang-wook Lee",
+      "SeokWon Han",
+      "Anna Kim"
+    ],
+    "institutions": [
+      "Dankook University"
+    ],
+    "countries": [
+      "KR"
+    ],
+    "keywords": [
+      "Computer science",
+      "Metaverse",
+      "Convolutional neural network",
+      "Human–computer interaction",
+      "Context (archaeology)",
+      "Video tracking",
+      "Artificial intelligence",
+      "Object (grammar)",
+      "Virtual reality",
+      "Visualization",
+      "Computer vision"
+    ],
+    "journal": "Frontiers in Neuroscience",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W2003955127",
+    "title": "Self‐Construal, Reference Groups, and Brand Meaning",
+    "year": 2005,
+    "doi": "10.1086/497549",
+    "authors": [
+      "Jennifer Edson Escalas",
+      "James R. Bettman"
+    ],
+    "institutions": [
+      "Vanderbilt University",
+      "Duke University"
+    ],
+    "countries": [
+      "US"
+    ],
+    "keywords": [
+      "Meaning (existential)",
+      "Construal level theory",
+      "Psychology",
+      "Self construal",
+      "Sociology",
+      "Social psychology",
+      "Social science"
+    ],
+    "journal": "Journal of Consumer Research",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W2995918197",
+    "title": "Motivation and social cognitive theory",
+    "year": 2019,
+    "doi": "10.1016/j.cedpsych.2019.101832",
+    "authors": [
+      "Dale H. Schunk",
+      "Maria K. DiBenedetto"
+    ],
+    "institutions": [
+      "University of North Carolina at Greensboro",
+      "Bryan College"
+    ],
+    "countries": [
+      "US"
+    ],
+    "keywords": [
+      "Psychology",
+      "Goal theory",
+      "Social cognitive theory",
+      "CLARITY",
+      "Attribution",
+      "Self-determination theory",
+      "Sense of agency",
+      "Social psychology",
+      "Social cognition",
+      "Cognitive evaluation theory",
+      "Perspective (graphical)",
+      "Cognition",
+      "Autonomy"
+    ],
+    "journal": "Contemporary Educational Psychology",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W1984663402",
+    "title": "Correlational effect size benchmarks.",
+    "year": 2014,
+    "doi": "10.1037/a0038047",
+    "authors": [
+      "Frank A. Bosco",
+      "Herman Aguinis",
+      "Kulraj Singh",
+      "James G. Field",
+      "Charles A. Pierce"
+    ],
+    "institutions": [
+      "University of Finance, Business and Entrepreneurship",
+      "Indiana University",
+      "Dakota State University",
+      "South Dakota State University",
+      "Virginia Commonwealth University",
+      "University of Memphis"
+    ],
+    "countries": [
+      "BG",
+      "US"
+    ],
+    "keywords": [
+      "Generality",
+      "Psychology",
+      "Sample size determination",
+      "Statistical power",
+      "Management science",
+      "Social psychology",
+      "Econometrics",
+      "Statistics",
+      "Cognitive psychology",
+      "Computer science",
+      "Mathematics"
+    ],
+    "journal": "Journal of Applied Psychology",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W3005351526",
+    "title": "Colour and shape of design elements of the packaging labels influence consumer expectations and hedonic judgments of specialty coffee",
+    "year": 2020,
+    "doi": "10.1016/j.foodqual.2020.103902",
+    "authors": [
+      "Maísa Mancini Matioli de Sousa",
+      "Fabiana M. Carvalho",
+      "Rosemary Gualberto Fonseca Alvarenga Pereira"
+    ],
+    "institutions": [
+      "Universidade Federal de Lavras",
+      "Universidade de São Paulo"
+    ],
+    "countries": [
+      "BR"
+    ],
+    "keywords": [
+      "Psychology",
+      "Advertising",
+      "Marketing",
+      "Package design",
+      "Cognitive psychology",
+      "Business",
+      "Engineering",
+      "Engineering drawing"
+    ],
+    "journal": "Food Quality and Preference",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4372204136",
+    "title": "A systematic literature review of exploratory factor analyses in management",
+    "year": 2023,
+    "doi": "10.1016/j.jbusres.2023.113969",
+    "authors": [
+      "Matt C. Howard"
+    ],
+    "institutions": [
+      "University of South Alabama",
+      "Mitchell College"
+    ],
+    "countries": [
+      "US"
+    ],
+    "keywords": [
+      "Checklist",
+      "Exploratory factor analysis",
+      "Systematic review",
+      "Impact factor",
+      "Psychology",
+      "MEDLINE",
+      "Medicine",
+      "Psychometrics",
+      "Clinical psychology",
+      "Political science",
+      "Cognitive psychology"
+    ],
+    "journal": "Journal of Business Research",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W3128340727",
+    "title": "Visual Elicitation of Brand Perception",
+    "year": 2021,
+    "doi": "10.1177/0022242921996661",
+    "authors": [
+      "Daria Dzyabura",
+      "Renana Peres"
+    ],
+    "institutions": [],
+    "countries": [],
+    "keywords": [
+      "Brand management",
+      "Brand equity",
+      "Brand awareness",
+      "Advertising",
+      "Fantasy",
+      "Perception",
+      "Brand extension",
+      "Psychology",
+      "Set (abstract data type)",
+      "Brand image",
+      "Brand relationship",
+      "Photo elicitation",
+      "Marketing",
+      "Computer science",
+      "Business",
+      "Artificial intelligence",
+      "Knowledge management"
+    ],
+    "journal": "Journal of Marketing",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W3117498059",
+    "title": "Antecedents of consumer-brand identification in terms of belonging brands",
+    "year": 2020,
+    "doi": "10.1016/j.jretconser.2020.102420",
+    "authors": [
+      "Naci Büyükdağ",
+      "Olgun Kitapçı"
+    ],
+    "institutions": [
+      "Akdeniz University"
+    ],
+    "countries": [
+      "TR"
+    ],
+    "keywords": [
+      "Brand equity",
+      "Brand management",
+      "Structural equation modeling",
+      "Advertising",
+      "Brand awareness",
+      "Brand extension",
+      "Social identity theory",
+      "Identification (biology)",
+      "Congruence (geometry)",
+      "Affect (linguistics)",
+      "Psychology",
+      "Corporate branding",
+      "Value (mathematics)",
+      "Business",
+      "Marketing",
+      "Social psychology",
+      "Social group",
+      "Mathematics"
+    ],
+    "journal": "Journal of Retailing and Consumer Services",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4286002052",
+    "title": "Antecedents and consequences of brand attachment: A literature review and research agenda",
+    "year": 2022,
+    "doi": "10.1111/ijcs.12853",
+    "authors": [
+      "Jane Hemsley‐Brown"
+    ],
+    "institutions": [
+      "University of Surrey"
+    ],
+    "countries": [
+      "GB"
+    ],
+    "keywords": [
+      "Brand loyalty",
+      "Brand management",
+      "Marketing",
+      "Brand relationship",
+      "Advertising",
+      "Context (archaeology)",
+      "Brand equity",
+      "Business",
+      "Word of mouth",
+      "Loyalty",
+      "Consumer behaviour",
+      "Psychology",
+      "Attachment theory",
+      "Place attachment",
+      "Social psychology"
+    ],
+    "journal": "International Journal of Consumer Studies",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W3010244641",
+    "title": "Leveraging Brand Equity for Effective Visual Product Design",
+    "year": 2020,
+    "doi": "10.1177/0022243720904004",
+    "authors": [
+      "Mark Heitmann",
+      "Jan R. Landwehr",
+      "Thomas Schreiner",
+      "Harald J. van Heerde"
+    ],
+    "institutions": [],
+    "countries": [],
+    "keywords": [
+      "Brand equity",
+      "Brand management",
+      "Marketing",
+      "Business",
+      "Brand awareness",
+      "Leverage (statistics)",
+      "Advertising",
+      "Product category",
+      "Brand extension",
+      "Product (mathematics)",
+      "Economics",
+      "Computer science"
+    ],
+    "journal": "Journal of Marketing Research",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4391579155",
+    "title": "Extending human creativity with AI",
+    "year": 2024,
+    "doi": "10.1016/j.yjoc.2024.100080",
+    "authors": [
+      "Katherine O’Toole",
+      "Emőke-Ágnes Horvát"
+    ],
+    "institutions": [
+      "Northwestern University"
+    ],
+    "countries": [
+      "US"
+    ],
+    "keywords": [
+      "Affordance",
+      "Creativity",
+      "Generative grammar",
+      "Process (computing)",
+      "Computer science",
+      "Creative work",
+      "Creativity technique",
+      "Knowledge management",
+      "Human–computer interaction",
+      "Engineering ethics",
+      "Cognitive science",
+      "Engineering",
+      "Artificial intelligence",
+      "Psychology",
+      "Political science"
+    ],
+    "journal": "Journal of Creativity",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W3119488258",
+    "title": "From the brand logo to brand associations and the corporate identity: visual and identity-based logo associations in a university merger",
+    "year": 2021,
+    "doi": "10.1057/s41262-020-00223-5",
+    "authors": [
+      "Ari-Matti Erjansola",
+      "Jukka Lipponen",
+      "Kimmo Vehkalahti",
+      "Hanna-Mari Aula",
+      "Anna‐Maija Pirttilä‐Backman"
+    ],
+    "institutions": [
+      "University of Helsinki"
+    ],
+    "countries": [
+      "FI"
+    ],
+    "keywords": [
+      "Logo (programming language)",
+      "Identity (music)",
+      "Logos Bible Software",
+      "Employer branding",
+      "Advertising",
+      "Brand management",
+      "Corporate identity",
+      "Brand equity",
+      "Psychology",
+      "Association (psychology)",
+      "Marketing",
+      "Business",
+      "Computer science",
+      "Aesthetics",
+      "Art",
+      "Product management"
+    ],
+    "journal": "Journal of Brand Management",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4396853240",
+    "title": "Research on consumers’ purchase intention of cultural and creative products—Metaphor design based on traditional cultural symbols",
+    "year": 2024,
+    "doi": "10.1371/journal.pone.0301678",
+    "authors": [
+      "Lili Liu",
+      "Hongxia Zhao"
+    ],
+    "institutions": [
+      "Zhengzhou University of Light Industry"
+    ],
+    "countries": [
+      "CN"
+    ],
+    "keywords": [
+      "Metaphor",
+      "Value (mathematics)",
+      "Psychology",
+      "Marketing",
+      "Consumer behaviour",
+      "Cultural identity",
+      "Product (mathematics)",
+      "Customer value",
+      "Advertising",
+      "Social psychology",
+      "Business",
+      "Computer science",
+      "Linguistics"
+    ],
+    "journal": "PLoS ONE",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4283747204",
+    "title": "The Influence of Design Aesthetics on Consumers’ Purchase Intention Toward Cultural and Creative Products: Evidence From the Palace Museum in China",
+    "year": 2022,
+    "doi": "10.3389/fpsyg.2022.939403",
+    "authors": [
+      "Yang Li",
+      "Jie Li"
+    ],
+    "institutions": [
+      "Wuhan University",
+      "Shanghai University"
+    ],
+    "countries": [
+      "CN"
+    ],
+    "keywords": [
+      "China",
+      "Value (mathematics)",
+      "Aesthetics",
+      "Revenue",
+      "Symbol (formal)",
+      "Chinese culture",
+      "Affect (linguistics)",
+      "Marketing",
+      "Psychology",
+      "Advertising",
+      "Sociology",
+      "Business",
+      "Political science",
+      "Art",
+      "Law",
+      "Computer science"
+    ],
+    "journal": "Frontiers in Psychology",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4294977117",
+    "title": "Consumer purchase intention of intangible cultural heritage products (ICHP): effects of cultural identity, consumer knowledge and manufacture type",
+    "year": 2022,
+    "doi": "10.1108/apjml-11-2021-0831",
+    "authors": [
+      "Mengxia Zhang",
+      "Xixuan Guo",
+      "Xiaoling Guo",
+      "Alain Jolibert"
+    ],
+    "institutions": [
+      "University of International Business and Economics"
+    ],
+    "countries": [
+      "CN"
+    ],
+    "keywords": [
+      "Scarcity",
+      "Marketing",
+      "Originality",
+      "Identity (music)",
+      "Cultural identity",
+      "Business",
+      "Intangible cultural heritage",
+      "Cultural heritage",
+      "Value (mathematics)",
+      "Psychology",
+      "Advertising",
+      "Social psychology",
+      "Economics",
+      "Aesthetics",
+      "Political science",
+      "Creativity"
+    ],
+    "journal": "Asia Pacific Journal of Marketing and Logistics",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4221073331",
+    "title": "Animation Special Effects Production Method and Art Color Research Based on Visual Communication Design",
+    "year": 2022,
+    "doi": "10.1155/2022/7835917",
+    "authors": [
+      "Xiaoying Liu"
+    ],
+    "institutions": [
+      "Weinan Normal University"
+    ],
+    "countries": [
+      "CN"
+    ],
+    "keywords": [
+      "Animation",
+      "Communication design",
+      "Visual communication",
+      "Computer science",
+      "Multimedia",
+      "Context (archaeology)",
+      "Informatization",
+      "Visibility",
+      "Process (computing)",
+      "Human–computer interaction",
+      "Engineering design process",
+      "Computer animation",
+      "Computer graphics (images)",
+      "Telecommunications",
+      "Engineering"
+    ],
+    "journal": "Scientific Programming",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4322500306",
+    "title": "The Innovative Application of Visual Communication Design in Modern Art Design",
+    "year": 2023,
+    "doi": "10.3390/electronics12051150",
+    "authors": [
+      "Yan Gu",
+      "Qi Wang",
+      "Wanli Gu"
+    ],
+    "institutions": [
+      "Jiangsu University of Science and Technology",
+      "Changzhou Institute of Technology",
+      "Guilin University of Aerospace Technology"
+    ],
+    "countries": [
+      "CN"
+    ],
+    "keywords": [
+      "Communication design",
+      "Computer science",
+      "Context (archaeology)",
+      "Visual communication",
+      "Information design",
+      "Field (mathematics)",
+      "Human–computer interaction",
+      "Plan (archaeology)",
+      "Resource (disambiguation)",
+      "Architectural engineering",
+      "Multimedia",
+      "Engineering",
+      "Mathematics"
+    ],
+    "journal": "Electronics",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4295110326",
+    "title": "Do consumers follow their heart or mind when purchasing global brands? Empirical insights",
+    "year": 2022,
+    "doi": "10.1080/08911762.2022.2113949",
+    "authors": [
+      "Nayyer Naseem",
+      "Attila Yaprak"
+    ],
+    "institutions": [
+      "Southern Illinois University Edwardsville",
+      "Wayne State University"
+    ],
+    "countries": [
+      "US"
+    ],
+    "keywords": [
+      "Realm",
+      "Purchasing",
+      "Value (mathematics)",
+      "Marketing",
+      "Business",
+      "Conceptual model",
+      "Consumer behaviour",
+      "Conceptual framework",
+      "Advertising",
+      "Psychology",
+      "Economics",
+      "Sociology"
+    ],
+    "journal": "Journal of Global Marketing",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4387418565",
+    "title": "Image of a city in the local and global media: Suzhou as a case",
+    "year": 2023,
+    "doi": "10.1016/j.cities.2023.104593",
+    "authors": [
+      "Yue Jiang",
+      "Xianwen Kuang"
+    ],
+    "institutions": [
+      "RMIT University",
+      "Xi’an Jiaotong-Liverpool University"
+    ],
+    "countries": [
+      "AU",
+      "CN"
+    ],
+    "keywords": [
+      "Tourism",
+      "Narrative",
+      "Storytelling",
+      "Promotion (chess)",
+      "China",
+      "Advertising",
+      "Global city",
+      "Political science",
+      "Media studies",
+      "Sociology",
+      "Economic geography",
+      "Geography",
+      "Business",
+      "Art"
+    ],
+    "journal": "Cities",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4410348122",
+    "title": "The Interplay Between the Intangible Cultural Heritage Label and Brand Types on Chinese Consumer Brand Responses",
+    "year": 2025,
+    "doi": "10.1177/21582440251334510",
+    "authors": [
+      "Huang Xiao",
+      "Qiulin Xu",
+      "Chen Gan"
+    ],
+    "institutions": [
+      "Zhejiang Fashion Institute of Technology",
+      "Ningbo University Affiliated Hospital"
+    ],
+    "countries": [
+      "CN"
+    ],
+    "keywords": [
+      "Advertising",
+      "Brand management",
+      "Psychology",
+      "Intangible cultural heritage",
+      "Brand awareness",
+      "Brand equity",
+      "Marketing",
+      "Business",
+      "Cultural heritage",
+      "Political science"
+    ],
+    "journal": "SAGE Open",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W3004833263",
+    "title": "A review of design intelligence: progress, problems, and challenges",
+    "year": 2019,
+    "doi": "10.1631/fitee.1900398",
+    "authors": [
+      "Yongchuan Tang",
+      "Jiangjie Huang",
+      "Meng‐Ting Yao",
+      "Jia Wei",
+      "Wei Li",
+      "Yongxing He",
+      "Zejian Li"
+    ],
+    "institutions": [
+      "Zhejiang University of Science and Technology",
+      "Zhejiang Lab",
+      "Alibaba Group (China)",
+      "Zhejiang University"
+    ],
+    "countries": [
+      "CN"
+    ],
+    "keywords": [
+      "Ideation",
+      "Computer science",
+      "Creativity",
+      "Context (archaeology)",
+      "Artificial intelligence",
+      "Data science",
+      "Management science",
+      "Human–computer interaction",
+      "Cognitive science",
+      "Engineering",
+      "Psychology"
+    ],
+    "journal": "Frontiers of Information Technology & Electronic Engineering",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4382394974",
+    "title": "Deep Learning Based Compression with Classification Model on CMOS Image Sensors",
+    "year": 2023,
+    "doi": "10.18280/ts.400332",
+    "authors": [
+      "Vinayagam Palani",
+      "Tamilvizhi Thanarajan",
+      "Anand Krishnamurthy",
+      "Surendran Rajendran"
+    ],
+    "institutions": [
+      "Saveetha University",
+      "Rajalakshmi Engineering College"
+    ],
+    "countries": [
+      "IN"
+    ],
+    "keywords": [
+      "CMOS",
+      "Computer science",
+      "Artificial intelligence",
+      "Image compression",
+      "Compression (physics)",
+      "Computer vision",
+      "Deep learning",
+      "Image (mathematics)",
+      "Data compression",
+      "Pattern recognition (psychology)",
+      "Electronic engineering",
+      "Engineering",
+      "Image processing",
+      "Materials science"
+    ],
+    "journal": "Traitement du signal",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W3183858239",
+    "title": "Evaluating the Impact of Religious Icons and Symbols on Consumer’s Brand Evaluation: Context of Hindu Religion",
+    "year": 2021,
+    "doi": "10.1080/00913367.2021.1940394",
+    "authors": [
+      "Ridhi Agarwala",
+      "Prashant Mishra",
+      "Ramendra Singh"
+    ],
+    "institutions": [
+      "Indian Institute of Management Calcutta"
+    ],
+    "countries": [
+      "IN"
+    ],
+    "keywords": [
+      "Advertising",
+      "Context (archaeology)",
+      "Semiotics",
+      "Psychology",
+      "Hinduism",
+      "Affect (linguistics)",
+      "Social psychology",
+      "Business",
+      "Communication",
+      "History",
+      "Linguistics"
+    ],
+    "journal": "Journal of Advertising",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W3201561399",
+    "title": "A sound brand identity design: The interplay between sound symbolism and typography on brand attitude and memory",
+    "year": 2021,
+    "doi": "10.1016/j.jretconser.2021.102724",
+    "authors": [
+      "Yesel Jun",
+      "Hyunju Lee"
+    ],
+    "institutions": [
+      "Yonsei University"
+    ],
+    "countries": [
+      "KR"
+    ],
+    "keywords": [
+      "Perception",
+      "Psychology",
+      "Typography",
+      "Appeal",
+      "Context (archaeology)",
+      "Advertising",
+      "Identity (music)",
+      "Cognitive psychology",
+      "Brand management",
+      "Aesthetics",
+      "Business",
+      "Art"
+    ],
+    "journal": "Journal of Retailing and Consumer Services",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W3033082000",
+    "title": "Systematic creation of a city’s visual communication: logo design based on the phoenix flower in Tainan City, Taiwan",
+    "year": 2020,
+    "doi": "10.1177/1470357220917438",
+    "authors": [
+      "Wang Po Hsun",
+      "Jie Gu"
+    ],
+    "institutions": [
+      "City University of Macau"
+    ],
+    "countries": [
+      "MO"
+    ],
+    "keywords": [
+      "Logos Bible Software",
+      "Semiotics",
+      "Phoenix",
+      "Typeface",
+      "Logo (programming language)",
+      "Visual communication",
+      "Communication design",
+      "Sociology",
+      "Visual arts",
+      "Aesthetics",
+      "Computer science",
+      "Linguistics",
+      "Art",
+      "Geography",
+      "Archaeology",
+      "Metropolitan area"
+    ],
+    "journal": "Visual Communication",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W3114752787",
+    "title": "Aspects of Visual Communication Design in Animated Learning Media for Early Childhood and Kindergarten",
+    "year": 2020,
+    "doi": "10.31295/ijss.v3n1.260",
+    "authors": [
+      "Ana Rosmiati",
+      "Rachman Kurniawan",
+      "Basnendar Herry Prilosadoso",
+      "Asmoro Nurhadi Panindias"
+    ],
+    "institutions": [],
+    "countries": [],
+    "keywords": [
+      "Animation",
+      "Triangulation",
+      "Data collection",
+      "Data presentation",
+      "Presentation (obstetrics)",
+      "Computer science",
+      "Constructive",
+      "Multimedia",
+      "Early childhood",
+      "Mathematics education",
+      "Psychology",
+      "Developmental psychology",
+      "Computer graphics (images)"
+    ],
+    "journal": "",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4398182713",
+    "title": "Effects of ethnic and global identities on home country brand perceptions: an identity theory perspective",
+    "year": 2024,
+    "doi": "10.1108/imr-04-2023-0078",
+    "authors": [
+      "Douglas R. Ewing",
+      "Mohammadali Zolfagharian",
+      "Sasawan Heingraj"
+    ],
+    "institutions": [],
+    "countries": [],
+    "keywords": [
+      "Ethnic group",
+      "Perspective (graphical)",
+      "Perception",
+      "Brand identity",
+      "Marketing",
+      "Identity (music)",
+      "Business",
+      "Advertising",
+      "Economic geography",
+      "Sociology",
+      "Psychology",
+      "Geography",
+      "Anthropology"
+    ],
+    "journal": "International Marketing Review",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W4410204074",
+    "title": "AI and Human Resources in a Literature-Driven Investigation Into Emerging Trends",
+    "year": 2025,
+    "doi": "10.1109/access.2025.3568338",
+    "authors": [
+      "Cristina Livia Iancu",
+      "Simona‐Vasilica Oprea"
+    ],
+    "institutions": [
+      "Bucharest University of Economic Studies"
+    ],
+    "countries": [
+      "RO"
+    ],
+    "keywords": [
+      "Computer science",
+      "Data science",
+      "Knowledge management"
+    ],
+    "journal": "IEEE Access",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W3208630697",
+    "title": "Image Classification Based On CNN: A Survey",
+    "year": 2021,
+    "doi": "10.5281/zenodo.4897990",
+    "authors": [
+      "Ahmed A. Elngar",
+      "Mohamed Arafa",
+      "Amar Fathy",
+      "Basma Moustafa",
+      "Omar Mahmoud",
+      "Mohamed Shaban",
+      "Nehal Fawzy"
+    ],
+    "institutions": [],
+    "countries": [],
+    "keywords": [
+      "Artificial intelligence",
+      "Pattern recognition (psychology)",
+      "Computer science",
+      "Computer vision"
+    ],
+    "journal": "Zenodo (CERN European Organization for Nuclear Research)",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W3130270287",
+    "title": "THE USE OF TRIZ (TIPS) METHODS FOR THE PERCEPTION OF THE MODERN VISUAL ART",
+    "year": 2021,
+    "doi": "10.30857/2617-0272.2020.4.1",
+    "authors": [
+      "Татьяна ЛАГАЕВА",
+      "A. I. Simak"
+    ],
+    "institutions": [
+      "Ion Creangă Pedagogical State University",
+      "Pedagogical University"
+    ],
+    "countries": [
+      "MD",
+      "MZ"
+    ],
+    "keywords": [
+      "TRIZ",
+      "Novelty",
+      "Semiotics",
+      "Originality",
+      "Interpretation (philosophy)",
+      "Perception",
+      "Meaning (existential)",
+      "Computer science",
+      "Field (mathematics)",
+      "The arts",
+      "Management science",
+      "Artificial intelligence",
+      "Psychology",
+      "Engineering",
+      "Qualitative research",
+      "Visual arts",
+      "Epistemology",
+      "Sociology",
+      "Art",
+      "Social science",
+      "Mathematics"
+    ],
+    "journal": "Art and Design",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W3172021228",
+    "title": "From cultural symbols to commercial marks: a quantitative analysis of the trademark law protection of intangible cultural heritage in China",
+    "year": 2021,
+    "doi": "10.4337/qmjip.2021.02.02",
+    "authors": [
+      "zONGKUI Luo",
+      "Wang Fang"
+    ],
+    "institutions": [
+      "Zhongyuan University of Technology",
+      "Inner Mongolia University of Technology"
+    ],
+    "countries": [
+      "CN"
+    ],
+    "keywords": [
+      "Trademark",
+      "Intellectual property",
+      "Intangible cultural heritage",
+      "Law",
+      "Business",
+      "China",
+      "Indigenous",
+      "Cultural property",
+      "Cultural heritage",
+      "Political science"
+    ],
+    "journal": "Queen Mary Journal of Intellectual Property",
+    "seed": false
+  },
+  {
+    "id": "https://openalex.org/W7131779864",
+    "title": "Can Vandalism Reshape the Way We Perceive Cultural Heritage?",
+    "year": 2025,
+    "doi": "10.21014/tc26-2025.051",
+    "authors": [
+      "Fabrizio Terenzio Gizzi",
+      "Cristina Cumbo",
+      "Maria Rosaria Potenza",
+      "Agata Maggio",
+      "Antonio Minervino Amodio",
+      "Canio Alfieri Sabia"
+    ],
+    "institutions": [],
+    "countries": [],
+    "keywords": [
+      "Perspective (graphical)",
+      "Field (mathematics)",
+      "Work (physics)"
+    ],
+    "journal": "",
+    "seed": false
+  }
+]
