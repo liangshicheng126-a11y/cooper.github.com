@@ -23,6 +23,15 @@ const Sidebar = () => {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
+  React.useEffect(() => {
+    if (!mobileOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [mobileOpen]);
+
   // Prevents hydration mismatch by ensuring the initial render matches the server
   const currentLanguageLabel = !mounted ? "English" : (language === "zh" ? "English" : "中文");
 
@@ -67,7 +76,7 @@ const Sidebar = () => {
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Drawer — light scrim + solid panel for readability */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -78,73 +87,89 @@ const Sidebar = () => {
           >
             <button
               type="button"
-              className="absolute inset-0 bg-black/50"
+              className="absolute inset-0 bg-white/55 backdrop-blur-[6px]"
               onClick={() => setMobileOpen(false)}
               aria-label="Close menu overlay"
             />
             <motion.aside
-              className="absolute left-4 right-4 top-20 bottom-4 glass rounded-3xl border-white/10 p-6 flex flex-col overflow-auto"
-              initial={{ y: 12, scale: 0.98, opacity: 0 }}
-              animate={{ y: 0, scale: 1, opacity: 1 }}
-              exit={{ y: 12, scale: 0.98, opacity: 0 }}
-              transition={{ duration: 0.18 }}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Site navigation"
+              className="absolute left-4 right-4 top-[4.75rem] bottom-4 max-h-[calc(100dvh-5.75rem)] flex flex-col overflow-auto rounded-3xl border border-slate-200/90 bg-white/[0.97] p-6 shadow-[0_24px_64px_rgba(15,23,42,0.16)] backdrop-blur-xl"
+              initial={{ y: 16, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 16, opacity: 0 }}
+              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
             >
-              <div className="mb-8 flex items-center justify-between">
-                <span className="text-xl font-bold bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent tracking-wider">
+              <div className="mb-6 flex items-center justify-between gap-3">
+                <span className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent tracking-wider">
                   COOPER.
                 </span>
-                <button
-                  type="button"
-                  className="text-xs font-bold text-foreground/60 hover:text-indigo-500 transition-colors stable-ui-text"
-                  onClick={toggleLanguage}
-                >
-                  {mounted ? (language === "zh" ? "EN" : "中文") : "EN"}
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold text-slate-700 hover:border-indigo-200 hover:text-indigo-600 transition-colors stable-ui-text"
+                    onClick={toggleLanguage}
+                  >
+                    {mounted ? (language === "zh" ? "EN" : "中文") : "EN"}
+                  </button>
+                  <button
+                    type="button"
+                    className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:border-indigo-200 hover:text-indigo-600 transition-colors"
+                    onClick={() => setMobileOpen(false)}
+                    aria-label="Close menu"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
               </div>
 
-              <nav className="space-y-3">
+              <nav className="space-y-2">
                 {navItems.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
                     onClick={() => setMobileOpen(false)}
                     className={cn(
-                      "flex items-center space-x-4 p-4 rounded-2xl transition-all duration-300 group w-full",
+                      "flex items-center space-x-4 rounded-2xl border p-4 transition-all duration-200 group w-full",
                       pathname === item.href
-                        ? "bg-white/10 text-indigo-500 shadow-sm"
-                        : "text-foreground/70 hover:text-foreground hover:bg-white/5"
+                        ? "border-indigo-200 bg-indigo-50 text-indigo-700 shadow-sm"
+                        : "border-transparent bg-slate-50/80 text-slate-800 hover:border-slate-200 hover:bg-slate-100"
                     )}
                   >
                     <div className="w-5 flex justify-center">
                       <item.icon
                         className={cn(
-                          "w-5 h-5 transition-transform duration-300 group-hover:scale-110 shrink-0",
-                          pathname === item.href ? "text-indigo-500" : "text-foreground/40 group-hover:text-indigo-400"
+                          "w-5 h-5 shrink-0 transition-transform duration-300 group-hover:scale-110",
+                          pathname === item.href ? "text-indigo-600" : "text-slate-500 group-hover:text-indigo-500"
                         )}
                       />
                     </div>
-                    <span className="font-medium truncate transition-all duration-300">{item.name}</span>
+                    <span className="text-base font-semibold truncate">{item.name}</span>
                   </Link>
                 ))}
               </nav>
 
-              <div className="mt-8 pt-6 border-t border-white/10 space-y-4">
+              <div className="mt-auto pt-6 border-t border-slate-200 space-y-3">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  {t.nav.contact}
+                </p>
                 <a
                   href="mailto:liangshicheng303@126.com"
-                  className="flex items-center space-x-3 text-sm text-foreground/70 hover:text-indigo-500 transition-colors group"
+                  className="flex items-center space-x-3 rounded-xl bg-slate-50 px-3 py-2.5 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors group"
                 >
-                  <Mail className="w-4 h-4 text-foreground/40 group-hover:text-indigo-400 shrink-0" />
+                  <Mail className="w-4 h-4 text-slate-500 group-hover:text-indigo-600 shrink-0" />
                   <span className="truncate">liangshicheng303@126.com</span>
                 </a>
                 <a
                   href="tel:13867681608"
-                  className="flex items-center space-x-3 text-sm text-foreground/70 hover:text-indigo-500 transition-colors group"
+                  className="flex items-center space-x-3 rounded-xl bg-slate-50 px-3 py-2.5 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors group"
                 >
-                  <Phone className="w-4 h-4 text-foreground/40 group-hover:text-indigo-400 shrink-0" />
+                  <Phone className="w-4 h-4 text-slate-500 group-hover:text-indigo-600 shrink-0" />
                   <span>13867681608</span>
                 </a>
-                <div className="flex items-center space-x-3 text-sm text-foreground/70">
-                  <MapPin className="w-4 h-4 text-foreground/40 shrink-0" />
+                <div className="flex items-center space-x-3 rounded-xl bg-slate-50 px-3 py-2.5 text-sm text-slate-700">
+                  <MapPin className="w-4 h-4 text-slate-500 shrink-0" />
                   <span className="truncate">{t.contact.location}</span>
                 </div>
               </div>
