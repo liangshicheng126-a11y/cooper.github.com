@@ -259,7 +259,12 @@ body {
   display: none;
 }
 
-body.lightbox-open .sidebar-shell {
+body.lightbox-open {
+  overflow: hidden;
+}
+
+body.lightbox-open .sidebar-shell,
+body.lightbox-open .mobile-top-shell {
   transform: translateX(-130%);
   opacity: 0;
   pointer-events: none;

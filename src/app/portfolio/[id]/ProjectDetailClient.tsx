@@ -33,14 +33,33 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const shuffledPosters = useMemo(() => shufflePosters(posters), [posters]);
 
+  const closeLightbox = () => setLightboxPhotos(null);
+
   useEffect(() => {
-    if (id !== "p3") return;
-    const active = Boolean(lightboxPhotos);
-    document.body.classList.toggle("lightbox-open", active);
+    if (!lightboxPhotos) return;
+
+    document.body.classList.add("lightbox-open");
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeLightbox();
+        return;
+      }
+      if (lightboxPhotos.length <= 1) return;
+      if (event.key === "ArrowLeft") {
+        setLightboxIndex((prev) => (prev - 1 + lightboxPhotos.length) % lightboxPhotos.length);
+      }
+      if (event.key === "ArrowRight") {
+        setLightboxIndex((prev) => (prev + 1) % lightboxPhotos.length);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
     return () => {
       document.body.classList.remove("lightbox-open");
+      window.removeEventListener("keydown", onKeyDown);
     };
-  }, [lightboxPhotos, id]);
+  }, [lightboxPhotos]);
 
   if (!mounted) return null;
 
@@ -426,40 +445,68 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
       </div>
 
       {lightboxPhotos && (
-        <div className="fixed inset-0 z-[120] bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
-          <button
-            type="button"
-            className="absolute top-5 right-5 w-10 h-10 rounded-full glass text-white flex items-center justify-center"
-            onClick={() => setLightboxPhotos(null)}
-            aria-label="Close preview"
-          >
-            <X className="w-5 h-5" />
-          </button>
-          {lightboxPhotos.length > 1 && (
-            <>
+        <div
+          className="fixed inset-0 z-[200] flex h-[100dvh] max-h-[100dvh] flex-col bg-black/95 backdrop-blur-md"
+          role="dialog"
+          aria-modal="true"
+          aria-label={id === "p1" ? t.portfolio.projectDetail.posterGallery : t.portfolio.projectDetail.photoGallery}
+        >
+          <header className="grid shrink-0 grid-cols-[1fr_auto_1fr] items-center gap-2 border-b border-white/10 px-3 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-5">
+            <button
+              type="button"
+              className="inline-flex min-h-11 w-fit items-center gap-2 rounded-full bg-white/10 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/20 active:scale-[0.98] sm:px-4"
+              onClick={closeLightbox}
+            >
+              <ArrowLeft className="h-5 w-5 shrink-0" />
+              <span>{t.portfolio.projectDetail.lightboxBack}</span>
+            </button>
+            {lightboxPhotos.length > 1 ? (
+              <span className="text-center text-sm font-medium tabular-nums text-white/70">
+                {lightboxIndex + 1} / {lightboxPhotos.length}
+              </span>
+            ) : (
+              <span />
+            )}
+            <div className="flex justify-end">
               <button
                 type="button"
-                className="absolute left-3 sm:left-6 w-10 h-10 rounded-full glass text-white flex items-center justify-center"
-                onClick={() => setLightboxIndex((prev) => (prev - 1 + lightboxPhotos.length) % lightboxPhotos.length)}
-                aria-label="Previous photo"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 sm:hidden"
+                onClick={closeLightbox}
+                aria-label={t.portfolio.projectDetail.lightboxClose}
               >
-                <ChevronLeft className="w-5 h-5" />
+                <X className="h-5 w-5" />
               </button>
-              <button
-                type="button"
-                className="absolute right-3 sm:right-6 w-10 h-10 rounded-full glass text-white flex items-center justify-center"
-                onClick={() => setLightboxIndex((prev) => (prev + 1) % lightboxPhotos.length)}
-                aria-label="Next photo"
-              >
-                <ChevronRight className="w-5 h-5" />
-              </button>
-            </>
-          )}
-          <div className="w-full max-w-[92vw] max-h-[92vh] rounded-2xl overflow-hidden border border-white/20 flex items-center justify-center">
+            </div>
+          </header>
+
+          <div className="relative flex min-h-0 flex-1 items-center justify-center px-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2 sm:px-6">
+            {lightboxPhotos.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  className="absolute left-1 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur-sm transition-colors hover:bg-black/60 sm:left-4 sm:h-11 sm:w-11"
+                  onClick={() =>
+                    setLightboxIndex((prev) => (prev - 1 + lightboxPhotos.length) % lightboxPhotos.length)
+                  }
+                  aria-label="Previous"
+                >
+                  <ChevronLeft className="h-6 w-6" />
+                </button>
+                <button
+                  type="button"
+                  className="absolute right-1 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur-sm transition-colors hover:bg-black/60 sm:right-4 sm:h-11 sm:w-11"
+                  onClick={() => setLightboxIndex((prev) => (prev + 1) % lightboxPhotos.length)}
+                  aria-label="Next"
+                >
+                  <ChevronRight className="h-6 w-6" />
+                </button>
+              </>
+            )}
             <img
               src={lightboxPhotos[lightboxIndex]}
-              alt={`${t.portfolio.projectDetail.photoAlt} ${lightboxIndex + 1}`}
-              className="max-w-full max-h-[90vh] w-auto h-auto object-contain"
+              alt={`${id === "p1" ? t.portfolio.projectDetail.posterAlt : t.portfolio.projectDetail.photoAlt} ${lightboxIndex + 1}`}
+              className="max-h-[calc(100dvh-5.5rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] max-w-[min(100%,calc(100vw-4.5rem))] w-auto h-auto select-none object-contain sm:max-w-[min(92vw,1200px)] sm:max-h-[calc(100dvh-6rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))]"
+              draggable={false}
             />
           </div>
         </div>
