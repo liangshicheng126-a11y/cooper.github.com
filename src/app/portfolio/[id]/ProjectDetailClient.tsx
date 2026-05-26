@@ -4,7 +4,16 @@ import { motion } from "framer-motion";
 import { useTranslation } from "@/locales/LanguageProvider";
 import { ArrowLeft, Calendar, User, Layout, CheckCircle, ExternalLink, X, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+
+function shufflePosters(items: string[]) {
+  const arr = [...items];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
 
 type Props = {
   id: string;
@@ -14,17 +23,15 @@ type Props = {
     location: string;
     photos: string[];
   }>;
-  posterGroups?: Array<{
-    label: string;
-    posters: string[];
-  }>;
+  posters?: string[];
 };
 
-export default function ProjectDetailClient({ id, photographyGroups = [], posterGroups = [] }: Props) {
+export default function ProjectDetailClient({ id, photographyGroups = [], posters = [] }: Props) {
   const { t, mounted } = useTranslation();
   const [photoOrientation, setPhotoOrientation] = useState<Record<string, "landscape" | "portrait" | "square">>({});
   const [lightboxPhotos, setLightboxPhotos] = useState<string[] | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const shuffledPosters = useMemo(() => shufflePosters(posters), [posters]);
 
   useEffect(() => {
     if (id !== "p3") return;
@@ -76,7 +83,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
   };
   const hasBilibiliPreview = Boolean(bilibiliByProject[id]?.length);
   const hasPhotographyGallery = id === "p3" && photographyGroups.length > 0;
-  const hasPosterGallery = id === "p1" && posterGroups.length > 0;
+  const hasPosterGallery = id === "p1" && posters.length > 0;
   const photographyByYear = photographyGroups.reduce<Record<string, typeof photographyGroups>>((acc, group) => {
     if (!acc[group.year]) acc[group.year] = [];
     acc[group.year].push(group);
@@ -340,50 +347,32 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
 
       {hasPosterGallery && (
         <motion.section variants={item} className="mb-16 lg:mb-24">
-          <div className="flex items-center justify-between gap-4 mb-5">
+          <div className="flex items-center justify-between gap-4 mb-6">
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t.portfolio.projectDetail.posterGallery}</h2>
             <span className="text-base sm:text-lg text-foreground/55 font-medium">
-              {t.portfolio.projectDetail.posterCount}{" "}
-              {posterGroups.reduce((sum, group) => sum + group.posters.length, 0)}
+              {t.portfolio.projectDetail.posterCount} {shuffledPosters.length}
             </span>
           </div>
-          <div className="space-y-10">
-            {posterGroups.map((group) => (
-              <div key={group.label} className="space-y-4">
-                <h3 className="text-lg sm:text-xl font-bold text-foreground/80">{group.label}</h3>
-                <div className="columns-1 sm:columns-2 lg:columns-3 [column-gap:1rem] sm:[column-gap:1.25rem]">
-                  {group.posters.map((poster, index) => (
-                    <div
-                      key={poster}
-                      className="group mb-4 sm:mb-5 break-inside-avoid overflow-hidden rounded-2xl glass border border-white/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_44px_-24px_rgba(15,23,42,0.85)]"
-                    >
-                      <button
-                        type="button"
-                        className="relative block w-full text-left"
-                        onClick={() => openLightbox(group.posters, index)}
-                      >
-                        <img
-                          src={poster}
-                          alt={`${t.portfolio.projectDetail.posterAlt} ${index + 1}`}
-                          className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-[1.02]"
-                          loading="lazy"
-                          draggable={false}
-                          onLoad={(event) => {
-                            const target = event.currentTarget;
-                            const { naturalWidth, naturalHeight } = target;
-                            const next =
-                              naturalWidth > naturalHeight
-                                ? "landscape"
-                                : naturalWidth < naturalHeight
-                                  ? "portrait"
-                                  : "square";
-                            setPhotoOrientation((prev) => (prev[poster] === next ? prev : { ...prev, [poster]: next }));
-                          }}
-                        />
-                      </button>
-                    </div>
-                  ))}
-                </div>
+          <div className="columns-2 sm:columns-3 lg:columns-4 [column-gap:0.75rem] sm:[column-gap:1rem]">
+            {shuffledPosters.map((poster, index) => (
+              <div
+                key={poster}
+                className="group mb-3 sm:mb-4 break-inside-avoid"
+              >
+                <button
+                  type="button"
+                  className="relative block w-full overflow-hidden rounded-2xl bg-slate-100/80 shadow-[0_2px_16px_rgba(15,23,42,0.08)] transition-all duration-300 hover:shadow-[0_12px_32px_rgba(15,23,42,0.14)] hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+                  onClick={() => openLightbox(shuffledPosters, index)}
+                >
+                  <img
+                    src={poster}
+                    alt={`${t.portfolio.projectDetail.posterAlt} ${index + 1}`}
+                    className="w-full h-auto block transition-transform duration-500 group-hover:scale-[1.03]"
+                    loading="lazy"
+                    decoding="async"
+                    draggable={false}
+                  />
+                </button>
               </div>
             ))}
           </div>

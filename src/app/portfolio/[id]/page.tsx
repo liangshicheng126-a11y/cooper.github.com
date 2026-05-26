@@ -13,14 +13,6 @@ type PhotographyGroup = {
   photos: string[];
   latestTimestamp: number;
 };
-type PosterGroup = {
-  label: string;
-  posters: string[];
-  latestTimestamp: number;
-};
-type RawPosterGroup = Omit<PosterGroup, "posters"> & {
-  posters: Array<{ path: string; timestamp: number }>;
-};
 type RawPhotographyGroup = Omit<PhotographyGroup, "photos"> & {
   photos: Array<{ path: string; timestamp: number }>;
 };
@@ -36,8 +28,8 @@ export default async function ProjectDetailPage({
 }) {
   const { id } = await params;
   const photographyGroups = await getPhotographyGroups();
-  const posterGroups = await getPosterGroups();
-  return <ProjectDetailClient id={id} photographyGroups={photographyGroups} posterGroups={posterGroups} />;
+  const posters = await getPosters();
+  return <ProjectDetailClient id={id} photographyGroups={photographyGroups} posters={posters} />;
 }
 
 async function getPhotographyGroups(): Promise<PhotographyGroup[]> {
@@ -181,44 +173,11 @@ async function getPhotographyGroups(): Promise<PhotographyGroup[]> {
   }
 }
 
-function derivePosterLabel(fileName: string, relParts: string[]): string {
-  if (relParts.length > 0) return relParts.join(" / ");
-  const base = fileName.replace(/\.[^.]+$/i, "");
-  const convSeries = base.match(/^(.+?)\s+conv\s*\d+$/i);
-  if (convSeries) return convSeries[1].trim();
-  if (!/^(Create_|Please_|Change_|Taking_|Translate_)/i.test(base)) {
-    const embeddedDate = base.match(/(20\d{2})(\d{2})(\d{2})/);
-    if (embeddedDate) return `${embeddedDate[1]}-${embeddedDate[2]}`;
-    return base.trim();
-  }
-  const embeddedDate = base.match(/(20\d{2})(\d{2})(\d{2})/);
-  if (embeddedDate) return `${embeddedDate[1]}-${embeddedDate[2]}`;
-  return "精选";
-}
-
-function posterConvIndex(fileName: string): number {
-  const m = fileName.match(/\bconv\s*(\d+)/i);
-  return m ? Number.parseInt(m[1], 10) : Number.MAX_SAFE_INTEGER;
-}
-
-async function getPosterGroups(): Promise<PosterGroup[]> {
+async function getPosters(): Promise<string[]> {
   const postersDir = path.join(process.cwd(), "public", "photos", "posters");
-  const groups = new Map<string, RawPosterGroup>();
   const isImage = (name: string) => /\.(jpg|jpeg|png|webp|avif|gif)$/i.test(name);
   const joinWebPath = (segments: string[]) =>
     `/photos/posters/${segments.map((s) => encodeURIComponent(s)).join("/")}`;
-  const parseDateToken = (value: string) => {
-    const compact = value.match(/(20\d{2})(\d{2})(\d{2})/);
-    if (compact) {
-      return Date.parse(`${compact[1]}-${compact[2]}-${compact[3]}T00:00:00Z`) || 0;
-    }
-    const m = value.match(/(20\d{2})[-_]?([01]\d)?[-_]?([0-3]\d)?/);
-    if (!m) return 0;
-    const year = m[1];
-    const month = (m[2] || "01").padStart(2, "0");
-    const day = (m[3] || "01").padStart(2, "0");
-    return Date.parse(`${year}-${month}-${day}T00:00:00Z`) || 0;
-  };
 
   const readAllImages = async (dirAbs: string, relParts: string[] = []) => {
     const entries = await fs.readdir(dirAbs, { withFileTypes: true });
@@ -234,47 +193,11 @@ async function getPosterGroups(): Promise<PosterGroup[]> {
     return out;
   };
 
-  const pushPoster = (label: string, webPath: string, timestamp: number) => {
-    const key = label || "精选";
-    const current = groups.get(key);
-    if (current) {
-      current.posters.push({ path: webPath, timestamp });
-      current.latestTimestamp = Math.max(current.latestTimestamp, timestamp);
-      return;
-    }
-    groups.set(key, {
-      label: key,
-      posters: [{ path: webPath, timestamp }],
-      latestTimestamp: timestamp,
-    });
-  };
-
   try {
     const images = await readAllImages(postersDir);
-    for (const image of images) {
-      const label = derivePosterLabel(image.fileName, image.relParts);
-      const tsSource = `${label}-${image.fileName}`;
-      const timestamp = parseDateToken(tsSource);
-      pushPoster(label, joinWebPath([...image.relParts, image.fileName]), Number.isNaN(timestamp) ? 0 : timestamp);
-    }
-
-    return Array.from(groups.values())
-      .map((group) => ({
-        ...group,
-        posters: group.posters
-          .sort((a, b) => {
-            const convA = posterConvIndex(decodeURIComponent(a.path.split("/").pop() ?? ""));
-            const convB = posterConvIndex(decodeURIComponent(b.path.split("/").pop() ?? ""));
-            if (convA !== convB) return convA - convB;
-            if (b.timestamp !== a.timestamp) return b.timestamp - a.timestamp;
-            return a.path.localeCompare(b.path, "en");
-          })
-          .map((poster) => poster.path),
-      }))
-      .sort((a, b) => {
-        if (b.latestTimestamp !== a.latestTimestamp) return b.latestTimestamp - a.latestTimestamp;
-        return a.label.localeCompare(b.label, "zh-Hans-CN");
-      });
+    return images
+      .map((image) => joinWebPath([...image.relParts, image.fileName]))
+      .sort((a, b) => a.localeCompare(b, "en"));
   } catch {
     return [];
   }
