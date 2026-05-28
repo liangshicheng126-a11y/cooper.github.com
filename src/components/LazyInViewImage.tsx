@@ -40,7 +40,7 @@ export default function LazyInViewImage({
 
   const isNatural = variant === "natural";
   const imgClassName = isNatural
-    ? `block w-full h-auto ${className}`.trim()
+    ? `block w-full h-auto max-w-full align-bottom ${className}`.trim()
     : `h-full w-full object-cover ${className}`.trim();
 
   useEffect(() => {
@@ -108,10 +108,18 @@ export default function LazyInViewImage({
       </div>
     );
 
+  const naturalWrapperClass = isNatural ? "leading-[0] [font-size:0]" : "";
+  const naturalButtonClass = isNatural
+    ? "block w-full appearance-none cursor-pointer border-0 bg-transparent p-0 m-0 leading-[0] [font-size:0] text-left"
+    : "relative w-full text-left h-full";
+
   if (onClick) {
     return (
-      <div ref={rootRef} className={`relative w-full ${isNatural ? "" : "h-full"} ${wrapperClassName}`}>
-        <button type="button" className={`relative w-full text-left ${isNatural ? "" : "h-full"}`} onClick={onClick}>
+      <div
+        ref={rootRef}
+        className={`relative w-full ${naturalWrapperClass} ${isNatural ? "" : "h-full"} ${wrapperClassName}`}
+      >
+        <button type="button" className={naturalButtonClass} onClick={onClick}>
           {content}
         </button>
       </div>
@@ -119,7 +127,10 @@ export default function LazyInViewImage({
   }
 
   return (
-    <div ref={rootRef} className={`relative w-full ${isNatural ? "" : "h-full"} ${wrapperClassName}`}>
+    <div
+      ref={rootRef}
+      className={`relative w-full ${naturalWrapperClass} ${isNatural ? "" : "h-full"} ${wrapperClassName}`}
+    >
       {content}
     </div>
   );

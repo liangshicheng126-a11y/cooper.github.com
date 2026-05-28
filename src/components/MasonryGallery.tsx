@@ -112,6 +112,10 @@ type MasonryItemProps = {
 
 export function MasonryItem({ children, className = "" }: MasonryItemProps) {
   return (
-    <div className={`masonry-item w-full overflow-hidden rounded-2xl ${className}`.trim()}>{children}</div>
+    <div
+      className={`masonry-item w-full overflow-hidden rounded-2xl leading-[0] [font-size:0] ${className}`.trim()}
+    >
+      {children}
+    </div>
   );
 }

@@ -318,7 +318,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
                       items={group.photos}
                       getOriginalSrc={(photo) => photo}
                       renderItem={(photo, index) => (
-                        <MasonryItem className="group glass border-white/10">
+                        <MasonryItem className="group shadow-[0_2px_16px_rgba(15,23,42,0.08)]">
                           <LazyInViewImage
                             src={thumbSrc(photo)}
                             fallbackSrc={photo}
@@ -352,7 +352,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
             items={shuffledPosters}
             getOriginalSrc={(poster) => poster}
             renderItem={(poster, index) => (
-              <MasonryItem className="group bg-slate-100/80 shadow-[0_2px_16px_rgba(15,23,42,0.08)] transition-shadow duration-300 sm:hover:shadow-[0_12px_32px_rgba(15,23,42,0.14)]">
+              <MasonryItem className="group shadow-[0_2px_16px_rgba(15,23,42,0.08)] transition-shadow duration-300 sm:hover:shadow-[0_12px_32px_rgba(15,23,42,0.14)]">
                 <LazyInViewImage
                   src={thumbSrc(poster)}
                   fallbackSrc={poster}

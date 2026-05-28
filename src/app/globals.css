@@ -280,6 +280,15 @@ body {
 
 .masonry-item {
   width: 100%;
+  line-height: 0;
+  font-size: 0;
+}
+
+.masonry-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  vertical-align: bottom;
 }
 
 @media (min-width: 640px) {
