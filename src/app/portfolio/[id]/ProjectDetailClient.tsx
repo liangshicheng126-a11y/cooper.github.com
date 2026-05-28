@@ -72,7 +72,8 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
     p4: [
       {
         title: "恐惧是生物的本能",
-        href: "https://v.douyin.com/aX991VQMtlU/",
+        href: "https://www.douyin.com/video/7606366795284967670",
+        embedUrl: "https://www.douyin.com/video/7606366795284967670",
       },
       {
         title: "视频预览 2",
