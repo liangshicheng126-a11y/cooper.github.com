@@ -39,11 +39,21 @@ type Props = {
   posters?: string[];
 };
 
+type ProjectVideo = {
+  title: string;
+  href: string;
+  embedUrl?: string;
+  mp4Url?: string;
+  poster?: string;
+  fallbackHref?: string;
+};
+
 export default function ProjectDetailClient({ id, photographyGroups = [], posters = [] }: Props) {
   const { t, mounted } = useTranslation();
   const [lightboxPhotos, setLightboxPhotos] = useState<string[] | null>(null);
   const [lightboxFallbacks, setLightboxFallbacks] = useState<string[] | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [videoLoadErrors, setVideoLoadErrors] = useState<Record<string, boolean>>({});
   const shuffledPosters = useMemo(() => stableShufflePosters(posters), [posters]);
   const shuffledPosterDisplay = useMemo(() => mapDisplaySources(shuffledPosters), [shuffledPosters]);
 
@@ -68,12 +78,14 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
     p4: "https://images.unsplash.com/photo-1536240478700-b869070f9279?w=1200&q=80",
   };
 
-  const videoByProject: Partial<Record<string, { title: string; href: string; embedUrl?: string }[]>> = {
+  const videoByProject: Partial<Record<string, ProjectVideo[]>> = {
     p4: [
       {
         title: "恐惧是生物的本能",
         href: "https://www.douyin.com/video/7606366795284967670",
-        embedUrl: "https://www.douyin.com/video/7606366795284967670",
+        mp4Url: "/videos/微信视频2026-04-28_141704_425.mp4",
+        poster: "https://images.unsplash.com/photo-1536240478700-b869070f9279?w=1200&q=80",
+        fallbackHref: "https://www.douyin.com/video/7606366795284967670",
       },
       {
         title: "视频预览 2",
@@ -82,10 +94,8 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
       },
     ],
   };
-  const getVideoPreviewUrl = (video: { href: string; embedUrl?: string }) => {
-    if (video.embedUrl) return video.embedUrl;
-    if (/douyin\.com/i.test(video.href)) return video.href;
-    return undefined;
+  const markVideoLoadError = (videoKey: string) => {
+    setVideoLoadErrors((prev) => ({ ...prev, [videoKey]: true }));
   };
   const hasVideoPreview = Boolean(videoByProject[id]?.length);
   const hasPhotographyGallery = id === "p3" && photographyGroups.length > 0;
@@ -394,10 +404,22 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
                   <span>{t.portfolio.projectDetail.watchVideo} {index + 1} · {video.title}</span>
                   <ExternalLink className="w-4 h-4" />
                 </a>
-                {getVideoPreviewUrl(video) ? (
+                {video.mp4Url && !videoLoadErrors[video.href] ? (
+                  <div className="glass rounded-[30px] p-2 border-white/10 aspect-video overflow-hidden">
+                    <video
+                      src={video.mp4Url}
+                      poster={video.poster}
+                      controls
+                      playsInline
+                      preload="metadata"
+                      className="w-full h-full rounded-[20px] bg-black"
+                      onError={() => markVideoLoadError(video.href)}
+                    />
+                  </div>
+                ) : video.embedUrl ? (
                   <div className="glass rounded-[30px] p-2 border-white/10 aspect-video overflow-hidden">
                     <iframe
-                      src={getVideoPreviewUrl(video)}
+                      src={video.embedUrl}
                       className="w-full h-full rounded-[20px]"
                       scrolling="no"
                       frameBorder="0"
@@ -408,8 +430,21 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
                     />
                   </div>
                 ) : (
-                  <div className="glass rounded-[30px] p-6 border-white/10">
-                    <p className="text-sm text-foreground/70">该视频为抖音链接，请点击上方链接打开观看。</p>
+                  <div className="glass rounded-[30px] border-white/10 overflow-hidden">
+                    <div className="aspect-video flex items-center justify-center bg-gradient-to-br from-indigo-500/20 via-cyan-500/20 to-fuchsia-500/20 p-6">
+                      <div className="text-center space-y-4">
+                        <p className="text-sm text-foreground/70">当前视频源不支持站内内嵌播放，请使用外链观看。</p>
+                        <a
+                          href={video.fallbackHref || video.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 rounded-xl bg-indigo-500 px-4 py-2 text-white text-sm font-medium hover:bg-indigo-600 transition-colors"
+                        >
+                          打开原视频
+                          <ExternalLink className="w-4 h-4" />
+                        </a>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
