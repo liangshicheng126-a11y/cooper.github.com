@@ -301,9 +301,24 @@ body.lightbox-open .mobile-top-shell {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .liquid-bg {
+/* Gallery detail: keep gradient + blobs; lighter GPU on small screens */
+@media (max-width: 640px) {
+  .liquid-bg--gallery .blob {
+    animation: none;
+    filter: blur(16px) saturate(115%);
+    will-change: auto;
+  }
+
+  .liquid-bg--gallery .blob::before,
+  .liquid-bg--gallery .blob::after {
     display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .liquid-bg .blob {
+    animation: none;
+    will-change: auto;
   }
 }
 
