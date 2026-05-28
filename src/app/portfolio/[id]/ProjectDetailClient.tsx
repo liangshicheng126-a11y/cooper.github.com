@@ -68,23 +68,20 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
     p4: "https://images.unsplash.com/photo-1536240478700-b869070f9279?w=1200&q=80",
   };
 
-  const bilibiliByProject: Partial<Record<string, { bvid: string; href: string }[]>> = {
+  const videoByProject: Partial<Record<string, { title: string; href: string; embedUrl?: string }[]>> = {
     p4: [
       {
-        bvid: "BV1Ws9rB9ErL",
-        href: "https://www.bilibili.com/video/BV1Ws9rB9ErL/",
+        title: "恐惧是生物的本能",
+        href: "https://v.douyin.com/aX991VQMtlU/",
       },
       {
-        bvid: "BV1ys9rBREj8",
+        title: "视频预览 2",
         href: "https://www.bilibili.com/video/BV1ys9rBREj8/",
-      },
-      {
-        bvid: "BV1Ct9rBXEAs",
-        href: "https://www.bilibili.com/video/BV1Ct9rBXEAs/",
+        embedUrl: "https://player.bilibili.com/player.html?bvid=BV1ys9rBREj8&page=1&high_quality=1",
       },
     ],
   };
-  const hasBilibiliPreview = Boolean(bilibiliByProject[id]?.length);
+  const hasVideoPreview = Boolean(videoByProject[id]?.length);
   const hasPhotographyGallery = id === "p3" && photographyGroups.length > 0;
   const hasPosterGallery = id === "p1" && posters.length > 0;
   const photographyByYear = photographyGroups.reduce<Record<string, typeof photographyGroups>>((acc, group) => {
@@ -260,7 +257,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
         </div>
       </motion.div>
 
-      {!hasBilibiliPreview && (
+      {!hasVideoPreview && (
         <motion.div variants={item} className="aspect-[4/3] sm:aspect-[21/9] rounded-[28px] sm:rounded-[40px] overflow-hidden glass border-white/10 mb-12 sm:mb-16">
           <div
             className="w-full h-full"
@@ -368,7 +365,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
         </motion.section>
       )}
 
-      {hasBilibiliPreview && (
+      {hasVideoPreview && (
         <>
         {id === "p4" && (
           <div className="mb-12 lg:mb-16">
@@ -380,27 +377,33 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
             <h2 className="text-2xl font-bold">{t.portfolio.projectDetail.videoPreview}</h2>
           </div>
           <div className="space-y-6">
-            {bilibiliByProject[id]!.map((video, index) => (
-              <div key={video.bvid} className="space-y-3">
+            {videoByProject[id]!.map((video, index) => (
+              <div key={video.href} className="space-y-3">
                 <a
                   href={video.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-sm font-medium text-indigo-500 hover:text-indigo-400 transition-colors"
                 >
-                  <span>{t.portfolio.projectDetail.watchOnBilibili} {index + 1}</span>
+                  <span>{t.portfolio.projectDetail.watchVideo} {index + 1} · {video.title}</span>
                   <ExternalLink className="w-4 h-4" />
                 </a>
-                <div className="glass rounded-[30px] p-2 border-white/10 aspect-video overflow-hidden">
-                  <iframe
-                    src={`https://player.bilibili.com/player.html?bvid=${video.bvid}&page=1&high_quality=1`}
-                    className="w-full h-full rounded-[20px]"
-                    scrolling="no"
-                    frameBorder="0"
-                    allowFullScreen
-                    title={`Bilibili Video Player ${index + 1}`}
-                  />
-                </div>
+                {video.embedUrl ? (
+                  <div className="glass rounded-[30px] p-2 border-white/10 aspect-video overflow-hidden">
+                    <iframe
+                      src={video.embedUrl}
+                      className="w-full h-full rounded-[20px]"
+                      scrolling="no"
+                      frameBorder="0"
+                      allowFullScreen
+                      title={`Video Player ${index + 1}`}
+                    />
+                  </div>
+                ) : (
+                  <div className="glass rounded-[30px] p-6 border-white/10">
+                    <p className="text-sm text-foreground/70">该视频为抖音链接，请点击上方链接打开观看。</p>
+                  </div>
+                )}
               </div>
             ))}
           </div>
