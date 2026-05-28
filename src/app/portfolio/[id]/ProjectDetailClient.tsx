@@ -2,14 +2,25 @@
 
 import { motion } from "framer-motion";
 import { useTranslation } from "@/locales/LanguageProvider";
-import { ArrowLeft, Calendar, User, Layout, CheckCircle, ExternalLink, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, Calendar, User, Layout, CheckCircle, ExternalLink } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+import LazyInViewImage from "@/components/LazyInViewImage";
+import GalleryLightbox from "@/components/GalleryLightbox";
 
-function shufflePosters(items: string[]) {
+/** Deterministic shuffle — avoids re-randomizing on each render (mobile re-render storms). */
+function stableShufflePosters(items: string[]) {
   const arr = [...items];
+  let seed = 2166136261;
+  for (const item of arr) {
+    for (let i = 0; i < item.length; i++) {
+      seed ^= item.charCodeAt(i);
+      seed = Math.imul(seed, 16777619);
+    }
+  }
   for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    seed = Math.imul(seed ^ (seed >>> 13), 1103515245) + 12345;
+    const j = Math.abs(seed) % (i + 1);
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
   return arr;
@@ -28,40 +39,11 @@ type Props = {
 
 export default function ProjectDetailClient({ id, photographyGroups = [], posters = [] }: Props) {
   const { t, mounted } = useTranslation();
-  const [photoOrientation, setPhotoOrientation] = useState<Record<string, "landscape" | "portrait" | "square">>({});
   const [lightboxPhotos, setLightboxPhotos] = useState<string[] | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState(0);
-  const shuffledPosters = useMemo(() => shufflePosters(posters), [posters]);
+  const shuffledPosters = useMemo(() => stableShufflePosters(posters), [posters]);
 
   const closeLightbox = () => setLightboxPhotos(null);
-
-  useEffect(() => {
-    if (!lightboxPhotos) return;
-
-    document.body.classList.add("lightbox-open");
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        closeLightbox();
-        return;
-      }
-      if (lightboxPhotos.length <= 1) return;
-      if (event.key === "ArrowLeft") {
-        setLightboxIndex((prev) => (prev - 1 + lightboxPhotos.length) % lightboxPhotos.length);
-      }
-      if (event.key === "ArrowRight") {
-        setLightboxIndex((prev) => (prev + 1) % lightboxPhotos.length);
-      }
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.body.classList.remove("lightbox-open");
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [lightboxPhotos]);
-
-  if (!mounted) return null;
 
   const projectKey = id as keyof typeof t.portfolio.projects;
   const project = t.portfolio.projects[projectKey];
@@ -113,16 +95,6 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
     const bYear = /^\d{4}$/.test(b) ? Number(b) : -1;
     return bYear - aYear;
   });
-  const getOrientation = (photo: string) => photoOrientation[photo] ?? "square";
-  const getPhotoCardClass = (orientation: "landscape" | "portrait" | "square") => {
-    if (orientation === "landscape") {
-      return "col-span-12 sm:col-span-8 lg:col-span-6 aspect-[16/10]";
-    }
-    if (orientation === "portrait") {
-      return "col-span-6 sm:col-span-4 lg:col-span-3 aspect-[3/4]";
-    }
-    return "col-span-6 sm:col-span-4 lg:col-span-4 aspect-square";
-  };
   const openLightbox = (photos: string[], index: number) => {
     setLightboxPhotos(photos);
     setLightboxIndex(index);
@@ -219,6 +191,16 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
     );
   }
 
+  if (!mounted) {
+    return (
+      <div className="max-w-5xl pb-8 animate-pulse">
+        <div className="mb-8 h-6 w-32 rounded-lg bg-white/10" />
+        <div className="mb-6 h-12 w-2/3 max-w-md rounded-xl bg-white/10" />
+        <div className="mb-12 h-48 rounded-3xl bg-white/5 sm:h-64" />
+      </div>
+    );
+  }
+
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="max-w-5xl pb-8">
       <motion.div variants={item} className="mb-8 sm:mb-12">
@@ -284,7 +266,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
       )}
 
       {hasPhotographyGallery && (
-        <motion.section variants={item} className="mb-16 lg:mb-24">
+        <motion.section variants={item} className="gallery-section mb-16 lg:mb-24">
           <div className="flex items-center justify-between gap-4 mb-5">
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t.portfolio.projectDetail.photoGallery}</h2>
             <span className="text-base sm:text-lg text-foreground/55 font-medium">
@@ -298,7 +280,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
                 {yearIndex > 0 && (
                   <div className="year-divider glass border-white/10 rounded-xl">
                     <div className="year-divider-track">
-                      {Array.from({ length: 36 }).map((_, i) => (
+                      {Array.from({ length: 12 }).map((_, i) => (
                         <span key={`${year}-${i}`} className="inline-flex items-center gap-4">
                           <span>{year}</span>
                           <span>{t.portfolio.projectDetail.yearDividerDot}</span>
@@ -324,35 +306,18 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
                         {group.photos.length} {t.portfolio.projectDetail.photosUnit}
                       </span>
                     </div>
-                    <div className="grid grid-cols-12 gap-4">
+                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
                       {group.photos.map((photo, index) => (
                         <div
-                          key={photo}
-                          className={`group rounded-2xl overflow-hidden glass border-white/10 ${getPhotoCardClass(getOrientation(photo))}`}
+                          key={`${group.dateLabel}-${group.location}-${photo}`}
+                          className="group aspect-[4/3] overflow-hidden rounded-2xl glass border-white/10"
                         >
-                          <button
-                            type="button"
-                            className="relative w-full h-full text-left"
+                          <LazyInViewImage
+                            src={photo}
+                            alt={`${t.portfolio.projectDetail.photoAlt} ${index + 1}`}
+                            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                             onClick={() => openLightbox(group.photos, index)}
-                          >
-                            <img
-                              src={photo}
-                              alt={`${t.portfolio.projectDetail.photoAlt} ${index + 1}`}
-                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                              loading="lazy"
-                              onLoad={(event) => {
-                                const target = event.currentTarget;
-                                const { naturalWidth, naturalHeight } = target;
-                                const next =
-                                  naturalWidth > naturalHeight
-                                    ? "landscape"
-                                    : naturalWidth < naturalHeight
-                                      ? "portrait"
-                                      : "square";
-                                setPhotoOrientation((prev) => (prev[photo] === next ? prev : { ...prev, [photo]: next }));
-                              }}
-                            />
-                          </button>
+                          />
                         </div>
                       ))}
                     </div>
@@ -365,33 +330,26 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
       )}
 
       {hasPosterGallery && (
-        <motion.section variants={item} className="mb-16 lg:mb-24">
+        <motion.section variants={item} className="gallery-section mb-16 lg:mb-24">
           <div className="flex items-center justify-between gap-4 mb-6">
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t.portfolio.projectDetail.posterGallery}</h2>
             <span className="text-base sm:text-lg text-foreground/55 font-medium">
               {t.portfolio.projectDetail.posterCount} {shuffledPosters.length}
             </span>
           </div>
-          <div className="columns-2 sm:columns-3 lg:columns-4 [column-gap:0.75rem] sm:[column-gap:1rem]">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
             {shuffledPosters.map((poster, index) => (
               <div
                 key={poster}
-                className="group mb-3 sm:mb-4 break-inside-avoid"
+                className="group aspect-[3/4] overflow-hidden rounded-2xl bg-slate-100/80 shadow-[0_2px_16px_rgba(15,23,42,0.08)] transition-all duration-300 hover:shadow-[0_12px_32px_rgba(15,23,42,0.14)] hover:-translate-y-0.5"
               >
-                <button
-                  type="button"
-                  className="relative block w-full overflow-hidden rounded-2xl bg-slate-100/80 shadow-[0_2px_16px_rgba(15,23,42,0.08)] transition-all duration-300 hover:shadow-[0_12px_32px_rgba(15,23,42,0.14)] hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+                <LazyInViewImage
+                  src={poster}
+                  alt={`${t.portfolio.projectDetail.posterAlt} ${index + 1}`}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                   onClick={() => openLightbox(shuffledPosters, index)}
-                >
-                  <img
-                    src={poster}
-                    alt={`${t.portfolio.projectDetail.posterAlt} ${index + 1}`}
-                    className="w-full h-auto block transition-transform duration-500 group-hover:scale-[1.03]"
-                    loading="lazy"
-                    decoding="async"
-                    draggable={false}
-                  />
-                </button>
+                  draggable={false}
+                />
               </div>
             ))}
           </div>
@@ -445,71 +403,16 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
       </div>
 
       {lightboxPhotos && (
-        <div
-          className="fixed inset-0 z-[200] flex h-[100dvh] max-h-[100dvh] flex-col bg-black/95 backdrop-blur-md"
-          role="dialog"
-          aria-modal="true"
-          aria-label={id === "p1" ? t.portfolio.projectDetail.posterGallery : t.portfolio.projectDetail.photoGallery}
-        >
-          <header className="grid shrink-0 grid-cols-[1fr_auto_1fr] items-center gap-2 border-b border-white/10 px-3 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-5">
-            <button
-              type="button"
-              className="inline-flex min-h-11 w-fit items-center gap-2 rounded-full bg-white/10 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/20 active:scale-[0.98] sm:px-4"
-              onClick={closeLightbox}
-            >
-              <ArrowLeft className="h-5 w-5 shrink-0" />
-              <span>{t.portfolio.projectDetail.lightboxBack}</span>
-            </button>
-            {lightboxPhotos.length > 1 ? (
-              <span className="text-center text-sm font-medium tabular-nums text-white/70">
-                {lightboxIndex + 1} / {lightboxPhotos.length}
-              </span>
-            ) : (
-              <span />
-            )}
-            <div className="flex justify-end">
-              <button
-                type="button"
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 sm:hidden"
-                onClick={closeLightbox}
-                aria-label={t.portfolio.projectDetail.lightboxClose}
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-          </header>
-
-          <div className="relative flex min-h-0 flex-1 items-center justify-center px-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2 sm:px-6">
-            {lightboxPhotos.length > 1 && (
-              <>
-                <button
-                  type="button"
-                  className="absolute left-1 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur-sm transition-colors hover:bg-black/60 sm:left-4 sm:h-11 sm:w-11"
-                  onClick={() =>
-                    setLightboxIndex((prev) => (prev - 1 + lightboxPhotos.length) % lightboxPhotos.length)
-                  }
-                  aria-label="Previous"
-                >
-                  <ChevronLeft className="h-6 w-6" />
-                </button>
-                <button
-                  type="button"
-                  className="absolute right-1 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur-sm transition-colors hover:bg-black/60 sm:right-4 sm:h-11 sm:w-11"
-                  onClick={() => setLightboxIndex((prev) => (prev + 1) % lightboxPhotos.length)}
-                  aria-label="Next"
-                >
-                  <ChevronRight className="h-6 w-6" />
-                </button>
-              </>
-            )}
-            <img
-              src={lightboxPhotos[lightboxIndex]}
-              alt={`${id === "p1" ? t.portfolio.projectDetail.posterAlt : t.portfolio.projectDetail.photoAlt} ${lightboxIndex + 1}`}
-              className="max-h-[calc(100dvh-5.5rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] max-w-[min(100%,calc(100vw-4.5rem))] w-auto h-auto select-none object-contain sm:max-w-[min(92vw,1200px)] sm:max-h-[calc(100dvh-6rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))]"
-              draggable={false}
-            />
-          </div>
-        </div>
+        <GalleryLightbox
+          photos={lightboxPhotos}
+          index={lightboxIndex}
+          onClose={closeLightbox}
+          onIndexChange={setLightboxIndex}
+          backLabel={t.portfolio.projectDetail.lightboxBack}
+          closeLabel={t.portfolio.projectDetail.lightboxClose}
+          altPrefix={id === "p1" ? t.portfolio.projectDetail.posterAlt : t.portfolio.projectDetail.photoAlt}
+          galleryLabel={id === "p1" ? t.portfolio.projectDetail.posterGallery : t.portfolio.projectDetail.photoGallery}
+        />
       )}
     </motion.div>
   );

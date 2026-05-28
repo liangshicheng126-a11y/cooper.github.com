@@ -242,7 +242,21 @@ body {
     gap: 1.25rem;
     letter-spacing: 0.14em;
     font-size: clamp(0.9rem, 3.6vw, 1.1rem);
+    animation: none;
+    justify-content: center;
+    width: 100%;
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .year-divider-track {
+    animation: none;
+  }
+}
+
+.gallery-section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 480px;
 }
 
 @keyframes year-marquee {

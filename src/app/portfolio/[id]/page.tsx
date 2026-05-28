@@ -27,8 +27,8 @@ export default async function ProjectDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const photographyGroups = await getPhotographyGroups();
-  const posters = await getPosters();
+  const photographyGroups = id === "p3" ? await getPhotographyGroups() : [];
+  const posters = id === "p1" ? await getPosters() : [];
   return <ProjectDetailClient id={id} photographyGroups={photographyGroups} posters={posters} />;
 }
 
