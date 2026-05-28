@@ -17,6 +17,8 @@ type Props = {
   /** Used when optimized thumb/display WebP is missing (e.g. dev without prebuild). */
   fallbackSrc?: string;
   sizes?: string;
+  /** cover: fill fixed-height frame; natural: intrinsic proportions for masonry */
+  variant?: "cover" | "natural";
 };
 
 export default function LazyInViewImage({
@@ -28,12 +30,18 @@ export default function LazyInViewImage({
   draggable = false,
   fallbackSrc,
   sizes = "(max-width: 640px) 50vw, 25vw",
+  variant = "cover",
 }: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
   const hasLoadedRef = useRef(false);
   const [shouldLoad, setShouldLoad] = useState(false);
   const [activeSrc, setActiveSrc] = useState(src);
   const [failed, setFailed] = useState(false);
+
+  const isNatural = variant === "natural";
+  const imgClassName = isNatural
+    ? `block w-full h-auto ${className}`.trim()
+    : `h-full w-full object-cover ${className}`.trim();
 
   useEffect(() => {
     setActiveSrc(src);
@@ -78,7 +86,7 @@ export default function LazyInViewImage({
       <img
         src={activeSrc}
         alt={alt}
-        className={className}
+        className={imgClassName}
         sizes={sizes}
         loading="lazy"
         decoding="async"
@@ -93,7 +101,7 @@ export default function LazyInViewImage({
       />
     ) : (
       <div
-        className={`h-full w-full bg-slate-200/60 dark:bg-white/5 ${failed ? "flex items-center justify-center text-xs text-foreground/40" : ""}`}
+        className={`w-full bg-slate-200/60 dark:bg-white/5 ${isNatural ? "min-h-[8rem]" : "h-full"} ${failed ? "flex items-center justify-center text-xs text-foreground/40" : ""}`}
         aria-hidden={!failed}
       >
         {failed ? "—" : null}
@@ -102,8 +110,8 @@ export default function LazyInViewImage({
 
   if (onClick) {
     return (
-      <div ref={rootRef} className={`relative h-full w-full ${wrapperClassName}`}>
-        <button type="button" className="relative h-full w-full text-left" onClick={onClick}>
+      <div ref={rootRef} className={`relative w-full ${isNatural ? "" : "h-full"} ${wrapperClassName}`}>
+        <button type="button" className={`relative w-full text-left ${isNatural ? "" : "h-full"}`} onClick={onClick}>
           {content}
         </button>
       </div>
@@ -111,7 +119,7 @@ export default function LazyInViewImage({
   }
 
   return (
-    <div ref={rootRef} className={`relative h-full w-full ${wrapperClassName}`}>
+    <div ref={rootRef} className={`relative w-full ${isNatural ? "" : "h-full"} ${wrapperClassName}`}>
       {content}
     </div>
   );

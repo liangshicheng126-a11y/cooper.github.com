@@ -76,7 +76,15 @@ async function resizeToWebp(sourceAbs, targetAbs, maxEdge, quality) {
     .toFile(targetAbs);
 }
 
-async function processGallery(galleryAbs) {
+async function readImageDimensions(sourceAbs) {
+  const meta = await sharp(sourceAbs).rotate().metadata();
+  return {
+    width: meta.width ?? 1,
+    height: meta.height ?? 1,
+  };
+}
+
+async function processGallery(galleryAbs, manifest) {
   const galleryRootName = path.basename(path.dirname(galleryAbs)) === "photos"
     ? path.basename(galleryAbs)
     : path.basename(galleryAbs);
@@ -86,6 +94,9 @@ async function processGallery(galleryAbs) {
   let skipped = 0;
 
   for (const image of images) {
+    const originalWeb = webPath(galleryRootName, image.relParts, image.fileName);
+    manifest[originalWeb] = await readImageDimensions(image.abs);
+
     for (const variant of VARIANTS) {
       const targetAbs = outputAbs(galleryAbs, variant.dir, image.relParts, image.fileName);
       if (!(await needsRegenerate(image.abs, targetAbs))) {
@@ -94,7 +105,6 @@ async function processGallery(galleryAbs) {
       }
       await resizeToWebp(image.abs, targetAbs, variant.maxEdge, variant.quality);
       generated += 1;
-      const originalWeb = webPath(galleryRootName, image.relParts, image.fileName);
       console.log(`  ${variant.dir}: ${originalWeb}`);
     }
   }
@@ -107,15 +117,21 @@ async function main() {
   let totalGenerated = 0;
   let totalSkipped = 0;
   let totalSources = 0;
+  const manifest = {};
 
   for (const galleryAbs of GALLERY_DIRS) {
     const name = path.relative(PUBLIC, galleryAbs);
-    const result = await processGallery(galleryAbs);
+    const result = await processGallery(galleryAbs, manifest);
     totalGenerated += result.generated;
     totalSkipped += result.skipped;
     totalSources += result.count;
     console.log(`${name}: ${result.count} source(s), ${result.generated} written, ${result.skipped} up-to-date`);
   }
+
+  const manifestPath = path.join(PUBLIC, "photos", "gallery-manifest.json");
+  await fs.mkdir(path.dirname(manifestPath), { recursive: true });
+  await fs.writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
+  console.log(`Wrote manifest: ${path.relative(ROOT, manifestPath)} (${Object.keys(manifest).length} entries)`);
 
   console.log(
     `Done. ${totalSources} source image(s); ${totalGenerated} variant(s) written; ${totalSkipped} skipped.`,

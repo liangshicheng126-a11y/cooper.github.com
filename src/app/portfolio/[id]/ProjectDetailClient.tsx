@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import LazyInViewImage from "@/components/LazyInViewImage";
 import GalleryLightbox from "@/components/GalleryLightbox";
+import MasonryGallery, { MasonryItem } from "@/components/MasonryGallery";
 import { mapDisplaySources, thumbSrc } from "@/lib/galleryImageUrl";
 
 /** Deterministic shuffle — avoids re-randomizing on each render (mobile re-render storms). */
@@ -313,24 +314,26 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
                         {group.photos.length} {t.portfolio.projectDetail.photosUnit}
                       </span>
                     </div>
-                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+                    <MasonryGallery>
                       {group.photos.map((photo, index) => (
-                        <div
+                        <MasonryItem
                           key={`${group.dateLabel}-${group.location}-${index}-${photo}`}
-                          className="group aspect-[4/3] overflow-hidden rounded-2xl glass border-white/10"
+                          originalSrc={photo}
+                          className="group glass border-white/10"
                         >
                           <LazyInViewImage
                             src={thumbSrc(photo)}
                             fallbackSrc={photo}
                             alt={`${t.portfolio.projectDetail.photoAlt} ${index + 1}`}
-                            className="h-full w-full object-cover transition-transform duration-700 sm:group-hover:scale-105"
+                            variant="natural"
+                            className="transition-transform duration-700 sm:group-hover:scale-[1.02]"
                             onClick={() =>
                               openLightbox(mapDisplaySources(group.photos), index, group.photos)
                             }
                           />
-                        </div>
+                        </MasonryItem>
                       ))}
-                    </div>
+                    </MasonryGallery>
                   </div>
                 ))}
               </div>
@@ -347,23 +350,25 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
               {t.portfolio.projectDetail.posterCount} {shuffledPosters.length}
             </span>
           </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+          <MasonryGallery>
             {shuffledPosters.map((poster, index) => (
-              <div
+              <MasonryItem
                 key={`poster-${index}-${poster}`}
-                className="group aspect-[3/4] overflow-hidden rounded-2xl bg-slate-100/80 shadow-[0_2px_16px_rgba(15,23,42,0.08)] transition-shadow duration-300 sm:hover:shadow-[0_12px_32px_rgba(15,23,42,0.14)] sm:hover:-translate-y-0.5"
+                originalSrc={poster}
+                className="group bg-slate-100/80 shadow-[0_2px_16px_rgba(15,23,42,0.08)] transition-shadow duration-300 sm:hover:shadow-[0_12px_32px_rgba(15,23,42,0.14)]"
               >
                 <LazyInViewImage
                   src={thumbSrc(poster)}
                   fallbackSrc={poster}
                   alt={`${t.portfolio.projectDetail.posterAlt} ${index + 1}`}
-                  className="h-full w-full object-cover transition-transform duration-500 sm:group-hover:scale-[1.03]"
+                  variant="natural"
+                  className="transition-transform duration-500 sm:group-hover:scale-[1.02]"
                   onClick={() => openLightbox(shuffledPosterDisplay, index, shuffledPosters)}
                   draggable={false}
                 />
-              </div>
+              </MasonryItem>
             ))}
-          </div>
+          </MasonryGallery>
         </motion.section>
       )}
 

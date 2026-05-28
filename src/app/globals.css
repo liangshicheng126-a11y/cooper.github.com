@@ -259,6 +259,35 @@ body {
   content-visibility: visible;
 }
 
+.masonry-grid {
+  display: flex;
+  margin-left: -0.75rem;
+  width: auto;
+}
+
+.masonry-grid_column {
+  padding-left: 0.75rem;
+  background-clip: padding-box;
+}
+
+.masonry-grid_column > .masonry-item {
+  margin-bottom: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .masonry-grid {
+    margin-left: -1rem;
+  }
+
+  .masonry-grid_column {
+    padding-left: 1rem;
+  }
+
+  .masonry-grid_column > .masonry-item {
+    margin-bottom: 1rem;
+  }
+}
+
 @keyframes year-marquee {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
