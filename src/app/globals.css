@@ -255,8 +255,8 @@ body {
 }
 
 .gallery-section {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 480px;
+  /* Avoid content-visibility on gallery grids — iOS Safari mis-paints during scroll. */
+  content-visibility: visible;
 }
 
 @keyframes year-marquee {

@@ -97,11 +97,14 @@ async function getPhotographyGroups(): Promise<PhotographyGroup[]> {
     return null;
   };
 
+  const skipDirs = new Set(["_thumb", "_display"]);
+
   const readAllImages = async (dirAbs: string, relParts: string[] = []) => {
     const entries = await fs.readdir(dirAbs, { withFileTypes: true });
     const out: { relParts: string[]; fileName: string }[] = [];
     for (const entry of entries) {
       if (entry.isDirectory()) {
+        if (skipDirs.has(entry.name)) continue;
         out.push(...(await readAllImages(path.join(dirAbs, entry.name), [...relParts, entry.name])));
         continue;
       }
@@ -178,12 +181,14 @@ async function getPosters(): Promise<string[]> {
   const isImage = (name: string) => /\.(jpg|jpeg|png|webp|avif|gif)$/i.test(name);
   const joinWebPath = (segments: string[]) =>
     `/photos/posters/${segments.map((s) => encodeURIComponent(s)).join("/")}`;
+  const skipDirs = new Set(["_thumb", "_display"]);
 
   const readAllImages = async (dirAbs: string, relParts: string[] = []) => {
     const entries = await fs.readdir(dirAbs, { withFileTypes: true });
     const out: { relParts: string[]; fileName: string }[] = [];
     for (const entry of entries) {
       if (entry.isDirectory()) {
+        if (skipDirs.has(entry.name)) continue;
         out.push(...(await readAllImages(path.join(dirAbs, entry.name), [...relParts, entry.name])));
         continue;
       }

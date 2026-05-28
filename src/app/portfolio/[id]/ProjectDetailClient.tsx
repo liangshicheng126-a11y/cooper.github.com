@@ -316,7 +316,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
                     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
                       {group.photos.map((photo, index) => (
                         <div
-                          key={`${group.dateLabel}-${group.location}-${photo}`}
+                          key={`${group.dateLabel}-${group.location}-${index}-${photo}`}
                           className="group aspect-[4/3] overflow-hidden rounded-2xl glass border-white/10"
                         >
                           <LazyInViewImage
@@ -350,7 +350,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
             {shuffledPosters.map((poster, index) => (
               <div
-                key={poster}
+                key={`poster-${index}-${poster}`}
                 className="group aspect-[3/4] overflow-hidden rounded-2xl bg-slate-100/80 shadow-[0_2px_16px_rgba(15,23,42,0.08)] transition-shadow duration-300 sm:hover:shadow-[0_12px_32px_rgba(15,23,42,0.14)] sm:hover:-translate-y-0.5"
               >
                 <LazyInViewImage

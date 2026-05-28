@@ -1,45 +1,10 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
-
-const MAX_CONCURRENT_LOADED = 6;
-
-type LoadedEntry = {
-  unload: () => void;
-};
-
-const loadedRegistry = new Map<string, LoadedEntry>();
-const loadOrder: string[] = [];
-
-function registerLoaded(id: string, unload: () => void) {
-  if (loadedRegistry.has(id)) {
-    loadedRegistry.get(id)?.unload();
-    loadedRegistry.delete(id);
-    const idx = loadOrder.indexOf(id);
-    if (idx >= 0) loadOrder.splice(idx, 1);
-  }
-
-  loadedRegistry.set(id, { unload });
-  loadOrder.push(id);
-
-  while (loadOrder.length > MAX_CONCURRENT_LOADED) {
-    const oldest = loadOrder.shift();
-    if (!oldest) break;
-    const entry = loadedRegistry.get(oldest);
-    entry?.unload();
-    loadedRegistry.delete(oldest);
-  }
-}
-
-function unregisterLoaded(id: string) {
-  loadedRegistry.delete(id);
-  const idx = loadOrder.indexOf(id);
-  if (idx >= 0) loadOrder.splice(idx, 1);
-}
+import { useEffect, useRef, useState } from "react";
 
 function getRootMargin(): string {
-  if (typeof window === "undefined") return "120px 0px";
-  return window.matchMedia("(max-width: 640px)").matches ? "80px 0px" : "200px 0px";
+  if (typeof window === "undefined") return "200px 0px";
+  return window.matchMedia("(max-width: 640px)").matches ? "160px 0px" : "280px 0px";
 }
 
 type Props = {
@@ -64,8 +29,8 @@ export default function LazyInViewImage({
   fallbackSrc,
   sizes = "(max-width: 640px) 50vw, 25vw",
 }: Props) {
-  const instanceId = useId();
   const rootRef = useRef<HTMLDivElement>(null);
+  const hasLoadedRef = useRef(false);
   const [shouldLoad, setShouldLoad] = useState(false);
   const [activeSrc, setActiveSrc] = useState(src);
   const [failed, setFailed] = useState(false);
@@ -73,46 +38,39 @@ export default function LazyInViewImage({
   useEffect(() => {
     setActiveSrc(src);
     setFailed(false);
-    setShouldLoad(false);
+    if (!hasLoadedRef.current) {
+      setShouldLoad(false);
+    }
   }, [src]);
 
   useEffect(() => {
     const node = rootRef.current;
     if (!node) return;
 
+    if (hasLoadedRef.current) {
+      setShouldLoad(true);
+      return;
+    }
+
     if (typeof IntersectionObserver === "undefined") {
+      hasLoadedRef.current = true;
       setShouldLoad(true);
       return;
     }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry?.isIntersecting) {
-          setShouldLoad(true);
-          return;
-        }
-        setShouldLoad(false);
-        unregisterLoaded(instanceId);
+        if (!entry?.isIntersecting) return;
+        hasLoadedRef.current = true;
+        setShouldLoad(true);
+        observer.disconnect();
       },
       { rootMargin: getRootMargin(), threshold: 0.01 },
     );
 
     observer.observe(node);
-    return () => {
-      observer.disconnect();
-      unregisterLoaded(instanceId);
-    };
-  }, [instanceId, src]);
-
-  useEffect(() => {
-    if (!shouldLoad) {
-      unregisterLoaded(instanceId);
-      return;
-    }
-
-    registerLoaded(instanceId, () => setShouldLoad(false));
-    return () => unregisterLoaded(instanceId);
-  }, [shouldLoad, instanceId]);
+    return () => observer.disconnect();
+  }, [src]);
 
   const content =
     shouldLoad && !failed ? (
@@ -135,7 +93,7 @@ export default function LazyInViewImage({
       />
     ) : (
       <div
-        className={`h-full w-full bg-white/5 ${failed ? "flex items-center justify-center text-xs text-foreground/40" : "animate-pulse"}`}
+        className={`h-full w-full bg-slate-200/60 dark:bg-white/5 ${failed ? "flex items-center justify-center text-xs text-foreground/40" : ""}`}
         aria-hidden={!failed}
       >
         {failed ? "—" : null}
