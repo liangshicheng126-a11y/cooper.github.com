@@ -81,6 +81,11 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
       },
     ],
   };
+  const getVideoPreviewUrl = (video: { href: string; embedUrl?: string }) => {
+    if (video.embedUrl) return video.embedUrl;
+    if (/douyin\.com/i.test(video.href)) return video.href;
+    return undefined;
+  };
   const hasVideoPreview = Boolean(videoByProject[id]?.length);
   const hasPhotographyGallery = id === "p3" && photographyGroups.length > 0;
   const hasPosterGallery = id === "p1" && posters.length > 0;
@@ -388,13 +393,15 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
                   <span>{t.portfolio.projectDetail.watchVideo} {index + 1} · {video.title}</span>
                   <ExternalLink className="w-4 h-4" />
                 </a>
-                {video.embedUrl ? (
+                {getVideoPreviewUrl(video) ? (
                   <div className="glass rounded-[30px] p-2 border-white/10 aspect-video overflow-hidden">
                     <iframe
-                      src={video.embedUrl}
+                      src={getVideoPreviewUrl(video)}
                       className="w-full h-full rounded-[20px]"
                       scrolling="no"
                       frameBorder="0"
+                      allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+                      referrerPolicy="strict-origin-when-cross-origin"
                       allowFullScreen
                       title={`Video Player ${index + 1}`}
                     />
