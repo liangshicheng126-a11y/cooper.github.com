@@ -58,8 +58,16 @@ App({
     return new Promise((resolve, reject) => {
       wx.login({
         success: async (res) => {
+          if (!res.code) {
+            const err = new Error('微信未返回登录码，请重试')
+            reject(err)
+            return
+          }
           try {
             const result = await request.post('/auth/login', { code: res.code })
+            if (!result?.data?.token) {
+              throw new Error(result?.message || '登录失败')
+            }
             this.globalData.token = result.data.token
             this.globalData.userInfo = result.data.user
             this.globalData.openid = result.data.openid
@@ -70,7 +78,9 @@ App({
             reject(e)
           }
         },
-        fail: reject,
+        fail: (err) => {
+          reject(new Error(err?.errMsg || '微信登录失败'))
+        },
       })
     })
   },

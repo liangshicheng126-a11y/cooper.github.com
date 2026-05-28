@@ -58,4 +58,6 @@ Write-Host "--- WeChat DevTools (manual) ---" -ForegroundColor Cyan
 Write-Host "1. Import project folder: $root"
 Write-Host "2. Settings: disable URL/domain check for localhost"
 Write-Host "3. Test: Discover -> Publish -> Admin list -> Check-in QR"
+Write-Host "4. Login: AppID in DevTools must match backend/.env WX_APP_ID"
+Write-Host "   Phone preview: set miniprogram/utils/config.local.js API_BASE_URL to LAN IP"
 Write-Host ""

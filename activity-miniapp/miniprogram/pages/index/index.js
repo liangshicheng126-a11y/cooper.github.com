@@ -81,10 +81,19 @@ Page({
     const app = getApp()
     app.globalData.privacyAgreed = true
     this.setData({ showPrivacy: false })
-    app._autoLogin().then(() => {
-      this._initMeta()
-      this._loadActivities(true)
-    })
+    app._autoLogin()
+      .then(() => {
+        this._initMeta()
+        this._loadActivities(true)
+      })
+      .catch((e) => {
+        console.error('[index] login after privacy', e)
+        wx.showToast({
+          title: e.message || i18n.t('loginFail'),
+          icon: 'none',
+          duration: 3000,
+        })
+      })
   },
 
   // 初始化语言、banner 等非列表内容（只需执行一次）

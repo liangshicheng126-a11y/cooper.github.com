@@ -19,6 +19,7 @@ Page({
     strPrivacyMenu: '',
     strLogoutMenu: '',
     strAdminMenu: '',
+    strTapToLogin: '',
   },
 
   onLoad() {
@@ -46,7 +47,33 @@ Page({
       strPrivacyMenu: i18n.t('privacyMenu'),
       strLogoutMenu: i18n.t('logoutMenu'),
       strAdminMenu: i18n.t('adminPanel'),
+      strTapToLogin: i18n.t('tapToLogin'),
     })
+  },
+
+  async onUserCardTap() {
+    const app = getApp()
+    if (app.globalData.token && app.globalData.openid) return
+    if (!app.globalData.privacyAgreed) {
+      wx.showToast({ title: i18n.t('privacyAgreeFirst'), icon: 'none' })
+      wx.switchTab({ url: '/pages/index/index' })
+      return
+    }
+    wx.showLoading({ title: i18n.t('loggingIn'), mask: true })
+    try {
+      await app.wxLogin()
+      this._loadUserInfo()
+      await this._refreshStats()
+      wx.showToast({ title: i18n.t('loginSuccess'), icon: 'success' })
+    } catch (e) {
+      wx.showToast({
+        title: e.message || i18n.t('loginFail'),
+        icon: 'none',
+        duration: 3000,
+      })
+    } finally {
+      wx.hideLoading()
+    }
   },
 
   _loadUserInfo() {

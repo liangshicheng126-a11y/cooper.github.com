@@ -7,7 +7,26 @@ const logger = require('../utils/logger')
 
 const ADMIN_OPENIDS = (process.env.ADMIN_OPENIDS || '').split(',').filter(Boolean)
 
+const WX_LOGIN_ERR_HINTS = {
+  40013: '小程序 AppID 与后端不一致：请确认微信开发者工具 AppID 与 backend/.env 中 WX_APP_ID 相同',
+  40125: 'AppSecret 无效：请检查 backend/.env 中 WX_APP_SECRET',
+  40029: '登录码无效或已过期，请关闭小程序后重新打开',
+  45011: '登录过于频繁，请稍后再试',
+  '-1': '微信服务繁忙，请稍后重试',
+}
+
+function wxLoginErrorMessage(data) {
+  const hint = WX_LOGIN_ERR_HINTS[String(data.errcode)]
+  if (hint) return hint
+  return `微信登录失败: ${data.errmsg || data.errcode}`
+}
+
 async function wxCode2Session(code) {
+  if (!process.env.WX_APP_ID || !process.env.WX_APP_SECRET) {
+    const err = new Error('服务端未配置 WX_APP_ID / WX_APP_SECRET，请编辑 backend/.env')
+    err.status = 503
+    throw err
+  }
   const { data } = await axios.get('https://api.weixin.qq.com/sns/jscode2session', {
     params: {
       appid: process.env.WX_APP_ID,
@@ -15,8 +34,13 @@ async function wxCode2Session(code) {
       js_code: code,
       grant_type: 'authorization_code',
     },
+    timeout: 15000,
   })
-  if (data.errcode) throw new Error(`微信登录失败: ${data.errmsg}`)
+  if (data.errcode) {
+    const err = new Error(wxLoginErrorMessage(data))
+    err.status = 400
+    throw err
+  }
   return data
 }
 

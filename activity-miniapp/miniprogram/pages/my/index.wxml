@@ -3,11 +3,12 @@
     <!-- 用户信息卡 -->
     <view class="user-card">
       <view class="user-bg" />
-      <view class="user-info">
+      <view class="user-info" bindtap="onUserCardTap">
         <image src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" class="user-avatar" />
         <view class="user-detail">
           <text class="user-name">{{userInfo.nickName || strNotLogged}}</text>
           <text class="user-sub" wx:if="{{userInfo.openid}}">ID: {{userInfo.openid.slice(0,8)}}...</text>
+          <text class="user-sub login-hint" wx:elif="{{!userInfo.openid}}">{{strTapToLogin}}</text>
         </view>
         <view class="user-badge" wx:if="{{isAdmin}}">
           <text>{{strAdminBadge}}</text>

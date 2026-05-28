@@ -190,3 +190,7 @@
 {"level":"info","message":"✅ Redis connected","timestamp":"2026-05-28 13:21:08"}
 {"level":"info","message":"✅ MySQL connected (pool size: 20)","timestamp":"2026-05-28 13:21:08"}
 {"level":"info","message":"✅ Server running on port 3000","timestamp":"2026-05-28 13:21:08"}
+{"level":"error","message":"POST /api/auth/login - 微信登录失败: invalid code, rid: 6a17c430-141cabaa-71f49e46","stack":"Error: 微信登录失败: invalid code, rid: 6a17c430-141cabaa-71f49e46\n    at wxCode2Session (X:\\A\\1\\activity-miniapp\\backend\\src\\controllers\\authController.js:19:27)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async exports.login (X:\\A\\1\\activity-miniapp\\backend\\src\\controllers\\authController.js:28:20)","timestamp":"2026-05-28 13:27:28"}
+{"level":"info","message":"✅ Redis connected","timestamp":"2026-05-28 13:28:10"}
+{"level":"info","message":"✅ MySQL connected (pool size: 20)","timestamp":"2026-05-28 13:28:10"}
+{"level":"info","message":"✅ Server running on port 3000","timestamp":"2026-05-28 13:28:10"}

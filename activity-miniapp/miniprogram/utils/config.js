@@ -24,8 +24,9 @@ const ENV = 'development'
 const APP_ID = 'wxa909312a016c6847'
 
 // 【3】后端接口地址
+// 模拟器请用 127.0.0.1（localhost 在部分环境下无法请求）；真机预览请在 config.local.js 改为电脑局域网 IP
 const API_BASE_URL_MAP = {
-  development: 'http://localhost:3000/api',
+  development: 'http://127.0.0.1:3000/api',
   production:  'https://your-domain.com/api',
 }
 

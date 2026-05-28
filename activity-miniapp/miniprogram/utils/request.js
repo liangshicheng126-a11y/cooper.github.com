@@ -59,7 +59,14 @@ async function request(method, url, data = {}, retry = 0) {
           return
         }
         if (res.statusCode >= 200 && res.statusCode < 300) {
-          resolve(res.data)
+          const body = res.data
+          if (body && typeof body === 'object' && body.code !== undefined && body.code !== 0) {
+            const msg = body.message || '请求失败'
+            wx.showToast({ title: msg, icon: 'none', duration: 2500 })
+            reject(new Error(msg))
+            return
+          }
+          resolve(body)
         } else {
           const msg = res.data?.message || `请求失败 (${res.statusCode})`
           wx.showToast({ title: msg, icon: 'none', duration: 2500 })
