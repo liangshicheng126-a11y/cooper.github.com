@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/optimize-gallery-images.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "optimize-images": "node scripts/optimize-gallery-images.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -25,6 +27,7 @@
     "@types/react-dom": "^19",
     "autoprefixer": "^10",
     "postcss": "^8",
+    "sharp": "^0.34.5",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

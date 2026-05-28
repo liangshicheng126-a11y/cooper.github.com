@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import LazyInViewImage from "@/components/LazyInViewImage";
 import GalleryLightbox from "@/components/GalleryLightbox";
+import { mapDisplaySources, thumbSrc } from "@/lib/galleryImageUrl";
 
 /** Deterministic shuffle — avoids re-randomizing on each render (mobile re-render storms). */
 function stableShufflePosters(items: string[]) {
@@ -40,10 +41,10 @@ type Props = {
 export default function ProjectDetailClient({ id, photographyGroups = [], posters = [] }: Props) {
   const { t, mounted } = useTranslation();
   const [lightboxPhotos, setLightboxPhotos] = useState<string[] | null>(null);
+  const [lightboxFallbacks, setLightboxFallbacks] = useState<string[] | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const shuffledPosters = useMemo(() => stableShufflePosters(posters), [posters]);
-
-  const closeLightbox = () => setLightboxPhotos(null);
+  const shuffledPosterDisplay = useMemo(() => mapDisplaySources(shuffledPosters), [shuffledPosters]);
 
   const projectKey = id as keyof typeof t.portfolio.projects;
   const project = t.portfolio.projects[projectKey];
@@ -95,9 +96,15 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
     const bYear = /^\d{4}$/.test(b) ? Number(b) : -1;
     return bYear - aYear;
   });
-  const openLightbox = (photos: string[], index: number) => {
+  const openLightbox = (photos: string[], index: number, fallbacks?: string[]) => {
     setLightboxPhotos(photos);
+    setLightboxFallbacks(fallbacks ?? null);
     setLightboxIndex(index);
+  };
+
+  const closeLightbox = () => {
+    setLightboxPhotos(null);
+    setLightboxFallbacks(null);
   };
   const item = {
     hidden: { opacity: 0, y: 20 },
@@ -313,10 +320,13 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
                           className="group aspect-[4/3] overflow-hidden rounded-2xl glass border-white/10"
                         >
                           <LazyInViewImage
-                            src={photo}
+                            src={thumbSrc(photo)}
+                            fallbackSrc={photo}
                             alt={`${t.portfolio.projectDetail.photoAlt} ${index + 1}`}
-                            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                            onClick={() => openLightbox(group.photos, index)}
+                            className="h-full w-full object-cover transition-transform duration-700 sm:group-hover:scale-105"
+                            onClick={() =>
+                              openLightbox(mapDisplaySources(group.photos), index, group.photos)
+                            }
                           />
                         </div>
                       ))}
@@ -341,13 +351,14 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
             {shuffledPosters.map((poster, index) => (
               <div
                 key={poster}
-                className="group aspect-[3/4] overflow-hidden rounded-2xl bg-slate-100/80 shadow-[0_2px_16px_rgba(15,23,42,0.08)] transition-all duration-300 hover:shadow-[0_12px_32px_rgba(15,23,42,0.14)] hover:-translate-y-0.5"
+                className="group aspect-[3/4] overflow-hidden rounded-2xl bg-slate-100/80 shadow-[0_2px_16px_rgba(15,23,42,0.08)] transition-shadow duration-300 sm:hover:shadow-[0_12px_32px_rgba(15,23,42,0.14)] sm:hover:-translate-y-0.5"
               >
                 <LazyInViewImage
-                  src={poster}
+                  src={thumbSrc(poster)}
+                  fallbackSrc={poster}
                   alt={`${t.portfolio.projectDetail.posterAlt} ${index + 1}`}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                  onClick={() => openLightbox(shuffledPosters, index)}
+                  className="h-full w-full object-cover transition-transform duration-500 sm:group-hover:scale-[1.03]"
+                  onClick={() => openLightbox(shuffledPosterDisplay, index, shuffledPosters)}
                   draggable={false}
                 />
               </div>
@@ -405,6 +416,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
       {lightboxPhotos && (
         <GalleryLightbox
           photos={lightboxPhotos}
+          fallbackPhotos={lightboxFallbacks ?? undefined}
           index={lightboxIndex}
           onClose={closeLightbox}
           onIndexChange={setLightboxIndex}

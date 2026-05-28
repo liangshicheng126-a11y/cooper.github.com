@@ -6,6 +6,8 @@ import { ArrowLeft, ChevronLeft, ChevronRight, X } from "lucide-react";
 
 type Props = {
   photos: string[];
+  /** Original full paths when `photos` are optimized variants. */
+  fallbackPhotos?: string[];
   index: number;
   onClose: () => void;
   onIndexChange: (index: number) => void;
@@ -19,6 +21,7 @@ const SWIPE_THRESHOLD_PX = 48;
 
 export default function GalleryLightbox({
   photos,
+  fallbackPhotos,
   index,
   onClose,
   onIndexChange,
@@ -29,8 +32,13 @@ export default function GalleryLightbox({
 }: Props) {
   const touchStartX = useRef<number | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [activeSrc, setActiveSrc] = useState(photos[index] ?? "");
 
   useEffect(() => setMounted(true), []);
+
+  useEffect(() => {
+    setActiveSrc(photos[index] ?? "");
+  }, [photos, index]);
 
   const goPrev = useCallback(() => {
     onIndexChange((index - 1 + photos.length) % photos.length);
@@ -62,11 +70,11 @@ export default function GalleryLightbox({
 
   if (!mounted) return null;
 
-  const currentSrc = photos[index];
+  const fallbackSrc = fallbackPhotos?.[index];
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[200] flex h-[100dvh] max-h-[100dvh] flex-col bg-black/95 backdrop-blur-md"
+      className="gallery-lightbox-overlay fixed inset-0 z-[200] flex h-[100dvh] max-h-[100dvh] flex-col bg-black/95 backdrop-blur-md"
       role="dialog"
       aria-modal="true"
       aria-label={galleryLabel}
@@ -140,13 +148,18 @@ export default function GalleryLightbox({
         )}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          key={currentSrc}
-          src={currentSrc}
+          key={activeSrc}
+          src={activeSrc}
           alt={`${altPrefix} ${index + 1}`}
           className="max-h-[calc(100dvh-5.5rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] max-w-[min(100%,calc(100vw-4.5rem))] h-auto w-auto select-none object-contain sm:max-w-[min(92vw,1200px)] sm:max-h-[calc(100dvh-6rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))]"
           draggable={false}
           decoding="async"
           fetchPriority="high"
+          onError={() => {
+            if (fallbackSrc && activeSrc !== fallbackSrc) {
+              setActiveSrc(fallbackSrc);
+            }
+          }}
         />
       </div>
     </div>,
