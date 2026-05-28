@@ -1,38 +1,44 @@
 "use client";
 
-import Masonry from "react-masonry-css";
-import { createContext, useContext, useEffect, useState, type CSSProperties, type ReactNode } from "react";
-
-const breakpointCols = {
-  default: 4,
-  1280: 3,
-  768: 2,
-};
+import { balanceMasonryColumns, getMasonryColumnCount } from "@/lib/masonryBalance";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
 type ManifestEntry = { width: number; height: number };
 type GalleryManifest = Record<string, ManifestEntry>;
 
-const ManifestContext = createContext<GalleryManifest | null>(null);
+const ITEM_GAP_MOBILE_PX = 12;
+const ITEM_GAP_DESKTOP_PX = 16;
 
-function useGalleryManifest() {
-  return useContext(ManifestContext);
+function getItemGap(containerWidth: number): number {
+  return containerWidth >= 640 ? ITEM_GAP_DESKTOP_PX : ITEM_GAP_MOBILE_PX;
 }
 
-export function useImageAspectRatio(originalSrc: string): number | undefined {
-  const manifest = useGalleryManifest();
-  if (!originalSrc || !manifest) return undefined;
+function lookupAspectRatio(manifest: GalleryManifest | null, originalSrc: string): number {
+  if (!manifest || !originalSrc) return 3 / 4;
   const entry = manifest[originalSrc] ?? manifest[decodeURIComponent(originalSrc)];
-  if (!entry?.width || !entry?.height) return undefined;
+  if (!entry?.width || !entry?.height) return 3 / 4;
   return entry.width / entry.height;
 }
 
-type MasonryGalleryProps = {
-  children: ReactNode;
+type MasonryGalleryProps<T> = {
+  items: T[];
+  getOriginalSrc: (item: T, index: number) => string;
+  renderItem: (item: T, index: number) => ReactNode;
   className?: string;
 };
 
-export default function MasonryGallery({ children, className = "" }: MasonryGalleryProps) {
+export default function MasonryGallery<T>({
+  items,
+  getOriginalSrc,
+  renderItem,
+  className = "",
+}: MasonryGalleryProps<T>) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const getOriginalSrcRef = useRef(getOriginalSrc);
+  getOriginalSrcRef.current = getOriginalSrc;
   const [manifest, setManifest] = useState<GalleryManifest | null>(null);
+  const [columnCount, setColumnCount] = useState(2);
+  const [containerWidth, setContainerWidth] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -49,35 +55,63 @@ export default function MasonryGallery({ children, className = "" }: MasonryGall
     };
   }, []);
 
+  useEffect(() => {
+    const node = containerRef.current;
+    if (!node) return;
+
+    const updateLayout = () => {
+      setColumnCount(getMasonryColumnCount(window.innerWidth));
+      setContainerWidth(node.offsetWidth);
+    };
+
+    updateLayout();
+    const observer = new ResizeObserver(updateLayout);
+    observer.observe(node);
+    window.addEventListener("resize", updateLayout);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updateLayout);
+    };
+  }, []);
+
+  const itemGap = getItemGap(containerWidth);
+  const columnWidth =
+    columnCount > 0 ? Math.max((containerWidth - itemGap * (columnCount - 1)) / columnCount, 1) : containerWidth;
+
+  const columns = useMemo(
+    () =>
+      balanceMasonryColumns(items, columnCount, {
+        columnWidth,
+        itemGap,
+        getAspectRatio: (item, index) =>
+          lookupAspectRatio(manifest, getOriginalSrcRef.current(item, index)),
+      }),
+    [items, columnCount, columnWidth, itemGap, manifest],
+  );
+
   return (
-    <ManifestContext.Provider value={manifest}>
-      <Masonry
-        breakpointCols={breakpointCols}
-        className={`masonry-grid ${className}`.trim()}
-        columnClassName="masonry-grid_column"
-      >
-        {children}
-      </Masonry>
-    </ManifestContext.Provider>
+    <div ref={containerRef} className={`masonry-grid w-full ${className}`.trim()}>
+      {columns.map((column, columnIndex) => (
+        <div key={columnIndex} className="masonry-grid_column">
+          {column.map(({ item, index }) => (
+            <div key={`${index}-${getOriginalSrc(item, index)}`} className="masonry-item-slot">
+              {renderItem(item, index)}
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
   );
 }
 
 type MasonryItemProps = {
   children: ReactNode;
-  /** Original gallery path for manifest aspect-ratio placeholder, e.g. /photos/posters/foo.jpg */
-  originalSrc?: string;
   className?: string;
 };
 
-export function MasonryItem({ children, originalSrc, className = "" }: MasonryItemProps) {
-  const aspectRatio = useImageAspectRatio(originalSrc ?? "");
-  const style: CSSProperties | undefined = aspectRatio
-    ? { aspectRatio: String(aspectRatio) }
-    : { minHeight: "8rem" };
-
+export function MasonryItem({ children, className = "" }: MasonryItemProps) {
   return (
-    <div className={`masonry-item rounded-2xl ${className}`.trim()} style={style}>
-      {children}
-    </div>
+    <div className={`masonry-item w-full overflow-hidden rounded-2xl ${className}`.trim()}>{children}</div>
   );
 }

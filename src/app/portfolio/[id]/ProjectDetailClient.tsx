@@ -314,13 +314,11 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
                         {group.photos.length} {t.portfolio.projectDetail.photosUnit}
                       </span>
                     </div>
-                    <MasonryGallery>
-                      {group.photos.map((photo, index) => (
-                        <MasonryItem
-                          key={`${group.dateLabel}-${group.location}-${index}-${photo}`}
-                          originalSrc={photo}
-                          className="group glass border-white/10"
-                        >
+                    <MasonryGallery
+                      items={group.photos}
+                      getOriginalSrc={(photo) => photo}
+                      renderItem={(photo, index) => (
+                        <MasonryItem className="group glass border-white/10">
                           <LazyInViewImage
                             src={thumbSrc(photo)}
                             fallbackSrc={photo}
@@ -332,8 +330,8 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
                             }
                           />
                         </MasonryItem>
-                      ))}
-                    </MasonryGallery>
+                      )}
+                    />
                   </div>
                 ))}
               </div>
@@ -350,13 +348,11 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
               {t.portfolio.projectDetail.posterCount} {shuffledPosters.length}
             </span>
           </div>
-          <MasonryGallery>
-            {shuffledPosters.map((poster, index) => (
-              <MasonryItem
-                key={`poster-${index}-${poster}`}
-                originalSrc={poster}
-                className="group bg-slate-100/80 shadow-[0_2px_16px_rgba(15,23,42,0.08)] transition-shadow duration-300 sm:hover:shadow-[0_12px_32px_rgba(15,23,42,0.14)]"
-              >
+          <MasonryGallery
+            items={shuffledPosters}
+            getOriginalSrc={(poster) => poster}
+            renderItem={(poster, index) => (
+              <MasonryItem className="group bg-slate-100/80 shadow-[0_2px_16px_rgba(15,23,42,0.08)] transition-shadow duration-300 sm:hover:shadow-[0_12px_32px_rgba(15,23,42,0.14)]">
                 <LazyInViewImage
                   src={thumbSrc(poster)}
                   fallbackSrc={poster}
@@ -367,8 +363,8 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
                   draggable={false}
                 />
               </MasonryItem>
-            ))}
-          </MasonryGallery>
+            )}
+          />
         </motion.section>
       )}
 
