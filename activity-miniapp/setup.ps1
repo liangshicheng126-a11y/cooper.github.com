@@ -65,13 +65,32 @@ if ($mysqlExe) {
     $plainPwd = [Runtime.InteropServices.Marshal]::PtrToStringAuto(
         [Runtime.InteropServices.Marshal]::SecureStringToBSTR($mysqlPwd)
     )
-    $schemaPath = Join-Path $root "database\schema.sql"
-    if ($plainPwd) {
-        & $mysqlExe -u root -p"$plainPwd" -e "source $schemaPath" 2>&1
-    } else {
-        & $mysqlExe -u root -e "source $schemaPath" 2>&1
+    $databaseDir = Join-Path $root "database"
+    $schemaPath = Join-Path $databaseDir "schema.sql"
+    $migratePath = Join-Path $databaseDir "migrate-all.sql"
+    Push-Location $databaseDir
+    try {
+        if ($plainPwd) {
+            & $mysqlExe -u root -p"$plainPwd" -e "source $schemaPath" 2>&1
+        } else {
+            & $mysqlExe -u root -e "source $schemaPath" 2>&1
+        }
+        $schemaOk = ($LASTEXITCODE -eq 0)
+        if ($schemaOk -and (Test-Path $migratePath)) {
+            Write-Host "  正在执行增量迁移 migrate-all.sql ..." -ForegroundColor Yellow
+            if ($plainPwd) {
+                & $mysqlExe -u root -p"$plainPwd" -e "source migrate-all.sql" 2>&1
+            } else {
+                & $mysqlExe -u root -e "source migrate-all.sql" 2>&1
+            }
+            if ($LASTEXITCODE -ne 0) {
+                Write-Host "  ⚠️  部分迁移可能已执行过（Duplicate column 可忽略）" -ForegroundColor Yellow
+            }
+        }
+    } finally {
+        Pop-Location
     }
-    if ($LASTEXITCODE -eq 0) {
+    if ($schemaOk) {
         Write-Host "  ✅ 数据库初始化成功" -ForegroundColor Green
         # 将密码写入 .env
         $envPath = Join-Path $root "backend\.env"

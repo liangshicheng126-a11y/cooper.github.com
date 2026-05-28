@@ -142,8 +142,14 @@ Page({
         wx.showLoading({ title: '上传中...' })
         try {
           const uploadRes = await request.upload('/upload/image', tempFile)
+          if (!uploadRes || uploadRes.code !== 0 || !uploadRes.data?.url) {
+            this.setData({ coverTempPath: '' })
+            wx.showToast({ title: uploadRes?.message || '上传失败，可重新点击封面重试', icon: 'none' })
+            return
+          }
           this.setData({ 'form.coverImage': uploadRes.data.url })
         } catch (e) {
+          this.setData({ coverTempPath: '' })
           wx.showToast({ title: '上传失败，可重新点击封面重试', icon: 'none' })
         } finally {
           wx.hideLoading()

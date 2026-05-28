@@ -117,6 +117,9 @@ npm install
 # 初始化数据库
 mysql -u root -p < ../database/schema.sql
 
+# 已有库升级（补 moderation_status、微信群字段、学校名册表等）
+cd ../database && mysql -u root -p activity_miniapp < migrate-all.sql
+
 # 开发模式
 npm run dev
 

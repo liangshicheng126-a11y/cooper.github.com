@@ -194,14 +194,24 @@ async function generateUnlimitedWxacodeBuffer(scene) {
   const accessToken = await getAccessToken()
   const sceneStr = String(scene).replace(/[^0-9A-Za-z]/g, '').slice(0, 32)
   if (!sceneStr) throw new Error('scene 无效')
+  const envVersion = process.env.WX_MINI_ENV_VERSION || 'release'
+  const body = {
+    scene: sceneStr,
+    page: 'pages/checkin/index',
+    width: 430,
+    env_version: envVersion,
+  }
+  // 开发版未上传体验版时 page 校验会报 invalid page；本地 develop/trial 关闭路径检查
+  if (
+    process.env.NODE_ENV !== 'production' ||
+    envVersion === 'develop' ||
+    envVersion === 'trial'
+  ) {
+    body.check_path = false
+  }
   const { data } = await axios.post(
     `https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=${accessToken}`,
-    {
-      scene: sceneStr,
-      page: 'pages/checkin/index',
-      width: 430,
-      env_version: process.env.WX_MINI_ENV_VERSION || 'release',
-    },
+    body,
     { responseType: 'arraybuffer' }
   )
   const buf = Buffer.from(data)

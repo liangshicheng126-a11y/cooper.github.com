@@ -89,9 +89,21 @@ function upload(url, filePath, name = 'file', formData = {}) {
       success: (res) => {
         try {
           const data = typeof res.data === 'string' ? JSON.parse(res.data) : res.data
-          resolve(data)
+          if (data && typeof data === 'object' && data.code !== undefined && data.code !== 0) {
+            const msg = data.message || '上传失败'
+            wx.showToast({ title: msg, icon: 'none', duration: 2500 })
+            reject(new Error(msg))
+            return
+          }
+          if (res.statusCode >= 200 && res.statusCode < 300) {
+            resolve(data)
+          } else {
+            const msg = data?.message || `上传失败 (${res.statusCode})`
+            wx.showToast({ title: msg, icon: 'none', duration: 2500 })
+            reject(new Error(msg))
+          }
         } catch (e) {
-          resolve(res.data)
+          reject(e)
         }
       },
       fail: reject,

@@ -13,14 +13,14 @@ Component({
       {
         text: '发现',
         pagePath: '/pages/index/index',
-        icon: '/images/icon-discover.svg',
-        iconActive: '/images/icon-discover-active.svg',
+        icon: '/images/tab-discover.png',
+        iconActive: '/images/tab-discover-active.png',
       },
       {
         text: '我的',
         pagePath: '/pages/my/index',
-        icon: '/images/icon-my.svg',
-        iconActive: '/images/icon-my-active.svg',
+        icon: '/images/tab-my.png',
+        iconActive: '/images/tab-my-active.png',
       },
     ],
   },
@@ -55,14 +55,14 @@ Component({
           {
             text: i18n.t('discover'),
             pagePath: '/pages/index/index',
-            icon: '/images/icon-discover.svg',
-            iconActive: '/images/icon-discover-active.svg',
+            icon: '/images/tab-discover.png',
+            iconActive: '/images/tab-discover-active.png',
           },
           {
             text: i18n.t('my'),
             pagePath: '/pages/my/index',
-            icon: '/images/icon-my.svg',
-            iconActive: '/images/icon-my-active.svg',
+            icon: '/images/tab-my.png',
+            iconActive: '/images/tab-my-active.png',
           },
         ],
       })

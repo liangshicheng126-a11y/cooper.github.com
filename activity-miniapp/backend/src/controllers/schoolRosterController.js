@@ -314,10 +314,7 @@ exports.pageStudents = async (req, res, next) => {
       try {
         if (x.phoneEnc) phoneMasked = maskPhone(decrypt(x.phoneEnc) || '')
       } catch (_) {}
-      let extraParsed = {}
-      try {
-        extraParsed = typeof x.extra === 'string' ? JSON.parse(x.extra || '{}') : x.extra || {}
-      } catch (_) {}
+      const extraParsed = parseJsonObject(x.extra, {})
       delete x.phoneEnc
       return { ...x, phoneMasked, extraParsed }
     })

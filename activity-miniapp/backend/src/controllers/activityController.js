@@ -10,7 +10,7 @@ const { v4: uuidv4 } = require('uuid')
 const logger = require('../utils/logger')
 const QRCode = require('qrcode')
 const { uploadPngBuffer, isCosReady } = require('../utils/cosUploadBuffer')
-const { respondIfMissingModerationStatus } = require('../utils/mysqlErrors')
+const { respondIfActivitySchemaMismatch, respondIfMissingModerationStatus } = require('../utils/mysqlErrors')
 
 /** 发布后人工审核：默认 pending，仅 moderation_status=passed 会在发现广场展示。AUTO_APPROVE_ACTIVITY_PUBLISH=1/true 时跳过审核（多用于本地调试） */
 function initialPublishModerationStatus() {
@@ -139,6 +139,7 @@ exports.list = async (req, res, next) => {
     if (cacheKey) await setCache(cacheKey, result, CACHE_TTL.ACTIVITIES)
     res.json({ code: 0, data: result })
   } catch (e) {
+    if (respondIfActivitySchemaMismatch(e, res)) return
     next(e)
   }
 }
@@ -156,6 +157,7 @@ exports.featured = async (req, res, next) => {
     await setCache('activities:featured', list.map(formatActivity), CACHE_TTL.FEATURED)
     res.json({ code: 0, data: list.map(formatActivity) })
   } catch (e) {
+    if (respondIfActivitySchemaMismatch(e, res)) return
     next(e)
   }
 }
@@ -370,7 +372,7 @@ exports.create = async (req, res, next) => {
     await delCache('activities:featured')
     res.status(201).json({ code: 0, data: { id, moderationStatus: modStatus } })
   } catch (e) {
-    if (respondIfMissingModerationStatus(e, res)) return
+    if (respondIfActivitySchemaMismatch(e, res)) return
     if (e.errno) {
       logger.error('[activities.create.mysql]', {
         errno: e.errno,
@@ -419,7 +421,7 @@ exports.update = async (req, res, next) => {
 
     res.json({ code: 0, message: '修改成功', data: { moderationStatus: modStatus } })
   } catch (e) {
-    if (respondIfMissingModerationStatus(e, res)) return
+    if (respondIfActivitySchemaMismatch(e, res)) return
     next(e)
   }
 }
