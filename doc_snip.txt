@@ -1,0 +1,25 @@
+title count: 9
+headerReference: 2
+w:hdr: 0
+wp:anchor: 0
+wps:txbx: 0
+v:textbox: 0
+positionH: 0
+--- occurrence 1 at 3482 ---
+Nanum Gothic ExtraBold" w:eastAsia="Nanum Gothic ExtraBold" w:hAnsi="Nanum Gothic ExtraBold" w:cs="Nanum Gothic ExtraBold"/><w:b/><w:color w:val="000000"/><w:spacing w:val="-10"/><w:w w:val="90"/><w:sz w:val="36"/><w:szCs w:val="36"/><w:lang w:eastAsia="ko-KR"/><w:textScale w:val="90"/></w:rPr><w:t>타이포 그래피 디자인이 브랜드의 시각적 정체성에 미치는 영향에 관한 연구</w:t></w:r></w:p><w:p w14:paraId="5F66CA30" w14:textId="77777777" w:rsidR="00037898" w:rsidRPr="005416C3" w:rsidRDefault="00B04CDD" w:rsidP="005416C3"><w:pPr><
+--- occurrence 2 at 50156 ---
+oth"/><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr></w:pPr><w:r w:rsidRPr="00924D0B"><w:rPr><w:rFonts w:ascii="Nanum Myeongjo" w:hAnsi="Nanum Myeongjo" w:cs="Nanum Myeongjo" w:eastAsia="Nanum Myeongjo"/><w:b w:val="0"/><w:sz w:val="20"/><w:spacing w:val="-5"/></w:rPr><w:t>브랜드의 시각적 아이덴티티 시스템(VIS) 내에서 타이포그래피 디자인은 단순한 정보 전달 수단일 뿐만 아니라, 브랜드의 정신과 소비자를 연결하는 가교 역할도 한다. 고급 선물 시장과 ‘합리적인 럭셔리’ 소비자 부문에 포지셔닝된 ‘실크 위스퍼’의 경우, 서체의 획에 담긴 섬세한 디테일, 레이아웃의 공간적 리듬, 그리고 색상의 시각적 위계가 소비자가 브랜드의 ‘독점성’과 ‘고귀함’을 어떻게 인식할지 결정한다.
+--- occurrence 3 at 50928 ---
+><w:jc w:val="both"/><w:rPr><w:rFonts w:hint="eastAsia"/></w:rPr></w:pPr><w:r w:rsidRPr="00924D0B"><w:rPr><w:rFonts w:ascii="Nanum Myeongjo" w:hAnsi="Nanum Myeongjo" w:cs="Nanum Myeongjo" w:eastAsia="Nanum Myeongjo"/><w:b w:val="0"/><w:sz w:val="20"/><w:spacing w:val="-5"/></w:rPr><w:t>본 논문의 목적은 현대 타이포그래피 디자인이 ‘실크 위스퍼’ 브랜드의 시각적 효과에 미치는 영향을 규명하는 것이다. 케시 공예의 시각적 특성을 분석하여 이를 서체 디자인 및 레이아웃에 통합함으로써, 소비자의 브랜드 인식을 제고하는 것을 목표로 한다. 또한 다른 무형문화유산(ICH) 브랜드의 현대적 브랜딩을 위한 귀중한 통찰력을 제공하는 것을 목표로 한다.</w:t></w:r></
+--- occurrence 4 at 82342 ---
+o-KR"/></w:rPr><w:t xml:space="preserve"> </w:t></w:r><w:r w:rsidRPr="00924D0B"><w:rPr><w:rStyle w:val="39"/><w:rFonts w:ascii="Nanum Myeongjo" w:hAnsi="Nanum Myeongjo" w:cs="Nanum Myeongjo" w:eastAsia="Nanum Myeongjo"/><w:b w:val="0"/><w:sz w:val="20"/><w:spacing w:val="-5"/></w:rPr><w:t>안정적이고 통일된 타이포그래피 시스템과 시각적 가이드라인이 부족하다. 브랜드 인지도를 높이기 위해서는 브랜드의 포지셔닝과 톤에 적합한 타이포그래피 시스템을 구축하여 정보 전달의 명확성과 미적 일관성을 개선할 필요가 있다.</w:t></w:r></w:p><w:p w14:paraId="2D4BACB9" w14:textId="77777777" w:rsidR="00B734C2" w
+--- occurrence 5 at 82407 ---
+RPr="00924D0B"><w:rPr><w:rStyle w:val="39"/><w:rFonts w:ascii="Nanum Myeongjo" w:hAnsi="Nanum Myeongjo" w:cs="Nanum Myeongjo" w:eastAsia="Nanum Myeongjo"/><w:b w:val="0"/><w:sz w:val="20"/><w:spacing w:val="-5"/></w:rPr><w:t>안정적이고 통일된 타이포그래피 시스템과 시각적 가이드라인이 부족하다. 브랜드 인지도를 높이기 위해서는 브랜드의 포지셔닝과 톤에 적합한 타이포그래피 시스템을 구축하여 정보 전달의 명확성과 미적 일관성을 개선할 필요가 있다.</w:t></w:r></w:p><w:p w14:paraId="2D4BACB9" w14:textId="77777777" w:rsidR="00B734C2" w:rsidRPr="00924D0B" w:rsidRDefault="00B04CDD" w:rsidP="00924D0B">
+--- occurrence 6 at 83036 ---
+val="left"/><w:rPr><w:rFonts w:eastAsia="宋体" w:hint="eastAsia"/></w:rPr></w:pPr><w:r w:rsidRPr="00924D0B"><w:rPr><w:rFonts w:ascii="Nanum Myeongjo" w:hAnsi="Nanum Myeongjo" w:cs="Nanum Myeongjo" w:eastAsia="Nanum Myeongjo"/><w:b w:val="0"/><w:sz w:val="26"/><w:spacing w:val="-5"/></w:rPr><w:t>3. 현대 타이포그래피가 “Silk Whisper”의 시각적 정체성에 미친 영향</w:t></w:r></w:p><w:p w14:paraId="4E3A6FFF" w14:textId="77777777" w:rsidR="00B734C2" w:rsidRPr="00924D0B" w:rsidRDefault="00B04CDD" w:rsidP="00924D0B"><w:pPr><w:
+--- occurrence 7 at 91520 ---
+w:sz w:val="20"/><w:lang w:eastAsia="ko-KR"/></w:rPr></w:pPr><w:r w:rsidRPr="005416C3"><w:rPr><w:rFonts w:ascii="Nanum Gothic" w:hAnsi="Nanum Gothic" w:cs="Nanum Gothic" w:eastAsia="Nanum Gothic"/><w:b w:val="0"/><w:sz w:val="22"/><w:lang w:eastAsia="ko-KR"/><w:spacing w:val="-5"/></w:rPr><w:t>3.2. 타이포그래피 레이아웃</w:t></w:r><w:r w:rsidRPr="005416C3"><w:rPr><w:rFonts w:eastAsia="Nanum Gothic" w:hint="eastAsia" w:ascii="Nanum Gothic" w:hAnsi="Nanum Gothic" w:cs="Nanum Gothic"/><w:b w:val="0"/><w:sz w
+--- occurrence 8 at 95743 ---
+rsidRPr="00924D0B"><w:rPr><w:rStyle w:val="39"/><w:rFonts w:ascii="Nanum Myeongjo" w:hAnsi="Nanum Myeongjo" w:cs="Nanum Myeongjo" w:eastAsia="Nanum Myeongjo"/><w:b w:val="0"/><w:sz w:val="20"/><w:spacing w:val="-5"/></w:rPr><w:t xml:space="preserve">) 브랜드 ‘Silk Whisper’의 시각적 생태계에 대한 심층 분석을 통해, 현대적인 타이포그래피 디자인은 무형문화유산 브랜드가 현대적 변신을 이루고 상업적 가치를 한 단계 </w:t></w:r><w:r w:rsidRPr="00924D0B"><w:rPr><w:rStyle w:val="39"/><w:rFonts w:ascii="Nanum Myeongjo" w:hAnsi="Nanum Myeongjo" w:cs="Nanum Myeongjo" w:
+--- occurrence 9 at 96702 ---
+w:r w:rsidRPr="00924D0B"><w:rPr><w:rStyle w:val="39"/><w:rFonts w:ascii="Nanum Myeongjo" w:hAnsi="Nanum Myeongjo" w:cs="Nanum Myeongjo" w:eastAsia="Nanum Myeongjo"/><w:b w:val="0"/><w:sz w:val="20"/><w:spacing w:val="-5"/></w:rPr><w:t>문화적·브랜드 정체성을 담아내는 매개체이기도 하다. 필획을 해체하고 레이아웃을 최적화함으로써, 케시의 독특한 특징이 타이포그래피 디자인에 통합되었다. 이는 브랜드의 시각적 정체성을 더욱 독창적으로 만들며, 중국 무형문화유산 브랜드의 시각적 효과 개발과 향상을 주도한다.</w:t></w:r></w:p><w:p w14:paraId="1B2FD994" w14:textId="77777777" w:rsidR="00B734C2" w:rsidRDefault="00B04CDD" w:r

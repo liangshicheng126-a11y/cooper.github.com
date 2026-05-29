@@ -233,6 +233,34 @@ def set_section_columns(section, num: int = 2) -> None:
     cols.set(qn("w:space"), COL_SPACE_TWIPS)
 
 
+from docx.opc.constants import RELATIONSHIP_TYPE as RT
+
+
+def clear_header(section) -> None:
+    section.header.is_linked_to_previous = False
+    hdr = section.header._element
+    for child in list(hdr):
+        hdr.remove(child)
+
+
+def clear_all_header_parts(doc: Document) -> None:
+    """Remove title text from every header part in the package."""
+    seen: set[int] = set()
+    for rel in doc.part.rels.values():
+        if rel.reltype != RT.HEADER:
+            continue
+        part = rel.target_part
+        pid = id(part)
+        if pid in seen:
+            continue
+        seen.add(pid)
+        root = part._element
+        for child in list(root):
+            root.remove(child)
+    for sec in doc.sections:
+        clear_header(sec)
+
+
 def clear_footer(section) -> None:
     section.footer.is_linked_to_previous = False
     ftr = section.footer._element
@@ -291,6 +319,7 @@ def setup_layout(doc: Document) -> None:
         insert_section_break_after(doc.paragraphs[aff_idx])
 
     sections = doc.sections
+    clear_all_header_parts(doc)
     if len(sections) >= 1:
         set_section_columns(sections[0], 1)
         clear_footer(sections[0])
