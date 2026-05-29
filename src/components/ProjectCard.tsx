@@ -108,7 +108,7 @@ export default function ProjectCard({
       <div
         ref={ref}
         data-scroll-batch-item
-        className="opacity-0 translate-y-14"
+        className="home-batch-item"
         style={{ willChange: "transform, opacity" }}
       >
         {cardInner}

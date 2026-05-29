@@ -15,9 +15,7 @@ type GsapScrollRevealProps = {
   className?: string;
   id?: string;
   as?: "section" | "div";
-  /** Vertical offset on enter (px) */
   y?: number;
-  /** Horizontal offset on enter (px), alternates with data-direction */
   x?: number;
   scrub?: boolean | number;
   once?: boolean;
@@ -30,7 +28,7 @@ export default function GsapScrollReveal({
   className,
   id,
   as: Tag = "section",
-  y = REVEAL.y,
+  y = 32,
   x = 0,
   scrub = false,
   once = true,
@@ -46,19 +44,14 @@ export default function GsapScrollReveal({
       const el = ref.current;
       if (!el || !useGsap) return;
 
-      const from: gsap.TweenVars = {
-        opacity: 0,
-        y,
-        x,
-        force3D: true,
-      };
+      gsap.set(el, { opacity: 1, y: 0, x: 0 });
 
       if (scrub) {
         gsap.fromTo(
           el,
-          from,
+          { autoAlpha: 0, y, x, force3D: true },
           {
-            opacity: 1,
+            autoAlpha: 1,
             y: 0,
             x: 0,
             ease: "none",
@@ -71,35 +64,35 @@ export default function GsapScrollReveal({
           }
         );
       } else {
-        gsap.fromTo(el, from, {
-          opacity: 1,
-          y: 0,
-          x: 0,
-          duration: REVEAL.duration,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: el,
-            start,
-            toggleActions: once ? "play none none none" : "play reverse play reverse",
-          },
-        });
+        gsap.fromTo(
+          el,
+          { autoAlpha: 0, y, x, force3D: true },
+          {
+            autoAlpha: 1,
+            y: 0,
+            x: 0,
+            duration: REVEAL.duration,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: el,
+              start,
+              toggleActions: once ? "play none none none" : "play reverse play reverse",
+            },
+          }
+        );
       }
     },
     { scope: ref, dependencies: [useGsap, y, x, scrub, once, start, end] }
   );
 
-  const staticClass = !MOTION_V2_ENABLED || reduced ? "opacity-100" : "gsap-scroll-reveal";
-
   return (
     <Tag
       ref={ref as React.RefObject<HTMLDivElement & HTMLElement>}
       id={id}
-      className={cn(staticClass, className)}
-      style={
-        useGsap
-          ? { opacity: 0, transform: `translate3d(${x}px, ${y}px, 0)` }
-          : undefined
-      }
+      className={cn(
+        useGsap && MOTION_V2_ENABLED && "gsap-scroll-reveal",
+        className
+      )}
     >
       {children}
     </Tag>

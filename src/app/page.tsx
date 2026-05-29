@@ -13,6 +13,7 @@ import ToolCard from "@/components/ToolCard";
 import ProjectCard from "@/components/ProjectCard";
 import GsapParallaxLayer from "@/components/motion/GsapParallaxLayer";
 import GsapScrollBatch from "@/components/motion/GsapScrollBatch";
+import HomeScrollStack from "@/components/motion/HomeScrollStack";
 
 export default function Home() {
   const { t, mounted } = useTranslation();
@@ -55,7 +56,7 @@ export default function Home() {
         variants={container}
         initial="hidden"
         animate="show"
-        className="flex flex-col flex-1 space-y-6"
+        className="flex flex-col flex-1"
       >
         {/* Hero Section */}
         <GsapParallaxLayer className="min-h-[36vh] lg:min-h-[44vh] flex flex-col justify-start pt-1 sm:pt-2 pb-0">
@@ -148,6 +149,7 @@ export default function Home() {
         </section>
         </GsapParallaxLayer>
 
+        <HomeScrollStack className="mt-6">
         {/* Services / Focus Section */}
         <ScrollDirectionSection
           id="services-block"
@@ -293,6 +295,7 @@ export default function Home() {
             ))}
           </GsapScrollBatch>
         </ScrollDirectionSection>
+        </HomeScrollStack>
       </motion.div>
     </div>
   );

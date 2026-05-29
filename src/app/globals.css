@@ -50,6 +50,54 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+/* Homepage: sticky panels slide over each other while scrolling */
+.home-scroll-stack {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-bottom: 12vh;
+}
+
+.home-stack-panel {
+  position: sticky;
+  top: 5.5rem;
+  margin-bottom: -3rem;
+  isolation: isolate;
+  will-change: transform;
+}
+
+@media (min-width: 1280px) {
+  .home-stack-panel {
+    top: 3rem;
+    margin-bottom: -3.5rem;
+  }
+}
+
+.home-stack-panel.section-block {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.94),
+    rgba(248, 250, 252, 0.88)
+  );
+  box-shadow:
+    0 16px 40px rgba(15, 23, 42, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+.dark .home-stack-panel.section-block {
+  background: linear-gradient(
+    145deg,
+    rgba(15, 23, 42, 0.94),
+    rgba(2, 6, 23, 0.9)
+  );
+}
+
+.gsap-scroll-batch .home-batch-item {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0);
+}
+
 .section-block {
   background: linear-gradient(
     145deg,
@@ -365,9 +413,17 @@ body.lightbox-open .mobile-top-shell {
 
   .gsap-parallax,
   .gsap-scroll-reveal,
-  .gsap-scroll-batch [data-scroll-batch-item] {
+  .gsap-scroll-batch [data-scroll-batch-item],
+  .gsap-scroll-batch .home-batch-item,
+  .home-stack-panel {
     transform: none !important;
     opacity: 1 !important;
+    position: relative !important;
+    top: auto !important;
+  }
+
+  .home-scroll-stack {
+    padding-bottom: 2rem;
   }
 }
 

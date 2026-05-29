@@ -14,6 +14,8 @@ type Props = {
   children: React.ReactNode;
   className?: string;
   id?: string;
+  /** When set, uses sticky slide-over stack (homepage) — always opaque, no scrub gaps */
+  stackIndex?: number;
 };
 
 function ScrollDirectionSectionFramer({ children, className, id }: Props) {
@@ -86,24 +88,46 @@ function ScrollDirectionSectionFramer({ children, className, id }: Props) {
   );
 }
 
-export default function ScrollDirectionSection(props: Props) {
+export default function ScrollDirectionSection({
+  children,
+  className,
+  id,
+  stackIndex,
+}: Props) {
   const reduced = usePrefersReducedMotion();
+
+  if (stackIndex != null && MOTION_V2_ENABLED && !reduced) {
+    return (
+      <section
+        id={id}
+        className={cn("home-stack-panel", className)}
+        style={{ zIndex: 20 + stackIndex * 10 }}
+        data-stack-index={stackIndex}
+      >
+        {children}
+      </section>
+    );
+  }
 
   if (MOTION_V2_ENABLED && shouldUseGsap(reduced)) {
     return (
       <GsapScrollReveal
         as="section"
-        id={props.id}
-        className={props.className}
-        y={56}
-        scrub={0.8}
+        id={id}
+        className={className}
+        y={32}
+        scrub={false}
+        once
         start="top 92%"
-        end="top 35%"
       >
-        {props.children}
+        {children}
       </GsapScrollReveal>
     );
   }
 
-  return <ScrollDirectionSectionFramer {...props} />;
+  return (
+    <ScrollDirectionSectionFramer className={className} id={id}>
+      {children}
+    </ScrollDirectionSectionFramer>
+  );
 }

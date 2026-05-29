@@ -42,25 +42,32 @@ export default function GsapScrollBatch({
         return;
       }
 
-      gsap.set(items, { opacity: 0, y, force3D: true });
+      const reveal = (batch: Element[]) => {
+        gsap.fromTo(
+          batch,
+          { autoAlpha: 0, y: Math.min(y, 36), force3D: true },
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: REVEAL.duration,
+            stagger,
+            ease: "power3.out",
+            overwrite: "auto",
+          }
+        );
+      };
 
       ScrollTrigger.batch(items, {
-        start: "top 90%",
-        onEnter: (batch) => {
-          gsap.fromTo(
-            batch,
-            { opacity: 0, y, force3D: true },
-            {
-              opacity: 1,
-              y: 0,
-              duration: REVEAL.duration,
-              stagger,
-              ease: "power3.out",
-              overwrite: "auto",
-            }
-          );
-        },
+        start: "top 92%",
+        onEnter: reveal,
         once: true,
+      });
+
+      items.forEach((item) => {
+        const rect = item.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.95) {
+          gsap.set(item, { autoAlpha: 1, y: 0 });
+        }
       });
     },
     { scope: ref, dependencies: [useGsap, itemSelector, stagger, y] }
