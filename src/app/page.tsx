@@ -59,8 +59,8 @@ export default function Home() {
         className="flex flex-col flex-1"
       >
         {/* Hero Section */}
-        <GsapParallaxLayer className="min-h-[36vh] lg:min-h-[44vh] flex flex-col justify-start pt-1 sm:pt-2 pb-0">
-        <section className="flex flex-col">
+        <GsapParallaxLayer className="relative z-50 min-h-[36vh] lg:min-h-[44vh] flex flex-col justify-start pt-1 sm:pt-2 pb-20 sm:pb-28">
+        <section className="flex flex-col relative z-50">
           <motion.div 
             variants={heroSoft}
             className="mb-8 inline-flex items-center space-x-3 px-4 py-1.5 rounded-full glass border-white/10 text-indigo-500 text-sm font-medium w-fit max-w-full"
@@ -149,7 +149,7 @@ export default function Home() {
         </section>
         </GsapParallaxLayer>
 
-        <HomeScrollStack className="mt-6">
+        <HomeScrollStack className="relative z-10 mt-4 sm:mt-8">
         {/* Services / Focus Section */}
         <ScrollDirectionSection
           id="services-block"
@@ -166,7 +166,7 @@ export default function Home() {
               const Icon = icons[i] || Sparkles;
               
               return (
-                <div key={i} className="glass p-8 rounded-[40px] border-white/5 hover:border-indigo-500/20 transition-all group flex flex-col items-center text-center">
+                <div key={i} className="glass-panel p-8 rounded-[40px] hover:border-indigo-500/25 transition-all group flex flex-col items-center text-center">
                   <div className="w-16 h-16 rounded-2xl bg-indigo-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                     <Icon className="w-8 h-8 text-indigo-500" />
                   </div>
@@ -186,7 +186,7 @@ export default function Home() {
             { icon: User, label: t.contact.happyClients, countTo: 30, suffix: "+" },
             { icon: Mail, label: t.contact.activeSupport, countTo: null, value: "24/7" },
           ].map((stat, i) => (
-            <div key={i} className="glass p-8 rounded-[40px] border-white/5 group hover:border-indigo-500/30 transition-all flex flex-col items-center text-center">
+            <div key={i} className="glass-panel p-8 rounded-[40px] group hover:border-indigo-500/30 transition-all flex flex-col items-center text-center">
               <div className="p-4 rounded-3xl bg-white/5 mb-6 group-hover:bg-indigo-500/10 transition-colors">
                 <stat.icon className="w-8 h-8 text-indigo-500" />
               </div>
@@ -241,7 +241,7 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {t.hero.workflow.steps.map((wf: any, i: number) => (
-              <div key={i} className="glass p-8 rounded-[40px] border-white/5 hover:border-indigo-500/20 transition-all relative group">
+              <div key={i} className="glass-panel p-8 rounded-[40px] hover:border-indigo-500/20 transition-all relative group">
                 <div className="absolute top-6 right-6 text-6xl font-bold text-indigo-500/10 group-hover:text-indigo-500/20 transition-colors">
                   0{i + 1}
                 </div>

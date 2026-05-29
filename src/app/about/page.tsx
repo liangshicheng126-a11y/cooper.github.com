@@ -130,9 +130,12 @@ export default function About() {
           </p>
         </GsapScrollReveal>
 
-        <GsapScrollReveal className="grid grid-cols-1 md:grid-cols-2 gap-10 sm:gap-20">
+        <motion.div
+          variants={item}
+          className="grid grid-cols-1 sm:grid-cols-2 gap-10 sm:gap-x-12 sm:gap-y-14 items-start"
+        >
           {/* Skills Section */}
-          <section>
+          <section className="min-w-0">
             <motion.h2
               initial={{ opacity: 0, x: -40 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -165,7 +168,7 @@ export default function About() {
           </section>
 
           {/* Hobbies Section */}
-          <section>
+          <section className="min-w-0">
             <motion.h2
               initial={{ opacity: 0, x: 40 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -201,7 +204,7 @@ export default function About() {
               ))}
             </motion.div>
           </section>
-        </GsapScrollReveal>
+        </motion.div>
 
         {/* CTA Section */}
         <motion.section

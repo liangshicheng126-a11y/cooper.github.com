@@ -97,11 +97,15 @@ export default function ScrollDirectionSection({
   const reduced = usePrefersReducedMotion();
 
   if (stackIndex != null && MOTION_V2_ENABLED && !reduced) {
+    const isFirst = stackIndex === 0;
     return (
       <section
         id={id}
-        className={cn("home-stack-panel", className)}
-        style={{ zIndex: 20 + stackIndex * 10 }}
+        className={cn(
+          isFirst ? "home-stack-panel-first" : "home-stack-panel",
+          className
+        )}
+        style={isFirst ? undefined : { zIndex: 20 + stackIndex * 10 }}
         data-stack-index={stackIndex}
       >
         {children}

@@ -59,10 +59,17 @@ body {
   padding-bottom: 12vh;
 }
 
+/* First homepage block: normal flow — does not sticky-cover hero CTAs */
+.home-stack-panel-first {
+  position: relative;
+  margin-bottom: 1.5rem;
+  isolation: isolate;
+}
+
 .home-stack-panel {
   position: sticky;
   top: 5.5rem;
-  margin-bottom: -3rem;
+  margin-bottom: -2rem;
   isolation: isolate;
   will-change: transform;
 }
@@ -70,27 +77,61 @@ body {
 @media (min-width: 1280px) {
   .home-stack-panel {
     top: 3rem;
-    margin-bottom: -3.5rem;
+    margin-bottom: -2.5rem;
   }
 }
 
+/* Large section shells: frosted glass so blobs show through (especially lower area) */
+.home-stack-panel-first.section-block,
 .home-stack-panel.section-block {
   background: linear-gradient(
-    145deg,
-    rgba(255, 255, 255, 0.94),
-    rgba(248, 250, 252, 0.88)
+    180deg,
+    rgba(255, 255, 255, 0.52) 0%,
+    rgba(255, 255, 255, 0.28) 45%,
+    rgba(255, 255, 255, 0.14) 100%
   );
+  border: 1px solid rgba(255, 255, 255, 0.38);
   box-shadow:
-    0 16px 40px rgba(15, 23, 42, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+    0 12px 36px rgba(15, 23, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(22px) saturate(165%);
+  -webkit-backdrop-filter: blur(22px) saturate(165%);
 }
 
+.dark .home-stack-panel-first.section-block,
 .dark .home-stack-panel.section-block {
   background: linear-gradient(
-    145deg,
-    rgba(15, 23, 42, 0.94),
-    rgba(2, 6, 23, 0.9)
+    180deg,
+    rgba(15, 23, 42, 0.55) 0%,
+    rgba(15, 23, 42, 0.32) 45%,
+    rgba(2, 6, 23, 0.18) 100%
   );
+}
+
+/* Inner cards on homepage — bottom more transparent to reveal animated blobs */
+.glass-panel {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.38) 0%,
+    rgba(255, 255, 255, 0.22) 50%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  backdrop-filter: blur(18px) saturate(170%);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  box-shadow:
+    0 8px 28px rgba(15, 23, 42, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.dark .glass-panel {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.03) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .section-block {
@@ -411,7 +452,8 @@ body.lightbox-open .mobile-top-shell {
   .gsap-scroll-batch [data-scroll-batch-item],
   .gsap-scroll-batch .gsap-batch-item,
   .gsap-reveal-content,
-  .home-stack-panel {
+  .home-stack-panel,
+  .home-stack-panel-first {
     transform: none !important;
     opacity: 1 !important;
     position: relative !important;
