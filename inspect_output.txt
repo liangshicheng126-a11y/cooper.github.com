@@ -1,0 +1,146 @@
+=== STYLES (paragraph) ===
+Normal: font=Times New Roman, size=152400, bold=None
+Heading 1: font=None, size=177800, bold=True
+Heading 2: font=None, size=165100, bold=True
+Heading 3: font=None, size=None, bold=True
+Heading 4: font=None, size=None, bold=True
+Heading 5: font=None, size=None, bold=None
+Heading 6: font=None, size=None, bold=None
+Heading 7: font=None, size=None, bold=None
+Heading 8: font=None, size=127000, bold=None
+Heading 9: font=None, size=127000, bold=None
+Header: font=None, size=None, bold=None
+Footer: font=None, size=None, bold=None
+No Spacing: font=None, size=None, bold=None
+Title: font=None, size=330200, bold=None
+Subtitle: font=None, size=152400, bold=None
+List Paragraph: font=None, size=None, bold=None
+Body Text: font=None, size=None, bold=None
+Body Text 2: font=None, size=None, bold=None
+Body Text 3: font=None, size=101600, bold=None
+List: font=None, size=None, bold=None
+List 2: font=None, size=None, bold=None
+List 3: font=None, size=None, bold=None
+List Bullet: font=None, size=None, bold=None
+List Bullet 2: font=None, size=None, bold=None
+List Bullet 3: font=None, size=None, bold=None
+List Number: font=None, size=None, bold=None
+List Number 2: font=None, size=None, bold=None
+List Number 3: font=None, size=None, bold=None
+List Continue: font=None, size=None, bold=None
+List Continue 2: font=None, size=None, bold=None
+List Continue 3: font=None, size=None, bold=None
+macro: font=Courier, size=127000, bold=None
+Quote: font=None, size=None, bold=None
+Caption: font=None, size=114300, bold=True
+Intense Quote: font=None, size=None, bold=True
+TOC Heading: font=None, size=None, bold=None
+Paper Title: font=None, size=None, bold=None
+Paper Subtitle: font=None, size=None, bold=None
+Paper Author: font=None, size=None, bold=None
+Paper Affiliation: font=None, size=None, bold=None
+Paper H1: font=None, size=None, bold=None
+Paper H2: font=None, size=None, bold=None
+Paper H3: font=None, size=None, bold=None
+Paper Ref: font=None, size=None, bold=None
+样式1: font=Malgun Gothic, size=None, bold=True
+样式2: font=Malgun Gothic, size=165100, bold=True
+样式3: font=Malgun Gothic, size=127000, bold=None
+
+=== SECTIONS ===
+Section 0: page=8.27x11.69 in, margins L=1.18 R=0.98 T=0.98 B=0.98
+Section 1: page=8.27x11.69 in, margins L=1.18 R=0.98 T=0.98 B=0.98
+
+=== PARAGRAPHS (first 20 with text) ===
+P0: style=Paper Title align=CENTER (1) line=330200 space_b=304800 space_a=152400 first_indent=None
+  run0: font=Times New Roman east=Batang size=228600 bold=True char_spacing=None text='타이포 그래피 디자인이 브랜드의 시각적 정체성에 미치는 영향에 관한 연구'
+  text: 타이포 그래피 디자인이 브랜드의 시각적 정체성에 미치는 영향에 관한 연구
+P1: style=Paper Subtitle align=CENTER (1) line=304800 space_b=0 space_a=228600 first_indent=None
+  run0: font=Times New Roman east=Batang size=177800 bold=False char_spacing=None text='— 썩처우커스 와 스위 브랜드를 중심으로 —'
+  text: — 썩처우커스 와 스위 브랜드를 중심으로 —
+P2: style=Paper Author align=CENTER (1) line=279400 space_b=0 space_a=76200 first_indent=None
+  run0: font=Times New Roman east=Batang size=152400 bold=False char_spacing=None text='량쉬청(LIANG SHICHENG)'
+  text: 량쉬청(LIANG SHICHENG)
+P3: style=Paper Affiliation align=CENTER (1) line=279400 space_b=0 space_a=457200 first_indent=None
+  run0: font=Times New Roman east=Batang size=152400 bold=False char_spacing=None text='\t'
+  run1: font=Times New Roman east=Batang size=152400 bold=False char_spacing=None text='한국 대구가톨릭대학교 대학원 과정'
+  text: 	한국 대구가톨릭대학교 대학원 과정
+P4: style=样式2 align=LEFT (0) line=279400 space_b=228600 space_a=152400 first_indent=None
+  run0: font=Times New Roman east=Batang size=203200 bold=True char_spacing=None text='1.서론'
+  text: 1.서론
+P5: style=样式1 align=LEFT (0) line=279400 space_b=152400 space_a=76200 first_indent=None
+  run0: font=Times New Roman east=Batang size=177800 bold=True char_spacing=None text='1.1 '
+  run1: font=Times New Roman east=Batang size=177800 bold=True char_spacing=None text='연구'
+  text: 1.1 연구 배경 및 목적
+P6: style=样式3 align=JUSTIFY (3) line=279400 space_b=0 space_a=0 first_indent=0
+  run0: font=Times New Roman east=Batang size=152400 bold=False char_spacing=None text='중국의'
+  run1: font=Times New Roman east=Batang size=152400 bold=False char_spacing=None text=' '
+  text: 중국의 현대 전통 무형문화유산은 브랜드 구축을 향한 변혁을 겪고 있다. 중국 비단 공예 중 가장 정교하고 섬세한 예술 형식으로 꼽히는 쑤저우 케시는 독특한 ‘연속 날실, 단절 씨실
+P7: style=样式3 align=JUSTIFY (3) line=279400 space_b=0 space_a=0 first_indent=0
+  run0: font=Times New Roman east=Batang size=152400 bold=False char_spacing=None text='브랜드의 시각적 아이덴티티 시스템(VIS) 내에서 타이포그래피 디자인은 '
+  text: 브랜드의 시각적 아이덴티티 시스템(VIS) 내에서 타이포그래피 디자인은 단순한 정보 전달 수단일 뿐만 아니라, 브랜드의 정신과 소비자를 연결하는 가교 역할도 한다. 고급 선물 시장
+P8: style=样式3 align=JUSTIFY (3) line=279400 space_b=0 space_a=0 first_indent=0
+  run0: font=Times New Roman east=Batang size=152400 bold=False char_spacing=None text='본 논문의 목적은 현대 타이포그래피 디자인이 ‘실크 위스퍼’ 브랜드의 시'
+  text: 본 논문의 목적은 현대 타이포그래피 디자인이 ‘실크 위스퍼’ 브랜드의 시각적 효과에 미치는 영향을 규명하는 것이다. 케시 공예의 시각적 특성을 분석하여 이를 서체 디자인 및 레이아
+P9: style=样式1 align=LEFT (0) line=279400 space_b=152400 space_a=76200 first_indent=None
+  run0: font=Times New Roman east=Batang size=177800 bold=True char_spacing=None text='1.2 '
+  run1: font=Times New Roman east=Batang size=177800 bold=True char_spacing=None text='연구'
+  text: 1.2 연구 범위
+P10: style=样式3 align=JUSTIFY (3) line=279400 space_b=0 space_a=0 first_indent=0
+  run0: font=Times New Roman east=Batang size=152400 bold=False char_spacing=None text='본 논문의 연구 범위는 쑤저우 케시 브랜드 ‘Silk Whisper’의 '
+  text: 본 논문의 연구 범위는 쑤저우 케시 브랜드 ‘Silk Whisper’의 전반적인 시각적 생태계에 초점을 맞추며, 브랜드 서체와 제품 패키지의 세부 디자인을 다룬다.
+P11: style=样式1 align=LEFT (0) line=279400 space_b=152400 space_a=76200 first_indent=None
+  run0: font=Times New Roman east=Batang size=177800 bold=True char_spacing=None text='1.3 '
+  run1: font=Times New Roman east=Batang size=177800 bold=True char_spacing=None text='연구'
+  text: 1.3 연구 방법
+P12: style=样式3 align=JUSTIFY (3) line=279400 space_b=0 space_a=0 first_indent=0
+  run0: font=Times New Roman east=Batang size=152400 bold=False char_spacing=None text='1. '
+  run1: font=Times New Roman east=Batang size=152400 bold=False char_spacing=None text='문헌'
+  text: 1. 문헌 고찰: 쑤저우 케시의 진화 과정을 체계적으로 추적하고 그 역사적 기원을 분석한다.
+P13: style=样式3 align=JUSTIFY (3) line=279400 space_b=0 space_a=0 first_indent=0
+  run0: font=Times New Roman east=Batang size=152400 bold=False char_spacing=None text='2. '
+  run1: font=Times New Roman east=Batang size=152400 bold=False char_spacing=None text='시각적'
+  text: 2. 시각적 분석: 세리프 서체와 획 처리가 브랜드 인지도 제고에 미치는 영향을 분석한다.
+P14: style=样式3 align=JUSTIFY (3) line=279400 space_b=0 space_a=0 first_indent=0
+  run0: font=Times New Roman east=Batang size=152400 bold=False char_spacing=None text='3. '
+  run1: font=Times New Roman east=Batang size=152400 bold=False char_spacing=None text='귀납적'
+  text: 3. 귀납적 방법: 서체 및 레이아웃 디자인이 제품 가치를 어떻게 높일 수 있는지 분석하고, 현대 시장에서 무형문화유산 브랜드의 생존 전략을 정리한다.
+P15: style=样式2 align=LEFT (0) line=279400 space_b=228600 space_a=152400 first_indent=None
+  run0: font=Times New Roman east=Batang size=203200 bold=True char_spacing=None text='2. '
+  run1: font=Times New Roman east=Batang size=203200 bold=True char_spacing=None text='브랜드'
+  text: 2. 브랜드 분석
+P16: style=Normal align=LEFT (0) line=279400 space_b=76200 space_a=76200 first_indent=None
+  run0: font=Times New Roman east=Batang size=152400 bold=True char_spacing=None text='2.1 케시의 개요 및 특징'
+  text: 2.1 케시의 개요 및 특징
+P17: style=样式3 align=JUSTIFY (3) line=279400 space_b=0 space_a=0 first_indent=0
+  run0: font=Times New Roman east=Batang size=152400 bold=False char_spacing=None text='소주 케시 직조 공예는 2천 년이 넘는 역사를 자랑하며, 중국에서 기계로'
+  text: 소주 케시 직조 공예는 2천 년이 넘는 역사를 자랑하며, 중국에서 기계로 대체할 수 없는 유일한 직조 기법입니다. 이 공예의 핵심 기술은 생사를 날실로, 다섯 가지 색상의 가공된 
+P18: style=样式3 align=JUSTIFY (3) line=279400 space_b=0 space_a=0 first_indent=0
+  run0: font=Times New Roman east=Batang size=152400 bold=False char_spacing=None text='케시의 역사는 시각적 유산의 지속적인 축적 과정이다. 송대(宋代)의 케시'
+  text: 케시의 역사는 시각적 유산의 지속적인 축적 과정이다. 송대(宋代)의 케시는 문인화(文人畫)에 대한 강한 미적 성향과 우아한 스타일을 보여준다. 원나라 시대의 스타일은 단순함과 대담
+P19: style=Normal align=LEFT (0) line=279400 space_b=76200 space_a=76200 first_indent=None
+  run0: font=Times New Roman east=Batang size=152400 bold=True char_spacing=None text='2.2 ‘실크 위스퍼스(Silk Whispers)’의 현황'
+  text: 2.2 ‘실크 위스퍼스(Silk Whispers)’의 현황
+
+Total paragraphs: 36
+
+=== STYLE USAGE ===
+  样式3: 16
+  样式1: 8
+  Normal: 5
+  样式2: 3
+  Paper Title: 1
+  Paper Subtitle: 1
+  Paper Author: 1
+  Paper Affiliation: 1
+
+=== CUSTOM PAPER STYLES ===
+Paper Title: font=None east=None size=None bold=None align=None line=None space_b=None space_a=None first_indent=None char_spacing=None
+Paper Subtitle: font=None east=None size=None bold=None align=None line=None space_b=None space_a=None first_indent=None char_spacing=None
+Paper Author: font=None east=None size=None bold=None align=None line=None space_b=None space_a=None first_indent=None char_spacing=None
+Paper Affiliation: font=None east=None size=None bold=None align=None line=None space_b=None space_a=None first_indent=None char_spacing=None
+Paper H1: font=None east=None size=None bold=None align=None line=None space_b=None space_a=None first_indent=None char_spacing=None
+Paper H2: font=None east=None size=None bold=None align=None line=None space_b=None space_a=None first_indent=None char_spacing=None
+Paper H3: font=None east=None size=None bold=None align=None line=None space_b=None space_a=None first_indent=None char_spacing=None
+Paper Ref: font=None east=None size=None bold=None align=None line=None space_b=None space_a=None first_indent=None char_spacing=None
+Normal: font=Times New Roman east=Batang size=152400 bold=None align=None line=279400 space_b=None space_a=None first_indent=None char_spacing=None
