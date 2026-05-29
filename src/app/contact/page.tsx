@@ -6,7 +6,6 @@ import { Mail, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import type { FormEvent } from "react";
-import GsapScrollReveal from "@/components/motion/GsapScrollReveal";
 
 export default function ContactPage() {
   const { t, mounted } = useTranslation();
@@ -90,7 +89,7 @@ export default function ContactPage() {
           </p>
         </motion.header>
 
-        <GsapScrollReveal as="section" className="glass rounded-[36px] border-white/15 p-6 sm:p-8 lg:p-10">
+        <motion.section variants={item} className="glass rounded-[36px] border-white/15 p-6 sm:p-8 lg:p-10">
           <form className="space-y-6" onSubmit={submitByMail}>
             <input
               type="text"
@@ -210,7 +209,7 @@ export default function ContactPage() {
               <p className="text-sm text-rose-500 font-medium">{t.contact.formError}</p>
             )}
           </form>
-        </GsapScrollReveal>
+        </motion.section>
       </motion.div>
     </div>
   );

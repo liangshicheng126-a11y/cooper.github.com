@@ -115,8 +115,7 @@ export default function ScrollDirectionSection({
         as="section"
         id={id}
         className={className}
-        y={32}
-        scrub={false}
+        y={20}
         once
         start="top 92%"
       >

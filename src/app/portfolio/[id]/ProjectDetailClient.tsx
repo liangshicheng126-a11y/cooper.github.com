@@ -11,7 +11,6 @@ import MasonryGallery, { MasonryItem } from "@/components/MasonryGallery";
 import { mapDisplaySources, thumbSrc } from "@/lib/galleryImageUrl";
 import ConstructionHero from "@/components/motion/ConstructionHero";
 import GsapGalleryStagger from "@/components/motion/GsapGalleryStagger";
-import GsapScrollReveal from "@/components/motion/GsapScrollReveal";
 
 /** Deterministic shuffle — avoids re-randomizing on each render (mobile re-render storms). */
 function stableShufflePosters(items: string[]) {
@@ -259,8 +258,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
       )}
 
       {hasPhotographyGallery && (
-        <GsapScrollReveal as="section" className="gallery-section mb-16 lg:mb-24">
-        <motion.section variants={item} className="mb-0">
+        <motion.section variants={item} className="gallery-section mb-16 lg:mb-24">
           <div className="flex items-center justify-between gap-4 mb-5">
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t.portfolio.projectDetail.photoGallery}</h2>
             <span className="text-base sm:text-lg text-foreground/55 font-medium">
@@ -326,12 +324,10 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
           </div>
           </GsapGalleryStagger>
         </motion.section>
-        </GsapScrollReveal>
       )}
 
       {hasPosterGallery && (
-        <GsapScrollReveal as="section" className="gallery-section mb-16 lg:mb-24">
-        <motion.section variants={item} className="mb-0">
+        <motion.section variants={item} className="gallery-section mb-16 lg:mb-24">
           <div className="flex items-center justify-between gap-4 mb-6">
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t.portfolio.projectDetail.posterGallery}</h2>
             <span className="text-base sm:text-lg text-foreground/55 font-medium">
@@ -358,7 +354,6 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
           />
           </GsapGalleryStagger>
         </motion.section>
-        </GsapScrollReveal>
       )}
 
       {hasVideoPreview && (

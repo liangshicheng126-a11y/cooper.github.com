@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import { STAGGER, shouldUseGsap } from "@/lib/motion";
+import { isElementInViewport } from "@/lib/scrollMotion";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,7 +15,7 @@ type GsapGalleryStaggerProps = {
   itemSelector?: string;
 };
 
-/** Staggers gallery thumbnails on scroll without animating the section wrapper. */
+/** Staggers gallery thumbnails — only hides off-screen items to avoid blank scroll gaps. */
 export default function GsapGalleryStagger({
   children,
   itemSelector = ".masonry-item, .gallery-thumb",
@@ -36,17 +37,28 @@ export default function GsapGalleryStagger({
       const items = root.querySelectorAll(itemSelector);
       if (!items.length) return;
 
-      gsap.set(items, { opacity: 0, y: 24, force3D: true });
+      const pending: Element[] = [];
+
+      items.forEach((item) => {
+        if (isElementInViewport(item)) {
+          gsap.set(item, { autoAlpha: 1, y: 0 });
+        } else {
+          gsap.set(item, { autoAlpha: 0, y: 16, force3D: true });
+          pending.push(item);
+        }
+      });
+
+      if (!pending.length) return;
 
       ScrollTrigger.create({
         trigger: root,
-        start: "top 85%",
+        start: "top 88%",
         once: true,
         onEnter: () => {
-          gsap.to(items, {
-            opacity: 1,
+          gsap.to(pending, {
+            autoAlpha: 1,
             y: 0,
-            duration: 0.5,
+            duration: 0.45,
             stagger: STAGGER.tight,
             ease: "power2.out",
           });

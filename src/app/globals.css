@@ -93,11 +93,6 @@ body {
   );
 }
 
-.gsap-scroll-batch .home-batch-item {
-  opacity: 0;
-  transform: translate3d(0, 28px, 0);
-}
-
 .section-block {
   background: linear-gradient(
     145deg,
@@ -414,7 +409,8 @@ body.lightbox-open .mobile-top-shell {
   .gsap-parallax,
   .gsap-scroll-reveal,
   .gsap-scroll-batch [data-scroll-batch-item],
-  .gsap-scroll-batch .home-batch-item,
+  .gsap-scroll-batch .gsap-batch-item,
+  .gsap-reveal-content,
   .home-stack-panel {
     transform: none !important;
     opacity: 1 !important;

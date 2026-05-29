@@ -7,6 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import { MOTION_V2_ENABLED, REVEAL, shouldUseGsap } from "@/lib/motion";
+import { isElementInViewport } from "@/lib/scrollMotion";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,85 +17,69 @@ type GsapScrollRevealProps = {
   id?: string;
   as?: "section" | "div";
   y?: number;
-  x?: number;
-  scrub?: boolean | number;
   once?: boolean;
   start?: string;
-  end?: string;
 };
 
+/**
+ * Outer shell stays fully opaque in layout — only inner content animates.
+ * Prevents scroll "blank bands" on about / contact / portfolio detail pages.
+ */
 export default function GsapScrollReveal({
   children,
   className,
   id,
   as: Tag = "section",
-  y = 32,
-  x = 0,
-  scrub = false,
+  y = 20,
   once = true,
-  start = "top 88%",
-  end = "top 40%",
+  start = "top 92%",
 }: GsapScrollRevealProps) {
-  const ref = useRef<HTMLElement>(null);
+  const outerRef = useRef<HTMLElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
   const reduced = usePrefersReducedMotion();
   const useGsap = shouldUseGsap(reduced);
 
   useGSAP(
     () => {
-      const el = ref.current;
-      if (!el || !useGsap) return;
+      const outer = outerRef.current;
+      const inner = innerRef.current;
+      if (!outer || !inner || !useGsap) return;
 
-      gsap.set(el, { opacity: 1, y: 0, x: 0 });
+      gsap.set(inner, { autoAlpha: 1, y: 0, force3D: true });
 
-      if (scrub) {
-        gsap.fromTo(
-          el,
-          { autoAlpha: 0, y, x, force3D: true },
-          {
-            autoAlpha: 1,
-            y: 0,
-            x: 0,
-            ease: "none",
-            scrollTrigger: {
-              trigger: el,
-              start,
-              end,
-              scrub: typeof scrub === "number" ? scrub : true,
-            },
-          }
-        );
-      } else {
-        gsap.fromTo(
-          el,
-          { autoAlpha: 0, y, x, force3D: true },
-          {
-            autoAlpha: 1,
-            y: 0,
-            x: 0,
-            duration: REVEAL.duration,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: el,
-              start,
-              toggleActions: once ? "play none none none" : "play reverse play reverse",
-            },
-          }
-        );
-      }
+      if (isElementInViewport(outer)) return;
+
+      gsap.fromTo(
+        inner,
+        { autoAlpha: 0, y, force3D: true },
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: REVEAL.duration * 0.85,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: outer,
+            start,
+            toggleActions: once ? "play none none none" : "play reverse play reverse",
+          },
+        }
+      );
     },
-    { scope: ref, dependencies: [useGsap, y, x, scrub, once, start, end] }
+    { scope: outerRef, dependencies: [useGsap, y, once, start] }
   );
 
   return (
     <Tag
-      ref={ref as React.RefObject<HTMLDivElement & HTMLElement>}
+      ref={outerRef as React.RefObject<HTMLDivElement & HTMLElement>}
       id={id}
       className={cn(
-        useGsap && MOTION_V2_ENABLED && "gsap-scroll-reveal",
+        useGsap && MOTION_V2_ENABLED && "gsap-scroll-reveal-shell",
         className
       )}
     >
-      {children}
+      <div ref={innerRef} className="gsap-reveal-content">
+        {children}
+      </div>
     </Tag>
   );
 }

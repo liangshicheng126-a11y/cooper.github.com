@@ -37,9 +37,9 @@ export default function About() {
     },
   };
 
-  const scrollSlideViewport = { once: false, amount: 0.35, margin: "0px 0px -40px 0px" as const };
+  const scrollSlideViewport = { once: true, amount: 0.35, margin: "0px 0px -40px 0px" as const };
   const scrollEase = [0.22, 1, 0.36, 1] as const;
-  const smoothViewport = { once: false, amount: 0.2, margin: "0px 0px -24px 0px" as const };
+  const smoothViewport = { once: true, amount: 0.2, margin: "0px 0px -24px 0px" as const };
   const listContainer = {
     hidden: {},
     show: {

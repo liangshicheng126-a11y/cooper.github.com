@@ -7,6 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import { MOTION_V2_ENABLED, REVEAL, STAGGER, shouldUseGsap } from "@/lib/motion";
+import { isElementInViewport } from "@/lib/scrollMotion";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -21,9 +22,9 @@ type GsapScrollBatchProps = {
 export default function GsapScrollBatch({
   children,
   className,
-  itemSelector = "[data-scroll-batch-item]",
+  itemSelector = "[data-scroll-batch-item], .gsap-batch-item",
   stagger = STAGGER.cards,
-  y = REVEAL.y,
+  y = 28,
 }: GsapScrollBatchProps) {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = usePrefersReducedMotion();
@@ -37,15 +38,23 @@ export default function GsapScrollBatch({
       const items = root.querySelectorAll(itemSelector);
       if (!items.length) return;
 
-      if (!useGsap) {
-        gsap.set(items, { opacity: 1, y: 0, clearProps: "transform" });
-        return;
-      }
+      const pending: Element[] = [];
+
+      items.forEach((item) => {
+        if (isElementInViewport(item)) {
+          gsap.set(item, { autoAlpha: 1, y: 0, clearProps: "transform" });
+        } else {
+          gsap.set(item, { autoAlpha: 0, y, force3D: true });
+          pending.push(item);
+        }
+      });
+
+      if (!pending.length) return;
 
       const reveal = (batch: Element[]) => {
         gsap.fromTo(
           batch,
-          { autoAlpha: 0, y: Math.min(y, 36), force3D: true },
+          { autoAlpha: 0, y, force3D: true },
           {
             autoAlpha: 1,
             y: 0,
@@ -57,17 +66,10 @@ export default function GsapScrollBatch({
         );
       };
 
-      ScrollTrigger.batch(items, {
+      ScrollTrigger.batch(pending, {
         start: "top 92%",
         onEnter: reveal,
         once: true,
-      });
-
-      items.forEach((item) => {
-        const rect = item.getBoundingClientRect();
-        if (rect.top < window.innerHeight * 0.95) {
-          gsap.set(item, { autoAlpha: 1, y: 0 });
-        }
       });
     },
     { scope: ref, dependencies: [useGsap, itemSelector, stagger, y] }
