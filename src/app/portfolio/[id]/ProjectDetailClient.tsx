@@ -9,6 +9,9 @@ import LazyInViewImage from "@/components/LazyInViewImage";
 import GalleryLightbox from "@/components/GalleryLightbox";
 import MasonryGallery, { MasonryItem } from "@/components/MasonryGallery";
 import { mapDisplaySources, thumbSrc } from "@/lib/galleryImageUrl";
+import ConstructionHero from "@/components/motion/ConstructionHero";
+import GsapGalleryStagger from "@/components/motion/GsapGalleryStagger";
+import GsapScrollReveal from "@/components/motion/GsapScrollReveal";
 
 /** Deterministic shuffle — avoids re-randomizing on each render (mobile re-render storms). */
 function stableShufflePosters(items: string[]) {
@@ -174,40 +177,9 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
           </Link>
         </motion.div>
 
-        <motion.section
-          variants={item}
-          className="min-h-[55vh] rounded-[40px] glass border-white/10 flex flex-col items-center justify-center text-center px-6 py-16"
-        >
-          <motion.div
-            animate={{ y: [0, -10, 0], rotate: [0, -2, 2, 0] }}
-            transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-            className="relative mb-8"
-          >
-            <div className="w-20 h-20 rounded-2xl bg-indigo-500/20 border border-indigo-400/40 flex items-center justify-center">
-              <Layout className="w-10 h-10 text-indigo-400" />
-            </div>
-            <motion.span
-              className="absolute -inset-2 rounded-3xl border border-indigo-400/30"
-              animate={{ scale: [1, 1.12, 1], opacity: [0.45, 0.1, 0.45] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            />
-          </motion.div>
-
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
-            正在施工中
-          </h1>
-          <p className="text-lg sm:text-xl text-foreground/60 mb-10">
-            敬请期待
-          </p>
-
-          <div className="w-full max-w-md h-2 rounded-full bg-white/10 overflow-hidden">
-            <motion.div
-              className="h-full rounded-full bg-gradient-to-r from-indigo-400 via-violet-400 to-cyan-400"
-              animate={{ x: ["-100%", "100%"] }}
-              transition={{ duration: 1.8, repeat: Infinity, ease: "linear" }}
-            />
-          </div>
-        </motion.section>
+        <motion.div variants={item}>
+          <ConstructionHero title="正在施工中" subtitle="敬请期待" />
+        </motion.div>
       </motion.div>
     );
   }
@@ -287,7 +259,8 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
       )}
 
       {hasPhotographyGallery && (
-        <motion.section variants={item} className="gallery-section mb-16 lg:mb-24">
+        <GsapScrollReveal as="section" className="gallery-section mb-16 lg:mb-24">
+        <motion.section variants={item} className="mb-0">
           <div className="flex items-center justify-between gap-4 mb-5">
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t.portfolio.projectDetail.photoGallery}</h2>
             <span className="text-base sm:text-lg text-foreground/55 font-medium">
@@ -295,6 +268,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
               {photographyGroups.reduce((sum, group) => sum + group.photos.length, 0)}
             </span>
           </div>
+          <GsapGalleryStagger>
           <div className="space-y-10">
             {years.map((year, yearIndex) => (
               <div key={year} className="space-y-6">
@@ -331,7 +305,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
                       items={group.photos}
                       getOriginalSrc={(photo) => photo}
                       renderItem={(photo, index) => (
-                        <MasonryItem className="group shadow-[0_2px_16px_rgba(15,23,42,0.08)]">
+                        <MasonryItem className="gallery-thumb group shadow-[0_2px_16px_rgba(15,23,42,0.08)]">
                           <LazyInViewImage
                             src={thumbSrc(photo)}
                             fallbackSrc={photo}
@@ -350,22 +324,26 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
               </div>
             ))}
           </div>
+          </GsapGalleryStagger>
         </motion.section>
+        </GsapScrollReveal>
       )}
 
       {hasPosterGallery && (
-        <motion.section variants={item} className="gallery-section mb-16 lg:mb-24">
+        <GsapScrollReveal as="section" className="gallery-section mb-16 lg:mb-24">
+        <motion.section variants={item} className="mb-0">
           <div className="flex items-center justify-between gap-4 mb-6">
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t.portfolio.projectDetail.posterGallery}</h2>
             <span className="text-base sm:text-lg text-foreground/55 font-medium">
               {t.portfolio.projectDetail.posterCount} {shuffledPosters.length}
             </span>
           </div>
+          <GsapGalleryStagger>
           <MasonryGallery
             items={shuffledPosters}
             getOriginalSrc={(poster) => poster}
             renderItem={(poster, index) => (
-              <MasonryItem className="group shadow-[0_2px_16px_rgba(15,23,42,0.08)] transition-shadow duration-300 sm:hover:shadow-[0_12px_32px_rgba(15,23,42,0.14)]">
+              <MasonryItem className="gallery-thumb group shadow-[0_2px_16px_rgba(15,23,42,0.08)] transition-shadow duration-300 sm:hover:shadow-[0_12px_32px_rgba(15,23,42,0.14)]">
                 <LazyInViewImage
                   src={thumbSrc(poster)}
                   fallbackSrc={poster}
@@ -378,7 +356,9 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
               </MasonryItem>
             )}
           />
+          </GsapGalleryStagger>
         </motion.section>
+        </GsapScrollReveal>
       )}
 
       {hasVideoPreview && (

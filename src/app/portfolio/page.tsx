@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import ProjectCard from "@/components/ProjectCard";
+import GsapScrollBatch from "@/components/motion/GsapScrollBatch";
 
 export default function Portfolio() {
   const { t, mounted } = useTranslation();
@@ -85,7 +86,7 @@ export default function Portfolio() {
           </motion.p>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
+        <GsapScrollBatch className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
           {projects.map((project, i) => (
             <ProjectCard
               key={project.id}
@@ -97,7 +98,7 @@ export default function Portfolio() {
               viewProject={t.portfolio.viewProject}
             />
           ))}
-        </div>
+        </GsapScrollBatch>
 
         {/* CTA Section */}
         <motion.section

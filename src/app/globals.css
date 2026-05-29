@@ -362,5 +362,12 @@ body.lightbox-open .mobile-top-shell {
     animation: none;
     will-change: auto;
   }
+
+  .gsap-parallax,
+  .gsap-scroll-reveal,
+  .gsap-scroll-batch [data-scroll-batch-item] {
+    transform: none !important;
+    opacity: 1 !important;
+  }
 }
 

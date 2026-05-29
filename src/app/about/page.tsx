@@ -5,6 +5,7 @@ import { useTranslation } from "@/locales/LanguageProvider";
 import { Zap, ArrowRight, Coffee } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import GsapScrollReveal from "@/components/motion/GsapScrollReveal";
 
 export default function About() {
   const { t, mounted } = useTranslation();
@@ -123,13 +124,13 @@ export default function About() {
         </header>
 
         {/* Philosophy Quote */}
-        <motion.section variants={item} className="mb-16 sm:mb-24 p-6 sm:p-12 rounded-[28px] sm:rounded-[40px] bg-indigo-500/5 border border-indigo-500/10 italic">
+        <GsapScrollReveal as="section" className="mb-16 sm:mb-24 p-6 sm:p-12 rounded-[28px] sm:rounded-[40px] bg-indigo-500/5 border border-indigo-500/10 italic">
           <p className="text-lg sm:text-2xl text-indigo-500/80 leading-relaxed text-center">
             &ldquo;{t.about.philosophy}&rdquo;
           </p>
-        </motion.section>
+        </GsapScrollReveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 sm:gap-20">
+        <GsapScrollReveal className="grid grid-cols-1 md:grid-cols-2 gap-10 sm:gap-20">
           {/* Skills Section */}
           <section>
             <motion.h2
@@ -200,7 +201,7 @@ export default function About() {
               ))}
             </motion.div>
           </section>
-        </div>
+        </GsapScrollReveal>
 
         {/* CTA Section */}
         <motion.section

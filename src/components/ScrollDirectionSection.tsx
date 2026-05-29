@@ -3,8 +3,11 @@
 import { motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import GsapScrollReveal from "@/components/motion/GsapScrollReveal";
+import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
+import { MOTION_V2_ENABLED, shouldUseGsap } from "@/lib/motion";
 
-const DIST = 36;
+const DIST = 48;
 const ease = [0.22, 1, 0.36, 1] as const;
 
 type Props = {
@@ -13,7 +16,7 @@ type Props = {
   id?: string;
 };
 
-export default function ScrollDirectionSection({ children, className, id }: Props) {
+function ScrollDirectionSectionFramer({ children, className, id }: Props) {
   const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, {
     once: false,
@@ -81,4 +84,26 @@ export default function ScrollDirectionSection({ children, className, id }: Prop
       {children}
     </motion.section>
   );
+}
+
+export default function ScrollDirectionSection(props: Props) {
+  const reduced = usePrefersReducedMotion();
+
+  if (MOTION_V2_ENABLED && shouldUseGsap(reduced)) {
+    return (
+      <GsapScrollReveal
+        as="section"
+        id={props.id}
+        className={props.className}
+        y={56}
+        scrub={0.8}
+        start="top 92%"
+        end="top 35%"
+      >
+        {props.children}
+      </GsapScrollReveal>
+    );
+  }
+
+  return <ScrollDirectionSectionFramer {...props} />;
 }

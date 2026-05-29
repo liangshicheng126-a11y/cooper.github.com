@@ -15,7 +15,14 @@ const pagesBasePath = useRepoPrefix ? `/${repository}` : "";
 
 const isGitHubActions = Boolean(process.env.GITHUB_ACTIONS);
 
+// Motion v2: GSAP scroll + enhanced Framer. Set to "false" to disable without git revert.
+const motionV2Env = process.env.NEXT_PUBLIC_MOTION_V2;
+const motionV2Enabled = motionV2Env !== "false";
+
 const nextConfig: NextConfig = {
+  env: {
+    NEXT_PUBLIC_MOTION_V2: motionV2Enabled ? "true" : "false",
+  },
   // GitHub Pages requires static export; Vercel uses server mode to support API routes
   ...(isGitHubActions ? { output: "export" } : {}),
   trailingSlash: true,

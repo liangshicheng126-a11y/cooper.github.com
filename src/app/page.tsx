@@ -11,6 +11,8 @@ import CountUp from "@/components/CountUp";
 import Magnet from "@/components/Magnet";
 import ToolCard from "@/components/ToolCard";
 import ProjectCard from "@/components/ProjectCard";
+import GsapParallaxLayer from "@/components/motion/GsapParallaxLayer";
+import GsapScrollBatch from "@/components/motion/GsapScrollBatch";
 
 export default function Home() {
   const { t, mounted } = useTranslation();
@@ -56,7 +58,8 @@ export default function Home() {
         className="flex flex-col flex-1 space-y-6"
       >
         {/* Hero Section */}
-        <section className="min-h-[36vh] lg:min-h-[44vh] flex flex-col justify-start pt-1 sm:pt-2 pb-0">
+        <GsapParallaxLayer className="min-h-[36vh] lg:min-h-[44vh] flex flex-col justify-start pt-1 sm:pt-2 pb-0">
+        <section className="flex flex-col">
           <motion.div 
             variants={heroSoft}
             className="mb-8 inline-flex items-center space-x-3 px-4 py-1.5 rounded-full glass border-white/10 text-indigo-500 text-sm font-medium w-fit max-w-full"
@@ -96,7 +99,7 @@ export default function Home() {
           </motion.div>
 
           <motion.div variants={heroSoft} className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-0 sm:space-x-6">
-            <Magnet padding={50} magnetStrength={3}>
+            <Magnet padding={50} magnetStrength={4.5}>
               <Link
                 href="/portfolio"
                 className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 bg-indigo-600 text-white rounded-2xl font-bold flex items-center justify-center space-x-3 hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-500/20"
@@ -105,7 +108,7 @@ export default function Home() {
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </Magnet>
-            <Magnet padding={50} magnetStrength={3}>
+            <Magnet padding={50} magnetStrength={4.5}>
               <Link
                 href="/about"
                 className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 glass rounded-2xl font-bold flex items-center justify-center space-x-3 hover:bg-white/10 transition-all"
@@ -143,6 +146,7 @@ export default function Home() {
             </motion.div>
           </motion.div>
         </section>
+        </GsapParallaxLayer>
 
         {/* Services / Focus Section */}
         <ScrollDirectionSection
@@ -210,7 +214,7 @@ export default function Home() {
             <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />
             <span className="text-foreground/40 text-sm sm:text-right">{t.hero.tools.subtitle}</span>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4" style={{ perspective: "800px" }}>
+          <GsapScrollBatch className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4" itemSelector="[data-scroll-batch-item]">
             {[
               { name: "Photoshop", icon: ImageIcon, color: "#31A8FF" },
               { name: "Illustrator", icon: PenTool, color: "#FF9A00" },
@@ -219,9 +223,11 @@ export default function Home() {
               { name: "CapCut", icon: Scissors, color: "#00C4CC" },
               { name: "Premiere", icon: Film, color: "#9999FF" },
             ].map((tool, i) => (
-              <ToolCard key={i} index={i} {...tool} />
+              <div key={i} data-scroll-batch-item style={{ perspective: "800px" }}>
+                <ToolCard index={i} {...tool} />
+              </div>
             ))}
-          </div>
+          </GsapScrollBatch>
         </ScrollDirectionSection>
 
         {/* Workflow Section */}
@@ -260,7 +266,7 @@ export default function Home() {
             </Link>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <GsapScrollBatch className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {[
               { 
                 id: "p1", 
@@ -285,7 +291,7 @@ export default function Home() {
                 viewProject={t.hero.viewAllWork}
               />
             ))}
-          </div>
+          </GsapScrollBatch>
         </ScrollDirectionSection>
       </motion.div>
     </div>
