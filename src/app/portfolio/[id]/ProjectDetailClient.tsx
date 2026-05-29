@@ -90,7 +90,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
       {
         title: "视频预览 2",
         href: "https://www.bilibili.com/video/BV1ys9rBREj8/",
-        embedUrl: "https://player.bilibili.com/player.html?bvid=BV1ys9rBREj8&page=1&high_quality=1",
+        embedUrl: "https://player.bilibili.com/player.html?bvid=BV1ys9rBREj8&page=1&high_quality=1&autoplay=1",
       },
     ],
   };
@@ -410,8 +410,10 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
                       src={video.mp4Url}
                       poster={video.poster}
                       controls
+                      autoPlay
+                      muted
                       playsInline
-                      preload="metadata"
+                      preload="auto"
                       className="w-full h-full rounded-[20px] bg-black"
                       onError={() => markVideoLoadError(video.href)}
                     />
