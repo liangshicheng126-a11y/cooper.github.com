@@ -11,12 +11,16 @@ import { isElementInViewport } from "@/lib/scrollMotion";
 
 gsap.registerPlugin(ScrollTrigger);
 
+type EntranceVariant = "default" | "portfolio";
+
 type GsapScrollBatchProps = {
   children: React.ReactNode;
   className?: string;
   itemSelector?: string;
   stagger?: number;
   y?: number;
+  /** portfolio: alternate slide + scale for project cards */
+  entrance?: EntranceVariant;
 };
 
 export default function GsapScrollBatch({
@@ -25,6 +29,7 @@ export default function GsapScrollBatch({
   itemSelector = "[data-scroll-batch-item], .gsap-batch-item",
   stagger = STAGGER.cards,
   y = 28,
+  entrance = "default",
 }: GsapScrollBatchProps) {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = usePrefersReducedMotion();
@@ -42,9 +47,19 @@ export default function GsapScrollBatch({
 
       items.forEach((item) => {
         if (isElementInViewport(item)) {
-          gsap.set(item, { autoAlpha: 1, y: 0, clearProps: "transform" });
+          gsap.set(item, { autoAlpha: 1, y: 0, x: 0, scale: 1, clearProps: "transform" });
         } else {
-          gsap.set(item, { autoAlpha: 0, y, force3D: true });
+          const idx = Number((item as HTMLElement).dataset.batchIndex ?? 0);
+          const x = entrance === "portfolio" ? (idx % 2 === 0 ? -36 : 36) : 0;
+          const startY = entrance === "portfolio" ? 56 : y;
+          const startScale = entrance === "portfolio" ? 0.92 : 1;
+          gsap.set(item, {
+            autoAlpha: 0,
+            y: startY,
+            x,
+            scale: startScale,
+            force3D: true,
+          });
           pending.push(item);
         }
       });
@@ -52,6 +67,28 @@ export default function GsapScrollBatch({
       if (!pending.length) return;
 
       const reveal = (batch: Element[]) => {
+        if (entrance === "portfolio") {
+          batch.forEach((el, i) => {
+            const idx = Number((el as HTMLElement).dataset.batchIndex ?? i);
+            const x = idx % 2 === 0 ? -36 : 36;
+            gsap.fromTo(
+              el,
+              { autoAlpha: 0, y: 56, x, scale: 0.92, force3D: true },
+              {
+                autoAlpha: 1,
+                y: 0,
+                x: 0,
+                scale: 1,
+                duration: 0.85,
+                delay: idx * (stagger || 0.12),
+                ease: "power3.out",
+                overwrite: "auto",
+              }
+            );
+          });
+          return;
+        }
+
         gsap.fromTo(
           batch,
           { autoAlpha: 0, y, force3D: true },
@@ -67,12 +104,12 @@ export default function GsapScrollBatch({
       };
 
       ScrollTrigger.batch(pending, {
-        start: "top 92%",
+        start: "top 90%",
         onEnter: reveal,
         once: true,
       });
     },
-    { scope: ref, dependencies: [useGsap, itemSelector, stagger, y] }
+    { scope: ref, dependencies: [useGsap, itemSelector, stagger, y, entrance] }
   );
 
   return (

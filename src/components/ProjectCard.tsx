@@ -108,6 +108,7 @@ export default function ProjectCard({
       <div
         ref={ref}
         data-scroll-batch-item
+        data-batch-index={index}
         className="gsap-batch-item"
         style={{ willChange: "transform, opacity" }}
       >

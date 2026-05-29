@@ -70,7 +70,7 @@ export default function Portfolio() {
   };
 
   return (
-    <div className={cn("pb-8", !mounted && "opacity-0")}>
+    <div className={cn("pb-4 sm:pb-6", !mounted && "opacity-0")}>
       <motion.div variants={container} initial="hidden" animate="show">
         <header className="mb-16">
           <motion.div variants={heroMask} className="overflow-hidden mb-6">
@@ -86,7 +86,11 @@ export default function Portfolio() {
           </motion.p>
         </header>
 
-        <GsapScrollBatch className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
+        <GsapScrollBatch
+          entrance="portfolio"
+          stagger={0.12}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10"
+        >
           {projects.map((project, i) => (
             <ProjectCard
               key={project.id}

@@ -50,7 +50,7 @@ export default function Home() {
 
   return (
     <div
-      className={cn("flex flex-col pb-8", !mounted && "opacity-0")}
+      className={cn("flex flex-col pb-4 sm:pb-6", !mounted && "opacity-0")}
     >
       <motion.div
         variants={container}
@@ -268,7 +268,11 @@ export default function Home() {
             </Link>
           </div>
           
-          <GsapScrollBatch className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <GsapScrollBatch
+            entrance="portfolio"
+            stagger={0.12}
+            className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+          >
             {[
               { 
                 id: "p1", 

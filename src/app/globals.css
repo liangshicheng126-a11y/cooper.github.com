@@ -56,33 +56,29 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0;
-  padding-bottom: 12vh;
-}
-
-/* First homepage block: normal flow — does not sticky-cover hero CTAs */
-.home-stack-panel-first {
-  position: relative;
-  margin-bottom: 1.5rem;
-  isolation: isolate;
+  padding-bottom: 1.5rem;
 }
 
 .home-stack-panel {
   position: sticky;
   top: 5.5rem;
-  margin-bottom: -2rem;
+  margin-bottom: -1.5rem;
   isolation: isolate;
   will-change: transform;
+}
+
+.home-scroll-stack > .home-stack-panel:last-child {
+  margin-bottom: 0;
 }
 
 @media (min-width: 1280px) {
   .home-stack-panel {
     top: 3rem;
-    margin-bottom: -2.5rem;
+    margin-bottom: -2rem;
   }
 }
 
 /* Large section shells: frosted glass so blobs show through (especially lower area) */
-.home-stack-panel-first.section-block,
 .home-stack-panel.section-block {
   background: linear-gradient(
     180deg,
@@ -98,7 +94,6 @@ body {
   -webkit-backdrop-filter: blur(22px) saturate(165%);
 }
 
-.dark .home-stack-panel-first.section-block,
 .dark .home-stack-panel.section-block {
   background: linear-gradient(
     180deg,
@@ -452,8 +447,7 @@ body.lightbox-open .mobile-top-shell {
   .gsap-scroll-batch [data-scroll-batch-item],
   .gsap-scroll-batch .gsap-batch-item,
   .gsap-reveal-content,
-  .home-stack-panel,
-  .home-stack-panel-first {
+  .home-stack-panel {
     transform: none !important;
     opacity: 1 !important;
     position: relative !important;
