@@ -21,6 +21,8 @@ type GsapScrollBatchProps = {
   y?: number;
   /** portfolio: alternate slide + scale for project cards */
   entrance?: EntranceVariant;
+  /** Play entrance on mount instead of waiting for scroll into view */
+  playOnMount?: boolean;
 };
 
 export default function GsapScrollBatch({
@@ -30,6 +32,7 @@ export default function GsapScrollBatch({
   stagger = STAGGER.cards,
   y = 28,
   entrance = "default",
+  playOnMount = false,
 }: GsapScrollBatchProps) {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = usePrefersReducedMotion();
@@ -106,6 +109,11 @@ export default function GsapScrollBatch({
         );
       };
 
+      if (playOnMount) {
+        requestAnimationFrame(() => reveal(pending));
+        return;
+      }
+
       ScrollTrigger.batch(pending, {
         start: entrance === "portfolio" ? "top 92%" : "top 90%",
         onEnter: reveal,
@@ -114,7 +122,7 @@ export default function GsapScrollBatch({
 
       requestAnimationFrame(() => ScrollTrigger.refresh());
     },
-    { scope: ref, dependencies: [useGsap, itemSelector, stagger, y, entrance] }
+    { scope: ref, dependencies: [useGsap, itemSelector, stagger, y, entrance, playOnMount] }
   );
 
   return (

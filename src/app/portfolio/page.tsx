@@ -83,6 +83,7 @@ export default function Portfolio() {
 
         <GsapScrollBatch
           entrance="portfolio"
+          playOnMount
           stagger={0.12}
           className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10"
         >
@@ -95,6 +96,7 @@ export default function Portfolio() {
               image={project.image}
               index={i}
               viewProject={t.portfolio.viewProject}
+              playOnMount
             />
           ))}
         </GsapScrollBatch>

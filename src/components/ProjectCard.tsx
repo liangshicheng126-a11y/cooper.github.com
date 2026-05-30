@@ -21,6 +21,8 @@ type ProjectCardProps = {
   image: string;
   index: number;
   viewProject: string;
+  /** Animate in on mount (portfolio grid) instead of scroll into view */
+  playOnMount?: boolean;
 };
 
 export default function ProjectCard({
@@ -30,6 +32,7 @@ export default function ProjectCard({
   image,
   index,
   viewProject,
+  playOnMount = false,
 }: ProjectCardProps) {
   const [hovered, setHovered] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -37,6 +40,8 @@ export default function ProjectCard({
   const batchReveal = MOTION_V2_ENABLED && shouldUseGsap(reduced);
 
   const isInView = useInView(ref, { once: true, amount: 0.08 });
+  const revealOnMount = playOnMount && !batchReveal;
+  const shouldReveal = revealOnMount || isInView;
   const xOffset = index % 2 === 0 ? -32 : 32;
 
   const cardInner = (
@@ -122,7 +127,7 @@ export default function ProjectCard({
       ref={ref}
       initial={{ opacity: 0, y: 48, x: xOffset }}
       animate={
-        isInView
+        shouldReveal
           ? { opacity: 1, y: 0, x: 0 }
           : { opacity: 0, y: 48, x: xOffset }
       }
