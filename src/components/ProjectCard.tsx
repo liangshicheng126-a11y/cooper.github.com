@@ -28,6 +28,8 @@ type ProjectCardProps = {
   /** Glass tilt + spotlight hover (homepage featured preview) */
   glassHover?: boolean;
   accent?: string;
+  /** Entrance handled by PortfolioGenieGrid wrapper */
+  genieReveal?: boolean;
 };
 
 const cardHeights =
@@ -43,11 +45,14 @@ export default function ProjectCard({
   playOnMount = false,
   glassHover = false,
   accent = "#6366f1",
+  genieReveal = false,
 }: ProjectCardProps) {
   const [hovered, setHovered] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const reduced = usePrefersReducedMotion();
-  const batchReveal = MOTION_V2_ENABLED && shouldUseGsap(reduced);
+  const gsapEnabled = MOTION_V2_ENABLED && shouldUseGsap(reduced);
+  const batchReveal = gsapEnabled && !genieReveal;
+  const genieGsap = genieReveal && gsapEnabled;
 
   const isInView = useInView(ref, { once: true, amount: 0.08 });
   const revealOnMount = playOnMount && !batchReveal;
@@ -136,6 +141,10 @@ export default function ProjectCard({
   ) : (
     link
   );
+
+  if (genieGsap) {
+    return cardInner;
+  }
 
   if (batchReveal) {
     return (

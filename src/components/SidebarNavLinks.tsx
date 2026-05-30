@@ -77,7 +77,12 @@ export default function SidebarNavLinks({
               />
             )}
 
-            <div className="relative z-10 w-5 flex justify-center shrink-0">
+            <div
+              className="relative z-10 w-5 flex justify-center shrink-0"
+              {...(item.href === "/portfolio" && !isMobile
+                ? { "data-nav-genie-origin": "portfolio" }
+                : {})}
+            >
               <item.icon
                 className={cn(
                   "w-5 h-5 transition-transform duration-300 group-hover:scale-110 shrink-0",
