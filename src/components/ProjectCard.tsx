@@ -30,6 +30,8 @@ type ProjectCardProps = {
   accent?: string;
   /** Entrance handled by PortfolioGenieGrid wrapper */
   genieReveal?: boolean;
+  /** Portfolio grid: hover text + 3D tilt only (no entrance / scale) */
+  tiltOnly?: boolean;
 };
 
 const cardHeights =
@@ -49,6 +51,7 @@ export default function ProjectCard({
   glassHover = false,
   accent = "#6366f1",
   genieReveal = false,
+  tiltOnly = false,
 }: ProjectCardProps) {
   const [hovered, setHovered] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -112,13 +115,19 @@ export default function ProjectCard({
           </h3>
           <div className="inline-flex items-center space-x-3 text-white font-semibold group/btn">
             <span>{viewProject}</span>
-            <motion.div
-              className="p-3 rounded-full bg-white/20 group-hover/btn:bg-white group-hover/btn:text-black"
-              animate={{ scale: hovered ? 1.08 : 1 }}
-              transition={{ type: "spring", stiffness: 400, damping: 18 }}
-            >
-              <ArrowUpRight className="w-5 h-5" />
-            </motion.div>
+            {tiltOnly ? (
+              <div className="p-3 rounded-full bg-white/20 group-hover/btn:bg-white group-hover/btn:text-black transition-colors">
+                <ArrowUpRight className="w-5 h-5" />
+              </div>
+            ) : (
+              <motion.div
+                className="p-3 rounded-full bg-white/20 group-hover/btn:bg-white group-hover/btn:text-black"
+                animate={{ scale: hovered ? 1.08 : 1 }}
+                transition={{ type: "spring", stiffness: 400, damping: 18 }}
+              >
+                <ArrowUpRight className="w-5 h-5" />
+              </motion.div>
+            )}
           </div>
         </div>
       </div>
@@ -137,7 +146,8 @@ export default function ProjectCard({
     <GlassHoverCard
       accent={accent}
       fill
-      hoverScale={1.02}
+      hoverScale={tiltOnly ? 1 : 1.02}
+      reducedHoverScale={1}
       spotlight={false}
       className={cn(cardHeights, "border-white/10 cursor-pointer")}
     >
@@ -146,6 +156,14 @@ export default function ProjectCard({
   ) : (
     link
   );
+
+  if (tiltOnly && glassHover) {
+    return (
+      <div className={glassHoverWrap} style={{ perspective: "800px" }}>
+        {cardInner}
+      </div>
+    );
+  }
 
   if (genieGsap) {
     return glassHover ? (
