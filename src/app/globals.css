@@ -469,11 +469,20 @@ body.lightbox-open .mobile-top-shell {
   }
 }
 
+/* Portfolio featured cards: hide before GSAP sets initial state (prevents flash) */
+.gsap-scroll-batch--portfolio .gsap-batch-item,
+.gsap-scroll-batch--portfolio [data-scroll-batch-item] {
+  opacity: 0;
+  visibility: hidden;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .liquid-bg .blob {
     animation: none;
   }
 
+  .gsap-scroll-batch--portfolio .gsap-batch-item,
+  .gsap-scroll-batch--portfolio [data-scroll-batch-item],
   .gsap-parallax,
   .gsap-scroll-reveal,
   .gsap-scroll-batch [data-scroll-batch-item],

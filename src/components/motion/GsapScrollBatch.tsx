@@ -44,24 +44,27 @@ export default function GsapScrollBatch({
       if (!items.length) return;
 
       const pending: Element[] = [];
+      /** Portfolio cards sit below the hero on most viewports — always reveal with stagger. */
+      const forceEntrance = entrance === "portfolio";
 
       items.forEach((item) => {
-        if (isElementInViewport(item)) {
+        if (!forceEntrance && isElementInViewport(item)) {
           gsap.set(item, { autoAlpha: 1, y: 0, x: 0, scale: 1, clearProps: "transform" });
-        } else {
-          const idx = Number((item as HTMLElement).dataset.batchIndex ?? 0);
-          const x = entrance === "portfolio" ? (idx % 2 === 0 ? -36 : 36) : 0;
-          const startY = entrance === "portfolio" ? 56 : y;
-          const startScale = entrance === "portfolio" ? 0.92 : 1;
-          gsap.set(item, {
-            autoAlpha: 0,
-            y: startY,
-            x,
-            scale: startScale,
-            force3D: true,
-          });
-          pending.push(item);
+          return;
         }
+
+        const idx = Number((item as HTMLElement).dataset.batchIndex ?? 0);
+        const x = entrance === "portfolio" ? (idx % 2 === 0 ? -36 : 36) : 0;
+        const startY = entrance === "portfolio" ? 56 : y;
+        const startScale = entrance === "portfolio" ? 0.92 : 1;
+        gsap.set(item, {
+          autoAlpha: 0,
+          y: startY,
+          x,
+          scale: startScale,
+          force3D: true,
+        });
+        pending.push(item);
       });
 
       if (!pending.length) return;
@@ -104,10 +107,12 @@ export default function GsapScrollBatch({
       };
 
       ScrollTrigger.batch(pending, {
-        start: "top 90%",
+        start: entrance === "portfolio" ? "top 92%" : "top 90%",
         onEnter: reveal,
         once: true,
       });
+
+      requestAnimationFrame(() => ScrollTrigger.refresh());
     },
     { scope: ref, dependencies: [useGsap, itemSelector, stagger, y, entrance] }
   );
@@ -117,6 +122,7 @@ export default function GsapScrollBatch({
       ref={ref}
       className={cn(
         useGsap && MOTION_V2_ENABLED && "gsap-scroll-batch",
+        entrance === "portfolio" && useGsap && MOTION_V2_ENABLED && "gsap-scroll-batch--portfolio",
         className
       )}
     >
