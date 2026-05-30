@@ -10,6 +10,9 @@ import GsapScrollReveal from "@/components/motion/GsapScrollReveal";
 import useMotionTier from "@/hooks/useMotionTier";
 import { heroMaskVariants } from "@/lib/motion";
 
+const aboutGlassTile =
+  "px-8 py-7 sm:px-12 sm:py-10 rounded-[1.25rem] sm:rounded-3xl flex-1 min-h-[6.25rem] sm:min-h-[7.25rem]";
+
 export default function About() {
   const { t, mounted } = useTranslation();
   const tier = useMotionTier();
@@ -148,14 +151,14 @@ export default function About() {
               initial="hidden"
               whileInView="show"
               viewport={smoothViewport}
-              className="flex-1 flex flex-col justify-between gap-5 sm:gap-6 min-h-0"
+              className="flex-1 flex flex-col justify-between gap-4 sm:gap-5 min-h-0"
             >
               {t.about.skillDetails.map((skill, index) => (
                 <GlassHoverCard
                   key={index}
                   accent="#6366f1"
                   variants={skillListItem}
-                  className="px-7 py-6 sm:px-10 sm:py-8 rounded-2xl flex-1 flex items-center min-h-[5.25rem] sm:min-h-[6rem]"
+                  className={cn(aboutGlassTile, "flex items-center")}
                 >
                   <div className="flex gap-3 text-xl font-medium leading-snug w-full">
                     <span
@@ -189,14 +192,14 @@ export default function About() {
               initial="hidden"
               whileInView="show"
               viewport={smoothViewport}
-              className="flex-1 flex flex-col justify-between gap-5 sm:gap-6 min-h-0"
+              className="flex-1 flex flex-col justify-between gap-4 sm:gap-5 min-h-0"
             >
               {t.about.hobbiesGroups.map((group, index) => (
                 <GlassHoverCard
                   key={index}
                   accent="#a855f7"
                   variants={skillListItem}
-                  className="px-7 py-6 sm:px-10 sm:py-8 rounded-2xl flex-1 flex flex-col justify-center min-h-[5.25rem] sm:min-h-[6rem]"
+                  className={cn(aboutGlassTile, "flex flex-col justify-center")}
                 >
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-2 h-2 shrink-0 rounded-full bg-purple-500 transition-transform duration-300 group-hover:scale-125" />
