@@ -21,8 +21,9 @@ function markRevealing(el: Element, active: boolean) {
 
 function finishGenieItem(el: Element) {
   markRevealing(el, false);
-  gsap.set(el, { clearProps: "transform,borderRadius,willChange" });
+  gsap.set(el, { clearProps: "transform,borderRadius,willChange,overflow" });
   (el as HTMLElement).style.willChange = "auto";
+  (el as HTMLElement).style.overflow = "visible";
 }
 
 type PortfolioGenieGridProps = {

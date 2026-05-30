@@ -35,6 +35,9 @@ type ProjectCardProps = {
 const cardHeights =
   "h-[320px] sm:h-[380px] lg:h-[450px] rounded-3xl";
 
+const glassHoverWrap =
+  "overflow-visible p-2 sm:p-3 [transform-style:preserve-3d]";
+
 export default function ProjectCard({
   id,
   title,
@@ -143,7 +146,11 @@ export default function ProjectCard({
   );
 
   if (genieGsap) {
-    return cardInner;
+    return glassHover ? (
+      <div className={glassHoverWrap}>{cardInner}</div>
+    ) : (
+      cardInner
+    );
   }
 
   if (batchReveal) {
@@ -152,7 +159,7 @@ export default function ProjectCard({
         ref={ref}
         data-scroll-batch-item
         data-batch-index={index}
-        className="gsap-batch-item"
+        className={cn("gsap-batch-item", glassHover && glassHoverWrap)}
         style={glassHover ? { perspective: "800px" } : undefined}
       >
         {cardInner}
@@ -163,6 +170,7 @@ export default function ProjectCard({
   return (
     <motion.div
       ref={ref}
+      className={glassHover ? glassHoverWrap : undefined}
       style={glassHover ? { perspective: "800px" } : undefined}
       initial={{ opacity: 0, y: 48, x: xOffset }}
       animate={

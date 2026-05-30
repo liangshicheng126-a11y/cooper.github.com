@@ -566,6 +566,11 @@ body.lightbox-open .mobile-top-shell {
 .portfolio-genie-grid [data-genie-item] {
   opacity: 0;
   visibility: hidden;
+  overflow: visible;
+}
+
+.portfolio-genie-grid {
+  overflow: visible;
 }
 
 /* Drop backdrop-filter while batch items animate (transform + blur is costly) */

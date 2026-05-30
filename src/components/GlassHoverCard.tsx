@@ -45,12 +45,14 @@ export default function GlassHoverCard({
   const spotlightActive = tier === "full";
   const reducedActive = tier === "reduced";
   const scaleTarget = tier === "full" ? hoverScale : reducedHoverScale;
+  /** Outer shell stays overflow-visible so 3D tilt / scale are not clipped */
+  const useTransformShell = tier !== "minimal";
 
   const ref = useRef<HTMLDivElement>(null);
   const rawX = useMotionValue(0);
   const rawY = useMotionValue(0);
-  const rotateX = useSpring(useTransform(rawY, [-1, 1], [10, -10]), spring);
-  const rotateY = useSpring(useTransform(rawX, [-1, 1], [-10, 10]), spring);
+  const rotateX = useSpring(useTransform(rawY, [-1, 1], [8, -8]), spring);
+  const rotateY = useSpring(useTransform(rawX, [-1, 1], [-8, 8]), spring);
   const scale = useSpring(1, spring);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -85,6 +87,39 @@ export default function GlassHoverCard({
     }
   };
 
+  const spotlightLayers = (spotlightActive || reducedActive) && (
+    <>
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300"
+        style={{
+          opacity: "var(--spot-opacity, 0)",
+          background: spotlightActive
+            ? `radial-gradient(${spotlightRadius}px circle at var(--spot-x, 50%) var(--spot-y, 50%), ${accent}22, transparent 70%)`
+            : `radial-gradient(ellipse at 50% 50%, ${accent}18, transparent 72%)`,
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 rounded-[inherit] border transition-opacity duration-300"
+        style={{
+          opacity: "var(--spot-opacity, 0)",
+          borderColor: `${accent}55`,
+        }}
+      />
+    </>
+  );
+
+  const content = (
+    <div className={cn("relative z-10", fill && "h-full w-full")}>{children}</div>
+  );
+
+  const shellClasses = cn(
+    "relative glass border-white/5 cursor-default group transition-colors",
+    useTransformShell ? "h-full w-full overflow-hidden rounded-[inherit]" : "overflow-hidden",
+    !useTransformShell && className,
+  );
+
   return (
     <motion.div
       ref={ref}
@@ -108,34 +143,22 @@ export default function GlassHoverCard({
         ["--spot-opacity" as string]: "0",
       }}
       className={cn(
-        "relative glass border-white/5 overflow-hidden cursor-default group transition-colors",
-        className,
+        "relative",
+        useTransformShell ? "overflow-visible" : shellClasses,
+        useTransformShell && className,
       )}
     >
-      {(spotlightActive || reducedActive) && (
+      {useTransformShell ? (
+        <div className={shellClasses}>
+          {spotlightLayers}
+          {content}
+        </div>
+      ) : (
         <>
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300"
-            style={{
-              opacity: "var(--spot-opacity, 0)",
-              background: spotlightActive
-                ? `radial-gradient(${spotlightRadius}px circle at var(--spot-x, 50%) var(--spot-y, 50%), ${accent}22, transparent 70%)`
-                : `radial-gradient(ellipse at 50% 50%, ${accent}18, transparent 72%)`,
-            }}
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 rounded-[inherit] border transition-opacity duration-300"
-            style={{
-              opacity: "var(--spot-opacity, 0)",
-              borderColor: `${accent}55`,
-            }}
-          />
+          {spotlightLayers}
+          {content}
         </>
       )}
-
-      <div className={cn("relative z-10", fill && "h-full w-full")}>{children}</div>
     </motion.div>
   );
 }

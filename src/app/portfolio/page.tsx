@@ -87,6 +87,7 @@ export default function Portfolio() {
               key={project.id}
               data-genie-item
               data-genie-index={i}
+              className="overflow-visible"
               style={{ perspective: "800px" }}
             >
               <ProjectCard
