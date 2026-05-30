@@ -28,6 +28,8 @@ type GlassHoverCardProps = Omit<HTMLMotionProps<"div">, "children"> & {
   spotlight?: boolean;
   /** Stretch inner content to fill card height */
   fill?: boolean;
+  /** Fired when pointer enters/leaves the tilt layer */
+  onHoverChange?: (hovered: boolean) => void;
 };
 
 export default function GlassHoverCard({
@@ -40,6 +42,7 @@ export default function GlassHoverCard({
   spotlightRadius = 120,
   spotlight = true,
   fill = false,
+  onHoverChange,
   style,
   ...motionProps
 }: GlassHoverCardProps) {
@@ -48,6 +51,7 @@ export default function GlassHoverCard({
   const spotlightActive = spotlight && tier === "full";
   const reducedSpotlight = spotlight && tier === "reduced";
   const scaleTarget = tier === "full" ? hoverScale : reducedHoverScale;
+  const enableHoverScale = scaleTarget !== 1;
   /** Outer shell stays overflow-visible so 3D tilt / scale are not clipped */
   const useTransformShell = tier !== "minimal";
 
@@ -74,22 +78,28 @@ export default function GlassHoverCard({
   };
 
   const handleMouseEnter = () => {
+    onHoverChange?.(true);
     if (tier === "minimal") {
       if (spotlight) {
         ref.current?.style.setProperty("border-color", `${accent}33`);
       }
       return;
     }
-    scale.set(scaleTarget);
+    if (enableHoverScale) {
+      scale.set(scaleTarget);
+    }
     if (spotlight) {
       ref.current?.style.setProperty("--spot-opacity", "1");
     }
   };
 
   const handleMouseLeave = () => {
+    onHoverChange?.(false);
     rawX.set(0);
     rawY.set(0);
-    scale.set(1);
+    if (enableHoverScale) {
+      scale.set(1);
+    }
     if (spotlight) {
       ref.current?.style.setProperty("--spot-opacity", "0");
     }
@@ -148,7 +158,7 @@ export default function GlassHoverCard({
               transformOrigin: "center center",
             }
           : {}),
-        ...(tier !== "minimal" ? { scale } : {}),
+        ...(tier !== "minimal" && enableHoverScale ? { scale } : {}),
         ["--spot-x" as string]: "50%",
         ["--spot-y" as string]: "50%",
         ["--spot-opacity" as string]: "0",

@@ -74,8 +74,10 @@ export default function ProjectCard({
         "group relative block overflow-hidden cursor-pointer",
         glassHover ? "h-full rounded-[inherit]" : cn(cardHeights, "glass border-white/10"),
       )}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      {...(tiltOnly ? {} : {
+        onMouseEnter: () => setHovered(true),
+        onMouseLeave: () => setHovered(false),
+      })}
     >
       <motion.div
         className="absolute inset-0"
@@ -87,7 +89,16 @@ export default function ProjectCard({
           backgroundPosition: "center",
         }}
       >
-        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/45 transition-colors duration-500" />
+        <div
+          className={cn(
+            "absolute inset-0",
+            tiltOnly
+              ? hovered
+                ? "bg-black/45"
+                : "bg-black/30"
+              : "bg-black/30 group-hover:bg-black/45 transition-colors duration-500",
+          )}
+        />
       </motion.div>
 
       {!glassHover && (
@@ -105,21 +116,44 @@ export default function ProjectCard({
         />
       )}
 
-      <div className="absolute inset-0 p-6 sm:p-10 lg:p-12 flex flex-col justify-end bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <div className="translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-out">
-          <span className="text-white/60 text-sm font-medium mb-2 block uppercase tracking-widest">
-            {category}
-          </span>
-          <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6 leading-tight">
-            {title}
-          </h3>
-          <div className="inline-flex items-center space-x-3 text-white font-semibold group/btn">
-            <span>{viewProject}</span>
-            {tiltOnly ? (
-              <div className="p-3 rounded-full bg-white/20 group-hover/btn:bg-white group-hover/btn:text-black transition-colors">
+      {tiltOnly ? (
+        <div
+          className={cn(
+            "absolute inset-0 p-6 sm:p-10 lg:p-12 flex flex-col justify-end bg-black/10",
+            hovered ? "opacity-100" : "opacity-0 pointer-events-none",
+          )}
+        >
+          <div>
+            <span className="text-white/60 text-sm font-medium mb-2 block uppercase tracking-widest">
+              {category}
+            </span>
+            <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6 leading-tight">
+              {title}
+            </h3>
+            <div className="inline-flex items-center space-x-3 text-white font-semibold">
+              <span>{viewProject}</span>
+              <div
+                className={cn(
+                  "p-3 rounded-full",
+                  hovered ? "bg-white text-black" : "bg-white/20 text-white",
+                )}
+              >
                 <ArrowUpRight className="w-5 h-5" />
               </div>
-            ) : (
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="absolute inset-0 p-6 sm:p-10 lg:p-12 flex flex-col justify-end bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-out">
+            <span className="text-white/60 text-sm font-medium mb-2 block uppercase tracking-widest">
+              {category}
+            </span>
+            <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6 leading-tight">
+              {title}
+            </h3>
+            <div className="inline-flex items-center space-x-3 text-white font-semibold group/btn">
+              <span>{viewProject}</span>
               <motion.div
                 className="p-3 rounded-full bg-white/20 group-hover/btn:bg-white group-hover/btn:text-black"
                 animate={{ scale: hovered ? 1.08 : 1 }}
@@ -127,18 +161,29 @@ export default function ProjectCard({
               >
                 <ArrowUpRight className="w-5 h-5" />
               </motion.div>
-            )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
-      <motion.div
-        className="absolute top-8 right-8 p-3 rounded-full glass border-white/20 text-white"
-        animate={{ opacity: hovered ? 0 : 1, scale: hovered ? 0.8 : 1 }}
-        transition={{ duration: 0.2 }}
-      >
-        <ArrowUpRight className="w-5 h-5" />
-      </motion.div>
+      {tiltOnly ? (
+        <div
+          className={cn(
+            "absolute top-8 right-8 p-3 rounded-full glass border-white/20 text-white",
+            hovered ? "opacity-0 scale-90" : "opacity-100 scale-100",
+          )}
+        >
+          <ArrowUpRight className="w-5 h-5" />
+        </div>
+      ) : (
+        <motion.div
+          className="absolute top-8 right-8 p-3 rounded-full glass border-white/20 text-white"
+          animate={{ opacity: hovered ? 0 : 1, scale: hovered ? 0.8 : 1 }}
+          transition={{ duration: 0.2 }}
+        >
+          <ArrowUpRight className="w-5 h-5" />
+        </motion.div>
+      )}
     </Link>
   );
 
@@ -149,6 +194,7 @@ export default function ProjectCard({
       hoverScale={tiltOnly ? 1 : 1.02}
       reducedHoverScale={1}
       spotlight={false}
+      onHoverChange={tiltOnly ? setHovered : undefined}
       className={cn(cardHeights, "border-white/10 cursor-pointer")}
     >
       {link}
