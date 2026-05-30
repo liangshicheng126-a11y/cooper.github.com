@@ -9,11 +9,13 @@ import useMotionTier from "@/hooks/useMotionTier";
 import { MOTION_V2_ENABLED, shouldUseGsap } from "@/lib/motion";
 import {
   getCardGenieOffset,
+  getGenieTransformOrigin,
   getPortfolioNavOrigin,
 } from "@/lib/navGenieOrigin";
 
 const STAGGER = 0.1;
-const GENIE_DURATION = 0.8;
+const GENIE_DURATION = 0.85;
+const GENIE_START_SCALE = 0.06;
 
 function markRevealing(el: Element, active: boolean) {
   el.classList.toggle("is-revealing", active);
@@ -21,7 +23,9 @@ function markRevealing(el: Element, active: boolean) {
 
 function finishGenieItem(el: Element) {
   markRevealing(el, false);
-  gsap.set(el, { clearProps: "transform,borderRadius,willChange,overflow" });
+  gsap.set(el, {
+    clearProps: "transform,borderRadius,willChange,overflow,transformOrigin",
+  });
   (el as HTMLElement).style.willChange = "auto";
   (el as HTMLElement).style.overflow = "visible";
 }
@@ -68,9 +72,10 @@ export default function PortfolioGenieGrid({
             autoAlpha: 0,
             x: offset.x,
             y: offset.y,
-            scale: 0.08,
+            scale: GENIE_START_SCALE,
             borderRadius: 12,
             overflow: "hidden",
+            transformOrigin: getGenieTransformOrigin(item, origin),
             force3D: true,
           });
           return;

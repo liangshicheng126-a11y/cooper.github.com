@@ -148,14 +148,14 @@ export default function About() {
               initial="hidden"
               whileInView="show"
               viewport={smoothViewport}
-              className="flex-1 flex flex-col justify-between gap-4 sm:gap-5 min-h-0"
+              className="flex-1 flex flex-col justify-between gap-5 sm:gap-6 min-h-0"
             >
               {t.about.skillDetails.map((skill, index) => (
                 <GlassHoverCard
                   key={index}
                   accent="#6366f1"
                   variants={skillListItem}
-                  className="px-6 py-5 sm:px-8 sm:py-6 rounded-2xl flex-1 flex items-center min-h-[4.5rem] sm:min-h-[5rem]"
+                  className="px-7 py-6 sm:px-10 sm:py-8 rounded-2xl flex-1 flex items-center min-h-[5.25rem] sm:min-h-[6rem]"
                 >
                   <div className="flex gap-3 text-xl font-medium leading-snug w-full">
                     <span
@@ -189,14 +189,14 @@ export default function About() {
               initial="hidden"
               whileInView="show"
               viewport={smoothViewport}
-              className="flex-1 flex flex-col justify-between gap-4 sm:gap-5 min-h-0"
+              className="flex-1 flex flex-col justify-between gap-5 sm:gap-6 min-h-0"
             >
               {t.about.hobbiesGroups.map((group, index) => (
                 <GlassHoverCard
                   key={index}
                   accent="#a855f7"
                   variants={skillListItem}
-                  className="px-6 py-5 sm:px-8 sm:py-6 rounded-2xl flex-1 flex flex-col justify-center min-h-0"
+                  className="px-7 py-6 sm:px-10 sm:py-8 rounded-2xl flex-1 flex flex-col justify-center min-h-[5.25rem] sm:min-h-[6rem]"
                 >
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-2 h-2 shrink-0 rounded-full bg-purple-500 transition-transform duration-300 group-hover:scale-125" />

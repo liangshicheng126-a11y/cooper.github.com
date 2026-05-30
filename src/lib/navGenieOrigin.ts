@@ -34,3 +34,16 @@ export function getCardGenieOffset(
     y: origin.y - cy,
   };
 }
+
+/** CSS transform-origin toward the nav briefcase (macOS genie anchor) */
+export function getGenieTransformOrigin(
+  cardEl: HTMLElement,
+  origin: NavOrigin
+): string {
+  const rect = cardEl.getBoundingClientRect();
+  if (rect.width === 0 || rect.height === 0) return "50% 50%";
+
+  const x = ((origin.x - rect.left) / rect.width) * 100;
+  const y = ((origin.y - rect.top) / rect.height) * 100;
+  return `${x}% ${y}%`;
+}

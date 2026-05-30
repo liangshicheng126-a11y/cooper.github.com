@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import ProjectCard from "@/components/ProjectCard";
+import PortfolioGenieGrid from "@/components/motion/PortfolioGenieGrid";
 import useMotionTier from "@/hooks/useMotionTier";
 import { heroMaskVariants } from "@/lib/motion";
 
@@ -80,19 +81,20 @@ export default function Portfolio() {
           </motion.p>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
-          {projects.map((project) => (
-            <ProjectCard
-              key={project.id}
-              id={project.id}
-              title={project.title}
-              category={project.category}
-              image={project.image}
-              viewProject={t.portfolio.viewProject}
-              accent={project.accent}
-            />
+        <PortfolioGenieGrid className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
+          {projects.map((project, i) => (
+            <div key={project.id} data-genie-item data-genie-index={i}>
+              <ProjectCard
+                id={project.id}
+                title={project.title}
+                category={project.category}
+                image={project.image}
+                viewProject={t.portfolio.viewProject}
+                accent={project.accent}
+              />
+            </div>
           ))}
-        </div>
+        </PortfolioGenieGrid>
 
         {/* CTA Section */}
         <motion.section
