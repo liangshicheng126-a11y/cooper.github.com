@@ -7,9 +7,12 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import ProjectCard from "@/components/ProjectCard";
 import GsapScrollBatch from "@/components/motion/GsapScrollBatch";
+import useMotionTier from "@/hooks/useMotionTier";
+import { heroMaskVariants } from "@/lib/motion";
 
 export default function Portfolio() {
   const { t, mounted } = useTranslation();
+  const tier = useMotionTier();
 
   if (!mounted) return null;
 
@@ -59,15 +62,7 @@ export default function Portfolio() {
     show: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
   };
 
-  const heroMask = {
-    hidden: { opacity: 0, y: 30, clipPath: "inset(0 0 100% 0)" },
-    show: {
-      opacity: 1,
-      y: 0,
-      clipPath: "inset(0 0 0% 0)",
-      transition: { duration: 1.0, ease: [0.22, 1, 0.36, 1] },
-    },
-  };
+  const heroMask = heroMaskVariants(tier);
 
   return (
     <div className={cn("pb-4 sm:pb-6", !mounted && "opacity-0")}>

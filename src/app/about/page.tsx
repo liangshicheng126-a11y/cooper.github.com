@@ -6,9 +6,12 @@ import { Zap, ArrowRight, Coffee } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import GsapScrollReveal from "@/components/motion/GsapScrollReveal";
+import useMotionTier from "@/hooks/useMotionTier";
+import { heroMaskVariants } from "@/lib/motion";
 
 export default function About() {
   const { t, mounted } = useTranslation();
+  const tier = useMotionTier();
 
   if (!mounted) return null;
 
@@ -27,15 +30,7 @@ export default function About() {
     show: { opacity: 1, y: 0, transition: { duration: 0.6 } },
   };
 
-  const heroMask = {
-    hidden: { opacity: 0, y: 30, clipPath: "inset(0 0 100% 0)" },
-    show: {
-      opacity: 1,
-      y: 0,
-      clipPath: "inset(0 0 0% 0)",
-      transition: { duration: 1.0, ease: [0.22, 1, 0.36, 1] },
-    },
-  };
+  const heroMask = heroMaskVariants(tier);
 
   const scrollSlideViewport = { once: true, amount: 0.35, margin: "0px 0px -40px 0px" as const };
   const scrollEase = [0.22, 1, 0.36, 1] as const;

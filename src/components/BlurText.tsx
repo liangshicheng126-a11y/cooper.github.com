@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState, useMemo } from "react";
+import useMotionTier from "@/hooks/useMotionTier";
 
 type BlurTextProps = {
   text?: string;
@@ -41,6 +42,8 @@ export default function BlurText({
   stepDuration = 0.38,
   onAnimationComplete,
 }: BlurTextProps) {
+  const tier = useMotionTier();
+  const useBlur = tier === "full";
   const elements = animateBy === "words" ? text.split(" ") : text.split("");
   const [inView, setInView] = useState(false);
   const ref = useRef<HTMLParagraphElement>(null);
@@ -60,25 +63,23 @@ export default function BlurText({
     return () => observer.disconnect();
   }, [threshold, rootMargin]);
 
-  const defaultFrom = useMemo(
-    () =>
-      direction === "top"
-        ? { filter: "blur(10px)", opacity: 0, y: -40 }
-        : { filter: "blur(10px)", opacity: 0, y: 40 },
-    [direction]
-  );
+  const defaultFrom = useMemo(() => {
+    if (useBlur) {
+      return direction === "top"
+        ? { filter: "blur(6px)", opacity: 0, y: -28 }
+        : { filter: "blur(6px)", opacity: 0, y: 28 };
+    }
+    return direction === "top"
+      ? { opacity: 0, y: -28 }
+      : { opacity: 0, y: 28 };
+  }, [direction, useBlur]);
 
-  const defaultTo = useMemo(
-    () => [
-      {
-        filter: "blur(4px)",
-        opacity: 0.5,
-        y: direction === "top" ? 4 : -4,
-      },
-      { filter: "blur(0px)", opacity: 1, y: 0 },
-    ],
-    [direction]
-  );
+  const defaultTo = useMemo(() => {
+    if (useBlur) {
+      return [{ filter: "blur(0px)", opacity: 1, y: 0 }];
+    }
+    return [{ opacity: 1, y: 0 }];
+  }, [useBlur]);
 
   const stepCount = defaultTo.length + 1;
   const totalDuration = stepDuration * (stepCount - 1);

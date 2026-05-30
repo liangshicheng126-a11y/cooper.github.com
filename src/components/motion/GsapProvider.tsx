@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -15,11 +15,25 @@ function ensureScrollTrigger() {
 
 export default function GsapProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const refreshTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const rafId = useRef<number | null>(null);
 
   useEffect(() => {
     ensureScrollTrigger();
-    const id = requestAnimationFrame(() => ScrollTrigger.refresh());
-    return () => cancelAnimationFrame(id);
+
+    if (rafId.current) cancelAnimationFrame(rafId.current);
+    if (refreshTimer.current) clearTimeout(refreshTimer.current);
+
+    rafId.current = requestAnimationFrame(() => {
+      refreshTimer.current = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 100);
+    });
+
+    return () => {
+      if (rafId.current) cancelAnimationFrame(rafId.current);
+      if (refreshTimer.current) clearTimeout(refreshTimer.current);
+    };
   }, [pathname]);
 
   return <>{children}</>;

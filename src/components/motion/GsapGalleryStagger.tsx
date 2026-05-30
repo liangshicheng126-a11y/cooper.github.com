@@ -5,6 +5,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
+import useMotionTier from "@/hooks/useMotionTier";
 import { STAGGER, shouldUseGsap } from "@/lib/motion";
 import { isElementInViewport } from "@/lib/scrollMotion";
 
@@ -22,17 +23,14 @@ export default function GsapGalleryStagger({
 }: GsapGalleryStaggerProps) {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = usePrefersReducedMotion();
+  const tier = useMotionTier();
   const useGsap = shouldUseGsap(reduced);
+  const enableStagger = useGsap && tier === "full";
 
   useGSAP(
     () => {
       const root = ref.current;
-      if (!root || !useGsap) return;
-
-      const isCoarse =
-        typeof window !== "undefined" &&
-        window.matchMedia("(max-width: 640px)").matches;
-      if (isCoarse) return;
+      if (!root || !enableStagger) return;
 
       const items = root.querySelectorAll(itemSelector);
       if (!items.length) return;
@@ -65,7 +63,7 @@ export default function GsapGalleryStagger({
         },
       });
     },
-    { scope: ref, dependencies: [useGsap, itemSelector] }
+    { scope: ref, dependencies: [enableStagger, itemSelector] }
   );
 
   return <div ref={ref}>{children}</div>;

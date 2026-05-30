@@ -7,6 +7,7 @@ import LanguageToggle from "@/components/LanguageToggle";
 import PageTransition from "@/components/PageTransition";
 import ScrollBlobs from "@/components/ScrollBlobs";
 import GsapProvider from "@/components/motion/GsapProvider";
+import MotionTierProvider from "@/components/motion/MotionTierProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 const siteUrl =
@@ -46,6 +47,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
         <LanguageProvider>
+          <MotionTierProvider>
           <GsapProvider>
             <ScrollBlobs />
 
@@ -60,6 +62,7 @@ export default function RootLayout({
               </main>
             </div>
           </GsapProvider>
+          </MotionTierProvider>
         </LanguageProvider>
       </body>
     </html>

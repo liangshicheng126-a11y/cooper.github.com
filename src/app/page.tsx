@@ -14,9 +14,13 @@ import ProjectCard from "@/components/ProjectCard";
 import GsapParallaxLayer from "@/components/motion/GsapParallaxLayer";
 import GsapScrollBatch from "@/components/motion/GsapScrollBatch";
 import HomeScrollStack from "@/components/motion/HomeScrollStack";
+import useMotionTier from "@/hooks/useMotionTier";
+import { heroMaskVariants } from "@/lib/motion";
 
 export default function Home() {
   const { t, mounted } = useTranslation();
+  const tier = useMotionTier();
+  const heroMask = heroMaskVariants(tier);
 
   const container = {
     hidden: { opacity: 0 },
@@ -31,16 +35,6 @@ export default function Home() {
   const item = {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
-  };
-
-  const heroMask = {
-    hidden: { opacity: 0, y: 36, clipPath: "inset(0 0 100% 0)" },
-    show: {
-      opacity: 1,
-      y: 0,
-      clipPath: "inset(0 0 0% 0)",
-      transition: { duration: 1.1, ease: [0.22, 1, 0.36, 1] },
-    },
   };
 
   const heroSoft = {
@@ -226,7 +220,7 @@ export default function Home() {
               { name: "Premiere", icon: Film, color: "#9999FF" },
             ].map((tool, i) => (
               <div key={i} data-scroll-batch-item style={{ perspective: "800px" }}>
-                <ToolCard index={i} {...tool} />
+                <ToolCard index={i} batchReveal {...tool} />
               </div>
             ))}
           </GsapScrollBatch>

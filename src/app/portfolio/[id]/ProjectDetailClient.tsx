@@ -11,6 +11,8 @@ import MasonryGallery, { MasonryItem } from "@/components/MasonryGallery";
 import { mapDisplaySources, thumbSrc } from "@/lib/galleryImageUrl";
 import ConstructionHero from "@/components/motion/ConstructionHero";
 import GsapGalleryStagger from "@/components/motion/GsapGalleryStagger";
+import useMotionTier from "@/hooks/useMotionTier";
+import { heroMaskVariants } from "@/lib/motion";
 
 /** Deterministic shuffle — avoids re-randomizing on each render (mobile re-render storms). */
 function stableShufflePosters(items: string[]) {
@@ -52,6 +54,7 @@ type ProjectVideo = {
 
 export default function ProjectDetailClient({ id, photographyGroups = [], posters = [] }: Props) {
   const { t, mounted } = useTranslation();
+  const tier = useMotionTier();
   const [lightboxPhotos, setLightboxPhotos] = useState<string[] | null>(null);
   const [lightboxFallbacks, setLightboxFallbacks] = useState<string[] | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState(0);
@@ -153,15 +156,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
     },
   };
 
-  const heroMask = {
-    hidden: { opacity: 0, y: 30, clipPath: "inset(0 0 100% 0)" },
-    show: {
-      opacity: 1,
-      y: 0,
-      clipPath: "inset(0 0 0% 0)",
-      transition: { duration: 1.0, ease: [0.22, 1, 0.36, 1] },
-    },
-  };
+  const heroMask = heroMaskVariants(tier);
 
   if (id === "p2") {
     return (

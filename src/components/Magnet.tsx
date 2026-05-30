@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
 
 type MagnetProps = {
   children: React.ReactNode;
@@ -19,56 +20,77 @@ export default function Magnet({
   wrapperClassName = "",
   innerClassName = "",
 }: MagnetProps) {
-  const [isActive, setIsActive] = useState(false);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
   const magnetRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
+  const xTo = useRef<gsap.QuickToFunc | null>(null);
+  const yTo = useRef<gsap.QuickToFunc | null>(null);
 
   useEffect(() => {
-    // Only enable on non-touch devices
     if (typeof window !== "undefined" && window.matchMedia("(hover: none)").matches) {
       return;
     }
 
-    if (disabled) {
-      setPosition({ x: 0, y: 0 });
+    const inner = innerRef.current;
+    if (!inner || disabled) {
+      if (inner) gsap.set(inner, { x: 0, y: 0, clearProps: "transform" });
       return;
     }
 
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!magnetRef.current) return;
-      const { left, top, width, height } =
-        magnetRef.current.getBoundingClientRect();
+    xTo.current = gsap.quickTo(inner, "x", { duration: 0.2, ease: "power2.out" });
+    yTo.current = gsap.quickTo(inner, "y", { duration: 0.5, ease: "power2.inOut" });
+
+    let rafId = 0;
+    let pendingX = 0;
+    let pendingY = 0;
+    let pendingActive = false;
+
+    const flush = () => {
+      rafId = 0;
+      if (!magnetRef.current || !xTo.current || !yTo.current) return;
+
+      const { left, top, width, height } = magnetRef.current.getBoundingClientRect();
       const centerX = left + width / 2;
       const centerY = top + height / 2;
-      const distX = Math.abs(centerX - e.clientX);
-      const distY = Math.abs(centerY - e.clientY);
 
-      if (distX < width / 2 + padding && distY < height / 2 + padding) {
-        setIsActive(true);
-        const offsetX = (e.clientX - centerX) / magnetStrength;
-        const offsetY = (e.clientY - centerY) / magnetStrength;
-        setPosition({ x: offsetX, y: offsetY });
+      if (pendingActive) {
+        xTo.current((pendingX - centerX) / magnetStrength);
+        yTo.current((pendingY - centerY) / magnetStrength);
       } else {
-        setIsActive(false);
-        setPosition({ x: 0, y: 0 });
+        xTo.current(0);
+        yTo.current(0);
       }
     };
 
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [padding, disabled, magnetStrength]);
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!magnetRef.current) return;
+      const { left, top, width, height } = magnetRef.current.getBoundingClientRect();
+      const distX = Math.abs(left + width / 2 - e.clientX);
+      const distY = Math.abs(top + height / 2 - e.clientY);
 
-  const transitionStyle = isActive
-    ? "transform 0.2s ease-out"
-    : "transform 0.5s ease-in-out";
+      pendingActive =
+        distX < width / 2 + padding && distY < height / 2 + padding;
+      pendingX = e.clientX;
+      pendingY = e.clientY;
+
+      if (!rafId) rafId = requestAnimationFrame(flush);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      if (rafId) cancelAnimationFrame(rafId);
+      gsap.set(inner, { x: 0, y: 0, clearProps: "transform" });
+      xTo.current = null;
+      yTo.current = null;
+    };
+  }, [padding, disabled, magnetStrength]);
 
   return (
     <div ref={magnetRef} className={wrapperClassName} style={{ display: "inline-flex" }}>
       <div
+        ref={innerRef}
         className={innerClassName}
         style={{
-          transform: `translate(${position.x}px, ${position.y}px)`,
-          transition: transitionStyle,
           display: "inline-flex",
           width: "100%",
         }}

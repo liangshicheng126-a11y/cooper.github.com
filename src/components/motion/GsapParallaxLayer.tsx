@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
+import useMotionTier from "@/hooks/useMotionTier";
 import { MOTION_V2_ENABLED, PARALLAX, shouldUseGsap } from "@/lib/motion";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -22,21 +23,18 @@ export default function GsapParallaxLayer({
   children,
   className,
   amount = PARALLAX.y,
-  scrub = PARALLAX.scrub,
+  scrub = 0.6,
 }: GsapParallaxLayerProps) {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = usePrefersReducedMotion();
+  const tier = useMotionTier();
   const useGsap = shouldUseGsap(reduced);
+  const enableParallax = useGsap && tier === "full";
 
   useGSAP(
     () => {
       const el = ref.current;
-      if (!el || !useGsap) return;
-
-      const isCoarse =
-        typeof window !== "undefined" &&
-        window.matchMedia("(max-width: 640px)").matches;
-      if (isCoarse) return;
+      if (!el || !enableParallax) return;
 
       gsap.to(el, {
         y: amount,
@@ -50,14 +48,14 @@ export default function GsapParallaxLayer({
         },
       });
     },
-    { scope: ref, dependencies: [useGsap, amount, scrub] }
+    { scope: ref, dependencies: [enableParallax, amount, scrub] }
   );
 
   return (
     <div
       ref={ref}
       className={cn(
-        useGsap && MOTION_V2_ENABLED && "gsap-parallax",
+        enableParallax && MOTION_V2_ENABLED && "gsap-parallax",
         className
       )}
     >
