@@ -169,12 +169,26 @@ body {
   background: linear-gradient(45deg, #0f172a, #020617);
 }
 
-.blob {
+.blob-scroll-wrap {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.blob-route {
   position: absolute;
   top: 0;
   left: 0;
   width: min(56vw, 760px);
   aspect-ratio: 1 / 1;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+.blob {
+  position: relative;
+  width: 100%;
+  height: 100%;
   border-radius: 39% 61% 48% 52% / 43% 37% 63% 57%;
   background: radial-gradient(circle at 35% 30%, var(--blob-c1, #7c84ff) 0%, var(--blob-c2, #a855f7) 55%, var(--blob-c3, #6b77ff) 100%);
   filter: blur(22px) saturate(125%);
@@ -229,13 +243,77 @@ body {
   --blob-opacity: 0.3;
 }
 
-.blob-a,
-.blob-b,
-.blob-c {
-  /* Transform driven by GSAP in ScrollBlobs — no CSS keyframe routes */
+.blob-route.blob-a {
+  animation: blob-route-a 26s ease-in-out infinite;
+  animation-delay: -2s;
 }
 
-.liquid-bg--static .blob {
+.blob-route.blob-b {
+  animation: blob-route-b 26s ease-in-out infinite;
+  animation-delay: -9s;
+}
+
+.blob-route.blob-c {
+  animation: blob-route-c 26s ease-in-out infinite;
+  animation-delay: -16s;
+}
+
+.blob-route.blob-a .blob {
+  animation: blob-shape-a 13s ease-in-out infinite alternate;
+  animation-delay: -2s;
+}
+
+.blob-route.blob-b .blob {
+  animation: blob-shape-b 16s ease-in-out infinite alternate;
+  animation-delay: -9s;
+}
+
+.blob-route.blob-c .blob {
+  animation: blob-shape-c 19s ease-in-out infinite alternate;
+  animation-delay: -16s;
+}
+
+@keyframes blob-route-a {
+  0% { transform: translate3d(-18vw, -20vh, 0) scale(1) rotate(0deg); }
+  33% { transform: translate3d(60vw, 6vh, 0) scale(1.14) rotate(11deg); }
+  66% { transform: translate3d(8vw, 58vh, 0) scale(0.9) rotate(-8deg); }
+  100% { transform: translate3d(-18vw, -20vh, 0) scale(1) rotate(0deg); }
+}
+
+@keyframes blob-route-b {
+  0% { transform: translate3d(60vw, 6vh, 0) scale(1.05) rotate(5deg); }
+  33% { transform: translate3d(8vw, 58vh, 0) scale(0.92) rotate(-9deg); }
+  66% { transform: translate3d(-18vw, -20vh, 0) scale(1.12) rotate(10deg); }
+  100% { transform: translate3d(60vw, 6vh, 0) scale(1.05) rotate(5deg); }
+}
+
+@keyframes blob-route-c {
+  0% { transform: translate3d(8vw, 58vh, 0) scale(0.96) rotate(-4deg); }
+  33% { transform: translate3d(-18vw, -20vh, 0) scale(1.1) rotate(8deg); }
+  66% { transform: translate3d(60vw, 6vh, 0) scale(0.9) rotate(-10deg); }
+  100% { transform: translate3d(8vw, 58vh, 0) scale(0.96) rotate(-4deg); }
+}
+
+@keyframes blob-shape-a {
+  0% { border-radius: 39% 61% 48% 52% / 43% 37% 63% 57%; }
+  50% { border-radius: 54% 46% 41% 59% / 58% 42% 51% 49%; }
+  100% { border-radius: 44% 56% 60% 40% / 36% 64% 44% 56%; }
+}
+
+@keyframes blob-shape-b {
+  0% { border-radius: 46% 54% 36% 64% / 58% 39% 61% 42%; }
+  50% { border-radius: 37% 63% 55% 45% / 41% 60% 40% 59%; }
+  100% { border-radius: 50% 50% 43% 57% / 55% 44% 56% 45%; }
+}
+
+@keyframes blob-shape-c {
+  0% { border-radius: 58% 42% 52% 48% / 48% 61% 39% 52%; }
+  50% { border-radius: 42% 58% 60% 40% / 63% 36% 64% 37%; }
+  100% { border-radius: 53% 47% 46% 54% / 40% 55% 45% 60%; }
+}
+
+.liquid-bg--static .blob-route,
+.liquid-bg--static .blob-route .blob {
   animation: none;
 }
 
@@ -255,6 +333,11 @@ body {
 [data-motion-tier="reduced"] .blob::before,
 [data-motion-tier="reduced"] .blob::after {
   display: none;
+}
+
+[data-motion-tier="minimal"] .blob-route,
+[data-motion-tier="minimal"] .blob-route .blob {
+  animation: none;
 }
 
 [data-motion-tier="minimal"] .blob {
@@ -458,8 +541,12 @@ body.lightbox-open .mobile-top-shell {
 
 /* Gallery detail: keep gradient + blobs; lighter GPU on small screens */
 @media (max-width: 640px) {
-  .liquid-bg--gallery .blob {
+  .liquid-bg--gallery .blob-route,
+  .liquid-bg--gallery .blob-route .blob {
     animation: none;
+  }
+
+  .liquid-bg--gallery .blob {
     filter: blur(16px) saturate(115%);
   }
 
@@ -477,7 +564,8 @@ body.lightbox-open .mobile-top-shell {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .liquid-bg .blob {
+  .liquid-bg .blob-route,
+  .liquid-bg .blob-route .blob {
     animation: none;
   }
 
