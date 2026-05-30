@@ -1,0 +1,30 @@
+---
+description: 动效组件与 GSAP 实现约定
+globs: src/components/motion/**/*,src/components/ScrollBlobs.tsx,src/lib/motion.ts,src/hooks/useMotionTier.ts
+alwaysApply: false
+---
+
+# 动效组件约定
+
+## 档位检查（每个新动效必做）
+
+```tsx
+const tier = useMotionTier();
+if (tier === "minimal") return null; // 或静态 fallback
+```
+
+## GsapScrollBatch
+
+- `entrance="portfolio"`：卡片 scale/rotate 入场；配合 `playOnMount` 用于 `/portfolio` 首屏。
+- 默认 entrance：仅 `y` + `opacity`，用于首页预览等轻量场景。
+- 入场期间避免与 `backdrop-filter` 同时 heavy animate；动画结束清理 `will-change`。
+
+## ScrollBlobs
+
+- GSAP scrub 只作用于 `.blob-scroll-wrap`；路径/形变用 CSS keyframes（`blob-route-*`、`blob-shape-*`）。
+- 桌面 `full`：rAF 节流 mousemove + `gsap.quickTo` 磁吸与 border-radius 形变。
+
+## 性能
+
+- 优先 `transform` / `opacity`；大列表用 stagger，避免同时 pin 多个 ScrollTrigger。
+- 改完在 `full`、`reduced`、`minimal` 三档各目测一次，必要时 `npm run build`。

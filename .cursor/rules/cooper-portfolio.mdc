@@ -1,0 +1,32 @@
+---
+description: cooperliang.top 作品集项目上下文与协作约定
+alwaysApply: true
+---
+
+# cooperliang.top 作品集
+
+Next.js 15 + React 19 + Tailwind + GSAP ScrollTrigger + Framer Motion。部署：push `main` → GitHub Pages（`.github/workflows/deploy-pages.yml`）。
+
+## 设计与 UI
+
+- 延续现有 **indigo 玻璃拟态**（sidebar、`ProjectCard`、渐变 blob），不要引入新设计系统或 landing-page 模板风。
+- UI 改动优先读现有组件与 `globals.css` token，再改代码。
+- 需要设计审查时用 **impeccable** 或 **ui-craft-audit**，不要加载已归档的 taste/landing/PPT 类 skill。
+
+## 动效
+
+- 滚动/入场：优先 **GSAP ScrollTrigger**（`GsapScrollBatch`、`GsapScrollReveal` 等），导航/布局 pill 用 **Framer Motion**。
+- 必须尊重 `useMotionTier()` 与 `NEXT_PUBLIC_MOTION_V2`：`full | reduced | minimal` 及 `prefers-reduced-motion`。
+- 背景 blob：`ScrollBlobs` 三层结构（scroll-wrap → route → blob）；`minimal` 用 `liquid-bg--static`。
+- 作品集页卡片可用 `entrance="portfolio"` + `playOnMount`；首页预览用默认轻量入场，避免重 backdrop-filter 叠加。
+- 回滚见 `docs/MOTION_ROLLBACK.md`，基线 tag `pre-motion-refresh-20260529`。
+
+## Git 与部署
+
+- **仅在用户明确说「部署」时** commit 并 push；平时只改文件不提交。
+- 不 force-push `main`，不跳过 hooks。
+
+## 语言与范围
+
+- 默认用**简体中文**回复。
+- 不做学术论文、PPT deck、营销落地页、App mockup 生成——除非用户明确要求并临时恢复对应 skill。
