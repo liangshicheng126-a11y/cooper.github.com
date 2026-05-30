@@ -24,6 +24,8 @@ type GlassHoverCardProps = Omit<HTMLMotionProps<"div">, "children"> & {
   reducedHoverScale?: number;
   /** Radial spotlight size in px */
   spotlightRadius?: number;
+  /** Mouse-follow radial glare on hover */
+  spotlight?: boolean;
   /** Stretch inner content to fill card height */
   fill?: boolean;
 };
@@ -36,14 +38,15 @@ export default function GlassHoverCard({
   hoverScale = 1.03,
   reducedHoverScale = 1.02,
   spotlightRadius = 120,
+  spotlight = true,
   fill = false,
   style,
   ...motionProps
 }: GlassHoverCardProps) {
   const tier = useMotionTier();
   const tiltActive = tier === "full" && enableTilt;
-  const spotlightActive = tier === "full";
-  const reducedActive = tier === "reduced";
+  const spotlightActive = spotlight && tier === "full";
+  const reducedSpotlight = spotlight && tier === "reduced";
   const scaleTarget = tier === "full" ? hoverScale : reducedHoverScale;
   /** Outer shell stays overflow-visible so 3D tilt / scale are not clipped */
   const useTransformShell = tier !== "minimal";
@@ -56,7 +59,7 @@ export default function GlassHoverCard({
   const scale = useSpring(1, spring);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current || !spotlightActive) return;
+    if (!ref.current) return;
     const rect = ref.current.getBoundingClientRect();
     const nx = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
     const ny = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
@@ -64,30 +67,38 @@ export default function GlassHoverCard({
       rawX.set(nx);
       rawY.set(ny);
     }
-    ref.current.style.setProperty("--spot-x", `${e.clientX - rect.left}px`);
-    ref.current.style.setProperty("--spot-y", `${e.clientY - rect.top}px`);
+    if (spotlightActive) {
+      ref.current.style.setProperty("--spot-x", `${e.clientX - rect.left}px`);
+      ref.current.style.setProperty("--spot-y", `${e.clientY - rect.top}px`);
+    }
   };
 
   const handleMouseEnter = () => {
     if (tier === "minimal") {
-      ref.current?.style.setProperty("border-color", `${accent}33`);
+      if (spotlight) {
+        ref.current?.style.setProperty("border-color", `${accent}33`);
+      }
       return;
     }
     scale.set(scaleTarget);
-    ref.current?.style.setProperty("--spot-opacity", "1");
+    if (spotlight) {
+      ref.current?.style.setProperty("--spot-opacity", "1");
+    }
   };
 
   const handleMouseLeave = () => {
     rawX.set(0);
     rawY.set(0);
     scale.set(1);
-    ref.current?.style.setProperty("--spot-opacity", "0");
-    if (tier === "minimal") {
+    if (spotlight) {
+      ref.current?.style.setProperty("--spot-opacity", "0");
+    }
+    if (tier === "minimal" && spotlight) {
       ref.current?.style.removeProperty("border-color");
     }
   };
 
-  const spotlightLayers = (spotlightActive || reducedActive) && (
+  const spotlightLayers = (spotlightActive || reducedSpotlight) && (
     <>
       <div
         aria-hidden

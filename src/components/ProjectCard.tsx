@@ -4,7 +4,7 @@
  * ProjectCard — 精选作品卡片
  *
  * 入场：GSAP ScrollTrigger.batch（motion v2）或 Framer useInView
- * 悬停：GlareHover + Framer scale / 箭头 spring；可选 glassHover（3D tilt + 光斑）
+ * 悬停：Framer scale / 箭头 spring；可选 glassHover（3D tilt，无炫光）
  */
 
 import { useRef, useState } from "react";
@@ -25,7 +25,7 @@ type ProjectCardProps = {
   viewProject: string;
   /** Animate in on mount (portfolio grid) instead of scroll into view */
   playOnMount?: boolean;
-  /** Glass tilt + spotlight hover (homepage featured preview) */
+  /** Glass tilt hover (homepage featured + portfolio grid) */
   glassHover?: boolean;
   accent?: string;
   /** Entrance handled by PortfolioGenieGrid wrapper */
@@ -87,18 +87,20 @@ export default function ProjectCard({
         <div className="absolute inset-0 bg-black/30 group-hover:bg-black/45 transition-colors duration-500" />
       </motion.div>
 
-      <div
-        aria-hidden
-        className="absolute inset-0 pointer-events-none rounded-[inherit]"
-        style={{
-          background:
-            "linear-gradient(-45deg, transparent 55%, rgba(255,255,255,0.22) 68%, transparent 82%)",
-          backgroundSize: "260% 260%",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: hovered ? "100% 100%" : "-100% -100%",
-          transition: hovered ? "background-position 700ms ease" : "none",
-        }}
-      />
+      {!glassHover && (
+        <div
+          aria-hidden
+          className="absolute inset-0 pointer-events-none rounded-[inherit]"
+          style={{
+            background:
+              "linear-gradient(-45deg, transparent 55%, rgba(255,255,255,0.22) 68%, transparent 82%)",
+            backgroundSize: "260% 260%",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: hovered ? "100% 100%" : "-100% -100%",
+            transition: hovered ? "background-position 700ms ease" : "none",
+          }}
+        />
+      )}
 
       <div className="absolute inset-0 p-6 sm:p-10 lg:p-12 flex flex-col justify-end bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
         <div className="translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-out">
@@ -136,7 +138,7 @@ export default function ProjectCard({
       accent={accent}
       fill
       hoverScale={1.02}
-      spotlightRadius={180}
+      spotlight={false}
       className={cn(cardHeights, "border-white/10 cursor-pointer")}
     >
       {link}
