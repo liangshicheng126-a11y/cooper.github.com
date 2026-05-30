@@ -155,12 +155,17 @@ export default function About() {
                   key={index}
                   accent="#6366f1"
                   variants={skillListItem}
-                  className="flex items-center gap-4 p-4 rounded-2xl"
+                  className="p-4 rounded-2xl"
                 >
-                  <div className="w-2 h-2 shrink-0 rounded-full bg-indigo-500 transition-transform duration-300 group-hover:scale-125" />
-                  <span className="text-lg font-medium text-foreground/85 transition-colors group-hover:text-foreground">
-                    {skill}
-                  </span>
+                  <div className="flex gap-3 text-lg font-medium leading-normal">
+                    <span
+                      aria-hidden
+                      className="mt-[0.55em] w-2 h-2 shrink-0 rounded-full bg-indigo-500 transition-transform duration-300 group-hover:scale-125"
+                    />
+                    <span className="text-foreground/85 transition-colors group-hover:text-foreground">
+                      {skill}
+                    </span>
+                  </div>
                 </GlassHoverCard>
               ))}
             </motion.div>
