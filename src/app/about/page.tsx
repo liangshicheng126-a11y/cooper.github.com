@@ -128,16 +128,16 @@ export default function About() {
 
         <motion.div
           variants={item}
-          className="grid grid-cols-1 sm:grid-cols-2 gap-10 sm:gap-x-12 sm:gap-y-14 items-start"
+          className="grid grid-cols-1 sm:grid-cols-2 gap-10 sm:gap-x-12 sm:gap-y-14 sm:items-stretch"
         >
           {/* Skills Section */}
-          <section className="min-w-0">
+          <section className="min-w-0 flex flex-col h-full">
             <motion.h2
               initial={{ opacity: 0, x: -40 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={scrollSlideViewport}
               transition={{ duration: 0.55, ease: scrollEase }}
-              className="text-3xl font-bold mb-10 flex items-center space-x-4"
+              className="text-3xl font-bold mb-10 flex items-center space-x-4 shrink-0"
             >
               <div className="w-12 h-1 bg-indigo-500 rounded-full" />
               <span>{t.about.skills}</span>
@@ -148,19 +148,19 @@ export default function About() {
               initial="hidden"
               whileInView="show"
               viewport={smoothViewport}
-              className="space-y-6"
+              className="flex-1 flex flex-col justify-between gap-4 sm:gap-5 min-h-0"
             >
               {t.about.skillDetails.map((skill, index) => (
                 <GlassHoverCard
                   key={index}
                   accent="#6366f1"
                   variants={skillListItem}
-                  className="p-4 rounded-2xl"
+                  className="p-5 sm:p-6 rounded-2xl flex-1 flex items-center min-h-[4.5rem] sm:min-h-[5rem]"
                 >
-                  <div className="flex gap-3 text-lg font-medium leading-normal">
+                  <div className="flex gap-3 text-xl font-medium leading-snug w-full">
                     <span
                       aria-hidden
-                      className="mt-[0.55em] w-2 h-2 shrink-0 rounded-full bg-indigo-500 transition-transform duration-300 group-hover:scale-125"
+                      className="mt-[0.55em] w-2.5 h-2.5 shrink-0 rounded-full bg-indigo-500 transition-transform duration-300 group-hover:scale-125"
                     />
                     <span className="text-foreground/85 transition-colors group-hover:text-foreground">
                       {skill}
@@ -172,13 +172,13 @@ export default function About() {
           </section>
 
           {/* Hobbies Section */}
-          <section className="min-w-0">
+          <section className="min-w-0 flex flex-col h-full">
             <motion.h2
               initial={{ opacity: 0, x: 40 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={scrollSlideViewport}
               transition={{ duration: 0.55, ease: scrollEase }}
-              className="text-3xl font-bold mb-10 flex items-center space-x-4"
+              className="text-3xl font-bold mb-10 flex items-center space-x-4 shrink-0"
             >
               <div className="w-12 h-1 bg-purple-500 rounded-full" />
               <span>{t.about.hobbiesTitle}</span>
@@ -189,14 +189,14 @@ export default function About() {
               initial="hidden"
               whileInView="show"
               viewport={smoothViewport}
-              className="space-y-6"
+              className="flex-1 flex flex-col justify-between gap-4 sm:gap-5 min-h-0"
             >
               {t.about.hobbiesGroups.map((group, index) => (
                 <GlassHoverCard
                   key={index}
                   accent="#a855f7"
                   variants={skillListItem}
-                  className="p-5 rounded-2xl"
+                  className="p-5 sm:p-6 rounded-2xl flex-1 flex flex-col justify-center min-h-0"
                 >
                   <div className="flex items-center gap-3 mb-3">
                     <div className="w-2 h-2 shrink-0 rounded-full bg-purple-500 transition-transform duration-300 group-hover:scale-125" />
