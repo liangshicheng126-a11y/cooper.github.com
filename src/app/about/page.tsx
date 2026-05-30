@@ -5,6 +5,7 @@ import { useTranslation } from "@/locales/LanguageProvider";
 import { Zap, ArrowRight, Coffee } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import GlassHoverCard from "@/components/GlassHoverCard";
 import GsapScrollReveal from "@/components/motion/GsapScrollReveal";
 import useMotionTier from "@/hooks/useMotionTier";
 import { heroMaskVariants } from "@/lib/motion";
@@ -150,14 +151,17 @@ export default function About() {
               className="space-y-6"
             >
               {t.about.skillDetails.map((skill, index) => (
-                <motion.div
+                <GlassHoverCard
                   key={index}
+                  accent="#6366f1"
                   variants={skillListItem}
-                  className="flex items-center space-x-4 glass p-4 rounded-2xl border-white/5 hover:border-indigo-500/20 transition-colors will-change-transform"
+                  className="flex items-center gap-4 p-4 rounded-2xl"
                 >
-                  <div className="w-2 h-2 rounded-full bg-indigo-500" />
-                  <span className="text-lg font-medium">{skill}</span>
-                </motion.div>
+                  <div className="w-2 h-2 shrink-0 rounded-full bg-indigo-500 transition-transform duration-300 group-hover:scale-125" />
+                  <span className="text-lg font-medium text-foreground/85 transition-colors group-hover:text-foreground">
+                    {skill}
+                  </span>
+                </GlassHoverCard>
               ))}
             </motion.div>
           </section>
@@ -183,19 +187,22 @@ export default function About() {
               className="space-y-6"
             >
               {t.about.hobbiesGroups.map((group, index) => (
-                <motion.div
+                <GlassHoverCard
                   key={index}
+                  accent="#a855f7"
                   variants={skillListItem}
-                  className="glass p-5 rounded-2xl border-white/5 hover:border-purple-500/20 transition-colors will-change-transform"
+                  className="p-5 rounded-2xl"
                 >
-                  <div className="flex items-center space-x-3 mb-3">
-                    <div className="w-2 h-2 rounded-full bg-purple-500" />
-                    <h3 className="text-base font-semibold text-foreground/90">{group.title}</h3>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-2 h-2 shrink-0 rounded-full bg-purple-500 transition-transform duration-300 group-hover:scale-125" />
+                    <h3 className="text-base font-semibold text-foreground/90 transition-colors group-hover:text-foreground">
+                      {group.title}
+                    </h3>
                   </div>
-                  <p className="text-base text-foreground/60 leading-relaxed">
+                  <p className="text-base text-foreground/60 leading-relaxed transition-colors group-hover:text-foreground/75">
                     {group.items.join(" / ")}
                   </p>
-                </motion.div>
+                </GlassHoverCard>
               ))}
             </motion.div>
           </section>
