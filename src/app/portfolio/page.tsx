@@ -6,7 +6,7 @@ import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import ProjectCard from "@/components/ProjectCard";
-import PortfolioGenieGrid from "@/components/motion/PortfolioGenieGrid";
+import GsapScrollBatch from "@/components/motion/GsapScrollBatch";
 import useMotionTier from "@/hooks/useMotionTier";
 import { heroMaskVariants } from "@/lib/motion";
 
@@ -81,9 +81,13 @@ export default function Portfolio() {
           </motion.p>
         </header>
 
-        <PortfolioGenieGrid className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
+        <GsapScrollBatch
+          entrance="portfolio"
+          playOnMount
+          className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10"
+        >
           {projects.map((project, i) => (
-            <div key={project.id} data-genie-item data-genie-index={i}>
+            <div key={project.id} data-scroll-batch-item data-batch-index={i}>
               <ProjectCard
                 id={project.id}
                 title={project.title}
@@ -94,7 +98,7 @@ export default function Portfolio() {
               />
             </div>
           ))}
-        </PortfolioGenieGrid>
+        </GsapScrollBatch>
 
         {/* CTA Section */}
         <motion.section
