@@ -289,6 +289,7 @@ export default function Home() {
                 image={project.image}
                 index={i}
                 viewProject={t.hero.viewAllWork}
+                glassHover
               />
             ))}
           </GsapScrollBatch>

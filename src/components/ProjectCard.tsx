@@ -4,15 +4,17 @@
  * ProjectCard — 精选作品卡片
  *
  * 入场：GSAP ScrollTrigger.batch（motion v2）或 Framer useInView
- * 悬停：GlareHover + Framer scale / 箭头 spring
+ * 悬停：GlareHover + Framer scale / 箭头 spring；可选 glassHover（3D tilt + 光斑）
  */
 
 import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import GlassHoverCard from "@/components/GlassHoverCard";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import { MOTION_V2_ENABLED, shouldUseGsap } from "@/lib/motion";
+import { cn } from "@/lib/utils";
 
 type ProjectCardProps = {
   id: string;
@@ -23,7 +25,13 @@ type ProjectCardProps = {
   viewProject: string;
   /** Animate in on mount (portfolio grid) instead of scroll into view */
   playOnMount?: boolean;
+  /** Glass tilt + spotlight hover (homepage featured preview) */
+  glassHover?: boolean;
+  accent?: string;
 };
+
+const cardHeights =
+  "h-[320px] sm:h-[380px] lg:h-[450px] rounded-3xl";
 
 export default function ProjectCard({
   id,
@@ -33,6 +41,8 @@ export default function ProjectCard({
   index,
   viewProject,
   playOnMount = false,
+  glassHover = false,
+  accent = "#6366f1",
 }: ProjectCardProps) {
   const [hovered, setHovered] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -44,16 +54,21 @@ export default function ProjectCard({
   const shouldReveal = revealOnMount || isInView;
   const xOffset = index % 2 === 0 ? -32 : 32;
 
-  const cardInner = (
+  const imageScale = glassHover ? 1 : hovered ? 1.06 : 1;
+
+  const link = (
     <Link
       href={`/portfolio/${id}`}
-      className="group relative block h-[320px] sm:h-[380px] lg:h-[450px] rounded-3xl overflow-hidden glass border-white/10 cursor-pointer"
+      className={cn(
+        "group relative block overflow-hidden cursor-pointer",
+        glassHover ? "h-full rounded-[inherit]" : cn(cardHeights, "glass border-white/10"),
+      )}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
       <motion.div
         className="absolute inset-0"
-        animate={{ scale: hovered ? 1.06 : 1 }}
+        animate={{ scale: imageScale }}
         transition={{ type: "spring", stiffness: 260, damping: 22 }}
         style={{
           backgroundImage: `url(${image})`,
@@ -66,7 +81,7 @@ export default function ProjectCard({
 
       <div
         aria-hidden
-        className="absolute inset-0 pointer-events-none rounded-3xl"
+        className="absolute inset-0 pointer-events-none rounded-[inherit]"
         style={{
           background:
             "linear-gradient(-45deg, transparent 55%, rgba(255,255,255,0.22) 68%, transparent 82%)",
@@ -108,6 +123,20 @@ export default function ProjectCard({
     </Link>
   );
 
+  const cardInner = glassHover ? (
+    <GlassHoverCard
+      accent={accent}
+      fill
+      hoverScale={1.02}
+      spotlightRadius={180}
+      className={cn(cardHeights, "border-white/10 cursor-pointer")}
+    >
+      {link}
+    </GlassHoverCard>
+  ) : (
+    link
+  );
+
   if (batchReveal) {
     return (
       <div
@@ -115,6 +144,7 @@ export default function ProjectCard({
         data-scroll-batch-item
         data-batch-index={index}
         className="gsap-batch-item"
+        style={glassHover ? { perspective: "800px" } : undefined}
       >
         {cardInner}
       </div>
@@ -124,6 +154,7 @@ export default function ProjectCard({
   return (
     <motion.div
       ref={ref}
+      style={glassHover ? { perspective: "800px" } : undefined}
       initial={{ opacity: 0, y: 48, x: xOffset }}
       animate={
         shouldReveal

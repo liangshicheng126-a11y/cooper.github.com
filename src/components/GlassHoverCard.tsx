@@ -22,6 +22,10 @@ type GlassHoverCardProps = Omit<HTMLMotionProps<"div">, "children"> & {
   hoverScale?: number;
   /** Scale on hover when tier is reduced */
   reducedHoverScale?: number;
+  /** Radial spotlight size in px */
+  spotlightRadius?: number;
+  /** Stretch inner content to fill card height */
+  fill?: boolean;
 };
 
 export default function GlassHoverCard({
@@ -31,6 +35,8 @@ export default function GlassHoverCard({
   enableTilt = true,
   hoverScale = 1.03,
   reducedHoverScale = 1.02,
+  spotlightRadius = 120,
+  fill = false,
   style,
   ...motionProps
 }: GlassHoverCardProps) {
@@ -114,7 +120,7 @@ export default function GlassHoverCard({
             style={{
               opacity: "var(--spot-opacity, 0)",
               background: spotlightActive
-                ? `radial-gradient(120px circle at var(--spot-x, 50%) var(--spot-y, 50%), ${accent}22, transparent 70%)`
+                ? `radial-gradient(${spotlightRadius}px circle at var(--spot-x, 50%) var(--spot-y, 50%), ${accent}22, transparent 70%)`
                 : `radial-gradient(ellipse at 50% 50%, ${accent}18, transparent 72%)`,
             }}
           />
@@ -129,7 +135,7 @@ export default function GlassHoverCard({
         </>
       )}
 
-      <div className="relative z-10">{children}</div>
+      <div className={cn("relative z-10", fill && "h-full w-full")}>{children}</div>
     </motion.div>
   );
 }
