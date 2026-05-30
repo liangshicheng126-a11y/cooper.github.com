@@ -2,7 +2,6 @@
 
 import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Home, 
@@ -15,12 +14,11 @@ import {
   X
 } from "lucide-react";
 import WeChatIcon from "./icons/WeChatIcon";
+import SidebarNavLinks from "./SidebarNavLinks";
 import { useTranslation } from "@/locales/LanguageProvider";
-import { cn } from "@/lib/utils";
 
 const Sidebar = () => {
   const { language, setLanguage, t, mounted } = useTranslation();
-  const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   React.useEffect(() => {
@@ -31,9 +29,6 @@ const Sidebar = () => {
       document.body.style.overflow = prev;
     };
   }, [mobileOpen]);
-
-  // Prevents hydration mismatch by ensuring the initial render matches the server
-  const currentLanguageLabel = !mounted ? "English" : (language === "zh" ? "English" : "中文");
 
   const navItems = [
     { name: t.nav.home, href: "/", icon: Home },
@@ -124,31 +119,12 @@ const Sidebar = () => {
                 </div>
               </div>
 
-              <nav className="space-y-2">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setMobileOpen(false)}
-                    className={cn(
-                      "flex items-center space-x-4 rounded-2xl border p-4 transition-all duration-200 group w-full",
-                      pathname === item.href
-                        ? "border-indigo-200 bg-indigo-50 text-indigo-700 shadow-sm"
-                        : "border-transparent bg-slate-50/80 text-slate-800 hover:border-slate-200 hover:bg-slate-100"
-                    )}
-                  >
-                    <div className="w-5 flex justify-center">
-                      <item.icon
-                        className={cn(
-                          "w-5 h-5 shrink-0 transition-transform duration-300 group-hover:scale-110",
-                          pathname === item.href ? "text-indigo-600" : "text-slate-500 group-hover:text-indigo-500"
-                        )}
-                      />
-                    </div>
-                    <span className="text-base font-semibold truncate">{item.name}</span>
-                  </Link>
-                ))}
-              </nav>
+              <SidebarNavLinks
+                items={navItems}
+                layoutId="mobile-nav-pill"
+                variant="mobile"
+                onNavigate={() => setMobileOpen(false)}
+              />
 
               <div className="mt-auto pt-6 border-t border-slate-200 space-y-3">
                 <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
@@ -188,28 +164,9 @@ const Sidebar = () => {
         </div>
 
       {/* Nav */}
-      <nav className="flex-1 space-y-4">
-        {navItems.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={cn(
-              "flex items-center space-x-4 p-3 rounded-xl transition-all duration-300 group w-full",
-              pathname === item.href 
-                ? "bg-white/10 text-indigo-500 shadow-sm" 
-                : "text-foreground/60 hover:text-foreground hover:bg-white/5"
-            )}
-          >
-            <div className="w-5 flex justify-center">
-              <item.icon className={cn(
-                "w-5 h-5 transition-transform duration-300 group-hover:scale-110 shrink-0",
-                pathname === item.href ? "text-indigo-500" : "text-foreground/40 group-hover:text-indigo-400"
-              )} />
-            </div>
-            <span className="font-medium truncate transition-all duration-300">{item.name}</span>
-          </Link>
-        ))}
-      </nav>
+      <div className="flex-1">
+        <SidebarNavLinks items={navItems} layoutId="desktop-nav-pill" variant="desktop" />
+      </div>
 
       {/* Contact at Bottom */}
       <div className="mt-auto pt-8 border-t border-white/10 space-y-4">
