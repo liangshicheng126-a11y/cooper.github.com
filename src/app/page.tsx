@@ -263,8 +263,8 @@ export default function Home() {
           </div>
           
           <GsapScrollBatch
-            entrance="portfolio"
-            stagger={0.12}
+            stagger={0.08}
+            y={20}
             className="grid grid-cols-1 lg:grid-cols-2 gap-6"
           >
             {[

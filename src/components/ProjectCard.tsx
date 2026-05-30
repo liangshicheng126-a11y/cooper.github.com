@@ -115,7 +115,6 @@ export default function ProjectCard({
         data-scroll-batch-item
         data-batch-index={index}
         className="gsap-batch-item"
-        style={{ willChange: "transform, opacity" }}
       >
         {cardInner}
       </div>

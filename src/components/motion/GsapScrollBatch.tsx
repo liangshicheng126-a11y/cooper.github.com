@@ -11,6 +11,16 @@ import { isElementInViewport } from "@/lib/scrollMotion";
 
 gsap.registerPlugin(ScrollTrigger);
 
+function markRevealing(el: Element, active: boolean) {
+  el.classList.toggle("is-revealing", active);
+}
+
+function finishReveal(el: Element) {
+  markRevealing(el, false);
+  gsap.set(el, { clearProps: "transform,willChange" });
+  (el as HTMLElement).style.willChange = "auto";
+}
+
 type EntranceVariant = "default" | "portfolio";
 
 type GsapScrollBatchProps = {
@@ -73,6 +83,8 @@ export default function GsapScrollBatch({
       if (!pending.length) return;
 
       const reveal = (batch: Element[]) => {
+        batch.forEach((el) => markRevealing(el, true));
+
         if (entrance === "portfolio") {
           batch.forEach((el, i) => {
             const idx = Number((el as HTMLElement).dataset.batchIndex ?? i);
@@ -89,6 +101,7 @@ export default function GsapScrollBatch({
                 delay: idx * (stagger || 0.12),
                 ease: "power3.out",
                 overwrite: "auto",
+                onComplete: () => finishReveal(el),
               }
             );
           });
@@ -101,10 +114,11 @@ export default function GsapScrollBatch({
           {
             autoAlpha: 1,
             y: 0,
-            duration: REVEAL.duration,
+            duration: REVEAL.duration * 0.9,
             stagger,
             ease: "power3.out",
             overwrite: "auto",
+            onComplete: () => batch.forEach(finishReveal),
           }
         );
       };
