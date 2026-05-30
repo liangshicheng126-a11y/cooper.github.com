@@ -155,7 +155,7 @@ export default function About() {
                   key={index}
                   accent="#6366f1"
                   variants={skillListItem}
-                  className="p-5 sm:p-6 rounded-2xl flex-1 flex items-center min-h-[4.5rem] sm:min-h-[5rem]"
+                  className="px-6 py-5 sm:px-8 sm:py-6 rounded-2xl flex-1 flex items-center min-h-[4.5rem] sm:min-h-[5rem]"
                 >
                   <div className="flex gap-3 text-xl font-medium leading-snug w-full">
                     <span
@@ -196,9 +196,9 @@ export default function About() {
                   key={index}
                   accent="#a855f7"
                   variants={skillListItem}
-                  className="p-5 sm:p-6 rounded-2xl flex-1 flex flex-col justify-center min-h-0"
+                  className="px-6 py-5 sm:px-8 sm:py-6 rounded-2xl flex-1 flex flex-col justify-center min-h-0"
                 >
-                  <div className="flex items-center gap-3 mb-3">
+                  <div className="flex items-center gap-3 mb-4">
                     <div className="w-2 h-2 shrink-0 rounded-full bg-purple-500 transition-transform duration-300 group-hover:scale-125" />
                     <h3 className="text-base font-semibold text-foreground/90 transition-colors group-hover:text-foreground">
                       {group.title}
