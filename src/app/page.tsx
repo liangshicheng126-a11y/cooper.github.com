@@ -262,37 +262,31 @@ export default function Home() {
             </Link>
           </div>
           
-          <GsapScrollBatch
-            stagger={0.08}
-            y={20}
-            className="grid grid-cols-1 lg:grid-cols-2 gap-6"
-          >
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {[
-              { 
-                id: "p1", 
-                title: t.portfolio.projects.p1.title, 
+              {
+                id: "p1",
+                title: t.portfolio.projects.p1.title,
                 category: t.portfolio.categories.graphic,
-                image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80"
+                image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80",
               },
-              { 
-                id: "p3", 
-                title: t.portfolio.projects.p3.title, 
+              {
+                id: "p3",
+                title: t.portfolio.projects.p3.title,
                 category: t.portfolio.categories.photography,
-                image: "https://images.unsplash.com/photo-1493863641943-9b68992a8d07?w=800&q=80"
-              }
-            ].map((project, i) => (
+                image: "https://images.unsplash.com/photo-1493863641943-9b68992a8d07?w=800&q=80",
+              },
+            ].map((project) => (
               <ProjectCard
-                key={i}
+                key={project.id}
                 id={project.id}
                 title={project.title}
                 category={project.category}
                 image={project.image}
-                index={i}
                 viewProject={t.hero.viewAllWork}
-                glassHover
               />
             ))}
-          </GsapScrollBatch>
+          </div>
         </ScrollDirectionSection>
         </HomeScrollStack>
       </motion.div>

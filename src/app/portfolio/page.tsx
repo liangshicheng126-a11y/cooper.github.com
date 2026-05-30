@@ -16,33 +16,29 @@ export default function Portfolio() {
   if (!mounted) return null;
 
   const projects = [
-    { 
-      id: "p1", 
-      title: t.portfolio.projects.p1.title, 
-      category: t.portfolio.categories.graphic, 
-      image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1200&q=80", 
-      color: "#6366f1" 
+    {
+      id: "p1",
+      title: t.portfolio.projects.p1.title,
+      category: t.portfolio.categories.graphic,
+      image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1200&q=80",
     },
-    { 
-      id: "p2", 
-      title: t.portfolio.projects.p2.title, 
-      category: t.portfolio.categories.uiux, 
-      image: "https://images.unsplash.com/photo-1545235617-9465d2a55698?w=1200&q=80", 
-      color: "#a855f7" 
+    {
+      id: "p2",
+      title: t.portfolio.projects.p2.title,
+      category: t.portfolio.categories.uiux,
+      image: "https://images.unsplash.com/photo-1545235617-9465d2a55698?w=1200&q=80",
     },
-    { 
-      id: "p3", 
-      title: t.portfolio.projects.p3.title, 
-      category: t.portfolio.categories.photography, 
-      image: "https://images.unsplash.com/photo-1493863641943-9b68992a8d07?w=1200&q=80", 
-      color: "#3b82f6" 
+    {
+      id: "p3",
+      title: t.portfolio.projects.p3.title,
+      category: t.portfolio.categories.photography,
+      image: "https://images.unsplash.com/photo-1493863641943-9b68992a8d07?w=1200&q=80",
     },
-    { 
-      id: "p4", 
-      title: t.portfolio.projects.p4.title, 
-      category: t.portfolio.categories.video, 
-      image: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=1200&q=80", 
-      color: "#2dd4bf" 
+    {
+      id: "p4",
+      title: t.portfolio.projects.p4.title,
+      category: t.portfolio.categories.video,
+      image: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=1200&q=80",
     },
   ];
 
@@ -81,18 +77,14 @@ export default function Portfolio() {
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
-          {projects.map((project, i) => (
+          {projects.map((project) => (
             <ProjectCard
               key={project.id}
               id={project.id}
               title={project.title}
               category={project.category}
               image={project.image}
-              index={i}
               viewProject={t.portfolio.viewProject}
-              glassHover
-              tiltOnly
-              accent={project.color}
             />
           ))}
         </div>
