@@ -93,9 +93,7 @@ export default function ProjectCard({
           className={cn(
             "absolute inset-0",
             tiltOnly
-              ? hovered
-                ? "bg-black/45"
-                : "bg-black/30"
+              ? "bg-black/30 group-hover/tcard:bg-black/45"
               : "bg-black/30 group-hover:bg-black/45 transition-colors duration-500",
           )}
         />
@@ -117,12 +115,7 @@ export default function ProjectCard({
       )}
 
       {tiltOnly ? (
-        <div
-          className={cn(
-            "absolute inset-0 p-6 sm:p-10 lg:p-12 flex flex-col justify-end bg-black/10",
-            hovered ? "opacity-100" : "opacity-0 pointer-events-none",
-          )}
-        >
+        <div className="absolute inset-0 p-6 sm:p-10 lg:p-12 flex flex-col justify-end bg-black/10 opacity-0 pointer-events-none group-hover/tcard:opacity-100">
           <div>
             <span className="text-white/60 text-sm font-medium mb-2 block uppercase tracking-widest">
               {category}
@@ -132,12 +125,7 @@ export default function ProjectCard({
             </h3>
             <div className="inline-flex items-center space-x-3 text-white font-semibold">
               <span>{viewProject}</span>
-              <div
-                className={cn(
-                  "p-3 rounded-full",
-                  hovered ? "bg-white text-black" : "bg-white/20 text-white",
-                )}
-              >
+              <div className="p-3 rounded-full bg-white/20 text-white group-hover/tcard:bg-white group-hover/tcard:text-black">
                 <ArrowUpRight className="w-5 h-5" />
               </div>
             </div>
@@ -167,12 +155,7 @@ export default function ProjectCard({
       )}
 
       {tiltOnly ? (
-        <div
-          className={cn(
-            "absolute top-8 right-8 p-3 rounded-full glass border-white/20 text-white",
-            hovered ? "opacity-0 scale-90" : "opacity-100 scale-100",
-          )}
-        >
+        <div className="absolute top-8 right-8 p-3 rounded-full glass border-white/20 text-white opacity-100 scale-100 group-hover/tcard:opacity-0 group-hover/tcard:scale-90 pointer-events-none">
           <ArrowUpRight className="w-5 h-5" />
         </div>
       ) : (
@@ -194,8 +177,11 @@ export default function ProjectCard({
       hoverScale={tiltOnly ? 1 : 1.02}
       reducedHoverScale={1}
       spotlight={false}
-      onHoverChange={tiltOnly ? setHovered : undefined}
-      className={cn(cardHeights, "border-white/10 cursor-pointer")}
+      className={cn(
+        cardHeights,
+        "border-white/10 cursor-pointer",
+        tiltOnly && "group/tcard",
+      )}
     >
       {link}
     </GlassHoverCard>
