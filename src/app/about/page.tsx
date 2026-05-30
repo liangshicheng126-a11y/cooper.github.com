@@ -10,8 +10,9 @@ import GsapScrollReveal from "@/components/motion/GsapScrollReveal";
 import useMotionTier from "@/hooks/useMotionTier";
 import { heroMaskVariants } from "@/lib/motion";
 
+const aboutGlassWrap = "flex-1 w-full min-h-0";
 const aboutGlassTile =
-  "px-8 py-7 sm:px-12 sm:py-10 rounded-[1.25rem] sm:rounded-3xl flex-1 min-h-[6.25rem] sm:min-h-[7.25rem]";
+  "px-8 py-7 sm:px-12 sm:py-10 rounded-[1.25rem] sm:rounded-3xl min-h-[6.5rem] sm:min-h-[7.5rem] border-white/15 bg-white/[0.11] dark:bg-white/[0.07]";
 
 export default function About() {
   const { t, mounted } = useTranslation();
@@ -158,6 +159,7 @@ export default function About() {
                   key={index}
                   accent="#6366f1"
                   variants={skillListItem}
+                  wrapperClassName={aboutGlassWrap}
                   className={cn(aboutGlassTile, "flex items-center")}
                 >
                   <div className="flex gap-3 text-xl font-medium leading-snug w-full">
@@ -199,6 +201,7 @@ export default function About() {
                   key={index}
                   accent="#a855f7"
                   variants={skillListItem}
+                  wrapperClassName={aboutGlassWrap}
                   className={cn(aboutGlassTile, "flex flex-col justify-center")}
                 >
                   <div className="flex items-center gap-3 mb-4">

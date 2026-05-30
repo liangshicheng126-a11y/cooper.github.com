@@ -28,6 +28,8 @@ type GlassHoverCardProps = Omit<HTMLMotionProps<"div">, "children"> & {
   spotlight?: boolean;
   /** Stretch inner content to fill card height */
   fill?: boolean;
+  /** Outer layout when using transform shell (e.g. flex-1 in a column) */
+  wrapperClassName?: string;
   /** Fired when pointer enters/leaves the tilt layer */
   onHoverChange?: (hovered: boolean) => void;
 };
@@ -42,6 +44,7 @@ export default function GlassHoverCard({
   spotlightRadius = 120,
   spotlight = true,
   fill = false,
+  wrapperClassName,
   onHoverChange,
   style,
   ...motionProps
@@ -137,8 +140,9 @@ export default function GlassHoverCard({
 
   const shellClasses = cn(
     "relative glass border-white/5 cursor-default group transition-colors",
-    useTransformShell ? "h-full w-full overflow-hidden rounded-[inherit]" : "overflow-hidden",
-    !useTransformShell && className,
+    useTransformShell
+      ? cn("h-full w-full overflow-hidden rounded-[inherit]", className)
+      : cn("overflow-hidden", className),
   );
 
   return (
@@ -164,9 +168,10 @@ export default function GlassHoverCard({
         ["--spot-opacity" as string]: "0",
       }}
       className={cn(
-        "relative",
-        useTransformShell ? "overflow-visible" : shellClasses,
-        useTransformShell && className,
+        "relative w-full",
+        useTransformShell
+          ? cn("h-full overflow-visible", wrapperClassName)
+          : shellClasses,
       )}
     >
       {useTransformShell ? (
