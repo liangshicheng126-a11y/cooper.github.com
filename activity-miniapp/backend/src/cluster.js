@@ -5,6 +5,7 @@ require('dotenv').config()
 const cluster = require('cluster')
 const os      = require('os')
 const logger  = require('./utils/logger')
+const { connectRedis } = require('./config/redis')
 
 function startCluster() {
   // 生产环境用全部核心，开发/测试用 2 个核心
@@ -15,15 +16,21 @@ function startCluster() {
   if (cluster.isPrimary) {
     logger.info(`🚀 Master ${process.pid} 启动，共 ${WORKERS} 个 Worker（CPU 核心数: ${os.cpus().length}）`)
 
+    if (process.env.START_REMINDER_JOB !== '0') {
+      connectRedis()
+        .catch(e => logger.warn(`Reminder Redis init failed: ${e.message}`))
+        .finally(() => require('./jobs/reminderJob'))
+    }
+
     // 启动所有 Worker
     for (let i = 0; i < WORKERS; i++) {
-      cluster.fork()
+      cluster.fork({ CLUSTER_WORKER: '1' })
     }
 
     // Worker 崩溃时自动重启
     cluster.on('exit', (worker, code, signal) => {
       logger.error(`❌ Worker ${worker.process.pid} 退出（code: ${code}, signal: ${signal}），正在重启...`)
-      cluster.fork()
+      cluster.fork({ CLUSTER_WORKER: '1' })
     })
 
     // 定期打印集群状态

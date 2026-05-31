@@ -8,8 +8,8 @@
 
   /* 白色毛玻璃 */
   background: rgba(255,255,255,0.84);
-  backdrop-filter: blur(24px) saturate(200%);
-  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
 
   border-top: 1rpx solid rgba(255,255,255,1);
   box-shadow: 0 -2rpx 12rpx rgba(30,27,75,0.06);

@@ -1,12 +1,10 @@
 // pages/search/index.js
 const request = require('../../utils/request')
 const { getCustomNavbarContentPaddingTop } = require('../../utils/nav')
-const { getActivityStatus } = require('../../utils/date')
 const { withListRowTimes } = require('../../utils/activityFormat')
+const { getStatusMeta } = require('../../utils/activityStatus')
 
 const HISTORY_KEY = 'search_history'
-const STATUS_TEXT = { active: '进行中', upcoming: '未开始', ended: '已结束', full: '已报满' }
-const STATUS_CLASS = { active: 'status-mini-active', upcoming: 'status-mini-upcoming', ended: 'status-mini-ended', full: 'status-mini-full' }
 
 Page({
   data: {
@@ -61,11 +59,11 @@ Page({
       const res = await request.get('/activities', { keyword: kw, size: 30 })
       const list = (res.data?.list || []).map((a) => {
         const row = withListRowTimes({ ...a })
-        const status = getActivityStatus(row)
+        const status = getStatusMeta(row, 'mini')
         return {
           ...row,
-          statusText: STATUS_TEXT[status] || status,
-          statusClass: STATUS_CLASS[status] || '',
+          statusText: status.text,
+          statusClass: status.className,
         }
       })
       const history = [kw, ...(this.data.history.filter((h) => h !== kw))].slice(0, 10)

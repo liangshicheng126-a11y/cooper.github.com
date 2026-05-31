@@ -113,7 +113,10 @@ function upload(url, filePath, name = 'file', formData = {}) {
           reject(e)
         }
       },
-      fail: reject,
+      fail: (err) => {
+        showNetworkError()
+        reject(err)
+      },
     })
   })
 }

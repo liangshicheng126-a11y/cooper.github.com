@@ -4,7 +4,7 @@
     <view class="user-card">
       <view class="user-bg" />
       <view class="user-info" bindtap="onUserCardTap">
-        <image src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" class="user-avatar" />
+        <image src="{{userInfo.avatarUrl || '/images/default-avatar.svg'}}" class="user-avatar" />
         <view class="user-detail">
           <text class="user-name">{{userInfo.nickName || strNotLogged}}</text>
           <text class="user-sub" wx:if="{{userInfo.openid}}">ID: {{userInfo.openid.slice(0,8)}}...</text>

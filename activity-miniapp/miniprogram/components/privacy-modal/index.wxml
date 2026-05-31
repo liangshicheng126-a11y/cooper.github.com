@@ -39,7 +39,7 @@
     </scroll-view>
     <view class="modal-footer">
       <view class="agree-row">
-        <view class="checkbox {{agreed ? 'checked' : ''}}" bindtap="toggleAgree">
+        <view class="checkbox {{agreed ? 'checked' : ''}}" bindtap="toggleAgree" role="checkbox" aria-checked="{{agreed}}" aria-label="同意隐私协议与服务条款">
           <text wx:if="{{agreed}}" class="check-icon">✓</text>
         </view>
         <text class="agree-text">我已阅读并同意</text>

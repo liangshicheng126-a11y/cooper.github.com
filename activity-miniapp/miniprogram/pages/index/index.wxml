@@ -2,11 +2,11 @@
 <view class="page">
   <!-- 顶部搜索栏 -->
   <view class="top-bar">
-    <view class="search-box" bindtap="onSearchTap">
+    <view class="search-box" bindtap="onSearchTap" role="button" aria-label="搜索活动">
       <text class="search-icon">🔍</text>
       <text class="search-placeholder">{{searchPlaceholder}}</text>
     </view>
-    <view class="lang-btn" bindtap="toggleLanguage">
+    <view class="lang-btn" bindtap="toggleLanguage" role="button" aria-label="切换语言">
       <text class="lang-text">{{langText}}</text>
     </view>
   </view>
@@ -23,6 +23,8 @@
         class="category-tag {{activeCategory === item.key ? 'category-active' : ''}}"
         data-key="{{item.key}}"
         bindtap="onCategoryChange"
+        role="button"
+        aria-label="筛选{{item.label}}"
       >
         <text>{{item.icon}} {{item.label}}</text>
       </view>
@@ -41,7 +43,7 @@
     indicator-color="rgba(255,255,255,0.5)"
   >
     <swiper-item wx:for="{{bannerList}}" wx:key="id" bindtap="onBannerTap" data-id="{{item.id}}">
-      <image src="{{item.coverImage}}" mode="aspectFill" class="banner-img" />
+      <image src="{{item.coverImage || '/images/default-cover.svg'}}" mode="aspectFill" class="banner-img" lazy-load />
       <view class="banner-info">
         <text class="banner-title text-ellipsis">{{item.name}}</text>
         <text class="banner-time">{{item.startTimeText}}</text>
@@ -52,7 +54,7 @@
   <!-- 列表标题 -->
   <view class="list-header">
     <text class="section-title">{{listTitle}}</text>
-    <view class="filter-btn" bindtap="openFilter">
+    <view class="filter-btn" bindtap="openFilter" role="button" aria-label="打开排序筛选">
       <text>{{filterBtnLabel}} ⚙</text>
     </view>
   </view>
@@ -103,7 +105,7 @@
   </scroll-view>
 
   <!-- 发布活动 FAB -->
-  <view class="fab" bindtap="onCreateActivity">
+  <view class="fab" bindtap="onCreateActivity" role="button" aria-label="发布活动">
     <text class="fab-icon">+</text>
   </view>
 </view>

@@ -17,8 +17,8 @@ function pickStr(override, fallback) {
   return t !== '' ? t : fallback
 }
 
-// 【1】开发 / 生产环境切换
-const ENV = 'development'
+// 【1】开发 / 生产环境切换；可在 config.local.js 覆盖为 production
+const ENV = pickStr(local.ENV, 'development')
 
 // 【2】微信小程序 AppID（在微信公众平台 → 开发管理 → 开发设置 中查看）
 const APP_ID = 'wxa909312a016c6847'
@@ -41,6 +41,29 @@ const SUBSCRIBE_TEMPLATES = {
 }
 
 const API_BASE_URL = pickStr(local.API_BASE_URL, API_BASE_URL_MAP[ENV])
+const SUBSCRIBE_TEMPLATE_OVERRIDES = local.SUBSCRIBE_TEMPLATES || {}
+
+Object.keys(SUBSCRIBE_TEMPLATE_OVERRIDES).forEach((key) => {
+  if (typeof SUBSCRIBE_TEMPLATE_OVERRIDES[key] === 'string' && SUBSCRIBE_TEMPLATE_OVERRIDES[key].trim()) {
+    SUBSCRIBE_TEMPLATES[key] = SUBSCRIBE_TEMPLATE_OVERRIDES[key].trim()
+  }
+})
+
+function assertNoProductionPlaceholders() {
+  if (ENV !== 'production') return
+  const placeholders = [
+    ['API_BASE_URL', API_BASE_URL],
+    ['MAP_KEY', MAP_KEY],
+    ['SUBSCRIBE_TEMPLATES.REMIND_24H', SUBSCRIBE_TEMPLATES.REMIND_24H],
+    ['SUBSCRIBE_TEMPLATES.REMIND_1H', SUBSCRIBE_TEMPLATES.REMIND_1H],
+  ].filter(([, value]) => /YOUR_|your-domain/i.test(String(value || '')))
+
+  if (placeholders.length) {
+    throw new Error(`生产配置仍包含占位符：${placeholders.map(([key]) => key).join(', ')}`)
+  }
+}
+
+assertNoProductionPlaceholders()
 
 module.exports = {
   ENV,

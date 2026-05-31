@@ -72,9 +72,14 @@ Page({
     if (app.globalData.refreshHomeActivityListNextShow) {
       app.globalData.refreshHomeActivityListNextShow = false
       this.setData({ activeCategory: 'all' })
+      this._applyLocale()
+      this._loadActivities(true)
+      return
     }
     this._applyLocale()
-    this._loadActivities(true)
+    if (!this._hasLoadedActivities) {
+      this._loadActivities(true)
+    }
   },
 
   onPrivacyConfirm() {
@@ -187,6 +192,7 @@ Page({
         page: page + 1,
         noMore: list.length < PAGE_SIZE,
       })
+      this._hasLoadedActivities = true
     } catch (e) {
       console.error('加载活动失败', e)
       wx.showToast({ title: e.message || i18n.t('listLoadFail'), icon: 'none', duration: 2500 })

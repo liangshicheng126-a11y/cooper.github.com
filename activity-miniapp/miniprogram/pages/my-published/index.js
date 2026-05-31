@@ -1,16 +1,7 @@
 // pages/my-published/index.js
 const request = require('../../utils/request')
-const { getActivityStatus } = require('../../utils/date')
 const { listRowStartTime } = require('../../utils/activityFormat')
-
-const STATUS_MAP = {
-  active: { text: '进行中', cls: 'status-mini-active' },
-  upcoming: { text: '未开始', cls: 'status-mini-upcoming' },
-  ended: { text: '已结束', cls: 'status-mini-ended' },
-  full: { text: '已报满', cls: 'status-mini-full' },
-  cancelled: { text: '已取消', cls: 'status-mini-ended' },
-  offline: { text: '已下架', cls: 'status-mini-ended' },
-}
+const { getStatusMeta } = require('../../utils/activityStatus')
 
 Page({
   data: {
@@ -32,8 +23,7 @@ Page({
     try {
       const res = await request.get('/activities/my-created')
       const list = (res.data || []).map((a) => {
-        const statusKey = getActivityStatus(a)
-        const meta = STATUS_MAP[statusKey] || {}
+        const meta = getStatusMeta(a, 'mini')
         const mod = a.moderationStatus || 'passed'
         let modBadge = ''
         if (mod === 'pending') modBadge = ' · 审核中'
@@ -41,8 +31,8 @@ Page({
         return {
           ...a,
           startTimeText: listRowStartTime(a.startTime),
-          statusText: (meta.text || '') + modBadge,
-          statusClass: meta.cls || '',
+          statusText: meta.text + modBadge,
+          statusClass: meta.className,
         }
       })
       this.setData({ activities: list, loading: false })

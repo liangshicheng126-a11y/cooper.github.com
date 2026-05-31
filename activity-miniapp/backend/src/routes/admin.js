@@ -24,8 +24,8 @@ router.post('/send-verify-code',                    auth, c.sendVerifyCode)
 router.post('/export-registrations',                auth, auditLog('EXPORT_DATA'), c.exportRegistrations)
 router.get('/activities/:activityId/analytics',     auth, c.getAnalytics)
 router.get('/activities/:activityId/checkins',      auth, c.getCheckins)
-router.get('/reports',                              auth, c.getReports)
-router.put('/reports/:id/ignore',                   auth, c.ignoreReport)
+router.get('/reports',                              auth, adminOnly, c.getReports)
+router.put('/reports/:id/ignore',                   auth, adminOnly, c.ignoreReport)
 
 // —— 学校学生名册 Excel 导入 ——
 router.post('/rosters/import', auth, rosterExcel.single('file'), roster.importExcel)

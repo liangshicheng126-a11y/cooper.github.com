@@ -15,7 +15,7 @@
       bindtap="onActivityTap"
       data-id="{{item.id}}"
     >
-      <image src="{{item.coverImage || '/images/default-cover.png'}}" mode="aspectFill" class="item-cover" />
+      <image src="{{item.coverImage || '/images/default-cover.svg'}}" mode="aspectFill" class="item-cover" lazy-load />
       <view class="item-body">
         <text class="item-name text-ellipsis">{{item.name}}</text>
         <view class="item-info-row">

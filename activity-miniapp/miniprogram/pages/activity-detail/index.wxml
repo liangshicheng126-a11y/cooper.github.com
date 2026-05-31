@@ -6,6 +6,8 @@
     class="nav-back-slot"
     style="top: {{navBackTop}}px; height: {{navBackHeight}}px;"
     bindtap="goBack"
+    role="button"
+    aria-label="返回上一页"
   >
     <view class="nav-back-circle">
       <text class="nav-back-arrow">‹</text>
@@ -35,7 +37,7 @@
 
     <!-- 封面图 -->
     <view class="cover-section">
-      <image wx:if="{{activity.coverImage}}" src="{{activity.coverImage}}" mode="aspectFill" class="cover-image" />
+      <image wx:if="{{activity.coverImage}}" src="{{activity.coverImage}}" mode="aspectFill" class="cover-image" lazy-load />
       <view wx:else class="cover-placeholder"><text class="cover-emoji">🎊</text></view>
       <view class="cover-gradient" />
     </view>
@@ -80,7 +82,7 @@
       </view>
 
       <!-- 地点（手动填写，无导航坐标时可复制） -->
-      <view class="info-item" bindtap="onCopyLocation" wx:if="{{activity.locationName || activity.locationAddress}}">
+      <view class="info-item" bindtap="onCopyLocation" wx:if="{{activity.locationName || activity.locationAddress}}" role="button" aria-label="复制活动地点">
         <view class="info-icon-wrap bg-green"><text class="info-emoji">📍</text></view>
         <view class="info-content flex-1">
           <text class="info-label">活动地点</text>
@@ -144,6 +146,7 @@
         src="{{activity.wxGroupChatQrcodeUrl}}"
         mode="widthFix"
         show-menu-by-longpress
+        lazy-load
       />
       <text class="wx-group-hint">长按二维码识别，是否加群请自行判断</text>
     </view>
@@ -159,6 +162,8 @@
         wx:for="{{subActivities}}" wx:key="id"
         class="sub-item {{selectedSubId === item.id ? 'sub-selected' : ''}} {{item.isFull ? 'sub-disabled' : ''}}"
         data-id="{{item.id}}" bindtap="onSelectSub"
+        role="button"
+        aria-label="选择场次 {{item.name}}"
       >
         <view class="sub-left">
           <view class="sub-radio {{selectedSubId === item.id ? 'radio-checked' : ''}}" />
@@ -181,7 +186,7 @@
     <view class="section-card" wx:if="{{activity.description}}">
       <view class="section-title">活动详情</view>
       <text class="desc-text {{descExpanded ? '' : 'desc-collapsed'}}">{{activity.description}}</text>
-      <view class="expand-btn" wx:if="{{activity.description && activity.description.length > 120}}" bindtap="toggleDesc">
+      <view class="expand-btn" wx:if="{{activity.description && activity.description.length > 120}}" bindtap="toggleDesc" role="button" aria-label="展开或收起活动详情">
         <text>{{descExpanded ? '收起 ↑' : '查看更多 ↓'}}</text>
       </view>
     </view>
@@ -200,6 +205,7 @@
           src="{{item.avatarUrl}}"
           mode="aspectFill"
           class="registrant-avatar"
+          lazy-load
         />
         <view class="avatar-more" wx:if="{{activity.registrationCount > 8}}">
           <text>+{{activity.registrationCount - 8}}</text>
@@ -221,7 +227,7 @@
         wx:key="id"
         class="checkin-detail-row"
       >
-        <image class="checkin-detail-avatar" src="{{item.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill" />
+        <image class="checkin-detail-avatar" src="{{item.avatarUrl || '/images/default-avatar.svg'}}" mode="aspectFill" lazy-load />
         <view class="checkin-detail-mid">
           <text class="checkin-detail-name">{{item.name}}</text>
           <text class="checkin-detail-time">签到时间 {{item.checkinTimeText}}</text>

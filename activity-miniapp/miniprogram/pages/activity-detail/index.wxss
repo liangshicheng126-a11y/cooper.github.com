@@ -290,12 +290,12 @@
   padding: 24rpx 20rpx; border-radius: 16rpx;
   border: 2rpx solid transparent;
   background: rgba(124,58,237,.04);
-  margin-bottom: 16rpx; transition: all .2s;
+  margin-bottom: 16rpx; transition: background .2s, border-color .2s, opacity .2s;
 }
 .sub-item.sub-selected { border-color: #7c3aed; background: rgba(124,58,237,.08); }
 .sub-item.sub-disabled { opacity: .5; }
 .sub-left  { display: flex; gap: 16rpx; align-items: flex-start; flex: 1; }
-.sub-radio { width: 36rpx; height: 36rpx; border-radius: 50%; border: 3rpx solid rgba(124,58,237,.3); flex-shrink: 0; margin-top: 4rpx; transition: all .2s; }
+.sub-radio { width: 36rpx; height: 36rpx; border-radius: 50%; border: 3rpx solid rgba(124,58,237,.3); flex-shrink: 0; margin-top: 4rpx; transition: background .2s, border-color .2s, box-shadow .2s; }
 .sub-radio.radio-checked { background: #7c3aed; border-color: #7c3aed; box-shadow: 0 0 12rpx rgba(124,58,237,.5); }
 .sub-info  { flex: 1; }
 .sub-name  { font-size: 30rpx; color: #1e1b4b; font-weight: 600; display: block; }

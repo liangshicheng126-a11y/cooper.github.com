@@ -224,10 +224,10 @@ exports.getReports = async (req, res, next) => {
 exports.ignoreReport = async (req, res, next) => {
   try {
     const { id } = req.params
-    const report = await queryOne('SELECT * FROM reports WHERE activity_id = ?', [id])
+    const report = await queryOne('SELECT * FROM reports WHERE id = ?', [id])
     if (report) {
-      await query('UPDATE reports SET handled = 1, handler_openid = ? WHERE activity_id = ?', [req.user.openid, id])
-      await query("UPDATE activities SET status='upcoming' WHERE id = ? AND status='frozen'", [id])
+      await query('UPDATE reports SET handled = 1, handler_openid = ? WHERE id = ?', [req.user.openid, id])
+      await query("UPDATE activities SET status='upcoming' WHERE id = ? AND status='frozen'", [report.activity_id])
     }
     res.json({ code: 0, message: '已忽略' })
   } catch (e) {
@@ -238,6 +238,11 @@ exports.ignoreReport = async (req, res, next) => {
 exports.getCheckins = async (req, res, next) => {
   try {
     const { activityId } = req.params
+    const activity = await queryOne('SELECT creator_openid FROM activities WHERE id = ?', [activityId])
+    if (!activity) return res.status(404).json({ code: 404, message: '活动不存在' })
+    if (activity.creator_openid !== req.user.openid && !req.user.isAdmin) {
+      return res.status(403).json({ code: 403, message: '无权限' })
+    }
     const list = await query(
       `SELECT r.id, r.checkin_time, u.nickname AS name, u.avatar_url AS avatarUrl
        FROM registrations r

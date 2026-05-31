@@ -21,6 +21,9 @@
  */
 
 module.exports = {
+  // 可选：production 会阻断 your-domain / YOUR_* 等占位配置
+  // ENV: 'development',
+
   // 必填其一：中国区「定位」无 Key 时会降级用 OpenStreetM（准确度一般）
   MAP_KEY: '',
 
@@ -29,4 +32,10 @@ module.exports = {
 
   // 可选覆盖（不填则用 config.js 里按 ENV 选的地址）
   // API_BASE_URL: 'http://192.168.1.100:3000/api',
+
+  // 生产订阅消息模板 ID
+  // SUBSCRIBE_TEMPLATES: {
+  //   REMIND_24H: '',
+  //   REMIND_1H: '',
+  // },
 }

@@ -1,7 +1,7 @@
 /* pages/create-activity/index.wxss · 白色毛玻璃发布活动 */
 .page {
   min-height: 100vh;
-  background: linear-gradient(145deg, #ede9fe 0%, #faf5ff 45%, #eff6ff 100%);
+  background: var(--bg-gradient);
 }
 .scroll-view { height: calc(100vh - 200rpx); }
 
@@ -10,8 +10,8 @@
   display: flex; align-items: center; justify-content: center;
   padding: 28rpx 40rpx;
   background: rgba(255,255,255,0.75);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
   border-bottom: 1rpx solid rgba(124,58,237,0.08);
   box-shadow: 0 2rpx 12rpx rgba(109,40,217,0.05);
 }
@@ -24,7 +24,7 @@
   display: flex; align-items: center; justify-content: center;
   font-size: 24rpx; color: rgba(30,27,75,0.40); font-weight: 700;
   background: rgba(255,255,255,0.70); flex-shrink: 0;
-  transition: all 0.3s;
+  transition: border-color 0.3s, background 0.3s, color 0.3s, box-shadow 0.3s;
 }
 .step-active .step-circle {
   border-color: #7c3aed;
@@ -46,10 +46,8 @@
 .section-card {
   margin: 0 20rpx 20rpx;
   padding: 28rpx 32rpx;
-  background: rgba(255,255,255,0.72);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1rpx solid rgba(255,255,255,0.95);
+  background: rgba(255,255,255,0.86);
+  border: 1rpx solid rgba(124,58,237,0.10);
   border-radius: 24rpx;
   box-shadow: 0 6rpx 24rpx rgba(109,40,217,0.07);
 }
@@ -62,7 +60,7 @@
   background: rgba(255,255,255,0.72);
   border: 1rpx solid rgba(124,58,237,0.14);
   font-size: 26rpx; color: rgba(30,27,75,0.55);
-  white-space: nowrap; transition: all 0.2s;
+  white-space: nowrap; transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
   box-shadow: 0 2rpx 8rpx rgba(109,40,217,0.05);
 }
 .cat-active {
@@ -77,7 +75,7 @@
   border: 2rpx dashed rgba(124,58,237,0.25);
   border-radius: 20rpx; overflow: hidden;
   display: flex; align-items: center; justify-content: center;
-  background: rgba(124,58,237,0.04); transition: all 0.2s;
+  background: rgba(124,58,237,0.04); transition: background 0.2s, border-color 0.2s;
 }
 .cover-picker:active { background: rgba(124,58,237,0.08); border-color: rgba(124,58,237,0.40); }
 .cover-preview { width: 100%; height: 100%; }
@@ -106,7 +104,7 @@
 .limit-option {
   flex: 1; text-align: center; padding: 20rpx;
   font-size: 28rpx; color: rgba(30,27,75,0.50);
-  transition: all 0.15s; background: rgba(255,255,255,0.55);
+  transition: background 0.15s, color 0.15s; background: rgba(255,255,255,0.55);
 }
 .limit-active {
   background: linear-gradient(135deg, rgba(124,58,237,0.18), rgba(37,99,235,0.12));
@@ -129,7 +127,7 @@
   background: rgba(30,27,75,0.06);
   color: rgba(30,27,75,0.45);
   border: 1rpx solid rgba(30,27,75,0.10);
-  transition: all 0.15s;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
 .switch-on   { background: rgba(5,150,105,0.12);  color: #059669; border-color: rgba(5,150,105,0.25); }
 .required-on { background: rgba(220,38,38,0.10);  color: #dc2626; border-color: rgba(220,38,38,0.22); }

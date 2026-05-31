@@ -1,5 +1,5 @@
 <!-- components/activity-card/index.wxml -->
-<view class="card activity-card animate-slide-up" bindtap="onTap" data-id="{{activity.id}}">
+<view class="card activity-card" bindtap="onTap" data-id="{{activity.id}}" role="button" aria-label="查看活动 {{activity.name}}">
   <!-- 封面图 -->
   <view class="card-cover" wx:if="{{activity.coverImage}}">
     <image src="{{activity.coverImage}}" mode="aspectFill" class="cover-img" lazy-load />
@@ -50,7 +50,7 @@
     <!-- 底部：发起人 & 时间 -->
     <view class="card-footer">
       <view class="creator-info">
-        <image src="{{activity.creatorAvatar || '/images/default-avatar.png'}}" class="creator-avatar" />
+        <image src="{{activity.creatorAvatar || '/images/default-avatar.svg'}}" class="creator-avatar" />
         <text class="creator-name">{{activity.creatorNickname}}</text>
       </view>
       <text class="publish-time">{{publishTime}}</text>

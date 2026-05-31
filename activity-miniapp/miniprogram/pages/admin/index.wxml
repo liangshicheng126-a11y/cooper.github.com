@@ -72,7 +72,7 @@
       <!-- 名单列表 -->
       <view wx:for="{{filteredList}}" wx:key="id" class="registration-item card">
         <view class="reg-header">
-          <image src="{{item.avatarUrl || '/images/default-avatar.png'}}" class="reg-avatar" />
+          <image src="{{item.avatarUrl || '/images/default-avatar.svg'}}" class="reg-avatar" lazy-load />
           <view class="reg-info">
             <text class="reg-name">{{item.displayName}}</text>
             <text class="reg-time">{{item.registrationTimeText}}</text>
@@ -238,7 +238,7 @@
         <text class="report-reason">举报原因：{{item.reason}}</text>
         <text class="report-time">{{item.createdAtText}}</text>
         <view class="report-actions" wx:if="{{!item.handled}}">
-          <button class="btn btn-sm btn-gray" data-id="{{item.activityId}}" bindtap="onIgnoreReport">忽略</button>
+          <button class="btn btn-sm btn-gray" data-id="{{item.id}}" bindtap="onIgnoreReport">忽略</button>
           <button class="btn btn-sm btn-danger" data-id="{{item.activityId}}" bindtap="onOfflineFromReport">下架活动</button>
         </view>
       </view>

@@ -24,7 +24,7 @@
         <text class="refresh-btn" bindtap="loadCheckinList">刷新</text>
       </view>
       <view wx:for="{{checkinList}}" wx:key="id" class="checkin-item">
-        <image src="{{item.avatarUrl || '/images/default-avatar.png'}}" class="checkin-avatar" />
+        <image src="{{item.avatarUrl || '/images/default-avatar.svg'}}" class="checkin-avatar" lazy-load />
         <view class="checkin-info">
           <text class="checkin-name">{{item.name}}</text>
           <text class="checkin-time">{{item.checkinTimeText}}</text>

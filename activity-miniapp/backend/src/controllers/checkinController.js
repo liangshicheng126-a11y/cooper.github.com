@@ -50,6 +50,11 @@ exports.resolveCheckinScene = async (req, res, next) => {
 exports.getCheckinQRData = async (req, res, next) => {
   try {
     const { activityId } = req.params
+    const activity = await queryOne('SELECT creator_openid FROM activities WHERE id = ?', [activityId])
+    if (!activity) return res.status(404).json({ code: 404, message: '活动不存在' })
+    if (activity.creator_openid !== req.user.openid && !req.user.isAdmin) {
+      return res.status(403).json({ code: 403, message: '无权限' })
+    }
     const token = genCheckinToken(activityId)
     res.json({ code: 0, data: { token, activityId } })
   } catch (e) {

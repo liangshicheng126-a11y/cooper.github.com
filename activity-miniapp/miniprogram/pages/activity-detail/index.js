@@ -2,18 +2,10 @@
 const request = require('../../utils/request')
 const { getMenuButtonAnchor } = require('../../utils/nav')
 const { formatDate, getDurationNatural, getActivityStatus } = require('../../utils/date')
+const { getStatusMeta, getProgressMeta } = require('../../utils/activityStatus')
 
 const CAT_LABEL = {
   sport: '运动', culture: '文化', volunteer: '公益', social: '社交', other: '其他',
-}
-
-const STATUS_MAP = {
-  active: { text: '进行中', cls: 'badge-active' },
-  upcoming: { text: '未开始', cls: 'badge-upcoming' },
-  ended: { text: '已结束', cls: 'badge-ended' },
-  full: { text: '已报满', cls: 'badge-full' },
-  cancelled: { text: '已取消', cls: 'badge-ended' },
-  offline: { text: '已下架', cls: 'badge-ended' },
 }
 
 Page({
@@ -84,10 +76,8 @@ Page({
       }
 
       const status = getActivityStatus(activity)
-      const { text, cls } = STATUS_MAP[status] || STATUS_MAP.active
-      const pct = activity.maxParticipants > 0
-        ? Math.min(100, Math.round((activity.registrationCount / activity.maxParticipants) * 100))
-        : 0
+      const statusMeta = getStatusMeta(status, 'badge')
+      const progress = getProgressMeta(activity, 'danger', '', '')
       const app = getApp()
 
       const subActivities = (subRes.data || []).map(s => ({
@@ -135,15 +125,15 @@ Page({
         hasWxGroupQr,
         wxGroupVisible,
         statusKey: status,
-        statusText: text,
-        statusClass: cls,
+        statusText: statusMeta.text,
+        statusClass: statusMeta.className,
         startTimeText: scheduleStartFull,
         scheduleStartFull,
         scheduleEndFull,
         scheduleDurationNatural,
         categoryLabel,
-        progressPct: pct,
-        progressClass: pct >= 90 ? 'danger' : '',
+        progressPct: progress.percent,
+        progressClass: progress.className,
         cannotRegister: ['ended', 'full', 'cancelled', 'offline'].includes(status),
         loading: false,
       })
@@ -203,13 +193,13 @@ Page({
       const r = raw[i] || {}
       slots.push({
         key: `a${i}`,
-        avatarUrl: r.avatarUrl || r.avatar_url || '/images/default-avatar.png',
+        avatarUrl: r.avatarUrl || r.avatar_url || '/images/default-avatar.svg',
       })
     }
     while (slots.length < maxShow) {
       slots.push({
         key: `p${slots.length}`,
-        avatarUrl: '/images/default-avatar.png',
+        avatarUrl: '/images/default-avatar.svg',
       })
     }
     return slots

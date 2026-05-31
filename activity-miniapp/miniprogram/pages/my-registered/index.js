@@ -1,16 +1,7 @@
 // pages/my-registered/index.js
 const request = require('../../utils/request')
-const { getActivityStatus } = require('../../utils/date')
 const { listRowStartTime } = require('../../utils/activityFormat')
-
-const STATUS_MAP = {
-  active: { text: '进行中', cls: 'status-mini-active' },
-  upcoming: { text: '未开始', cls: 'status-mini-upcoming' },
-  ended: { text: '已结束', cls: 'status-mini-ended' },
-  full: { text: '已报满', cls: 'status-mini-full' },
-  cancelled: { text: '已取消', cls: 'status-mini-ended' },
-  offline: { text: '已下架', cls: 'status-mini-ended' },
-}
+const { getStatusMeta } = require('../../utils/activityStatus')
 
 Page({
   data: {
@@ -37,15 +28,14 @@ Page({
           startTime: r.startTime,
           endTime: r.endTime,
         }
-        const key = getActivityStatus(pseudo)
-        const meta = STATUS_MAP[key] || {}
+        const meta = getStatusMeta(pseudo, 'mini')
         return {
           ...r,
           name: r.activityName,
           startTimeText: listRowStartTime(r.startTime),
           registeredAtText: listRowStartTime(r.created_at || r.createdAt),
-          statusText: meta.text || '',
-          statusClass: meta.cls || '',
+          statusText: meta.text,
+          statusClass: meta.className,
         }
       })
       this.setData({ activities: list, loading: false })

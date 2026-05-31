@@ -93,7 +93,9 @@ app.use((err, req, res, next) => {
 
 async function start() {
   await connectRedis()
-  require('./jobs/reminderJob')
+  if (process.env.START_REMINDER_JOB !== '0' && !process.env.CLUSTER_WORKER) {
+    require('./jobs/reminderJob')
+  }
   const PORT = process.env.PORT || 3000
   const server = app.listen(PORT, async () => {
     await db.authenticate()

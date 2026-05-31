@@ -10,6 +10,9 @@ exports.generatePoster = async (req, res, next) => {
 
     const activity = await queryOne('SELECT * FROM activities WHERE id = ?', [activityId])
     if (!activity) return res.status(404).json({ code: 404, message: '活动不存在' })
+    if (activity.creator_openid !== req.user.openid && !req.user.isAdmin) {
+      return res.status(403).json({ code: 403, message: '无权限' })
+    }
 
     const prompt = buildPrompt(activity, style, color, extraText)
 

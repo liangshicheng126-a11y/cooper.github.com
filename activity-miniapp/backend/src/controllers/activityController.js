@@ -430,6 +430,11 @@ exports.offline = async (req, res, next) => {
   try {
     const { id } = req.params
     const { reason } = req.body
+    const activity = await queryOne('SELECT creator_openid FROM activities WHERE id = ?', [id])
+    if (!activity) return res.status(404).json({ code: 404, message: '活动不存在' })
+    if (activity.creator_openid !== req.user.openid && !req.user.isAdmin) {
+      return res.status(403).json({ code: 403, message: '无权限' })
+    }
     await query("UPDATE activities SET status='offline', offline_reason=?, offline_at=NOW() WHERE id=?", [reason || '', id])
     await delCache(`activity:${id}`)
     await delCacheByPattern('activities:list*')
