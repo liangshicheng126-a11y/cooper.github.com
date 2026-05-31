@@ -412,15 +412,25 @@
 .admin-icon--scan .admin-icon__mark {
   width: 28rpx;
   height: 28rpx;
+  background:
+    linear-gradient(currentColor, currentColor) left top / 12rpx 3rpx no-repeat,
+    linear-gradient(currentColor, currentColor) left top / 3rpx 12rpx no-repeat,
+    linear-gradient(currentColor, currentColor) right top / 12rpx 3rpx no-repeat,
+    linear-gradient(currentColor, currentColor) right top / 3rpx 12rpx no-repeat,
+    linear-gradient(currentColor, currentColor) left bottom / 12rpx 3rpx no-repeat,
+    linear-gradient(currentColor, currentColor) left bottom / 3rpx 12rpx no-repeat,
+    linear-gradient(currentColor, currentColor) right bottom / 12rpx 3rpx no-repeat,
+    linear-gradient(currentColor, currentColor) right bottom / 3rpx 12rpx no-repeat;
 }
-.admin-icon--scan .admin-icon__mark::before,
-.admin-icon--scan .admin-icon__mark::after {
-  inset: 0;
-  border: 3rpx solid currentColor;
-  border-radius: 6rpx;
+.admin-icon--scan .admin-icon__mark::before {
+  left: 5rpx;
+  right: 5rpx;
+  top: 13rpx;
+  height: 3rpx;
+  border-radius: 4rpx;
+  background: currentColor;
+  opacity: 0.75;
 }
-.admin-icon--scan .admin-icon__mark::before { clip-path: polygon(0 0, 42% 0, 42% 18%, 18% 18%, 18% 42%, 0 42%); }
-.admin-icon--scan .admin-icon__mark::after { clip-path: polygon(58% 0, 100% 0, 100% 42%, 82% 42%, 82% 18%, 58% 18%, 58% 100%, 100% 100%, 100% 58%, 82% 58%, 82% 82%, 58% 82%, 42% 82%, 18% 82%, 18% 58%, 0 58%, 0 100%, 42% 100%, 42% 82%); }
 .admin-icon--qr .admin-icon__mark {
   width: 26rpx;
   height: 26rpx;
