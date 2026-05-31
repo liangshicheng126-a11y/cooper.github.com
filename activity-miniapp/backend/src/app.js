@@ -16,7 +16,10 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // ===== 安全中间件 =====
-app.use(helmet())
+// 小程序/模拟器会以跨源方式拉取 /uploads 静态图；默认 same-origin 会触发 ERR_BLOCKED_BY_RESPONSE
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: 'cross-origin' },
+}))
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' ? false : '*',
   credentials: true,
@@ -65,7 +68,10 @@ app.use(express.json({ limit: '5mb' }))
 app.use(express.urlencoded({ extended: true }))
 
 // 开发环境本地上传封面（/api/upload/image 写入 public/uploads）
-app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')))
+app.use('/uploads', (req, res, next) => {
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin')
+  next()
+}, express.static(path.join(__dirname, '../public/uploads')))
 
 // ===== 路由（各接口独立限流） =====
 app.use('/api/auth',          authLimit,  require('./routes/auth'))
