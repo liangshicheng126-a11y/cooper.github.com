@@ -21,8 +21,11 @@
  */
 
 module.exports = {
-  // 可选：production 会阻断 your-domain / YOUR_* 等占位配置
-  // ENV: 'development',
+  // 上传微信审核 / 正式版请设为 production（API 默认 https://api.cooperliang.top/api）
+  // ENV: 'production',
+
+  // 可选：覆盖生产 API（一般不必改）
+  // API_BASE_URL: 'https://api.cooperliang.top/api',
 
   // 必填其一：中国区「定位」无 Key 时会降级用 OpenStreetM（准确度一般）
   MAP_KEY: '',

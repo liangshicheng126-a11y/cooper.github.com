@@ -22,4 +22,5 @@ public/photos/**/_display/
 
 # 小程序本地密钥（勿提交）
 activity-miniapp/miniprogram/utils/config.local.js
+activity-miniapp/backend/.env
 

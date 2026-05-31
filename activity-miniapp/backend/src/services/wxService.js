@@ -242,7 +242,8 @@ async function generateMiniQRCode(scene) {
     logger.error('Generate QR failed:', e.message)
     // 降级使用 qrcode 本地生成
     const QRCode = require('qrcode')
-    return await QRCode.toDataURL(`https://your-domain.com/checkin?scene=${scene}`)
+    const base = (process.env.API_PUBLIC_BASE || 'https://api.cooperliang.top').replace(/\/$/, '')
+    return await QRCode.toDataURL(`${base}/checkin?scene=${scene}`)
   }
 }
 
