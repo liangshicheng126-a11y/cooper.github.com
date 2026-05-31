@@ -1,24 +1,24 @@
-/* components/privacy-modal/index.wxss · 白色毛玻璃隐私协议弹窗 */
+/* components/privacy-modal/index.wxss · 活力隐私协议弹窗 */
 .mask {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(30,27,75,0.30);
+  background: rgba(37,26,52,0.34);
   backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
   z-index: 2000;
   display: flex; align-items: flex-end;
 }
 
 .modal {
-  background: rgba(255,255,255,0.94);
-  backdrop-filter: blur(30px) saturate(200%);
-  -webkit-backdrop-filter: blur(30px) saturate(200%);
+  background: var(--surface-strong);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
   border: 1rpx solid rgba(255,255,255,1);
-  border-top: 1rpx solid rgba(124,58,237,0.15);
+  border-top: 4rpx solid rgba(255,90,61,0.55);
   border-radius: 40rpx 40rpx 0 0;
   width: 100%; max-height: 88vh;
   display: flex; flex-direction: column;
-  box-shadow: 0 -16rpx 60rpx rgba(109,40,217,0.12);
-  animation: slideUp 0.4s cubic-bezier(0.34, 1.2, 0.64, 1) both;
+  box-shadow: 0 -18rpx 60rpx rgba(255,90,61,0.14);
+  animation: slideUp var(--motion-slow) var(--ease-pop) both;
 }
 
 @keyframes slideUp {
@@ -29,23 +29,23 @@
 .modal-header {
   padding: 40rpx 40rpx 20rpx;
   text-align: center;
-  border-bottom: 1rpx solid rgba(30,27,75,0.07);
+  border-bottom: 1rpx solid var(--divider);
 }
-.modal-title { font-size: 34rpx; font-weight: 700; color: #1e1b4b; letter-spacing: 1rpx; }
+.modal-title { font-size: 34rpx; font-weight: 800; color: var(--text-primary); letter-spacing: 1rpx; }
 
 .modal-scroll { flex: 1; max-height: 50vh; }
 .modal-body   { padding: 28rpx 40rpx; }
 
-.modal-welcome { display: block; font-size: 28rpx; font-weight: 600; color: #7c3aed; margin-bottom: 12rpx; }
-.modal-desc    { display: block; font-size: 26rpx; color: rgba(30,27,75,0.60); line-height: 1.75; margin-bottom: 28rpx; }
+.modal-welcome { display: block; font-size: 28rpx; font-weight: 700; color: var(--accent-text); margin-bottom: 12rpx; }
+.modal-desc    { display: block; font-size: 26rpx; color: var(--text-secondary); line-height: 1.75; margin-bottom: 28rpx; }
 
 .policy-section { margin-bottom: 28rpx; }
-.policy-title   { display: block; font-size: 28rpx; font-weight: 600; color: #1e1b4b; margin-bottom: 12rpx; }
-.policy-text    { display: block; font-size: 25rpx; color: rgba(30,27,75,0.60); line-height: 1.85; padding-left: 8rpx; }
+.policy-title   { display: block; font-size: 28rpx; font-weight: 700; color: var(--text-primary); margin-bottom: 12rpx; }
+.policy-text    { display: block; font-size: 25rpx; color: var(--text-secondary); line-height: 1.85; padding-left: 8rpx; }
 
 .modal-footer {
   padding: 24rpx 40rpx 36rpx;
-  border-top: 1rpx solid rgba(30,27,75,0.07);
+  border-top: 1rpx solid var(--divider);
 }
 
 .agree-row {
@@ -55,20 +55,33 @@
 
 .checkbox {
   width: 36rpx; height: 36rpx;
-  border: 2rpx solid rgba(30,27,75,0.22); border-radius: 8rpx;
+  border: 2rpx solid rgba(37,26,52,0.22); border-radius: 10rpx;
   margin-right: 14rpx; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
-  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s; background: rgba(255,255,255,0.80);
+  transition: background var(--motion-base), border-color var(--motion-base), box-shadow var(--motion-base), transform var(--motion-base) var(--ease-out); background: rgba(255,255,255,0.86);
 }
 .checkbox.checked {
-  background: linear-gradient(135deg, #7c3aed, #2563eb);
-  border-color: #7c3aed;
-  box-shadow: 0 2rpx 12rpx rgba(124,58,237,0.35);
+  background: var(--accent-grad);
+  border-color: var(--accent);
+  box-shadow: 0 4rpx 14rpx rgba(255,90,61,0.28);
+  transform: scale(1.04);
 }
 .check-icon { color: #fff; font-size: 22rpx; font-weight: 700; }
 
-.agree-text { font-size: 25rpx; color: rgba(30,27,75,0.60); }
-.link-text  { font-size: 25rpx; color: #7c3aed; font-weight: 600; }
+.agree-text { font-size: 25rpx; color: var(--text-secondary); }
+.link-text  { font-size: 25rpx; color: var(--accent-text); font-weight: 700; }
 
 .btn-disabled { opacity: 0.35; }
 .mt-12 { margin-top: 16rpx; }
+
+@media (prefers-reduced-motion: reduce) {
+  .modal {
+    animation: none;
+  }
+  .checkbox {
+    transition: background var(--motion-fast), border-color var(--motion-fast);
+  }
+  .checkbox.checked {
+    transform: none;
+  }
+}

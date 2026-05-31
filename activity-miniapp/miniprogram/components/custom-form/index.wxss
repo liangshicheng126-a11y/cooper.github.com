@@ -12,12 +12,14 @@
   border: 2rpx solid var(--gray-200);
   border-radius: var(--radius-md);
   background: var(--gray-50);
-  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+  transition: border-color var(--motion-base), background var(--motion-base), box-shadow var(--motion-base), transform var(--motion-base) var(--ease-out);
 }
 
 .option-item.option-selected {
   border-color: var(--primary);
   background: var(--primary-light);
+  box-shadow: 0 6rpx 18rpx rgba(255,90,61,0.10);
+  transform: translateY(-1rpx);
 }
 
 .option-radio {
@@ -26,13 +28,13 @@
   border: 2rpx solid var(--gray-300);
   border-radius: 50%;
   margin-right: 12rpx;
-  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  transition: border-color var(--motion-base), background var(--motion-base), color var(--motion-base);
 }
 
 .option-radio.radio-checked {
   border-color: var(--primary);
   background: var(--primary);
-  box-shadow: inset 0 0 0 6rpx white;
+  box-shadow: inset 0 0 0 6rpx white, 0 0 0 4rpx rgba(255,90,61,0.10);
 }
 
 .option-checkbox {
@@ -44,12 +46,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  transition: border-color var(--motion-base), background var(--motion-base), color var(--motion-base), box-shadow var(--motion-base);
 }
 
 .option-checkbox.checkbox-checked {
   background: var(--primary);
   border-color: var(--primary);
+  box-shadow: 0 0 0 4rpx rgba(255,90,61,0.10);
 }
 
 .check-icon {
@@ -89,4 +92,15 @@
   color: var(--gray-400);
   transform: rotate(90deg);
   display: inline-block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .option-item,
+  .option-radio,
+  .option-checkbox {
+    transition: background var(--motion-fast), border-color var(--motion-fast);
+  }
+  .option-item.option-selected {
+    transform: none;
+  }
 }

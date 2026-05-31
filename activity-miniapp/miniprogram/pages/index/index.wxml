@@ -39,7 +39,7 @@
     interval="4000"
     circular
     indicator-dots
-    indicator-active-color="#4F46E5"
+    indicator-active-color="#ff5a3d"
     indicator-color="rgba(255,255,255,0.5)"
   >
     <swiper-item wx:for="{{bannerList}}" wx:key="id" bindtap="onBannerTap" data-id="{{item.id}}">
