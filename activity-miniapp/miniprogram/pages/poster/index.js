@@ -8,7 +8,7 @@ Page({
     posterUrl: '',
     generating: false,
     selectedStyle: 'modern',
-    selectedColor: '#4F46E5',
+    selectedColor: '#FF5A3D',
     extraText: '',
     posterStyles: [
       { key: 'modern', name: '现代简约', emoji: '🎨' },
@@ -19,9 +19,9 @@ Page({
       { key: 'retro', name: '复古风', emoji: '📻' },
     ],
     colorThemes: [
-      { value: '#4F46E5' }, { value: '#EC4899' }, { value: '#10B981' },
-      { value: '#F59E0B' }, { value: '#EF4444' }, { value: '#06B6D4' },
-      { value: '#8B5CF6' }, { value: '#1F2937' },
+      { value: '#FF5A3D' }, { value: '#7C3AED' }, { value: '#FACC15' },
+      { value: '#10B981' }, { value: '#EF4444' }, { value: '#06B6D4' },
+      { value: '#EC4899' }, { value: '#251A34' },
     ],
   },
 
