@@ -307,7 +307,7 @@
   <view class="bottom-bar" wx:if="{{!loading && !loadError}}">
     <view wx:if="{{!isRegistered && !isCreator}}" class="bottom-main-row">
       <button class="share-btn" open-type="share">
-        <view class="share-btn-icon" />
+        <view class="share-btn-icon"><view class="share-btn-icon__arrow" /></view>
       </button>
       <button class="btn btn-primary flex-1 btn-lg" bindtap="onRegister" disabled="{{cannotRegister}}">
         <text wx:if="{{statusKey === 'full'}}">已报满</text>
@@ -324,7 +324,7 @@
     </view>
     <view wx:elif="{{isCreator}}" class="creator-bar">
       <button class="share-btn" open-type="share">
-        <view class="share-btn-icon" />
+        <view class="share-btn-icon"><view class="share-btn-icon__arrow" /></view>
       </button>
       <button class="btn btn-outline flex-1" bindtap="onEditActivity">编辑</button>
       <button class="btn btn-primary flex-1" bindtap="onViewRegistrations">查看名单</button>
