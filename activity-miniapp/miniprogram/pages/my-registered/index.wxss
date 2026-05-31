@@ -49,6 +49,11 @@
   transform: scale(0.99);
 }
 
+.item-cover-box { position: relative; width: 200rpx; height: 160rpx; flex-shrink: 0; flex-grow: 0; overflow: hidden; }
+.item-cover-fallback {
+  position: absolute; inset: 0;
+  background: linear-gradient(145deg, #fff7ed 0%, #fff1f2 48%, #eef2ff 100%);
+}
 .item-cover { width: 200rpx; height: 160rpx; flex-shrink: 0; flex-grow: 0; }
 
 .item-body {

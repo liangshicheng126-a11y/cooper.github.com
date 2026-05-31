@@ -1,8 +1,16 @@
 <!-- components/activity-card/index.wxml -->
 <view class="card activity-card" bindtap="onTap" data-id="{{activity.id}}" role="button" aria-label="查看活动 {{activity.name}}">
-  <!-- 封面图 -->
-  <view class="card-cover" wx:if="{{activity.coverImage}}">
-    <image src="{{activity.coverImage}}" mode="aspectFill" class="cover-img" lazy-load />
+  <!-- 封面图（无图或加载失败时用 CSS 占位，避免 SVG/无效 URL 空白） -->
+  <view class="card-cover">
+    <view class="cover-fallback" wx:if="{{!coverSrc || coverFailed}}" />
+    <image
+      wx:if="{{coverSrc && !coverFailed}}"
+      src="{{coverSrc}}"
+      mode="aspectFill"
+      class="cover-img"
+      lazy-load
+      binderror="onCoverError"
+    />
     <view class="cover-overlay" />
   </view>
 
@@ -50,7 +58,15 @@
     <!-- 底部：发起人 & 时间 -->
     <view class="card-footer">
       <view class="creator-info">
-        <image src="{{activity.creatorAvatar || '/images/default-avatar.svg'}}" class="creator-avatar" />
+        <view class="creator-avatar creator-avatar--fallback" wx:if="{{!creatorAvatarSrc}}" />
+        <image
+          wx:else
+          src="{{creatorAvatarSrc}}"
+          class="creator-avatar"
+          mode="aspectFill"
+          lazy-load
+          binderror="onAvatarError"
+        />
         <text class="creator-name">{{activity.creatorNickname}}</text>
       </view>
       <text class="publish-time">{{publishTime}}</text>

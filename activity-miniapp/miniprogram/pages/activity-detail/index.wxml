@@ -37,8 +37,15 @@
 
     <!-- 封面图 -->
     <view class="cover-section">
-      <image wx:if="{{activity.coverImage}}" src="{{activity.coverImage}}" mode="aspectFill" class="cover-image" lazy-load />
-      <view wx:else class="cover-placeholder"><text class="cover-emoji">🎊</text></view>
+      <view class="cover-fallback" wx:if="{{!activity.coverImage || coverFailed}}" />
+      <image
+        wx:if="{{activity.coverImage && !coverFailed}}"
+        src="{{activity.coverImage}}"
+        mode="aspectFill"
+        class="cover-image"
+        lazy-load
+        binderror="onCoverError"
+      />
       <view class="cover-gradient" />
     </view>
 
@@ -199,14 +206,18 @@
       </view>
       <text class="participants-hint" wx:if="{{registrantSlots.length}}">展示最近报名者头像（最多 8 位）</text>
       <view class="avatar-list avatar-list--lg">
-        <image
-          wx:for="{{registrantSlots}}"
-          wx:key="key"
-          src="{{item.avatarUrl}}"
-          mode="aspectFill"
-          class="registrant-avatar"
-          lazy-load
-        />
+        <block wx:for="{{registrantSlots}}" wx:key="key">
+          <view wx:if="{{!item.avatarUrl}}" class="registrant-avatar registrant-avatar--fallback" />
+          <image
+            wx:else
+            src="{{item.avatarUrl}}"
+            mode="aspectFill"
+            class="registrant-avatar"
+            lazy-load
+            binderror="onRegAvatarError"
+            data-index="{{index}}"
+          />
+        </block>
         <view class="avatar-more" wx:if="{{activity.registrationCount > 8}}">
           <text>+{{activity.registrationCount - 8}}</text>
         </view>
@@ -227,7 +238,8 @@
         wx:key="id"
         class="checkin-detail-row"
       >
-        <image class="checkin-detail-avatar" src="{{item.avatarUrl || '/images/default-avatar.svg'}}" mode="aspectFill" lazy-load />
+        <view class="checkin-detail-avatar checkin-detail-avatar--fallback" wx:if="{{!item.avatarUrl}}" />
+        <image wx:else class="checkin-detail-avatar" src="{{item.avatarUrl}}" mode="aspectFill" lazy-load binderror="onRegAvatarError" data-index="{{index}}" />
         <view class="checkin-detail-mid">
           <text class="checkin-detail-name">{{item.name}}</text>
           <text class="checkin-detail-time">签到时间 {{item.checkinTimeText}}</text>

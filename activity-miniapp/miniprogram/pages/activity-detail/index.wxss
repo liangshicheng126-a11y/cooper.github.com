@@ -68,7 +68,11 @@
   height: 260rpx;
   overflow: hidden;
 }
-.cover-image { width: 100%; height: 100%; }
+.cover-fallback {
+  position: absolute; inset: 0;
+  background: linear-gradient(145deg, #fff7ed 0%, #fff1f2 48%, #eef2ff 100%);
+}
+.cover-image { position: relative; z-index: 1; width: 100%; height: 100%; }
 .cover-placeholder {
   width: 100%;
   height: 100%;
@@ -354,6 +358,9 @@
   border: 4rpx solid rgba(255,255,255,.95);
   box-shadow: 0 4rpx 12rpx rgba(255,90,61,0.14);
 }
+.registrant-avatar--fallback {
+  background: linear-gradient(145deg, rgba(255,90,61,0.22), rgba(124,58,237,0.18));
+}
 .avatar-more {
   width: 80rpx; height: 80rpx; border-radius: 50%;
   background: var(--accent-light); display: flex; align-items: center; justify-content: center;
@@ -533,6 +540,9 @@
   border-radius: 50%;
   background: var(--accent-light);
   flex-shrink: 0;
+}
+.creator-checkin-card .checkin-detail-avatar--fallback {
+  background: linear-gradient(145deg, rgba(255,90,61,0.22), rgba(124,58,237,0.18));
 }
 .creator-checkin-card .checkin-detail-mid {
   flex: 1;

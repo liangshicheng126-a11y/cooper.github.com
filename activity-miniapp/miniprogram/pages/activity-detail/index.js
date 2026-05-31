@@ -3,6 +3,7 @@ const request = require('../../utils/request')
 const { getMenuButtonAnchor } = require('../../utils/nav')
 const { formatDate, getDurationNatural, getActivityStatus } = require('../../utils/date')
 const { getStatusMeta, getProgressMeta } = require('../../utils/activityStatus')
+const { withActivityMedia, resolveAvatarUrl } = require('../../utils/media')
 
 const CAT_LABEL = {
   sport: '运动', culture: '文化', volunteer: '公益', social: '社交', other: '其他',
@@ -41,6 +42,7 @@ Page({
     wxGroupHighlight: false,
     hasWxGroupQr: false,
     wxGroupVisible: false,
+    coverFailed: false,
   },
 
   onLoad(options) {
@@ -61,6 +63,7 @@ Page({
   },
 
   async _loadDetail(id) {
+    this.setData({ coverFailed: false })
     wx.showNavigationBarLoading()
     try {
       const [actRes, subRes, regRes] = await Promise.all([
@@ -69,7 +72,7 @@ Page({
         request.get(`/activities/${id}/my-registration`),
       ])
 
-      const activity = actRes.data
+      const activity = withActivityMedia(actRes.data)
       if (!activity || !activity.id) {
         this.setData({ loading: false, loadError: true })
         return
@@ -159,6 +162,16 @@ Page({
     }
   },
 
+  onCoverError() {
+    this.setData({ coverFailed: true })
+  },
+
+  onRegAvatarError(e) {
+    const idx = e.currentTarget.dataset.index
+    if (idx === undefined) return
+    this.setData({ [`registrantSlots[${idx}].avatarUrl`]: '' })
+  },
+
   onRetry() {
     this.setData({ loadError: false })
     this._loadDetail(this.data.activityId)
@@ -193,13 +206,13 @@ Page({
       const r = raw[i] || {}
       slots.push({
         key: `a${i}`,
-        avatarUrl: r.avatarUrl || r.avatar_url || '/images/default-avatar.svg',
+        avatarUrl: resolveAvatarUrl(r.avatarUrl || r.avatar_url),
       })
     }
     while (slots.length < maxShow) {
       slots.push({
         key: `p${slots.length}`,
-        avatarUrl: '/images/default-avatar.svg',
+        avatarUrl: '',
       })
     }
     return slots

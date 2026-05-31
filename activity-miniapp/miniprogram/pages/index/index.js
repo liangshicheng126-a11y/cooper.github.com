@@ -2,6 +2,7 @@
 const request = require('../../utils/request')
 const i18n = require('../../utils/i18n')
 const { withListRowTimes, bannerRowStartTime } = require('../../utils/activityFormat')
+const { withActivityMedia } = require('../../utils/media')
 
 const PAGE_SIZE = 10
 
@@ -215,10 +216,13 @@ Page({
     try {
       const res = await request.get('/activities/featured')
       this.setData({
-        bannerList: (res.data || []).map((a) => ({
-          ...a,
-          startTimeText: bannerRowStartTime(a.startTime),
-        })),
+        bannerList: (res.data || []).map((a) => {
+          const row = withActivityMedia(a)
+          return {
+            ...row,
+            startTimeText: bannerRowStartTime(row.startTime),
+          }
+        }),
       })
     } catch (e) {}
   },
@@ -236,6 +240,13 @@ Page({
 
   onBannerTap(e) {
     wx.navigateTo({ url: `/pages/activity-detail/index?id=${e.currentTarget.dataset.id}` })
+  },
+
+  onBannerImageError(e) {
+    const idx = e.currentTarget.dataset.index
+    if (idx === undefined || idx === null) return
+    const key = `bannerList[${idx}].coverImage`
+    this.setData({ [key]: '' })
   },
 
   onSearchTap() {

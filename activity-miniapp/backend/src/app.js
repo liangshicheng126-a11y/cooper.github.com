@@ -1,5 +1,6 @@
 // src/app.js - 应用入口
 require('dotenv').config()
+const path      = require('path')
 const express   = require('express')
 const cors      = require('cors')
 const helmet    = require('helmet')
@@ -62,6 +63,9 @@ const heavyLimit = rateLimit({
 app.use(globalLimit)
 app.use(express.json({ limit: '5mb' }))
 app.use(express.urlencoded({ extended: true }))
+
+// 开发环境本地上传封面（/api/upload/image 写入 public/uploads）
+app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')))
 
 // ===== 路由（各接口独立限流） =====
 app.use('/api/auth',          authLimit,  require('./routes/auth'))

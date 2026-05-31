@@ -43,7 +43,18 @@
     indicator-color="rgba(255,255,255,0.5)"
   >
     <swiper-item wx:for="{{bannerList}}" wx:key="id" bindtap="onBannerTap" data-id="{{item.id}}">
-      <image src="{{item.coverImage || '/images/default-cover.svg'}}" mode="aspectFill" class="banner-img" lazy-load />
+      <view class="banner-cover">
+        <view class="banner-fallback" wx:if="{{!item.coverImage}}" />
+        <image
+          wx:if="{{item.coverImage}}"
+          src="{{item.coverImage}}"
+          mode="aspectFill"
+          class="banner-img"
+          lazy-load
+          data-index="{{index}}"
+          binderror="onBannerImageError"
+        />
+      </view>
       <view class="banner-info">
         <text class="banner-title text-ellipsis">{{item.name}}</text>
         <text class="banner-time">{{item.startTimeText}}</text>

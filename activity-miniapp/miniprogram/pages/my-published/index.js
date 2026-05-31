@@ -1,6 +1,7 @@
 // pages/my-published/index.js
 const request = require('../../utils/request')
 const { listRowStartTime } = require('../../utils/activityFormat')
+const { withActivityMedia } = require('../../utils/media')
 const { getStatusMeta } = require('../../utils/activityStatus')
 
 Page({
@@ -28,12 +29,12 @@ Page({
         let modBadge = ''
         if (mod === 'pending') modBadge = ' · 审核中'
         else if (mod === 'rejected') modBadge = ' · 未过审'
-        return {
+        return withActivityMedia({
           ...a,
           startTimeText: listRowStartTime(a.startTime),
           statusText: meta.text + modBadge,
           statusClass: meta.className,
-        }
+        })
       })
       this.setData({ activities: list, loading: false })
     } catch (e) {

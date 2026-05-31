@@ -15,7 +15,10 @@
       bindtap="onActivityTap"
       data-id="{{item.activityId}}"
     >
-      <image src="{{item.coverImage || '/images/default-cover.svg'}}" mode="aspectFill" class="item-cover" lazy-load />
+      <view class="item-cover-box">
+        <view class="item-cover-fallback" wx:if="{{!item.coverImage}}" />
+        <image wx:if="{{item.coverImage}}" src="{{item.coverImage}}" mode="aspectFill" class="item-cover" lazy-load />
+      </view>
       <view class="item-body">
         <text class="item-name text-ellipsis">{{item.name}}</text>
         <view class="item-info-row">

@@ -1,6 +1,7 @@
 // utils/activityFormat.js - 列表/横幅等活动展示用时间格式（跟随 i18n）
 const { formatDate } = require('./date')
 const i18n = require('./i18n')
+const { withActivityMedia } = require('./media')
 
 /** 卡片列表行右侧时间一行 */
 function listRowStartTime(startTime) {
@@ -17,10 +18,10 @@ function bannerRowStartTime(startTime) {
 }
 
 function withListRowTimes(activity) {
-  return {
+  return withActivityMedia({
     ...activity,
     startTimeText: listRowStartTime(activity.startTime),
-  }
+  })
 }
 
 module.exports = {

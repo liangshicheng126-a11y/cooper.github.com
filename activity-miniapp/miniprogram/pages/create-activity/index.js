@@ -125,7 +125,7 @@ Page({
   onCoverImageError() {
     if (this.data.coverTempPath) return
     wx.showToast({
-      title: '请将封面图域名加入小程序 downloadFile 合法域名',
+      title: '封面图加载失败，请重新上传或检查 downloadFile 合法域名',
       icon: 'none',
       duration: 3000,
     })

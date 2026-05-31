@@ -1,6 +1,7 @@
 // pages/my-registered/index.js
 const request = require('../../utils/request')
 const { listRowStartTime } = require('../../utils/activityFormat')
+const { resolveMediaUrl } = require('../../utils/media')
 const { getStatusMeta } = require('../../utils/activityStatus')
 
 Page({
@@ -31,6 +32,7 @@ Page({
         const meta = getStatusMeta(pseudo, 'mini')
         return {
           ...r,
+          coverImage: resolveMediaUrl(r.coverImage),
           name: r.activityName,
           startTimeText: listRowStartTime(r.startTime),
           registeredAtText: listRowStartTime(r.created_at || r.createdAt),

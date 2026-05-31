@@ -90,7 +90,20 @@
   box-shadow: 0 16rpx 38rpx rgba(255,90,61,0.14), 0 4rpx 12rpx rgba(37,26,52,0.06);
 }
 
-.banner-img { width: 100%; height: 100%; }
+.banner-cover { position: relative; width: 100%; height: 100%; }
+.banner-fallback {
+  position: absolute; inset: 0;
+  background: linear-gradient(145deg, #fff7ed 0%, #fff1f2 48%, #eef2ff 100%);
+}
+.banner-fallback::after {
+  content: '';
+  position: absolute;
+  width: 280rpx; height: 280rpx;
+  top: -60rpx; right: -40rpx;
+  border-radius: 50%;
+  background: rgba(255,90,61,0.14);
+}
+.banner-img { position: relative; z-index: 1; width: 100%; height: 100%; }
 
 .banner-info {
   position: absolute;
