@@ -33,14 +33,14 @@
       {
         "pagePath": "pages/index/index",
         "text": "发现",
-        "iconPath": "images/tab-discover.png",
-        "selectedIconPath": "images/tab-discover-active.png"
+        "iconPath": "images/icon-discover.svg",
+        "selectedIconPath": "images/icon-discover-active.svg"
       },
       {
         "pagePath": "pages/my/index",
         "text": "我的",
-        "iconPath": "images/tab-my.png",
-        "selectedIconPath": "images/tab-my-active.png"
+        "iconPath": "images/icon-my.svg",
+        "selectedIconPath": "images/icon-my-active.svg"
       }
     ]
   },
