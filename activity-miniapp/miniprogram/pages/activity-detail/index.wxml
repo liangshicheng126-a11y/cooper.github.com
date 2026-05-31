@@ -287,20 +287,6 @@
       </view>
     </view>
 
-    <!-- 复制 / 举报（不与底部「转发」重复图标入口） -->
-    <view class="extras-bar">
-      <view class="extras-inner">
-        <view class="extras-chip" bindtap="onCopyLink">
-          <text class="extras-chip-ico">摘</text>
-          <text class="extras-chip-txt">复制活动摘要</text>
-        </view>
-        <view class="extras-chip extras-chip--danger" wx:if="{{!isCreator && activity.id}}" bindtap="onReport">
-          <text class="extras-chip-ico">⚑</text>
-          <text class="extras-chip-txt">举报</text>
-        </view>
-      </view>
-    </view>
-
   </block>
 
   <!-- 底部操作栏（固定） -->
