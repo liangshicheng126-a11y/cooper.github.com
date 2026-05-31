@@ -619,23 +619,24 @@
 }
 .share-btn-icon__arrow {
   position: absolute;
-  left: 19rpx;
+  left: 50%;
   top: 2rpx;
   width: 4rpx;
   height: 30rpx;
   border-radius: 4rpx;
   background: currentColor;
+  transform: translateX(-50%);
 }
 .share-btn-icon__arrow::before {
   content: '';
   position: absolute;
-  left: -9rpx;
+  left: 50%;
   top: 0;
   width: 18rpx;
   height: 18rpx;
   border-left: 4rpx solid currentColor;
   border-top: 4rpx solid currentColor;
-  transform: rotate(45deg);
+  transform: translateX(-50%) rotate(45deg);
   box-sizing: border-box;
 }
 
