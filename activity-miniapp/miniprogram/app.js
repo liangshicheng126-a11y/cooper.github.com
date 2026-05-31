@@ -12,6 +12,7 @@ App({
     privacyAgreed: false,
     /** 发布新活动后为 true：回到发现页时切到「全部」并强制拉列表 */
     refreshHomeActivityListNextShow: false,
+    backendUnavailable: false,
   },
 
   onLaunch() {
@@ -45,10 +46,15 @@ App({
         this.globalData.userInfo = res.data
         this.globalData.openid = res.data.openid || null
         this.globalData.isAdmin = res.data.isAdmin || false
+        this.globalData.backendUnavailable = false
       } else {
         await this.wxLogin()
       }
     } catch (e) {
+      if (e?.isNetworkError) {
+        this.globalData.backendUnavailable = true
+        return
+      }
       wx.removeStorageSync('token')
       await this.wxLogin()
     }
@@ -72,6 +78,7 @@ App({
             this.globalData.userInfo = result.data.user
             this.globalData.openid = result.data.openid
             this.globalData.isAdmin = result.data.user.isAdmin || false
+            this.globalData.backendUnavailable = false
             wx.setStorageSync('token', result.data.token)
             resolve(result.data)
           } catch (e) {

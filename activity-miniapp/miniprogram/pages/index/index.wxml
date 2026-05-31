@@ -80,6 +80,15 @@
       </view>
     </view>
 
+    <view wx:elif="{{loadError && !loading}}">
+      <view class="empty-state error-state">
+        <text class="empty-icon">⚠️</text>
+        <text class="empty-text">后端服务未连接</text>
+        <text class="empty-sub">{{loadErrorText}}</text>
+        <button class="retry-btn" bindtap="onRetryLoad">重新加载</button>
+      </view>
+    </view>
+
     <view wx:elif="{{activities.length === 0 && !loading}}">
       <view class="empty-state">
         <text class="empty-icon">🎉</text>

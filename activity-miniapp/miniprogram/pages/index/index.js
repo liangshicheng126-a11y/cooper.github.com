@@ -46,6 +46,8 @@ Page({
     emptySubActivities: '',
     loadingEllipsis: '',
     loadedAllFooter: '',
+    loadError: false,
+    loadErrorText: '',
     showPrivacy: false,
     categories: [],
     /** 列表排序：latest | soon | popular | distance */
@@ -152,7 +154,7 @@ Page({
     const page = reset ? 1 : this.data.page
 
     if (reset) {
-      this.setData({ loading: true, activities: [], noMore: false })
+      this.setData({ loading: true, activities: [], noMore: false, loadError: false, loadErrorText: '' })
     } else {
       this.setData({ loadingMore: true })
     }
@@ -191,11 +193,19 @@ Page({
         activities: reset ? list : [...this.data.activities, ...list],
         page: page + 1,
         noMore: list.length < PAGE_SIZE,
+        loadError: false,
+        loadErrorText: '',
       })
       this._hasLoadedActivities = true
     } catch (e) {
       console.error('加载活动失败', e)
-      wx.showToast({ title: e.message || i18n.t('listLoadFail'), icon: 'none', duration: 2500 })
+      const msg = e?.isNetworkError
+        ? `${e.message}（${e.apiBaseUrl || 'API'}）`
+        : (e.message || i18n.t('listLoadFail'))
+      this.setData({ loadError: true, loadErrorText: msg })
+      if (!e?.isNetworkError) {
+        wx.showToast({ title: msg, icon: 'none', duration: 2500 })
+      }
     } finally {
       this.setData({ loading: false, loadingMore: false, refreshing: false })
     }
@@ -279,6 +289,11 @@ Page({
 
   onRefresh() {
     this.setData({ refreshing: true })
+    this._loadActivities(true)
+  },
+
+  onRetryLoad() {
+    this._loadBanners()
     this._loadActivities(true)
   },
 

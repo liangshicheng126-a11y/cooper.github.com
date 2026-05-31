@@ -187,6 +187,24 @@
   letter-spacing: 2rpx;
 }
 
+.error-state {
+  padding: 72rpx 48rpx;
+}
+
+.retry-btn {
+  margin-top: 28rpx;
+  min-width: 220rpx;
+  height: 72rpx;
+  line-height: 72rpx;
+  border-radius: 999rpx;
+  background: var(--accent-grad);
+  color: #fff;
+  font-size: 26rpx;
+  font-weight: 600;
+  box-shadow: 0 6rpx 20rpx rgba(124,58,237,0.22);
+}
+.retry-btn::after { border: none; }
+
 /* ══ FAB（页面 2/3 位置） ══ */
 .fab {
   position: fixed;

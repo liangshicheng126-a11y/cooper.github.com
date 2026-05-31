@@ -69,9 +69,17 @@ app.use('/api/checkin',       writeLimit, require('./routes/checkin'))
 app.use('/api/upload',        heavyLimit, require('./routes/upload'))
 
 // ===== 健康检查（含连接池状态） =====
-app.get('/health', (req, res) => {
+function healthPayload() {
   const stats = db.getPoolStats ? db.getPoolStats() : {}
-  res.json({ status: 'ok', ts: Date.now(), db: stats })
+  return { status: 'ok', ts: Date.now(), db: stats }
+}
+
+app.get('/health', (req, res) => {
+  res.json(healthPayload())
+})
+
+app.get('/api/health', (req, res) => {
+  res.json({ code: 0, data: healthPayload() })
 })
 
 // ===== 开发辅助 =====

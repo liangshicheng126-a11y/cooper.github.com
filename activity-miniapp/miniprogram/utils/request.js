@@ -4,13 +4,39 @@ const { API_BASE_URL } = require('./config')
 const MAX_RETRY = 2
 /** wx.request / uploadFile 超时（毫秒），避免弱网无限挂起 */
 const HTTP_TIMEOUT_MS = 30000
+const NETWORK_TOAST_GAP_MS = 2500
+let lastNetworkToastAt = 0
 
 function getToken() {
   return wx.getStorageSync('token') || ''
 }
 
-function showNetworkError() {
-  wx.showToast({ title: '网络异常，请重试', icon: 'none' })
+function isNetworkFail(err) {
+  const msg = String(err?.errMsg || err?.message || err || '').toLowerCase()
+  return /request:fail|uploadfile:fail|econnrefused|timeout|err_connection|network|failed to connect/.test(msg)
+}
+
+function createNetworkError(err, fullUrl) {
+  const raw = err?.errMsg || err?.message || 'request:fail'
+  const message = /econnrefused|failed to connect/i.test(raw)
+    ? '后端服务未连接，请先启动本地服务'
+    : /timeout/i.test(raw)
+      ? '请求超时，请检查网络或后端服务'
+      : '网络异常，请重试'
+  const e = new Error(message)
+  e.isNetworkError = true
+  e.apiBaseUrl = API_BASE_URL
+  e.url = fullUrl
+  e.errMsg = raw
+  e.original = err
+  return e
+}
+
+function showNetworkError(error) {
+  const now = Date.now()
+  if (now - lastNetworkToastAt < NETWORK_TOAST_GAP_MS) return
+  lastNetworkToastAt = now
+  wx.showToast({ title: error?.message || '网络异常，请重试', icon: 'none', duration: 2500 })
 }
 
 /** GET 查询串不传 undefined/null/空串，避免被序列化为 category=undefined 导致服务端按分类过滤为空 */
@@ -74,8 +100,9 @@ async function request(method, url, data = {}, retry = 0) {
         }
       },
       fail: (err) => {
-        showNetworkError()
-        reject(err)
+        const error = isNetworkFail(err) ? createNetworkError(err, fullUrl) : err
+        if (error.isNetworkError) showNetworkError(error)
+        reject(error)
       },
     })
   })
@@ -114,8 +141,9 @@ function upload(url, filePath, name = 'file', formData = {}) {
         }
       },
       fail: (err) => {
-        showNetworkError()
-        reject(err)
+        const error = isNetworkFail(err) ? createNetworkError(err, fullUrl) : err
+        if (error.isNetworkError) showNetworkError(error)
+        reject(error)
       },
     })
   })
@@ -128,4 +156,5 @@ module.exports = {
   patch: (url, data) => request('PATCH', url, data),
   delete: (url, data) => request('DELETE', url, data),
   upload,
+  isNetworkFail,
 }

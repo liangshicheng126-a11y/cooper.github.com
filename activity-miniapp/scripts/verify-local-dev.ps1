@@ -7,7 +7,23 @@ Write-Host ""
 Write-Host "=== activity-miniapp local verify ===" -ForegroundColor Cyan
 
 try {
-  $r = Invoke-RestMethod -Uri "http://localhost:3000/api/activities?page=1&size=1" -TimeoutSec 5
+  $health = Invoke-RestMethod -Uri "http://127.0.0.1:3000/api/health" -TimeoutSec 5
+  if ($health.code -eq 0) {
+    Write-Host "[OK] GET /api/health" -ForegroundColor Green
+  } else {
+    Write-Host "[FAIL] GET /api/health - code=$($health.code)" -ForegroundColor Red
+    exit 1
+  }
+} catch {
+  Write-Host "[FAIL] Backend not reachable at http://127.0.0.1:3000/api" -ForegroundColor Red
+  Write-Host "      Start it first: cd activity-miniapp/backend; npm run dev" -ForegroundColor Yellow
+  Write-Host "      If using phone preview, set miniprogram/utils/config.local.js API_BASE_URL to your LAN IP." -ForegroundColor Yellow
+  Write-Host "      $($_.Exception.Message)" -ForegroundColor Yellow
+  exit 1
+}
+
+try {
+  $r = Invoke-RestMethod -Uri "http://127.0.0.1:3000/api/activities?page=1&size=1" -TimeoutSec 5
   if ($r.code -eq 0) {
     $n = @($r.data.list).Count
     Write-Host "[OK] GET /api/activities - $n item(s)" -ForegroundColor Green
@@ -15,7 +31,7 @@ try {
     Write-Host "[FAIL] GET /api/activities - code=$($r.code)" -ForegroundColor Red
   }
 } catch {
-  Write-Host "[FAIL] Backend not running. Run: cd backend; npm run dev" -ForegroundColor Red
+  Write-Host "[FAIL] Backend is running, but /api/activities failed" -ForegroundColor Red
   Write-Host "      $($_.Exception.Message)" -ForegroundColor Yellow
   exit 1
 }
