@@ -107,7 +107,97 @@
 .menu-item:last-child { border-bottom: none; }
 .menu-item:active { background: rgba(154,107,36,0.07); transform: scale(0.996); }
 
-.menu-icon  { width: 44rpx; height: 44rpx; border-radius: 50%; background: rgba(154,107,36,0.12); color: var(--accent-text); font-size: 22rpx; font-weight: 700; margin-right: 24rpx; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 1rpx 0 rgba(255,255,255,0.70); }
+.menu-icon {
+  position: relative;
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  background: rgba(154,107,36,0.12);
+  color: var(--accent-text);
+  margin-right: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 1rpx 0 rgba(255,255,255,0.70);
+  flex-shrink: 0;
+}
+.menu-icon__mark,
+.menu-icon__mark::before,
+.menu-icon__mark::after {
+  content: '';
+  position: absolute;
+  box-sizing: border-box;
+}
+.menu-icon--language .menu-icon__mark {
+  width: 26rpx;
+  height: 26rpx;
+  border: 3rpx solid currentColor;
+  border-radius: 50%;
+}
+.menu-icon--language .menu-icon__mark::before {
+  left: 4rpx;
+  right: 4rpx;
+  top: 10rpx;
+  height: 3rpx;
+  border-radius: 4rpx;
+  background: currentColor;
+  box-shadow: 0 -7rpx 0 -1rpx currentColor, 0 7rpx 0 -1rpx currentColor;
+}
+.menu-icon--language .menu-icon__mark::after {
+  left: 9rpx;
+  top: -3rpx;
+  width: 8rpx;
+  height: 26rpx;
+  border-left: 3rpx solid currentColor;
+  border-right: 3rpx solid currentColor;
+  border-radius: 50%;
+}
+.menu-icon--privacy .menu-icon__mark {
+  width: 24rpx;
+  height: 28rpx;
+  border: 3rpx solid currentColor;
+  border-radius: 12rpx 12rpx 14rpx 14rpx;
+  transform: translateY(1rpx);
+}
+.menu-icon--privacy .menu-icon__mark::before {
+  left: 5rpx;
+  top: 7rpx;
+  width: 8rpx;
+  height: 8rpx;
+  border-right: 3rpx solid currentColor;
+  border-bottom: 3rpx solid currentColor;
+  transform: rotate(45deg);
+}
+.menu-icon--logout {
+  color: #dc2626;
+  background: rgba(220,38,38,0.09);
+}
+.menu-icon--logout .menu-icon__mark {
+  left: 11rpx;
+  top: 10rpx;
+  width: 14rpx;
+  height: 24rpx;
+  border: 3rpx solid currentColor;
+  border-right: none;
+  border-radius: 5rpx 0 0 5rpx;
+}
+.menu-icon--logout .menu-icon__mark::before {
+  left: 12rpx;
+  top: 9rpx;
+  width: 18rpx;
+  height: 3rpx;
+  border-radius: 4rpx;
+  background: currentColor;
+}
+.menu-icon--logout .menu-icon__mark::after {
+  right: -18rpx;
+  top: 4rpx;
+  width: 10rpx;
+  height: 10rpx;
+  border-top: 3rpx solid currentColor;
+  border-right: 3rpx solid currentColor;
+  transform: rotate(45deg);
+}
 .menu-label { font-size: 28rpx; color: var(--text-primary); flex: 1; }
 .menu-value { font-size: 26rpx; color: var(--text-muted); margin-right: 8rpx; }
 .menu-arrow { font-size: 36rpx; color: rgba(37,26,52,0.24); }
