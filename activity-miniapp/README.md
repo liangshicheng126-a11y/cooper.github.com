@@ -129,10 +129,23 @@ npm start
 
 ### 前端（微信小程序）
 
-1. 用微信开发者工具打开 `miniprogram/` 目录
-2. 修改 `utils/config.js` 中的 `API_BASE_URL` 和 `APP_ID`
-3. 在 `app.json` 中填入正确的小程序 AppID
+1. 用微信开发者工具打开项目根目录 `activity-miniapp/`（含 `project.config.json`，不要只打开 `miniprogram/` 子目录）
+2. 修改 `miniprogram/utils/config.js` 中的 `API_BASE_URL` 和 `APP_ID`
+3. 在根目录 `project.config.json` 中填入正确的小程序 AppID
 4. 编译运行
+
+#### 命令行校验（不依赖模拟器）
+
+在项目根目录 `activity-miniapp/` 执行：
+
+```bash
+npm run mp:validate   # 校验 app.json、页面、分包、TabBar、组件与 JSON
+npm run mp:check:js   # 校验全部 .js 语法
+npm run mp:check      # 以上两项
+npm run mp:build      # 与 mp:check 相同（发布前静态检查）
+```
+
+说明：原生小程序无 Webpack 打包产物；`mp:build` 表示发布前的静态检查，不能替代微信开发者工具的编译预览。模拟器异常时仍可用 `npm run mp:check` 验证工程完整性，并用「预览 / 真机调试」查看界面。
 
 ## 数据库设计
 
