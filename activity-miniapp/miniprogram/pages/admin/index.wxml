@@ -65,7 +65,7 @@
 
       <!-- 脱敏提示 -->
       <view class="desensitize-tip">
-        <text class="tip-icon">🔒</text>
+        <text class="tip-icon">隐</text>
         <text class="tip-text">敏感信息已脱敏，点击"查看"按钮显示明文（操作将被记录）</text>
       </view>
 
@@ -97,14 +97,14 @@
 
       <!-- 底部：导出 -->
       <view class="export-bar">
-        <button class="btn btn-outline" bindtap="onExportExcel">📊 导出 Excel</button>
+        <button class="btn btn-outline" bindtap="onExportExcel">导出 Excel</button>
       </view>
     </view>
 
     <!-- Tab: 学生名册（Excel 导入） -->
     <view wx:if="{{activeTab === 'roster'}}">
       <view class="card roster-guide">
-        <view class="section-title">📥 批量导入在校生/名单</view>
+        <view class="section-title">批量导入在校生/名单</view>
         <text class="guide-p">从学校教务导出的表格中选择文件上传。识别列名包括但不限于：</text>
         <text class="guide-li">姓名（必填）</text>
         <text class="guide-li">学号、手机、班级、年级、备注</text>
@@ -137,7 +137,7 @@
         </scroll-view>
       </view>
       <view class="empty-state" wx:if="{{rosters.length === 0}}">
-        <text class="empty-icon">📋</text>
+        <text class="empty-icon">·</text>
         <text class="empty-text">暂无名册，请先导入 Excel</text>
       </view>
     </view>
@@ -203,7 +203,7 @@
         <text class="moderate-intro-text">待审核的活动不会出现在「发现」广场；通过后方可被报名。</text>
       </view>
       <view wx:if="{{!isPlatformAdmin}}" class="empty-state card">
-        <text class="empty-icon">🔒</text>
+        <text class="empty-icon">隐</text>
         <text class="empty-text">仅平台管理员可审核活动（请在服务端配置 ADMIN_OPENIDS）</text>
       </view>
 

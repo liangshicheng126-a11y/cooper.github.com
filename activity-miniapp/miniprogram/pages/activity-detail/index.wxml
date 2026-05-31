@@ -27,7 +27,7 @@
 
   <!-- 加载失败 -->
   <view wx:elif="{{loadError}}" class="error-state">
-    <text class="error-icon">⚠️</text>
+    <text class="error-icon">!</text>
     <text class="error-text">活动信息加载失败</text>
     <view class="btn btn-primary btn-sm" style="margin-top:24rpx;" bindtap="onRetry">重新加载</view>
   </view>
@@ -79,7 +79,7 @@
 
       <!-- 时间 -->
       <view class="info-item info-item--time">
-        <view class="info-icon-wrap bg-blue"><text class="info-emoji">📅</text></view>
+        <view class="info-icon-wrap bg-blue"><text class="info-emoji">时</text></view>
         <view class="info-content">
           <text class="info-label">活动时间</text>
           <text class="info-value info-value--strong">开始 {{scheduleStartFull}}</text>
@@ -90,7 +90,7 @@
 
       <!-- 地点（手动填写，无导航坐标时可复制） -->
       <view class="info-item" bindtap="onCopyLocation" wx:if="{{activity.locationName || activity.locationAddress}}" role="button" aria-label="复制活动地点">
-        <view class="info-icon-wrap bg-green"><text class="info-emoji">📍</text></view>
+        <view class="info-icon-wrap bg-green"><text class="info-emoji">地</text></view>
         <view class="info-content flex-1">
           <text class="info-label">活动地点</text>
           <text class="info-value" wx:if="{{activity.locationName}}">{{activity.locationName}}</text>
@@ -101,7 +101,7 @@
 
       <!-- 人数 -->
       <view class="info-item">
-        <view class="info-icon-wrap bg-purple"><text class="info-emoji">👥</text></view>
+        <view class="info-icon-wrap bg-purple"><text class="info-emoji">人</text></view>
         <view class="info-content flex-1">
           <text class="info-label">报名人数</text>
           <view class="participants-row">
@@ -120,7 +120,7 @@
 
       <!-- 邀请码提示 -->
       <view wx:if="{{activity.requireInvite}}" class="invite-banner">
-        <text class="invite-banner-icon">🔑</text>
+        <text class="invite-banner-icon">邀</text>
         <view class="invite-banner-info">
           <text class="invite-banner-title">需要邀请码才能报名</text>
           <view wx:if="{{isCreator && activity.inviteCode}}" class="invite-code-reveal">
@@ -133,7 +133,7 @@
 
       <!-- 提醒 -->
       <view class="reminder-box" wx:if="{{activity.reminder}}">
-        <text class="reminder-icon">💡</text>
+        <text class="reminder-icon">注</text>
         <text class="reminder-text">{{activity.reminder}}</text>
       </view>
     </view>
@@ -177,7 +177,7 @@
           <view class="sub-info">
             <text class="sub-name">{{item.name}}</text>
             <text class="sub-time">{{item.startTimeText}} ~ {{item.endTimeText}}</text>
-            <text class="sub-location" wx:if="{{item.locationName}}">📍 {{item.locationName}}</text>
+            <text class="sub-location" wx:if="{{item.locationName}}">地点 {{item.locationName}}</text>
           </view>
         </view>
         <view class="sub-right">
@@ -255,25 +255,25 @@
       <view class="section-title">管理操作</view>
       <view class="admin-actions">
         <view class="admin-action-btn" bindtap="onViewRegistrations">
-          <text class="admin-icon">📋</text><text>查看名单</text>
+          <text class="admin-icon">名</text><text>查看名单</text>
         </view>
         <view class="admin-action-btn" bindtap="onCheckinQR">
-          <text class="admin-icon">✅</text><text>核验二维码</text>
+          <text class="admin-icon">验</text><text>核验二维码</text>
         </view>
         <view class="admin-action-btn" bindtap="onShareQR">
-          <text class="admin-icon">🔗</text><text>分享二维码</text>
+          <text class="admin-icon">码</text><text>分享二维码</text>
         </view>
         <view class="admin-action-btn" bindtap="onNotifyAll">
-          <text class="admin-icon">🔔</text><text>通知全员</text>
+          <text class="admin-icon">通</text><text>通知全员</text>
         </view>
         <view class="admin-action-btn" bindtap="goWxGroupSetup">
-          <text class="admin-icon">👥</text><text>交流群设置</text>
+          <text class="admin-icon">群</text><text>交流群设置</text>
         </view>
         <view class="admin-action-btn" bindtap="onEditActivity">
-          <text class="admin-icon">✏️</text><text>编辑活动</text>
+          <text class="admin-icon">编</text><text>编辑活动</text>
         </view>
         <view class="admin-action-btn danger" bindtap="onOfflineActivity" wx:if="{{activity.status !== 'offline'}}">
-          <text class="admin-icon">⏹</text><text>下架活动</text>
+          <text class="admin-icon">停</text><text>下架活动</text>
         </view>
       </view>
     </view>
@@ -283,7 +283,7 @@
       <view class="section-title">现场签到</view>
       <text class="registrant-checkin-hint">到场后请打开微信主界面「扫一扫」，扫描主办方出示的现场签到二维码即可自动完成签到。</text>
       <view class="admin-action-btn registrant-checkin-btn" bindtap="onRegistrantCheckin">
-        <text class="admin-icon">📷</text><text>签到二维码</text>
+        <text class="admin-icon">扫</text><text>签到二维码</text>
       </view>
     </view>
 
@@ -291,7 +291,7 @@
     <view class="extras-bar">
       <view class="extras-inner">
         <view class="extras-chip" bindtap="onCopyLink">
-          <text class="extras-chip-ico">📋</text>
+          <text class="extras-chip-ico">摘</text>
           <text class="extras-chip-txt">复制活动摘要</text>
         </view>
         <view class="extras-chip extras-chip--danger" wx:if="{{!isCreator && activity.id}}" bindtap="onReport">
@@ -334,7 +334,7 @@
   <!-- 时间冲突弹窗 -->
   <view class="mask" wx:if="{{showConflictModal}}" catchtap="">
     <view class="conflict-modal">
-      <text class="conflict-title">⚠️ 时间冲突提示</text>
+      <text class="conflict-title">时间冲突提示</text>
       <text class="conflict-desc">您已报名的「{{conflictActivity}}」与此场次时间重叠，是否仍要报名？</text>
       <view class="conflict-actions">
         <button class="btn btn-gray btn-sm" bindtap="cancelConflict">取消</button>

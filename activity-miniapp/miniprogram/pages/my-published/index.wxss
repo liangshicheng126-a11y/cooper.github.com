@@ -37,20 +37,17 @@
   margin-bottom: 20rpx;
   overflow: hidden;
   border-radius: 20rpx;
-  background: rgba(255,255,255,0.82);
-  border: 1rpx solid rgba(255,255,255,0.95);
+  background: rgba(255,255,255,0.86);
+  border: 1rpx solid rgba(29,28,24,0.08);
   box-shadow: var(--shadow-md);
 }
 
-.my-activity-item:active {
-  opacity: 0.92;
-  transform: scale(0.99);
-}
+.my-activity-item:active { opacity: 0.92; transform: scale(0.994); }
 
 .item-cover-box { position: relative; width: 200rpx; height: 160rpx; flex-shrink: 0; overflow: hidden; }
 .item-cover-fallback {
   position: absolute; inset: 0;
-  background: linear-gradient(145deg, #fff7ed 0%, #fff1f2 48%, #eef2ff 100%);
+  background: linear-gradient(145deg, #f8f6f0 0%, #eee9df 100%);
 }
 .item-cover { width: 200rpx; height: 160rpx; flex-shrink: 0; }
 

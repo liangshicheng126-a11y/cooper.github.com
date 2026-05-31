@@ -1,24 +1,22 @@
-/* components/privacy-modal/index.wxss · 活力隐私协议弹窗 */
+/* components/privacy-modal/index.wxss · 简洁高级隐私协议弹窗 */
 .mask {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(37,26,52,0.34);
-  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  background: rgba(29,28,24,0.34);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
   z-index: 2000;
   display: flex; align-items: flex-end;
 }
 
 .modal {
   background: var(--surface-strong);
-  backdrop-filter: blur(18px) saturate(150%);
-  -webkit-backdrop-filter: blur(18px) saturate(150%);
-  border: 1rpx solid rgba(255,255,255,1);
-  border-top: 4rpx solid rgba(255,90,61,0.55);
+  border: 1rpx solid rgba(29,28,24,0.08);
+  border-top: 4rpx solid rgba(154,107,36,0.44);
   border-radius: 40rpx 40rpx 0 0;
   width: 100%; max-height: 88vh;
   display: flex; flex-direction: column;
-  box-shadow: 0 -18rpx 60rpx rgba(255,90,61,0.14);
-  animation: slideUp var(--motion-slow) var(--ease-pop) both;
+  box-shadow: 0 -18rpx 54rpx rgba(29,28,24,0.14);
+  animation: slideUp var(--motion-medium) var(--ease-out) both;
 }
 
 @keyframes slideUp {
@@ -31,7 +29,7 @@
   text-align: center;
   border-bottom: 1rpx solid var(--divider);
 }
-.modal-title { font-size: 34rpx; font-weight: 800; color: var(--text-primary); letter-spacing: 1rpx; }
+.modal-title { font-size: 34rpx; font-weight: 760; color: var(--text-primary); letter-spacing: 0; }
 
 .modal-scroll { flex: 1; max-height: 50vh; }
 .modal-body   { padding: 28rpx 40rpx; }
@@ -58,13 +56,13 @@
   border: 2rpx solid rgba(37,26,52,0.22); border-radius: 10rpx;
   margin-right: 14rpx; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
-  transition: background var(--motion-base), border-color var(--motion-base), box-shadow var(--motion-base), transform var(--motion-base) var(--ease-out); background: rgba(255,255,255,0.86);
+  transition: background var(--motion-base), border-color var(--motion-base), box-shadow var(--motion-base), transform var(--motion-fast) var(--ease-out); background: rgba(255,255,255,0.86);
 }
 .checkbox.checked {
   background: var(--accent-grad);
   border-color: var(--accent);
-  box-shadow: 0 4rpx 14rpx rgba(255,90,61,0.28);
-  transform: scale(1.04);
+  box-shadow: 0 4rpx 14rpx rgba(29,28,24,0.12);
+  transform: scale(1.02);
 }
 .check-icon { color: #fff; font-size: 22rpx; font-weight: 700; }
 

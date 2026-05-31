@@ -38,7 +38,7 @@
   padding: 20rpx 24rpx;
   font-size: 28rpx;
   border-radius: 16rpx;
-  background: rgba(255,90,61,0.07);
+  background: rgba(154,107,36,0.07);
   box-sizing: border-box;
 }
 

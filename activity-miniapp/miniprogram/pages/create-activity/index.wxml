@@ -36,7 +36,7 @@
                 data-key="{{item.key}}"
                 bindtap="onSelectCategory"
               >
-                <text>{{item.icon}} {{item.label}}</text>
+                <text>{{item.label}}</text>
               </view>
             </view>
           </scroll-view>
@@ -196,10 +196,10 @@
 
         <view class="limit-toggle">
           <view class="limit-option {{!form.requireInvite ? 'limit-active' : ''}}" bindtap="setNoInvite">
-            <text>🌐 公开报名</text>
+            <text>公开报名</text>
           </view>
           <view class="limit-option {{form.requireInvite ? 'limit-active' : ''}}" bindtap="setRequireInvite">
-            <text>🔑 需要邀请码</text>
+            <text>需要邀请码</text>
           </view>
         </view>
         <text class="form-hint" style="margin-top:12rpx;display:block">
@@ -209,7 +209,7 @@
         <view wx:if="{{form.requireInvite}}" class="invite-code-box">
           <view class="invite-code-label">
             <text>邀请码</text>
-            <text class="invite-auto-btn" bindtap="genInviteCode">🎲 随机生成</text>
+            <text class="invite-auto-btn" bindtap="genInviteCode">随机生成</text>
           </view>
           <view class="invite-code-input-row">
             <input

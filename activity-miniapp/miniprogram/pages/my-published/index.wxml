@@ -3,7 +3,7 @@
     <text class="state-text">加载中...</text>
   </view>
   <view wx:elif="{{activities.length === 0}}" class="state-wrap empty">
-    <text class="empty-icon">📋</text>
+    <text class="empty-icon">·</text>
     <text class="empty-title">还没有发布活动</text>
     <button class="btn-primary" bindtap="goCreate">立即发布</button>
   </view>
@@ -22,7 +22,7 @@
       <view class="item-body">
         <text class="item-name text-ellipsis">{{item.name}}</text>
         <view class="item-info-row">
-          <text class="item-time">📅 {{item.startTimeText}}</text>
+          <text class="item-time">时间 {{item.startTimeText}}</text>
         </view>
         <view class="item-footer">
           <view class="status-mini {{item.statusClass}}">

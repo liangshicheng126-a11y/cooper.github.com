@@ -43,7 +43,7 @@
       <text class="scan-title">扫码签到</text>
       <text class="scan-activity">{{activityName}}</text>
       <view class="scan-icon-wrap">
-        <text class="scan-icon">📸</text>
+        <text class="scan-icon">扫</text>
       </view>
       <text class="scan-hint">请使用微信右上角「扫一扫」扫描主办方出示的现场小程序码或海报码（个人主体为小程序码）；亦可请他人用微信扫描你的手机截图（勿在小程序内扫 wxaurl 链接码）。</text>
       <button class="btn btn-primary btn-block btn-lg mt-32" bindtap="onScan">扫码签到</button>

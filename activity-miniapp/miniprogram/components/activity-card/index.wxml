@@ -28,11 +28,11 @@
 
     <!-- 信息行 -->
     <view class="info-row">
-      <text class="info-icon">📅</text>
+      <text class="info-icon">时间</text>
       <text class="info-text">{{startTime}}</text>
     </view>
     <view class="info-row" wx:if="{{activity.locationName || activity.locationAddress}}">
-      <text class="info-icon">📍</text>
+      <text class="info-icon">地点</text>
       <text class="info-text text-ellipsis">{{activity.locationName || activity.locationAddress}}</text>
     </view>
 

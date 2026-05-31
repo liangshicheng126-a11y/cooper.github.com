@@ -15,19 +15,19 @@
   ],
   "window": {
     "backgroundTextStyle": "dark",
-    "navigationBarBackgroundColor": "#fff7ed",
+    "navigationBarBackgroundColor": "#f7f5ef",
     "navigationBarTitleText": "活动报名",
     "navigationBarTextStyle": "black",
-    "backgroundColor": "#fff7ed",
-    "backgroundColorTop": "#fff7ed",
-    "backgroundColorBottom": "#eef2ff",
+    "backgroundColor": "#f7f5ef",
+    "backgroundColorTop": "#f7f5ef",
+    "backgroundColorBottom": "#f1eee7",
     "enablePullDownRefresh": false
   },
   "tabBar": {
     "custom": true,
-    "color": "#8a7f96",
-    "selectedColor": "#ff5a3d",
-    "backgroundColor": "#ffffff",
+    "color": "#8a857b",
+    "selectedColor": "#9a6b24",
+    "backgroundColor": "#fbfaf7",
     "borderStyle": "white",
     "list": [
       {

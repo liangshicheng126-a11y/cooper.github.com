@@ -36,23 +36,23 @@
     <view class="menu-section">
       <view class="menu-group card">
         <view class="menu-item" bindtap="goAdmin" wx:if="{{isAdmin}}">
-          <text class="menu-icon">⚙️</text>
+          <text class="menu-icon">管</text>
           <text class="menu-label">{{strAdminMenu}}</text>
           <text class="menu-arrow">›</text>
         </view>
         <view class="menu-item" bindtap="toggleLanguage">
-          <text class="menu-icon">🌐</text>
+          <text class="menu-icon">语</text>
           <text class="menu-label">{{strLanguageMenu}}</text>
           <text class="menu-value">{{langText}}</text>
           <text class="menu-arrow">›</text>
         </view>
         <view class="menu-item" bindtap="openPrivacyPolicy">
-          <text class="menu-icon">📄</text>
+          <text class="menu-icon">隐</text>
           <text class="menu-label">{{strPrivacyMenu}}</text>
           <text class="menu-arrow">›</text>
         </view>
         <view class="menu-item danger" bindtap="onLogout">
-          <text class="menu-icon">🚪</text>
+          <text class="menu-icon">退</text>
           <text class="menu-label">{{strLogoutMenu}}</text>
           <text class="menu-arrow">›</text>
         </view>

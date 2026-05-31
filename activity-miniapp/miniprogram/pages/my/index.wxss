@@ -1,4 +1,4 @@
-/* pages/my/index.wxss · 活力年轻"我的"页面 */
+/* pages/my/index.wxss · 简洁高级"我的"页面 */
 .page-wrap {
   min-height: 100vh;
   padding-bottom: calc(160rpx + env(safe-area-inset-bottom));
@@ -7,15 +7,15 @@
 
 /* ── 用户卡片 ── */
 .user-card {
-  background: linear-gradient(145deg, rgba(255,90,61,0.22), rgba(250,204,21,0.18), rgba(124,58,237,0.12));
-  border-bottom: 1rpx solid rgba(255,255,255,0.70);
+  background: linear-gradient(180deg, #fffefa 0%, #f4f1ea 100%);
+  border-bottom: 1rpx solid rgba(29,28,24,0.08);
   position: relative; overflow: hidden;
 }
 .user-card::before {
   content: '';
   position: absolute; top: -80rpx; right: -80rpx;
   width: 360rpx; height: 360rpx;
-  background: radial-gradient(circle, rgba(255,255,255,0.30) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(154,107,36,0.10) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -27,32 +27,30 @@
 
 .user-avatar {
   width: 120rpx; height: 120rpx; border-radius: 50%;
-  border: 4rpx solid rgba(255,255,255,0.80);
-  background: rgba(255,255,255,0.40);
-  box-shadow: 0 8rpx 24rpx rgba(255,90,61,0.20);
+  border: 4rpx solid rgba(255,255,255,0.90);
+  background: rgba(255,255,255,0.60);
+  box-shadow: 0 8rpx 22rpx rgba(29,28,24,0.10);
 }
 
 .user-detail { flex: 1; }
-.user-name { font-size: 34rpx; font-weight: 800; color: var(--text-primary); display: block; letter-spacing: 0.5rpx; }
+.user-name { font-size: 34rpx; font-weight: 760; color: var(--text-primary); display: block; letter-spacing: 0; }
 .user-sub  { font-size: 22rpx; color: var(--text-secondary); display: block; margin-top: 6rpx; }
 .user-sub.login-hint { color: var(--accent-text); }
 
 .user-badge {
-  background: rgba(255,255,255,0.60);
-  border: 1rpx solid rgba(255,255,255,0.80);
+  background: rgba(154,107,36,0.08);
+  border: 1rpx solid rgba(154,107,36,0.18);
   padding: 8rpx 20rpx; border-radius: 100rpx;
   font-size: 22rpx; color: var(--accent-text); font-weight: 700;
-  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
 }
 
 /* ── 数据统计 ── */
 .stats-row {
   display: flex;
-  background: rgba(255,255,255,0.78);
-  border: 1rpx solid rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.86);
+  border: 1rpx solid rgba(29,28,24,0.08);
   margin: 0 24rpx;
   border-radius: 20rpx; padding: 24rpx 0;
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   box-shadow: var(--shadow-md);
   position: relative; z-index: 1;
 }
@@ -76,8 +74,7 @@
 
 .menu-group {
   background: var(--surface);
-  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-  border: 1rpx solid rgba(255,255,255,0.95);
+  border: 1rpx solid rgba(29,28,24,0.08);
   border-radius: 20rpx; overflow: hidden;
   box-shadow: var(--shadow-md);
 }
@@ -89,9 +86,9 @@
   transition: background var(--motion-fast), transform var(--motion-fast) var(--ease-out);
 }
 .menu-item:last-child { border-bottom: none; }
-.menu-item:active { background: rgba(255,90,61,0.07); transform: scale(0.995); }
+.menu-item:active { background: rgba(154,107,36,0.07); transform: scale(0.996); }
 
-.menu-icon  { font-size: 36rpx; margin-right: 24rpx; }
+.menu-icon  { width: 44rpx; height: 44rpx; border-radius: 50%; background: var(--accent-light); color: var(--accent-text); font-size: 22rpx; font-weight: 700; margin-right: 24rpx; display: flex; align-items: center; justify-content: center; }
 .menu-label { font-size: 28rpx; color: var(--text-primary); flex: 1; }
 .menu-value { font-size: 26rpx; color: var(--text-muted); margin-right: 8rpx; }
 .menu-arrow { font-size: 36rpx; color: rgba(37,26,52,0.24); }

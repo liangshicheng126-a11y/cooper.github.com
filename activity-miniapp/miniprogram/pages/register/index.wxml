@@ -5,11 +5,11 @@
     <view class="activity-brief card">
       <text class="brief-name">{{activity.name}}</text>
       <view class="brief-row">
-        <text class="brief-icon">📅</text>
+        <text class="brief-icon">时间</text>
         <text class="brief-time">{{startTimeText}}</text>
       </view>
       <view class="brief-row" wx:if="{{subActivity}}">
-        <text class="brief-icon">🎯</text>
+        <text class="brief-icon">场次</text>
         <text class="brief-time">场次：{{subActivity.name}} · {{subActivity.startTimeText}}</text>
       </view>
     </view>
@@ -17,7 +17,7 @@
     <!-- 邀请码输入（需要时显示） -->
     <view class="form-card card" wx:if="{{activity.requireInvite}}">
       <view class="invite-header">
-        <text class="invite-icon">🔑</text>
+        <text class="invite-icon">邀</text>
         <view>
           <text class="invite-title">需要邀请码</text>
           <text class="invite-desc">请输入发布者提供的邀请码</text>

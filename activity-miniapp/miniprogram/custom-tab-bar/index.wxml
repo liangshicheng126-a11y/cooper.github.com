@@ -6,10 +6,6 @@
 
     <!-- 顶部高光线 -->
     <view class="tab-bar__top-line"></view>
-
-    <!-- 背景渐变光晕（中心对齐当前 Tab 区域中点） -->
-    <view class="tab-bar__glow" style="left: {{glowCenterPx}}px;"></view>
-
     <!-- 滑动胶囊指示器（宽度与位置按 Tab 居中） -->
     <view
       class="tab-bar__indicator"

@@ -8,7 +8,7 @@
       <text class="back-arrow">‹</text>
     </view>
     <view class="search-input-wrap">
-      <text class="search-icon-txt">🔍</text>
+      <text class="search-icon-txt">⌕</text>
       <input
         class="search-input"
         placeholder="搜索活动名称、地点..."
@@ -60,7 +60,7 @@
         bindtap="onHistoryTap"
         data-kw="{{item}}"
       >
-        <text>🔥 {{item}}</text>
+        <text>{{item}}</text>
       </view>
     </view>
   </view>
@@ -74,7 +74,7 @@
 
     <!-- 无结果 -->
     <view wx:elif="{{results.length === 0}}" class="empty-state">
-      <text class="empty-icon">🔍</text>
+      <text class="empty-icon">⌕</text>
       <text class="empty-text">未找到"{{keyword}}"相关活动</text>
       <text class="empty-sub">试试其他关键词吧</text>
     </view>

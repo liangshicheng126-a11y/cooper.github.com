@@ -3,7 +3,7 @@
   <!-- 顶部搜索栏 -->
   <view class="top-bar">
     <view class="search-box" bindtap="onSearchTap" role="button" aria-label="搜索活动">
-      <text class="search-icon">🔍</text>
+      <text class="search-icon">⌕</text>
       <text class="search-placeholder">{{searchPlaceholder}}</text>
     </view>
     <view class="lang-btn" bindtap="toggleLanguage" role="button" aria-label="切换语言">
@@ -26,7 +26,7 @@
         role="button"
         aria-label="筛选{{item.label}}"
       >
-        <text>{{item.icon}} {{item.label}}</text>
+        <text>{{item.label}}</text>
       </view>
     </view>
   </scroll-view>
@@ -39,7 +39,7 @@
     interval="4000"
     circular
     indicator-dots
-    indicator-active-color="#ff5a3d"
+    indicator-active-color="#9a6b24"
     indicator-color="rgba(255,255,255,0.5)"
   >
     <swiper-item wx:for="{{bannerList}}" wx:key="id" bindtap="onBannerTap" data-id="{{item.id}}">
@@ -66,7 +66,7 @@
   <view class="list-header">
     <text class="section-title">{{listTitle}}</text>
     <view class="filter-btn" bindtap="openFilter" role="button" aria-label="打开排序筛选">
-      <text>{{filterBtnLabel}} ⚙</text>
+      <text>{{filterBtnLabel}}</text>
     </view>
   </view>
 
@@ -93,7 +93,7 @@
 
     <view wx:elif="{{loadError && !loading}}">
       <view class="empty-state error-state">
-        <text class="empty-icon">⚠️</text>
+        <text class="empty-icon">!</text>
         <text class="empty-text">后端服务未连接</text>
         <text class="empty-sub">{{loadErrorText}}</text>
         <button class="retry-btn" bindtap="onRetryLoad">重新加载</button>
@@ -102,7 +102,7 @@
 
     <view wx:elif="{{activities.length === 0 && !loading}}">
       <view class="empty-state">
-        <text class="empty-icon">🎉</text>
+        <text class="empty-icon">·</text>
         <text class="empty-text">{{emptyActivities}}</text>
         <text class="empty-sub">{{emptySubActivities}}</text>
       </view>
