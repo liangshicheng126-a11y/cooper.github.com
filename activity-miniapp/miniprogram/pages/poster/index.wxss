@@ -1,5 +1,5 @@
 /* pages/poster/index.wxss */
-.page { min-height: 100vh; background: var(--gray-50); }
+.page { min-height: 100vh; background: var(--bg-radial); }
 .scroll-view { height: 100vh; }
 
 .poster-preview-wrap { padding: 24rpx; text-align: center; }
@@ -12,10 +12,10 @@
   margin-top: 32rpx;
 }
 
-.generate-panel { margin: 24rpx; padding: 40rpx 32rpx; }
+.generate-panel { margin: 24rpx; padding: 40rpx 32rpx; background: var(--surface); box-shadow: var(--shadow-md); }
 
-.gen-title { display: block; font-size: 36rpx; font-weight: 800; color: var(--gray-800); margin-bottom: 8rpx; text-align: center; }
-.gen-activity-name { display: block; font-size: 26rpx; color: var(--primary); text-align: center; margin-bottom: 40rpx; }
+.gen-title { display: block; font-size: 36rpx; font-weight: 800; color: var(--text-primary); margin-bottom: 8rpx; text-align: center; }
+.gen-activity-name { display: block; font-size: 26rpx; color: var(--accent-text); text-align: center; margin-bottom: 40rpx; }
 
 .style-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16rpx; margin-top: 16rpx; }
 .style-item {
@@ -23,24 +23,31 @@
   padding: 24rpx 16rpx;
   border: 2rpx solid var(--gray-200);
   border-radius: var(--radius-lg);
-  background: var(--gray-50);
+  background: rgba(255,255,255,0.82);
   gap: 10rpx;
-  transition: border-color 0.15s, background 0.15s, transform 0.15s;
+  transition: border-color var(--motion-base), background var(--motion-base), transform var(--motion-base) var(--ease-out), box-shadow var(--motion-base);
 }
-.style-active { border-color: var(--primary); background: var(--primary-light); }
+.style-active { border-color: var(--primary); background: var(--primary-light); box-shadow: 0 8rpx 20rpx rgba(255,90,61,0.14); transform: translateY(-2rpx); }
 .style-emoji { font-size: 48rpx; }
 .style-name { font-size: 22rpx; color: var(--gray-600); }
-.style-active .style-name { color: var(--primary); font-weight: 600; }
+.style-active .style-name { color: var(--accent-text); font-weight: 700; }
 
 .color-row { display: flex; gap: 20rpx; flex-wrap: wrap; margin-top: 16rpx; }
 .color-circle {
   width: 60rpx; height: 60rpx;
   border-radius: 50%;
   border: 4rpx solid transparent;
-  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+  transition: transform var(--motion-base) var(--ease-out), border-color var(--motion-base), box-shadow var(--motion-base);
 }
 .color-active {
-  border-color: var(--gray-800);
+  border-color: var(--text-primary);
   transform: scale(1.15);
-  box-shadow: 0 0 0 4rpx rgba(0,0,0,0.1);
+  box-shadow: 0 0 0 5rpx rgba(255,255,255,0.9), 0 6rpx 18rpx rgba(37,26,52,0.14);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .style-active,
+  .color-active {
+    transform: none;
+  }
 }

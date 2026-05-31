@@ -1,7 +1,7 @@
-/* pages/create-activity/index.wxss · 白色毛玻璃发布活动 */
+/* pages/create-activity/index.wxss · 活力年轻发布活动 */
 .page {
   min-height: 100vh;
-  background: var(--bg-gradient);
+  background: var(--bg-radial);
 }
 .scroll-view { height: calc(100vh - 200rpx); }
 
@@ -9,11 +9,11 @@
 .step-bar {
   display: flex; align-items: center; justify-content: center;
   padding: 28rpx 40rpx;
-  background: rgba(255,255,255,0.75);
-  backdrop-filter: blur(16px) saturate(160%);
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
-  border-bottom: 1rpx solid rgba(124,58,237,0.08);
-  box-shadow: 0 2rpx 12rpx rgba(109,40,217,0.05);
+  background: rgba(255,255,255,0.90);
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  border-bottom: 1rpx solid rgba(255,90,61,0.10);
+  box-shadow: 0 6rpx 18rpx rgba(255,90,61,0.08);
 }
 
 .step-item { display: flex; align-items: center; position: relative; }
@@ -27,16 +27,16 @@
   transition: border-color 0.3s, background 0.3s, color 0.3s, box-shadow 0.3s;
 }
 .step-active .step-circle {
-  border-color: #7c3aed;
-  background: linear-gradient(135deg, #7c3aed, #2563eb);
-  color: #fff; box-shadow: 0 4rpx 16rpx rgba(124,58,237,0.35);
+  border-color: var(--accent);
+  background: var(--accent-grad);
+  color: #fff; box-shadow: 0 6rpx 18rpx rgba(255,90,61,0.28);
 }
 .step-done .step-circle {
   border-color: #059669; background: rgba(5,150,105,0.12); color: #059669;
 }
 
 .step-label { font-size: 22rpx; color: rgba(30,27,75,0.40); margin-left: 8rpx; }
-.step-active .step-label { color: #7c3aed; font-weight: 600; }
+.step-active .step-label { color: var(--accent-text); font-weight: 700; }
 .step-done .step-label   { color: #059669; }
 
 .step-line { width: 60rpx; height: 2rpx; background: rgba(30,27,75,0.12); margin: 0 12rpx; }
@@ -46,10 +46,10 @@
 .section-card {
   margin: 0 20rpx 20rpx;
   padding: 28rpx 32rpx;
-  background: rgba(255,255,255,0.86);
-  border: 1rpx solid rgba(124,58,237,0.10);
+  background: var(--surface);
+  border: 1rpx solid rgba(255,255,255,0.94);
   border-radius: 24rpx;
-  box-shadow: 0 6rpx 24rpx rgba(109,40,217,0.07);
+  box-shadow: var(--shadow-md);
 }
 
 /* ── 分类 ── */
@@ -57,68 +57,69 @@
 .cat-list { display: flex; gap: 12rpx; white-space: nowrap; padding: 4rpx 0; }
 .cat-item {
   padding: 12rpx 24rpx; border-radius: 100rpx;
-  background: rgba(255,255,255,0.72);
-  border: 1rpx solid rgba(124,58,237,0.14);
-  font-size: 26rpx; color: rgba(30,27,75,0.55);
-  white-space: nowrap; transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2rpx 8rpx rgba(109,40,217,0.05);
+  background: rgba(255,255,255,0.88);
+  border: 1rpx solid rgba(255,90,61,0.16);
+  font-size: 26rpx; color: var(--text-secondary);
+  white-space: nowrap; transition: background var(--motion-base), color var(--motion-base), border-color var(--motion-base), box-shadow var(--motion-base), transform var(--motion-base) var(--ease-out);
+  box-shadow: 0 3rpx 10rpx rgba(37,26,52,0.04);
 }
 .cat-active {
-  background: linear-gradient(135deg, #7c3aed, #2563eb);
+  background: var(--accent-grad);
   border-color: transparent; color: #fff; font-weight: 600;
-  box-shadow: 0 4rpx 16rpx rgba(124,58,237,0.28);
+  box-shadow: 0 8rpx 22rpx rgba(255,90,61,0.22);
+  transform: translateY(-2rpx);
 }
 
 /* ── 封面选择 ── */
 .cover-picker {
   width: 100%; height: 280rpx;
-  border: 2rpx dashed rgba(124,58,237,0.25);
+  border: 2rpx dashed rgba(255,90,61,0.28);
   border-radius: 20rpx; overflow: hidden;
   display: flex; align-items: center; justify-content: center;
-  background: rgba(124,58,237,0.04); transition: background 0.2s, border-color 0.2s;
+  background: rgba(255,90,61,0.06); transition: background var(--motion-base), border-color var(--motion-base), transform var(--motion-base) var(--ease-out);
 }
-.cover-picker:active { background: rgba(124,58,237,0.08); border-color: rgba(124,58,237,0.40); }
+.cover-picker:active { background: rgba(255,90,61,0.10); border-color: rgba(255,90,61,0.42); transform: scale(0.99); }
 .cover-preview { width: 100%; height: 100%; }
 .cover-placeholder-btn { display: flex; flex-direction: column; align-items: center; gap: 12rpx; }
-.cover-plus { font-size: 80rpx; color: rgba(124,58,237,0.25); line-height: 1; }
-.cover-hint { font-size: 26rpx; color: rgba(30,27,75,0.40); }
+.cover-plus { font-size: 80rpx; color: rgba(255,90,61,0.34); line-height: 1; }
+.cover-hint { font-size: 26rpx; color: var(--text-muted); }
 .form-textarea--addr { min-height: 200rpx; box-sizing: border-box; }
 
 /* ── 子活动 ── */
 .section-title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16rpx; }
-.add-sub-btn { font-size: 26rpx; color: #7c3aed; font-weight: 600; }
+.add-sub-btn { font-size: 26rpx; color: var(--accent-text); font-weight: 700; }
 .sub-form-item {
-  border: 1rpx solid rgba(124,58,237,0.12);
+  border: 1rpx solid rgba(255,90,61,0.14);
   border-radius: 16rpx; padding: 20rpx; margin-top: 20rpx;
   background: rgba(255,255,255,0.50);
 }
 .sub-form-header { display: flex; justify-content: space-between; margin-bottom: 16rpx; }
-.sub-form-title  { font-size: 26rpx; font-weight: 600; color: rgba(30,27,75,0.75); }
+.sub-form-title  { font-size: 26rpx; font-weight: 600; color: var(--text-primary); }
 .sub-form-del    { font-size: 26rpx; color: #dc2626; }
 
 /* ── 人数限制切换 ── */
 .limit-toggle {
-  display: flex; border: 1rpx solid rgba(124,58,237,0.15);
+  display: flex; border: 1rpx solid rgba(255,90,61,0.16);
   border-radius: 16rpx; overflow: hidden;
 }
 .limit-option {
   flex: 1; text-align: center; padding: 20rpx;
-  font-size: 28rpx; color: rgba(30,27,75,0.50);
-  transition: background 0.15s, color 0.15s; background: rgba(255,255,255,0.55);
+  font-size: 28rpx; color: var(--text-muted);
+  transition: background var(--motion-fast), color var(--motion-fast); background: rgba(255,255,255,0.64);
 }
 .limit-active {
-  background: linear-gradient(135deg, rgba(124,58,237,0.18), rgba(37,99,235,0.12));
-  color: #7c3aed; font-weight: 600;
+  background: var(--accent-grad-soft);
+  color: var(--accent-text); font-weight: 700;
 }
 
 /* ── 字段开关 ── */
 .field-toggle-item {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 20rpx 0; border-bottom: 1rpx solid rgba(30,27,75,0.06);
+  padding: 20rpx 0; border-bottom: 1rpx solid var(--divider);
 }
 .field-info { flex: 1; }
-.field-name  { font-size: 28rpx; color: #1e1b4b; font-weight: 500; }
-.field-desc  { font-size: 22rpx; color: rgba(30,27,75,0.38); display: block; margin-top: 4rpx; }
+.field-name  { font-size: 28rpx; color: var(--text-primary); font-weight: 600; }
+.field-desc  { font-size: 22rpx; color: var(--text-muted); display: block; margin-top: 4rpx; }
 .field-switches { display: flex; gap: 12rpx; }
 
 .field-switch-btn, .field-required-btn {
@@ -136,16 +137,16 @@
   display: flex; align-items: center; justify-content: space-between;
   margin-top: 32rpx; margin-bottom: 16rpx;
 }
-.add-field-btn { font-size: 26rpx; color: #7c3aed; font-weight: 600; }
+.add-field-btn { font-size: 26rpx; color: var(--accent-text); font-weight: 700; }
 
 .custom-field-item {
-  padding: 20rpx; border: 1rpx solid rgba(124,58,237,0.12);
+  padding: 20rpx; border: 1rpx solid rgba(255,90,61,0.14);
   border-radius: 16rpx; margin-bottom: 16rpx;
   background: rgba(255,255,255,0.50);
 }
 .custom-field-row { display: flex; align-items: center; gap: 12rpx; }
 .field-del-btn { font-size: 32rpx; color: rgba(30,27,75,0.30); padding: 8rpx; }
-.form-hint-inline { font-size: 22rpx; color: rgba(30,27,75,0.38); font-weight: 400; }
+.form-hint-inline { font-size: 22rpx; color: var(--text-muted); font-weight: 400; }
 .mt-12 { margin-top: 16rpx; }
 .mt-16 { margin-top: 20rpx; }
 
@@ -155,31 +156,38 @@
 /* ── 邀请码 ── */
 .invite-code-box {
   margin-top: 24rpx;
-  background: rgba(124,58,237,0.06);
-  border: 1rpx solid rgba(124,58,237,0.20);
+  background: rgba(255,90,61,0.07);
+  border: 1rpx solid rgba(255,90,61,0.20);
   border-radius: 16rpx; padding: 24rpx;
 }
 .invite-code-label {
   display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 16rpx; font-size: 26rpx; color: rgba(30,27,75,0.65);
+  margin-bottom: 16rpx; font-size: 26rpx; color: var(--text-secondary);
 }
 .invite-auto-btn {
-  color: #7c3aed; font-size: 24rpx; padding: 6rpx 16rpx;
-  background: rgba(124,58,237,0.10);
-  border: 1rpx solid rgba(124,58,237,0.22); border-radius: 20rpx;
+  color: var(--accent-text); font-size: 24rpx; padding: 6rpx 16rpx;
+  background: var(--accent-light);
+  border: 1rpx solid rgba(255,90,61,0.22); border-radius: 20rpx;
 }
 .invite-code-input-row { display: flex; gap: 12rpx; align-items: center; }
 .invite-code-input {
   flex: 1; background: rgba(255,255,255,0.80);
-  border: 1.5rpx solid rgba(124,58,237,0.28);
+  border: 1.5rpx solid rgba(255,90,61,0.28);
   border-radius: 12rpx; padding: 20rpx;
   font-size: 36rpx; letter-spacing: 8rpx;
-  font-weight: 700; color: #7c3aed; text-align: center;
+  font-weight: 700; color: var(--accent-text); text-align: center;
 }
 .invite-copy-btn {
   padding: 0 28rpx; height: 80rpx;
-  background: linear-gradient(135deg, #7c3aed, #2563eb);
+  background: var(--accent-grad);
   color: #fff; border-radius: 12rpx;
   display: flex; align-items: center; font-size: 26rpx; flex-shrink: 0;
-  box-shadow: 0 4rpx 16rpx rgba(124,58,237,0.30);
+  box-shadow: 0 6rpx 18rpx rgba(255,90,61,0.26);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cat-active,
+  .cover-picker:active {
+    transform: none;
+  }
 }

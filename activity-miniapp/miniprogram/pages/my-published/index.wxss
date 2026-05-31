@@ -2,7 +2,7 @@
 .page {
   min-height: 100vh;
   padding: 24rpx 24rpx calc(40rpx + env(safe-area-inset-bottom));
-  background: linear-gradient(145deg, #ede9fe 0%, #faf5ff 45%, #eff6ff 100%);
+  background: var(--bg-radial);
 }
 
 .state-wrap {
@@ -14,14 +14,14 @@
   padding: 40rpx;
 }
 .state-wrap.empty { gap: 16rpx; }
-.state-text { font-size: 28rpx; color: rgba(30,27,75,0.45); }
+.state-text { font-size: 28rpx; color: var(--text-muted); }
 
 .empty-icon { font-size: 80rpx; }
-.empty-title { font-size: 30rpx; color: #1e1b4b; font-weight: 600; margin-bottom: 24rpx; }
+.empty-title { font-size: 30rpx; color: var(--text-primary); font-weight: 700; margin-bottom: 24rpx; }
 
 .btn-primary {
   margin-top: 8rpx;
-  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  background: var(--accent-grad);
   color: #fff;
   font-size: 28rpx;
   padding: 20rpx 56rpx;
@@ -39,7 +39,7 @@
   border-radius: 20rpx;
   background: rgba(255,255,255,0.82);
   border: 1rpx solid rgba(255,255,255,0.95);
-  box-shadow: 0 4rpx 16rpx rgba(109,40,217,0.07);
+  box-shadow: var(--shadow-md);
 }
 
 .my-activity-item:active {
@@ -61,7 +61,7 @@
 .item-name {
   font-size: 28rpx;
   font-weight: 600;
-  color: #1e1b4b;
+  color: var(--text-primary);
 }
 
 .text-ellipsis {
@@ -71,7 +71,7 @@
 }
 
 .item-info-row { margin-top: 8rpx; }
-.item-time { font-size: 22rpx; color: rgba(30,27,75,0.45); }
+.item-time { font-size: 22rpx; color: var(--text-muted); }
 
 .item-footer {
   display: flex;
@@ -89,7 +89,7 @@
 
 .status-mini-active { background: rgba(5,150,105,0.10); color: #059669; border: 1rpx solid rgba(5,150,105,0.20); }
 .status-mini-upcoming { background: rgba(217,119,6,0.10); color: #d97706; border: 1rpx solid rgba(217,119,6,0.20); }
-.status-mini-ended { background: rgba(30,27,75,0.06); color: rgba(30,27,75,0.45); border: 1rpx solid rgba(30,27,75,0.12); }
+.status-mini-ended { background: rgba(37,26,52,0.06); color: var(--text-muted); border: 1rpx solid rgba(37,26,52,0.12); }
 .status-mini-full { background: rgba(220,38,38,0.08); color: #dc2626; border: 1rpx solid rgba(220,38,38,0.18); }
 
-.item-count { font-size: 22rpx; color: rgba(30,27,75,0.40); }
+.item-count { font-size: 22rpx; color: var(--text-muted); }
