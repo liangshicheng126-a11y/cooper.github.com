@@ -376,7 +376,156 @@
   border: 1rpx solid rgba(29,28,24,.08);
 }
 .admin-action-btn.danger { background: rgba(239,68,68,.06); border-color: rgba(239,68,68,.15); }
-.admin-icon { width: 44rpx; height: 44rpx; border-radius: 50%; background: var(--accent-light); color: var(--accent-text); font-size: 22rpx; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.admin-icon {
+  position: relative;
+  width: 52rpx;
+  height: 52rpx;
+  border-radius: 50%;
+  background: var(--accent-light);
+  color: var(--accent-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.admin-icon__mark,
+.admin-icon__mark::before,
+.admin-icon__mark::after {
+  content: '';
+  position: absolute;
+  box-sizing: border-box;
+}
+.admin-icon--list .admin-icon__mark {
+  width: 26rpx;
+  height: 28rpx;
+  border: 3rpx solid currentColor;
+  border-radius: 5rpx;
+}
+.admin-icon--list .admin-icon__mark::before {
+  left: 5rpx;
+  top: 7rpx;
+  width: 12rpx;
+  height: 3rpx;
+  border-radius: 4rpx;
+  background: currentColor;
+  box-shadow: 0 8rpx 0 currentColor;
+}
+.admin-icon--scan .admin-icon__mark {
+  width: 28rpx;
+  height: 28rpx;
+}
+.admin-icon--scan .admin-icon__mark::before,
+.admin-icon--scan .admin-icon__mark::after {
+  inset: 0;
+  border: 3rpx solid currentColor;
+  border-radius: 6rpx;
+}
+.admin-icon--scan .admin-icon__mark::before { clip-path: polygon(0 0, 42% 0, 42% 18%, 18% 18%, 18% 42%, 0 42%); }
+.admin-icon--scan .admin-icon__mark::after { clip-path: polygon(58% 0, 100% 0, 100% 42%, 82% 42%, 82% 18%, 58% 18%, 58% 100%, 100% 100%, 100% 58%, 82% 58%, 82% 82%, 58% 82%, 42% 82%, 18% 82%, 18% 58%, 0 58%, 0 100%, 42% 100%, 42% 82%); }
+.admin-icon--qr .admin-icon__mark {
+  width: 26rpx;
+  height: 26rpx;
+  border: 3rpx solid currentColor;
+  border-radius: 4rpx;
+}
+.admin-icon--qr .admin-icon__mark::before {
+  left: 4rpx;
+  top: 4rpx;
+  width: 5rpx;
+  height: 5rpx;
+  background: currentColor;
+  box-shadow: 10rpx 0 0 currentColor, 0 10rpx 0 currentColor, 10rpx 10rpx 0 currentColor;
+}
+.admin-icon--bell .admin-icon__mark {
+  width: 24rpx;
+  height: 24rpx;
+  border: 3rpx solid currentColor;
+  border-bottom: none;
+  border-radius: 14rpx 14rpx 8rpx 8rpx;
+  transform: translateY(-2rpx);
+}
+.admin-icon--bell .admin-icon__mark::before {
+  left: -4rpx;
+  right: -4rpx;
+  bottom: -5rpx;
+  height: 3rpx;
+  border-radius: 4rpx;
+  background: currentColor;
+}
+.admin-icon--bell .admin-icon__mark::after {
+  left: 8rpx;
+  bottom: -11rpx;
+  width: 7rpx;
+  height: 7rpx;
+  border-radius: 50%;
+  background: currentColor;
+}
+.admin-icon--group .admin-icon__mark {
+  width: 16rpx;
+  height: 16rpx;
+  border: 3rpx solid currentColor;
+  border-radius: 50%;
+  transform: translateY(-7rpx);
+}
+.admin-icon--group .admin-icon__mark::before {
+  left: -10rpx;
+  top: 16rpx;
+  width: 36rpx;
+  height: 14rpx;
+  border: 3rpx solid currentColor;
+  border-top-left-radius: 16rpx;
+  border-top-right-radius: 16rpx;
+  border-bottom: none;
+}
+.admin-icon--group .admin-icon__mark::after {
+  left: 20rpx;
+  top: 4rpx;
+  width: 11rpx;
+  height: 11rpx;
+  border: 3rpx solid currentColor;
+  border-radius: 50%;
+  opacity: 0.75;
+}
+.admin-icon--edit .admin-icon__mark {
+  width: 26rpx;
+  height: 8rpx;
+  border-radius: 8rpx;
+  background: currentColor;
+  transform: rotate(-42deg);
+}
+.admin-icon--edit .admin-icon__mark::before {
+  right: -6rpx;
+  top: 0;
+  width: 4rpx;
+  height: 8rpx;
+  border-left: 3rpx solid rgba(255,255,255,0.75);
+}
+.admin-icon--edit .admin-icon__mark::after {
+  left: -8rpx;
+  top: 0;
+  width: 0;
+  height: 0;
+  border-top: 4rpx solid transparent;
+  border-bottom: 4rpx solid transparent;
+  border-right: 8rpx solid currentColor;
+}
+.admin-icon--offline {
+  color: #ef4444;
+  background: rgba(239,68,68,.09);
+}
+.admin-icon--offline .admin-icon__mark {
+  width: 26rpx;
+  height: 26rpx;
+  border: 3rpx solid currentColor;
+  border-radius: 50%;
+}
+.admin-icon--offline .admin-icon__mark::before {
+  left: 4rpx;
+  top: 10rpx;
+  width: 14rpx;
+  height: 3rpx;
+  border-radius: 4rpx;
+  background: currentColor;
+}
 .admin-action-btn text:last-child { font-size: 26rpx; color: var(--text-primary); }
 .admin-action-btn.danger text:last-child { color: #ef4444; }
 
@@ -439,7 +588,37 @@
   flex-shrink: 0;
 }
 .share-btn::after { border: none; }
-.share-btn-icon { font-size: 34rpx; color: var(--accent-text); }
+.share-btn-icon {
+  position: relative;
+  width: 34rpx;
+  height: 34rpx;
+  color: var(--accent-text);
+}
+.share-btn-icon::before,
+.share-btn-icon::after {
+  content: '';
+  position: absolute;
+  box-sizing: border-box;
+}
+.share-btn-icon::before {
+  left: 3rpx;
+  bottom: 3rpx;
+  width: 24rpx;
+  height: 24rpx;
+  border-left: 3rpx solid currentColor;
+  border-bottom: 3rpx solid currentColor;
+  border-radius: 0 0 0 6rpx;
+}
+.share-btn-icon::after {
+  right: 4rpx;
+  top: 2rpx;
+  width: 18rpx;
+  height: 18rpx;
+  border-top: 3rpx solid currentColor;
+  border-right: 3rpx solid currentColor;
+  transform: rotate(0deg);
+  box-shadow: 4rpx -4rpx 0 -2rpx currentColor;
+}
 
 /* 通用按钮 */
 .btn {

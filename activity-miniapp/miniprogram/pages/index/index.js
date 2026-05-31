@@ -1,8 +1,7 @@
 // pages/index/index.js
 const request = require('../../utils/request')
 const i18n = require('../../utils/i18n')
-const { withListRowTimes, bannerRowStartTime } = require('../../utils/activityFormat')
-const { withActivityMedia } = require('../../utils/media')
+const { withListRowTimes } = require('../../utils/activityFormat')
 
 const PAGE_SIZE = 10
 
@@ -31,7 +30,6 @@ const CATEGORY_DEF = [
 Page({
   data: {
     activities: [],
-    bannerList: [],
     loading: false,
     loadingMore: false,
     refreshing: false,
@@ -104,10 +102,9 @@ Page({
       })
   },
 
-  // 初始化语言、banner 等非列表内容（只需执行一次）
+  // 初始化语言等非列表内容（只需执行一次）
   _initMeta() {
     this._applyLocale()
-    this._loadBanners()
   },
 
   /** 将界面文案、分类与语言对齐；仅在语言切换时刷新 localeRev 与已缓存列表的日期格式，避免每次 onShow 整表重算 */
@@ -138,10 +135,6 @@ Page({
     }
 
     if (langChanged) {
-      patch.bannerList = (this.data.bannerList || []).map((a) => ({
-        ...a,
-        startTimeText: bannerRowStartTime(a.startTime),
-      }))
       patch.activities = (this.data.activities || []).map(withListRowTimes)
       patch.localeRev = (this.data.localeRev || 0) + 1
     }
@@ -212,21 +205,6 @@ Page({
     }
   },
 
-  async _loadBanners() {
-    try {
-      const res = await request.get('/activities/featured')
-      this.setData({
-        bannerList: (res.data || []).map((a) => {
-          const row = withActivityMedia(a)
-          return {
-            ...row,
-            startTimeText: bannerRowStartTime(row.startTime),
-          }
-        }),
-      })
-    } catch (e) {}
-  },
-
   onCategoryChange(e) {
     const key = e.currentTarget.dataset.key
     const lk = LIST_TITLE_KEYS[key] || 'listTitleAll'
@@ -236,17 +214,6 @@ Page({
 
   onActivityTap(e) {
     wx.navigateTo({ url: `/pages/activity-detail/index?id=${e.detail.id}` })
-  },
-
-  onBannerTap(e) {
-    wx.navigateTo({ url: `/pages/activity-detail/index?id=${e.currentTarget.dataset.id}` })
-  },
-
-  onBannerImageError(e) {
-    const idx = e.currentTarget.dataset.index
-    if (idx === undefined || idx === null) return
-    const key = `bannerList[${idx}].coverImage`
-    this.setData({ [key]: '' })
   },
 
   onSearchTap() {
@@ -304,7 +271,6 @@ Page({
   },
 
   onRetryLoad() {
-    this._loadBanners()
     this._loadActivities(true)
   },
 
@@ -321,7 +287,6 @@ Page({
     return {
       title: i18n.t('shareDiscoverTitle'),
       path: '/pages/index/index',
-      imageUrl: this.data.bannerList[0]?.coverImage || '',
     }
   },
 
@@ -329,7 +294,6 @@ Page({
     return {
       title: i18n.t('shareDiscoverTitle'),
       query: '',
-      imageUrl: this.data.bannerList[0]?.coverImage || '',
     }
   },
 })

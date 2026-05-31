@@ -31,37 +31,6 @@
     </view>
   </scroll-view>
 
-  <!-- Banner 轮播（精选活动） -->
-  <swiper
-    wx:if="{{bannerList.length > 0}}"
-    class="banner-swiper"
-    autoplay
-    interval="4000"
-    circular
-    indicator-dots
-    indicator-active-color="#9a6b24"
-    indicator-color="rgba(255,255,255,0.5)"
-  >
-    <swiper-item wx:for="{{bannerList}}" wx:key="id" bindtap="onBannerTap" data-id="{{item.id}}">
-      <view class="banner-cover">
-        <view class="banner-fallback" wx:if="{{!item.coverImage}}" />
-        <image
-          wx:if="{{item.coverImage}}"
-          src="{{item.coverImage}}"
-          mode="aspectFill"
-          class="banner-img"
-          lazy-load
-          data-index="{{index}}"
-          binderror="onBannerImageError"
-        />
-      </view>
-      <view class="banner-info">
-        <text class="banner-title text-ellipsis">{{item.name}}</text>
-        <text class="banner-time">{{item.startTimeText}}</text>
-      </view>
-    </swiper-item>
-  </swiper>
-
   <!-- 列表标题 -->
   <view class="list-header">
     <text class="section-title">{{listTitle}}</text>

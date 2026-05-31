@@ -1,8 +1,14 @@
 <!-- pages/poster/index.wxml - AI 海报生成 -->
 <view class="page">
   <scroll-view scroll-y class="scroll-view">
-    <view class="poster-preview-wrap" wx:if="{{posterUrl}}">
-      <image src="{{posterUrl}}" mode="aspectFit" class="poster-preview" show-menu-by-longpress />
+    <view class="poster-preview-wrap" wx:if="{{posterUrl && !posterFailed}}">
+      <image
+        src="{{posterUrl}}"
+        mode="aspectFit"
+        class="poster-preview"
+        show-menu-by-longpress
+        binderror="onPosterError"
+      />
       <view class="preview-actions">
         <button class="btn btn-outline btn-sm" bindtap="regenerate" loading="{{generating}}">重新生成</button>
         <button class="btn btn-primary btn-sm" bindtap="savePoster">保存海报</button>
@@ -10,7 +16,7 @@
       </view>
     </view>
 
-    <view class="generate-panel card" wx:if="{{!posterUrl}}">
+    <view class="generate-panel card" wx:if="{{!posterUrl || posterFailed}}">
       <text class="gen-title">AI 活动海报生成</text>
       <text class="gen-activity-name">{{activityName}}</text>
 

@@ -3,7 +3,15 @@
 .scroll-view { height: 100vh; }
 
 .poster-preview-wrap { padding: 24rpx; text-align: center; }
-.poster-preview { width: 100%; max-width: 700rpx; border-radius: var(--radius-xl); box-shadow: var(--shadow-lg); }
+.poster-preview {
+  width: 100%;
+  max-width: 700rpx;
+  height: calc(100vh - 190rpx);
+  min-height: 760rpx;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  background: rgba(255,255,255,0.72);
+}
 
 .preview-actions {
   display: flex;
