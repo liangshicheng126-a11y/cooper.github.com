@@ -1,6 +1,7 @@
 // pages/create-activity/index.js
 const request = require('../../utils/request')
 const { toPickerValue, toPickerTimeValue } = require('../../utils/date')
+const { resolveMediaUrl } = require('../../utils/media')
 
 const FIELD_TYPES = ['文本', '手机号', '邮箱', '身份证号', '单选', '多选', '下拉选择', '多行文本']
 const FIELD_TYPE_KEYS = ['text', 'phone', 'email', 'idCard', 'radio', 'checkbox', 'select', 'textarea']
@@ -77,7 +78,7 @@ Page({
           ...this.data.form,
           name: a.name,
           description: a.description || '',
-          coverImage: a.coverImage || '',
+          coverImage: resolveMediaUrl(a.coverImage || ''),
           reminder: a.reminder || '',
           category: a.category || 'other',
           hasLimit: a.maxParticipants > 0,
@@ -124,8 +125,11 @@ Page({
 
   onCoverImageError() {
     if (this.data.coverTempPath) return
+    const now = Date.now()
+    if (this._coverImageErrorAt && now - this._coverImageErrorAt < 1500) return
+    this._coverImageErrorAt = now
     wx.showToast({
-      title: '封面图加载失败，请重新上传或检查 downloadFile 合法域名',
+      title: '封面图加载失败，请重新选择封面或检查图片域名配置',
       icon: 'none',
       duration: 3000,
     })
@@ -138,6 +142,7 @@ Page({
       sourceType: ['album', 'camera'],
       success: async (res) => {
         const tempFile = res.tempFiles[0].tempFilePath
+        this._coverImageErrorAt = 0
         this.setData({ coverTempPath: tempFile })
         wx.showLoading({ title: '上传中...' })
         try {
@@ -147,7 +152,12 @@ Page({
             wx.showToast({ title: uploadRes?.message || '上传失败，可重新点击封面重试', icon: 'none' })
             return
           }
-          this.setData({ 'form.coverImage': uploadRes.data.url })
+          const normalized = resolveMediaUrl(uploadRes.data.url)
+          if (!normalized) {
+            wx.showToast({ title: '上传成功但封面地址无效，请重新选择', icon: 'none' })
+            return
+          }
+          this.setData({ 'form.coverImage': normalized })
         } catch (e) {
           this.setData({ coverTempPath: '' })
           wx.showToast({ title: '上传失败，可重新点击封面重试', icon: 'none' })

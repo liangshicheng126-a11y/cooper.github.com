@@ -9,6 +9,19 @@ const path = require('path')
 
 const DEV_UPLOAD_ROOT = path.join(__dirname, '../../public/uploads')
 
+function detectPublicBase(req) {
+  const configured = String(process.env.PUBLIC_BASE_URL || '').trim()
+  if (configured) return configured.replace(/\/$/, '')
+
+  const xfProto = String(req.headers['x-forwarded-proto'] || '').split(',')[0].trim()
+  const xfHost = String(req.headers['x-forwarded-host'] || '').split(',')[0].trim()
+  const host = xfHost || req.get('host') || ''
+  const proto = xfProto || (req.protocol || 'http')
+  if (host) return `${proto}://${host}`.replace(/\/$/, '')
+
+  return 'http://127.0.0.1:3000'
+}
+
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
@@ -32,7 +45,7 @@ router.post('/image', auth, upload.single('file'), async (req, res, next) => {
       fs.mkdirSync(dir, { recursive: true })
       const filename = `${uuidv4()}${ext}`
       fs.writeFileSync(path.join(dir, filename), req.file.buffer)
-      const base = (process.env.PUBLIC_BASE_URL || 'http://127.0.0.1:3000').replace(/\/$/, '')
+      const base = detectPublicBase(req)
       const url = `${base}/uploads/${year}/${filename}`
       return res.json({ code: 0, data: { url } })
     }
