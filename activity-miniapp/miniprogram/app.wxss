@@ -204,8 +204,11 @@ page {
   background: rgba(255,255,255,0.82);
   border: 1.5rpx solid rgba(29,28,24,0.12);
   border-radius: var(--radius-md);
-  padding: 24rpx 28rpx;
+  height: 88rpx;
+  min-height: 88rpx;
+  padding: 0 28rpx;
   font-size: 28rpx;
+  line-height: 88rpx;
   color: var(--text-primary);
   width: 100%;
   box-sizing: border-box;
@@ -223,6 +226,7 @@ page {
   border-radius: var(--radius-md);
   padding: 24rpx 28rpx;
   font-size: 28rpx;
+  line-height: 1.55;
   color: var(--text-primary);
   width: 100%;
   box-sizing: border-box;
@@ -232,7 +236,7 @@ page {
 .form-hint  { font-size: 22rpx; color: var(--text-muted); margin-top: 8rpx; }
 .form-error { font-size: 22rpx; color: var(--danger);     margin-top: 8rpx; }
 
-.picker-input { display: flex; align-items: center; justify-content: space-between; }
+.picker-input { display: flex; align-items: center; justify-content: space-between; line-height: normal; }
 .picker-value       { color: var(--text-primary); }
 .picker-placeholder { color: var(--text-muted); }
 
