@@ -212,3 +212,4 @@
 {"level":"info","message":"✅ Redis connected","timestamp":"2026-05-31 14:58:33"}
 {"level":"info","message":"✅ MySQL connected (pool size: 20)","timestamp":"2026-05-31 14:58:33"}
 {"level":"info","message":"✅ Server running on port 3000","timestamp":"2026-05-31 14:58:33"}
+{"level":"info","message":"Sending 24小时 reminder for activity 0d83d614-c15c-467b-9b56-ba58127c8562 to 0 users","timestamp":"2026-05-31 21:40:00"}
