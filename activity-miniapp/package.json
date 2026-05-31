@@ -1,0 +1,16 @@
+{
+  "name": "activity-miniapp-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "活动报名微信小程序前端校验与构建脚本",
+  "type": "module",
+  "scripts": {
+    "mp:validate": "node scripts/mp-validate.mjs",
+    "mp:check:js": "node scripts/mp-check-js.mjs",
+    "mp:check": "npm run mp:validate && npm run mp:check:js",
+    "mp:build": "npm run mp:check"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
