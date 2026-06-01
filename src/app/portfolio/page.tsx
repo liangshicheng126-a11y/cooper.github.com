@@ -87,16 +87,16 @@ export default function Portfolio() {
           className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10"
         >
           {projects.map((project, i) => (
-            <div key={project.id} data-scroll-batch-item data-batch-index={i}>
-              <ProjectCard
-                id={project.id}
-                title={project.title}
-                category={project.category}
-                image={project.image}
-                viewProject={t.portfolio.viewProject}
-                accent={project.accent}
-              />
-            </div>
+            <ProjectCard
+              key={project.id}
+              id={project.id}
+              title={project.title}
+              category={project.category}
+              image={project.image}
+              viewProject={t.portfolio.viewProject}
+              accent={project.accent}
+              batchIndex={i}
+            />
           ))}
         </GsapScrollBatch>
 
