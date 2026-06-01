@@ -22,8 +22,9 @@ from docx.shared import Pt
 
 WNS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 
-INPUT_PATH = Path(r"X:\A\liangsc_formatted.docx")
-OUTPUT_PATH = Path(r"X:\A\liangsc_formatted_checked.docx")
+DOC_PATH = Path(r"X:\A\liangsc_formatted_checked.docx")
+INPUT_PATH = DOC_PATH
+OUTPUT_PATH = DOC_PATH
 AUDIT_PATH = Path(r"X:\A\liangsc_formatted_audit.md")
 
 # Style name mapping in document
@@ -104,6 +105,7 @@ SPEC: dict[str, FormatSpec] = {
         csp=-5,
         line=1.6,
         align="left",
+        bold=True,
         style_name=STYLE_BODY_H1,
     ),
     "body_h2": FormatSpec(
@@ -113,6 +115,7 @@ SPEC: dict[str, FormatSpec] = {
         csp=-5,
         line=1.6,
         align="left",
+        bold=True,
         style_name=STYLE_BODY_H2,
     ),
     "body_h3": FormatSpec(
@@ -135,14 +138,14 @@ SPEC: dict[str, FormatSpec] = {
         style_name=STYLE_BODY,
     ),
     "refs_title": FormatSpec(
-        font="Nanum Gothic ExtraBold",
+        font="Nanum Myeongjo ExtraBold",
         size=11,
         scale=100,
         csp=-5,
         line=1.6,
         align="left",
         bold=True,
-        style_name=STYLE_BODY_H2,
+        style_name=None,
     ),
     "refs": FormatSpec(
         font="Nanum Myeongjo",
@@ -150,7 +153,7 @@ SPEC: dict[str, FormatSpec] = {
         scale=100,
         csp=None,
         line=1.6,
-        align="left",
+        align="justify",
         style_name=STYLE_BODY,
     ),
 }
@@ -217,24 +220,39 @@ def heading_level(text: str) -> int | None:
     if not m:
         return None
     parts = m.group(1).split(".")
-    # Single-digit "1. xxx" with long text or colon → enumerated list item, not heading
-    if len(parts) == 1:
+    depth = len(parts)
+    if depth >= 3:
+        return 3
+    if depth == 2:
+        return 2
+    if depth == 1:
         rest = text.strip()[m.end() :]
-        if len(text.strip()) > 35 or ":" in rest[:25]:
+        # Single-number list item with colon label (not chapter title)
+        if ":" in rest:
             return None
-    return len(parts)
+        return 1
+    return None
 
 
 def is_enumerated_body_item(text: str) -> bool:
-    """Numbered list items under a section (e.g. 1. 문헌 고찰: ...)."""
-    m = re.match(r"^\d+\.\s+\S", text.strip())
-    if not m:
-        return False
-    # Multi-level numbering is handled by heading_level
+    """Single-number list lines like '1. 문헌 고찰: ...' (not chapter headings)."""
     if re.match(r"^\d+\.\d+", text.strip()):
         return False
+    m = re.match(r"^(\d+)\.\s+", text.strip())
+    if not m:
+        return False
     rest = text.strip()[m.end() :]
-    return len(text.strip()) > 35 or ":" in rest[:25]
+    if ":" not in rest:
+        return False
+    return len(text.strip()) > 35
+
+
+def is_unnumbered_subheading(text: str) -> bool:
+    """Short unnumbered lines e.g. '세리프 서체' under a section."""
+    t = text.strip()
+    if not t or re.match(r"^\d", t):
+        return False
+    return len(t) <= 30
 
 
 def classify_paragraph(paragraph, index: int, refs_title_index: int | None) -> str | None:
@@ -266,6 +284,9 @@ def classify_paragraph(paragraph, index: int, refs_title_index: int | None) -> s
 
     if is_enumerated_body_item(text):
         return "body"
+
+    if is_unnumbered_subheading(text):
+        return "body_h3"
 
     level = heading_level(text)
     if level == 1:
@@ -400,6 +421,20 @@ def apply_paragraph_format(paragraph, spec: FormatSpec) -> None:
         apply_run_format(run, spec)
 
 
+def format_footers(doc: Document) -> None:
+    """Center footer page numbers; do not change footer text."""
+    for sec in doc.sections:
+        for footer in (sec.footer, sec.first_page_footer):
+            for p in footer.paragraphs:
+                if not p.text.strip():
+                    continue
+                p.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                for run in p.runs:
+                    run.font.name = "Nanum Gothic"
+                    if run.font.size is None:
+                        run.font.size = Pt(9)
+
+
 def build_style_rpr(spec: FormatSpec) -> ET.Element:
     rpr = ET.Element(wqn("rPr"))
     rf = ET.SubElement(rpr, wqn("rFonts"))
@@ -503,6 +538,9 @@ def audit_document(doc: Document) -> list[tuple]:
         rp = get_run_props(p.runs[0]) if p.runs else {}
         pp = get_para_props(p)
 
+        if spec.bold is not None and rp.get("bold") != spec.bold:
+            issues.append((i, cat, "bold", spec.bold, rp.get("bold")))
+
         for key, expected in [
             ("font", spec.font.split()[0]),
             ("size", spec.size),
@@ -558,7 +596,17 @@ def format_document(doc: Document) -> list[str]:
         else:
             changes.append(f"Para {i}: applied format for {cat}")
 
+    format_footers(doc)
     return changes
+
+
+def media_hash(docx_path: Path) -> dict[str, str]:
+    out: dict[str, str] = {}
+    with zipfile.ZipFile(docx_path, "r") as z:
+        for name in z.namelist():
+            if name.startswith("word/media/"):
+                out[name] = hashlib.sha256(z.read(name)).hexdigest()
+    return out
 
 
 def write_audit_report(
@@ -569,12 +617,11 @@ def write_audit_report(
     text_hash_after: str,
 ) -> None:
     lines = [
-        "# liangsc_formatted 格式检查报告",
+        "# liangsc_formatted_checked 格式再修正报告",
         "",
         "## 摘要",
         "",
-        f"- 源文件: `{INPUT_PATH}`",
-        f"- 输出副本: `{OUTPUT_PATH}`",
+        f"- 文件（覆盖保存）: `{OUTPUT_PATH}`",
         f"- 修正前问题数: **{len(before_issues)}**",
         f"- 修正后问题数: **{len(after_issues)}**",
         f"- 文本 hash 一致: **{'是' if text_hash_before == text_hash_after else '否'}**",
@@ -589,9 +636,10 @@ def write_audit_report(
         "| 소속 (Paper Affiliation) | 已修正 |",
         "| 본문제목1 (样式2) | 已修正 |",
         "| 본문제목1.1 (样式1) | 已修正 |",
+        "| 본문제목1.1.1 (三级标题) | 已修正 |",
         "| 본문 (样式3) | 已修正 |",
-        "| 참고문헌제목 | 已修正 |",
-        "| 참고문헌 | 已修正 |",
+        "| 참고문헌제목 (명조 ExtraBold) | 已修正 |",
+        "| 참고문헌 (양쪽对齐) | 已修正 |",
         "| abstract / 목차 / 图题 / 表题 / 脚注 / 英文标题 | N/A（文档无对应内容）|",
         "",
         "## 修正操作",
@@ -613,12 +661,14 @@ def write_audit_report(
 
 
 def main() -> int:
-    if not INPUT_PATH.exists():
-        print(f"Input not found: {INPUT_PATH}", file=sys.stderr)
+    if not DOC_PATH.exists():
+        print(f"Input not found: {DOC_PATH}", file=sys.stderr)
         return 1
 
+    media_before = media_hash(DOC_PATH)
+
     # Load and audit before
-    doc = Document(str(INPUT_PATH))
+    doc = Document(str(DOC_PATH))
     hash_before = paragraph_text_hash(doc)
     before_issues = audit_document(doc)
 
@@ -631,28 +681,33 @@ def main() -> int:
         return 2
 
     # Save via docx then patch styles.xml
-    doc.save(str(OUTPUT_PATH))
+    doc.save(str(DOC_PATH))
 
     # Update styles.xml in output zip
-    with zipfile.ZipFile(OUTPUT_PATH, "r") as zin:
+    with zipfile.ZipFile(DOC_PATH, "r") as zin:
         contents = {name: zin.read(name) for name in zin.namelist()}
 
     if "word/styles.xml" in contents:
         contents["word/styles.xml"] = update_styles_xml(contents["word/styles.xml"])
 
-    tmp = OUTPUT_PATH.with_suffix(".tmp.docx")
+    tmp = DOC_PATH.with_suffix(".tmp.docx")
     with zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as zout:
         for name, data in contents.items():
             zout.writestr(name, data)
-    tmp.replace(OUTPUT_PATH)
+    tmp.replace(DOC_PATH)
+
+    media_after = media_hash(DOC_PATH)
+    if media_before != media_after:
+        print("ERROR: Media files changed!", file=sys.stderr)
+        return 4
 
     # Re-audit output
-    doc_out = Document(str(OUTPUT_PATH))
+    doc_out = Document(str(DOC_PATH))
     after_issues = audit_document(doc_out)
 
     write_audit_report(before_issues, after_issues, changes, hash_before, hash_after)
 
-    print(f"Saved: {OUTPUT_PATH}")
+    print(f"Saved: {DOC_PATH}")
     print(f"Audit: {AUDIT_PATH}")
     print(f"Before issues: {len(before_issues)}, After issues: {len(after_issues)}")
     print(f"Text hash OK: {hash_before == hash_after}")
