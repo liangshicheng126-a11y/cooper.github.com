@@ -153,7 +153,7 @@ SPEC: dict[str, FormatSpec] = {
         scale=100,
         csp=None,
         line=1.6,
-        align="justify",
+        align="left",
         style_name=STYLE_BODY,
     ),
     "figure_caption": FormatSpec(
@@ -459,6 +459,37 @@ def set_xml_bold_rpr(rpr, bold: bool | None) -> None:
         b.set(qn("w:val"), "0")
 
 
+JC_XML = {"left": "left", "center": "center", "right": "right", "justify": "both"}
+
+
+def ensure_ppr(paragraph) -> Any:
+    p = paragraph._element
+    p_pr = p.find(qn("w:pPr"))
+    if p_pr is None:
+        p_pr = OxmlElement("w:pPr")
+        p.insert(0, p_pr)
+    return p_pr
+
+
+def apply_paragraph_ppr_xml(paragraph, spec: FormatSpec) -> None:
+    """Force 행간/정렬 on paragraph pPr (Word reads this reliably)."""
+    p_pr = ensure_ppr(paragraph)
+    jc = p_pr.find(qn("w:jc"))
+    if jc is None:
+        jc = OxmlElement("w:jc")
+        p_pr.append(jc)
+    jc.set(qn("w:val"), JC_XML[spec.align])
+
+    if spec.line is not None:
+        sp = p_pr.find(qn("w:spacing"))
+        if sp is None:
+            sp = OxmlElement("w:spacing")
+            p_pr.append(sp)
+        line_val = str(int(round(spec.line * 240)))
+        sp.set(qn("w:line"), line_val)
+        sp.set(qn("w:lineRule"), "auto")
+
+
 def apply_run_format(run, spec: FormatSpec) -> None:
     rpr = ensure_rpr(run._element)
     set_xml_font_rpr(rpr, spec.font)
@@ -480,14 +511,18 @@ def apply_paragraph_format(paragraph, spec: FormatSpec) -> None:
         pf.line_spacing_rule = WD_LINE_SPACING.MULTIPLE
         pf.line_spacing = spec.line
 
+    apply_paragraph_ppr_xml(paragraph, spec)
+
     if spec.style_name and paragraph.style.name != spec.style_name:
         try:
             paragraph.style = spec.style_name
         except KeyError:
             pass
 
-    for run in paragraph.runs:
-        apply_run_format(run, spec)
+    for r_el in paragraph._element.findall(".//" + wqn("r")):
+        from docx.text.run import Run
+
+        apply_run_format(Run(r_el, paragraph), spec)
 
 
 def add_page_number_field(paragraph) -> None:
@@ -619,10 +654,11 @@ def update_styles_xml(styles_xml_bytes: bytes) -> bytes:
         sid = st.get(wqn("styleId"), "")
 
         spec = STYLE_NAME_DEFS.get(name) or STYLE_XML_DEFS.get(sid)
+        if spec is None and name in ("样式1", "样式2", "样式3"):
+            spec = STYLE_NAME_DEFS.get(name)
         if spec is None:
             continue
 
-        # Remove existing rPr/pPr and rebuild
         for tag in ("rPr", "pPr"):
             old = st.find(wqn(tag))
             if old is not None:
@@ -647,20 +683,36 @@ def get_run_props(run) -> dict[str, Any]:
         d["bold"] = True
     if rpr is not None:
         sp = rpr.find(qn("w:spacing"))
-        if sp is not None:
+        if sp is not None and sp.get(qn("w:val")) is not None:
             d["csp"] = int(sp.get(qn("w:val")))
         w = rpr.find(qn("w:w"))
-        if w is not None:
+        if w is not None and w.get(qn("w:val")) is not None:
             d["scale"] = int(w.get(qn("w:val")))
     return d
 
 
 def get_para_props(paragraph) -> dict[str, Any]:
     pf = paragraph.paragraph_format
-    return {
+    props: dict[str, Any] = {
         "align": REVERSE_ALIGN.get(pf.alignment, pf.alignment),
         "line": pf.line_spacing,
     }
+    p_pr = paragraph._element.find(qn("w:pPr"))
+    if p_pr is not None:
+        jc = p_pr.find(qn("w:jc"))
+        if jc is not None:
+            xml_align = jc.get(qn("w:val"))
+            props["align"] = {
+                "left": "left",
+                "center": "center",
+                "right": "right",
+                "both": "justify",
+            }.get(xml_align, xml_align)
+        sp = p_pr.find(qn("w:spacing"))
+        if sp is not None and sp.get(qn("w:line")):
+            line_twips = int(sp.get(qn("w:line")))
+            props["line"] = round(line_twips / 240, 2)
+    return props
 
 
 def audit_document(doc: Document) -> list[tuple]:
@@ -698,10 +750,12 @@ def audit_document(doc: Document) -> list[tuple]:
                     issues.append((i, cat, key, expected, rp[key]))
             elif key in pp:
                 actual = pp[key]
-                if key == "align" and actual == "inherit":
-                    issues.append((i, cat, key, expected, actual))
-                elif key == "line" and actual != expected:
-                    issues.append((i, cat, key, expected, actual))
+                if key == "align":
+                    if actual in ("inherit", None) or actual != expected:
+                        issues.append((i, cat, key, expected, actual))
+                elif key == "line":
+                    if actual is None or abs(float(actual) - float(expected)) > 0.05:
+                        issues.append((i, cat, key, expected, actual))
             elif key in ("size", "scale", "csp"):
                 if expected is not None:
                     issues.append((i, cat, key, expected, "missing"))
@@ -763,6 +817,19 @@ def write_audit_report(
         f"- 修正前问题数: **{len(before_issues)}**",
         f"- 修正后问题数: **{len(after_issues)}**",
         f"- 文本 hash 一致: **{'是' if text_hash_before == text_hash_after else '否'}**",
+        "",
+        "## 장평 / 자간 / 행간 / 정렬 核对标准",
+        "",
+        "| 样式 | 장평 | 자간 | 행간 | 정렬 |",
+        "|------|------|------|------|------|",
+        "| 본문 | 100% | -5 | 160% (line=384) | 양쪽 (both) |",
+        "| 논문제목 | 90% | -10 | 130% (line=312) | 중앙 |",
+        "| 논문부제목 | 100% | -10 | 130% | 중앙 |",
+        "| 이름/소속 | 95% | -5 | 160% | 중앙 |",
+        "| 본문제목1 | 100% | -5 | 160% | 좌측 |",
+        "| 본문소제목 | 100% | -5 | 160% | 좌측 |",
+        "| 그림캡션 | 95% | -5 | 130% | 중앙 |",
+        "| 참고문헌 | 100% | (空) | 160% | 좌측 |",
         "",
         "## 样式表覆盖情况",
         "",
