@@ -421,18 +421,87 @@ def apply_paragraph_format(paragraph, spec: FormatSpec) -> None:
         apply_run_format(run, spec)
 
 
-def format_footers(doc: Document) -> None:
-    """Center footer page numbers; do not change footer text."""
+def add_page_number_field(paragraph) -> None:
+    """Insert Word PAGE field so footer shows - 1 -, - 2 -, etc."""
+    run = paragraph.add_run()
+    r = run._r
+    fld_begin = OxmlElement("w:fldChar")
+    fld_begin.set(qn("w:fldCharType"), "begin")
+    instr = OxmlElement("w:instrText")
+    instr.set(qn("xml:space"), "preserve")
+    instr.text = " PAGE "
+    fld_sep = OxmlElement("w:fldChar")
+    fld_sep.set(qn("w:fldCharType"), "separate")
+    fld_end = OxmlElement("w:fldChar")
+    fld_end.set(qn("w:fldCharType"), "end")
+    r.append(fld_begin)
+    r.append(instr)
+    r.append(fld_sep)
+    t = OxmlElement("w:t")
+    t.text = "1"
+    r.append(t)
+    r.append(fld_end)
+    run.font.name = "Nanum Gothic"
+    run.font.size = Pt(9)
+
+
+def setup_page_footers(doc: Document) -> None:
+    """Every section gets centered '- N -' footer including the title page."""
     for sec in doc.sections:
-        for footer in (sec.footer, sec.first_page_footer):
-            for p in footer.paragraphs:
-                if not p.text.strip():
-                    continue
-                p.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
-                for run in p.runs:
-                    run.font.name = "Nanum Gothic"
-                    if run.font.size is None:
-                        run.font.size = Pt(9)
+        footer = sec.footer
+        footer.is_linked_to_previous = False
+
+        root = footer._element
+        for child in list(root):
+            if child.tag == wqn("p"):
+                root.remove(child)
+
+        p = footer.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        r_prefix = p.add_run("- ")
+        r_prefix.font.name = "Nanum Gothic"
+        r_prefix.font.size = Pt(9)
+        add_page_number_field(p)
+        r_suffix = p.add_run(" -")
+        r_suffix.font.name = "Nanum Gothic"
+        r_suffix.font.size = Pt(9)
+
+
+def patch_first_section_footer_reference(docx_path: Path) -> None:
+    """Section 0 sectPr often lacks footerReference; link it to the default footer."""
+    with zipfile.ZipFile(docx_path, "r") as zin:
+        contents = {name: zin.read(name) for name in zin.namelist()}
+
+    root = ET.fromstring(contents["word/document.xml"])
+    body = root.find(wqn("body"))
+    if body is None:
+        return
+
+    last_sp = body.find(wqn("sectPr"))
+    if last_sp is None:
+        return
+
+    footer_ref = last_sp.find(wqn("footerReference"))
+    if footer_ref is None:
+        return
+
+    for p in body.findall(wqn("p")):
+        p_pr = p.find(wqn("pPr"))
+        if p_pr is None:
+            continue
+        sp = p_pr.find(wqn("sectPr"))
+        if sp is None:
+            continue
+        if sp.find(wqn("footerReference")) is None:
+            sp.append(deepcopy(footer_ref))
+        break
+
+    contents["word/document.xml"] = ET.tostring(root, encoding="utf-8", xml_declaration=True)
+    tmp = docx_path.with_suffix(".tmp.docx")
+    with zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as zout:
+        for name, data in contents.items():
+            zout.writestr(name, data)
+    tmp.replace(docx_path)
 
 
 def build_style_rpr(spec: FormatSpec) -> ET.Element:
@@ -596,7 +665,7 @@ def format_document(doc: Document) -> list[str]:
         else:
             changes.append(f"Para {i}: applied format for {cat}")
 
-    format_footers(doc)
+    setup_page_footers(doc)
     return changes
 
 
@@ -695,6 +764,8 @@ def main() -> int:
         for name, data in contents.items():
             zout.writestr(name, data)
     tmp.replace(DOC_PATH)
+
+    patch_first_section_footer_reference(DOC_PATH)
 
     media_after = media_hash(DOC_PATH)
     if media_before != media_after:
