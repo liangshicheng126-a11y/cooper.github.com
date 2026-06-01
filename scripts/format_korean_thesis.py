@@ -156,6 +156,24 @@ SPEC: dict[str, FormatSpec] = {
         align="justify",
         style_name=STYLE_BODY,
     ),
+    "figure_caption": FormatSpec(
+        font="Nanum Gothic",
+        size=8,
+        scale=95,
+        csp=-5,
+        line=1.3,
+        align="center",
+        style_name=STYLE_BODY,
+    ),
+    "table_caption": FormatSpec(
+        font="Nanum Gothic",
+        size=8,
+        scale=95,
+        csp=-5,
+        line=1.3,
+        align="left",
+        style_name=STYLE_BODY,
+    ),
 }
 
 # styles.xml styleId -> FormatSpec key
@@ -194,6 +212,7 @@ STYLE_NAME_DEFS: dict[str, FormatSpec] = {
         line=1.6,
         align="justify",
     ),
+    "Caption": SPEC["figure_caption"],
 }
 
 
@@ -212,6 +231,48 @@ def is_image_only_paragraph(paragraph) -> bool:
     has_pict = el.find(".//" + wqn("pict")) is not None
     text = paragraph.text.strip()
     return (has_drawing or has_pict) and not text
+
+
+def paragraph_has_image(paragraph) -> bool:
+    el = paragraph._element
+    return el.find(".//" + wqn("drawing")) is not None or el.find(".//" + wqn("pict")) is not None
+
+
+def is_figure_caption_pattern(text: str) -> bool:
+    t = text.strip()
+    return bool(
+        re.match(r"^\[?\s*그림\s*\d+\s*\]?", t, re.IGNORECASE)
+        or re.match(r"^\[그림\s*\d+\]", t)
+        or re.match(r"^<\s*그림\s*\d+\s*>", t)
+    )
+
+
+def is_table_caption_pattern(text: str) -> bool:
+    t = text.strip()
+    return bool(
+        re.match(r"^<\s*표\s*\d+\s*>", t)
+        or re.match(r"^표\s*\d+", t)
+    )
+
+
+def is_adjacent_to_image_only(doc: Document, index: int) -> bool:
+    paras = doc.paragraphs
+    for delta in (-1, 1):
+        j = index + delta
+        if 0 <= j < len(paras) and is_image_only_paragraph(paras[j]):
+            return True
+    return False
+
+
+def is_likely_figure_caption(doc: Document, index: int, text: str) -> bool:
+    if is_figure_caption_pattern(text):
+        return True
+    if heading_level(text) is not None:
+        return False
+    if not is_adjacent_to_image_only(doc, index):
+        return False
+    # Descriptive caption next to an image (not a section title)
+    return len(text) <= 120
 
 
 def heading_level(text: str) -> int | None:
@@ -255,7 +316,9 @@ def is_unnumbered_subheading(text: str) -> bool:
     return len(t) <= 30
 
 
-def classify_paragraph(paragraph, index: int, refs_title_index: int | None) -> str | None:
+def classify_paragraph(
+    paragraph, index: int, refs_title_index: int | None, doc: Document
+) -> str | None:
     if is_image_only_paragraph(paragraph):
         return None
 
@@ -264,6 +327,12 @@ def classify_paragraph(paragraph, index: int, refs_title_index: int | None) -> s
         return None
 
     style = paragraph.style.name if paragraph.style else ""
+
+    if is_table_caption_pattern(text):
+        return "table_caption"
+
+    if is_likely_figure_caption(doc, index, text):
+        return "figure_caption"
 
     if style == "Paper Title":
         return "Paper Title"
@@ -600,7 +669,7 @@ def audit_document(doc: Document) -> list[tuple]:
     for i, p in enumerate(doc.paragraphs):
         if is_image_only_paragraph(p) or not p.text.strip():
             continue
-        cat = classify_paragraph(p, i, refs_idx)
+        cat = classify_paragraph(p, i, refs_idx, doc)
         if cat is None or cat not in SPEC:
             continue
         spec = SPEC[cat]
@@ -652,7 +721,7 @@ def format_document(doc: Document) -> list[str]:
         if not p.text.strip():
             continue
 
-        cat = classify_paragraph(p, i, refs_idx)
+        cat = classify_paragraph(p, i, refs_idx, doc)
         if cat is None:
             continue
 
@@ -709,7 +778,9 @@ def write_audit_report(
         "| 본문 (样式3) | 已修正 |",
         "| 참고문헌제목 (명조 ExtraBold) | 已修正 |",
         "| 참고문헌 (양쪽对齐) | 已修正 |",
-        "| abstract / 목차 / 图题 / 表题 / 脚注 / 英文标题 | N/A（文档无对应内容）|",
+        "| 그림캡션 (图题说明) | 已修正 |",
+        "| 표캡션 (表题) | 已修正（如有）|",
+        "| abstract / 목차 / 脚注 / 英文标题 | N/A（文档无对应内容）|",
         "",
         "## 修正操作",
         "",
