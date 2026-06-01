@@ -2,7 +2,9 @@
 
 import { motion } from "framer-motion";
 import { useTranslation } from "@/locales/LanguageProvider";
-import { ArrowLeft, Calendar, User, Layout, CheckCircle, ExternalLink } from "lucide-react";
+import { ArrowLeft, Calendar, User, Layout, CheckCircle } from "lucide-react";
+import VideoPreviewGrid from "@/components/VideoPreviewGrid";
+import VideoPreviewLightbox, { type VideoPreviewItem } from "@/components/VideoPreviewLightbox";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import LazyInViewImage from "@/components/LazyInViewImage";
@@ -43,15 +45,6 @@ type Props = {
   posters?: string[];
 };
 
-type ProjectVideo = {
-  title: string;
-  href: string;
-  embedUrl?: string;
-  mp4Url?: string;
-  poster?: string;
-  fallbackHref?: string;
-};
-
 export default function ProjectDetailClient({ id, photographyGroups = [], posters = [] }: Props) {
   const { t, mounted } = useTranslation();
   const tier = useMotionTier();
@@ -59,6 +52,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
   const [lightboxFallbacks, setLightboxFallbacks] = useState<string[] | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [videoLoadErrors, setVideoLoadErrors] = useState<Record<string, boolean>>({});
+  const [activeVideoIndex, setActiveVideoIndex] = useState<number | null>(null);
   const shuffledPosters = useMemo(() => stableShufflePosters(posters), [posters]);
   const shuffledPosterDisplay = useMemo(() => mapDisplaySources(shuffledPosters), [shuffledPosters]);
 
@@ -83,7 +77,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
     p4: "https://images.unsplash.com/photo-1536240478700-b869070f9279?w=1200&q=80",
   };
 
-  const videoByProject: Partial<Record<string, ProjectVideo[]>> = {
+  const videoByProject: Partial<Record<string, VideoPreviewItem[]>> = {
     p4: [
       {
         title: "恐惧是生物的本能",
@@ -96,6 +90,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
         title: "视频预览 2",
         href: "https://www.bilibili.com/video/BV1ys9rBREj8/",
         embedUrl: "https://player.bilibili.com/player.html?bvid=BV1ys9rBREj8&page=1&high_quality=1&autoplay=1",
+        poster: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=1200&q=80",
       },
     ],
   };
@@ -358,70 +353,21 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
             {resultsSection}
           </div>
         )}
-        <motion.section variants={item} className="mb-16 lg:mb-24">
-          <div className="flex items-center justify-between gap-4 mb-5">
-            <h2 className="text-2xl font-bold">{t.portfolio.projectDetail.videoPreview}</h2>
+        <motion.section variants={item} className="gallery-section mb-16 lg:mb-24">
+          <div className="mb-5 flex items-center justify-between gap-4">
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">{t.portfolio.projectDetail.videoPreview}</h2>
+            <span className="text-base font-medium text-foreground/55 sm:text-lg">
+              {t.portfolio.projectDetail.videoCount} {videoByProject[id]!.length}
+            </span>
           </div>
-          <div className="space-y-6">
-            {videoByProject[id]!.map((video, index) => (
-              <div key={video.href} className="space-y-3">
-                <a
-                  href={video.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-sm font-medium text-indigo-500 hover:text-indigo-400 transition-colors"
-                >
-                  <span>{t.portfolio.projectDetail.watchVideo} {index + 1} · {video.title}</span>
-                  <ExternalLink className="w-4 h-4" />
-                </a>
-                {video.mp4Url && !videoLoadErrors[video.href] ? (
-                  <div className="glass rounded-[30px] p-2 border-white/10 aspect-video overflow-hidden">
-                    <video
-                      src={video.mp4Url}
-                      poster={video.poster}
-                      controls
-                      autoPlay
-                      muted
-                      playsInline
-                      preload="auto"
-                      className="w-full h-full rounded-[20px] bg-black"
-                      onError={() => markVideoLoadError(video.href)}
-                    />
-                  </div>
-                ) : video.embedUrl ? (
-                  <div className="glass rounded-[30px] p-2 border-white/10 aspect-video overflow-hidden">
-                    <iframe
-                      src={video.embedUrl}
-                      className="w-full h-full rounded-[20px]"
-                      scrolling="no"
-                      frameBorder="0"
-                      allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
-                      referrerPolicy="strict-origin-when-cross-origin"
-                      allowFullScreen
-                      title={`Video Player ${index + 1}`}
-                    />
-                  </div>
-                ) : (
-                  <div className="glass rounded-[30px] border-white/10 overflow-hidden">
-                    <div className="aspect-video flex items-center justify-center bg-gradient-to-br from-indigo-500/20 via-cyan-500/20 to-fuchsia-500/20 p-6">
-                      <div className="text-center space-y-4">
-                        <p className="text-sm text-foreground/70">当前视频源不支持站内内嵌播放，请使用外链观看。</p>
-                        <a
-                          href={video.fallbackHref || video.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 rounded-xl bg-indigo-500 px-4 py-2 text-white text-sm font-medium hover:bg-indigo-600 transition-colors"
-                        >
-                          打开原视频
-                          <ExternalLink className="w-4 h-4" />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+          <GsapGalleryStagger itemSelector=".video-preview-card">
+            <VideoPreviewGrid
+              videos={videoByProject[id]!}
+              watchVideoLabel={t.portfolio.projectDetail.watchVideo}
+              openOriginalLabel={t.portfolio.projectDetail.openOriginalVideo}
+              onOpenPreview={setActiveVideoIndex}
+            />
+          </GsapGalleryStagger>
         </motion.section>
         </>
       )}
@@ -431,6 +377,21 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
           resultsSection
         )}
       </div>
+
+      {activeVideoIndex !== null && videoByProject[id] && (
+        <VideoPreviewLightbox
+          videos={videoByProject[id]!}
+          index={activeVideoIndex}
+          onClose={() => setActiveVideoIndex(null)}
+          onIndexChange={setActiveVideoIndex}
+          backLabel={t.portfolio.projectDetail.lightboxBack}
+          closeLabel={t.portfolio.projectDetail.lightboxClose}
+          openOriginalLabel={t.portfolio.projectDetail.openOriginalVideo}
+          galleryLabel={t.portfolio.projectDetail.videoPreview}
+          videoLoadErrors={videoLoadErrors}
+          onVideoError={markVideoLoadError}
+        />
+      )}
 
       {lightboxPhotos && (
         <GalleryLightbox
