@@ -83,14 +83,14 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
         title: "恐惧是生物的本能",
         href: "https://www.douyin.com/video/7606366795284967670",
         mp4Url: "/videos/微信视频2026-04-28_141704_425.mp4",
-        poster: "https://images.unsplash.com/photo-1536240478700-b869070f9279?w=1200&q=80",
+        poster: "/videos/thumbnails/fear-instinct.jpg",
         fallbackHref: "https://www.douyin.com/video/7606366795284967670",
       },
       {
-        title: "视频预览 2",
+        title: "色彩重启剪辑",
         href: "https://www.bilibili.com/video/BV1ys9rBREj8/",
         embedUrl: "https://player.bilibili.com/player.html?bvid=BV1ys9rBREj8&page=1&high_quality=1&autoplay=1",
-        poster: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=1200&q=80",
+        poster: "/videos/thumbnails/color-reboot-edit.jpg",
       },
     ],
   };

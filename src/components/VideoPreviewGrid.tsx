@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { ExternalLink, Play } from "lucide-react";
 import type { VideoPreviewItem } from "@/components/VideoPreviewLightbox";
 
@@ -39,13 +38,14 @@ export default function VideoPreviewGrid({
               aria-label={`${watchVideoLabel} ${index + 1}: ${video.title}`}
             >
               {thumb ? (
-                <Image
+                // eslint-disable-next-line @next/next/no-img-element -- local video frame posters, same as gallery thumbs
+                <img
                   src={thumb}
                   alt=""
-                  fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                  className="object-cover transition-transform duration-500 sm:group-hover:scale-[1.03]"
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 sm:group-hover:scale-[1.03]"
                   draggable={false}
+                  loading="lazy"
+                  decoding="async"
                 />
               ) : (
                 <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/30 via-cyan-500/20 to-fuchsia-500/30" />
