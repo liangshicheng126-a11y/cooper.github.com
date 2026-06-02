@@ -604,7 +604,8 @@ body.lightbox-open .mobile-top-shell {
   .gsap-scroll-batch [data-scroll-batch-item],
   .gsap-scroll-batch .gsap-batch-item,
   .gsap-reveal-content,
-  .home-stack-panel {
+  .home-stack-panel,
+  .gsap-page-transition__content {
     transform: none !important;
     opacity: 1 !important;
     position: relative !important;
@@ -613,6 +614,31 @@ body.lightbox-open .mobile-top-shell {
 
   .home-scroll-stack {
     padding-bottom: 2rem;
+  }
+}
+
+/* Main content: GSAP route transition (sidebar nav) */
+.gsap-page-transition {
+  position: relative;
+  overflow: clip;
+}
+
+.gsap-page-transition.is-page-transitioning {
+  overflow: hidden;
+}
+
+.gsap-page-transition__content {
+  transform-origin: left center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gsap-page-transition.is-page-transitioning {
+    overflow: clip;
+  }
+
+  .gsap-page-transition__content {
+    transform: none !important;
+    opacity: 1 !important;
   }
 }
 
