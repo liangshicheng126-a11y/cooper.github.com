@@ -15,11 +15,14 @@ import GsapParallaxLayer from "@/components/motion/GsapParallaxLayer";
 import GsapScrollBatch from "@/components/motion/GsapScrollBatch";
 import HomeScrollStack from "@/components/motion/HomeScrollStack";
 import useMotionTier from "@/hooks/useMotionTier";
-import { heroMaskVariants } from "@/lib/motion";
+import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
+import { heroMaskVariants, shouldUseGsap } from "@/lib/motion";
 
 export default function Home() {
   const { t, mounted } = useTranslation();
   const tier = useMotionTier();
+  const reduced = usePrefersReducedMotion();
+  const useGsap = shouldUseGsap(reduced);
   const heroMask = heroMaskVariants(tier);
 
   const container = {
@@ -48,7 +51,7 @@ export default function Home() {
     >
       <motion.div
         variants={container}
-        initial="hidden"
+        initial={useGsap ? "show" : "hidden"}
         animate="show"
         className="flex flex-col flex-1"
       >

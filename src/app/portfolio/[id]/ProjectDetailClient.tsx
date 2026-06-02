@@ -125,7 +125,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
     show: { opacity: 1, y: 0, transition: { duration: 0.6 } },
   };
   const resultsSection = (
-    <motion.section variants={item} className="text-center max-w-3xl mx-auto">
+    <section className="text-center max-w-3xl mx-auto">
       <h2 className="text-3xl font-bold mb-8 flex items-center justify-center space-x-3">
         <CheckCircle className="w-6 h-6 text-indigo-500" />
         <span>{t.portfolio.projectDetail.results}</span>
@@ -140,7 +140,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
           <span className="text-sm text-foreground/40 font-medium">{t.portfolio.projectDetail.activeUsers}</span>
         </div>
       </div>
-    </motion.section>
+    </section>
   );
 
   const container = {
@@ -184,8 +184,8 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
   }
 
   return (
-    <motion.div variants={container} initial="hidden" animate="show" className="max-w-5xl pb-8">
-      <motion.div variants={item} className="mb-8 sm:mb-12">
+    <div className="max-w-5xl pb-8">
+      <div className="mb-8 sm:mb-12">
         <Link
           href="/portfolio"
           className="inline-flex items-center space-x-2 text-foreground/60 hover:text-indigo-500 transition-colors group"
@@ -193,7 +193,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
           <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
           <span className="font-medium">{t.portfolio.projectDetail.back}</span>
         </Link>
-      </motion.div>
+      </div>
 
       <header className="mb-10 sm:mb-16">
         <motion.div variants={heroMask} className="overflow-hidden mb-6">
@@ -208,7 +208,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
         )}
       </header>
 
-      <motion.div variants={item} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-12 sm:mb-16 lg:mb-24">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-12 sm:mb-16 lg:mb-24">
         <div className="glass p-6 sm:p-8 rounded-3xl border-white/5">
           <User className="w-6 h-6 text-indigo-500 mb-4" />
           <h4 className="text-xs uppercase font-bold text-foreground/40 tracking-widest mb-2">{t.portfolio.projectDetail.role}</h4>
@@ -232,10 +232,10 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
                   : t.portfolio.categories.video}
           </p>
         </div>
-      </motion.div>
+      </div>
 
       {!hasVideoPreview && (
-        <motion.div variants={item} className="aspect-[4/3] sm:aspect-[21/9] rounded-[28px] sm:rounded-[40px] overflow-hidden glass border-white/10 mb-12 sm:mb-16">
+        <div className="aspect-[4/3] sm:aspect-[21/9] rounded-[28px] sm:rounded-[40px] overflow-hidden glass border-white/10 mb-12 sm:mb-16">
           <div
             className="w-full h-full"
             style={{
@@ -244,11 +244,11 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
               backgroundPosition: "center",
             }}
           />
-        </motion.div>
+        </div>
       )}
 
       {hasPhotographyGallery && (
-        <motion.section variants={item} className="gallery-section mb-16 lg:mb-24">
+        <section className="gallery-section mb-16 lg:mb-24">
           <div className="flex items-center justify-between gap-4 mb-5">
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t.portfolio.projectDetail.photoGallery}</h2>
             <span className="text-base sm:text-lg text-foreground/55 font-medium">
@@ -313,11 +313,11 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
             ))}
           </div>
           </GsapGalleryStagger>
-        </motion.section>
+        </section>
       )}
 
       {hasPosterGallery && (
-        <motion.section variants={item} className="gallery-section mb-16 lg:mb-24">
+        <section className="gallery-section mb-16 lg:mb-24">
           <div className="flex items-center justify-between gap-4 mb-6">
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t.portfolio.projectDetail.posterGallery}</h2>
             <span className="text-base sm:text-lg text-foreground/55 font-medium">
@@ -343,7 +343,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
             )}
           />
           </GsapGalleryStagger>
-        </motion.section>
+        </section>
       )}
 
       {hasVideoPreview && (
@@ -353,7 +353,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
             {resultsSection}
           </div>
         )}
-        <motion.section variants={item} className="gallery-section mb-16 lg:mb-24">
+        <section className="gallery-section mb-16 lg:mb-24">
           <div className="mb-5 flex items-center justify-between gap-4">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">{t.portfolio.projectDetail.videoPreview}</h2>
             <span className="text-base font-medium text-foreground/55 sm:text-lg">
@@ -368,7 +368,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
               onOpenPreview={setActiveVideoIndex}
             />
           </GsapGalleryStagger>
-        </motion.section>
+        </section>
         </>
       )}
 
@@ -406,6 +406,6 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
           galleryLabel={id === "p1" ? t.portfolio.projectDetail.posterGallery : t.portfolio.projectDetail.photoGallery}
         />
       )}
-    </motion.div>
+    </div>
   );
 }

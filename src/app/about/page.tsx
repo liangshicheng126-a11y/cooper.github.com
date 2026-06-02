@@ -5,19 +5,22 @@ import { useTranslation } from "@/locales/LanguageProvider";
 import { Zap, ArrowRight, Coffee } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import GlassHoverCard from "@/components/GlassHoverCard";
 import GsapScrollReveal from "@/components/motion/GsapScrollReveal";
+import GsapScrollBatch from "@/components/motion/GsapScrollBatch";
 import GsapAboutAvatar from "@/components/motion/GsapAboutAvatar";
+import GsapGlassHover from "@/components/motion/GsapGlassHover";
 import useMotionTier from "@/hooks/useMotionTier";
-import { heroMaskVariants } from "@/lib/motion";
+import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
+import { heroMaskVariants, shouldUseGsap } from "@/lib/motion";
 
-const aboutGlassWrap = "flex-1 w-full min-h-0";
 const aboutGlassTile =
   "px-8 py-7 sm:px-12 sm:py-10 rounded-[1.25rem] sm:rounded-3xl min-h-[6.5rem] sm:min-h-[7.5rem] border-white/15 bg-white/[0.11] dark:bg-white/[0.07]";
 
 export default function About() {
   const { t, mounted } = useTranslation();
   const tier = useMotionTier();
+  const reduced = usePrefersReducedMotion();
+  const useGsap = shouldUseGsap(reduced);
 
   if (!mounted) return null;
 
@@ -40,27 +43,12 @@ export default function About() {
 
   const scrollSlideViewport = { once: true, amount: 0.35, margin: "0px 0px -40px 0px" as const };
   const scrollEase = [0.22, 1, 0.36, 1] as const;
-  const smoothViewport = { once: true, amount: 0.2, margin: "0px 0px -24px 0px" as const };
-  const listContainer = {
-    hidden: {},
-    show: {
-      transition: {
-        staggerChildren: 0.06,
-      },
-    },
-  };
-  const skillListItem = {
-    hidden: { opacity: 0, x: -20 },
-    show: {
-      opacity: 1,
-      x: 0,
-      transition: { duration: 0.36, ease: scrollEase },
-    },
-  };
+
+  // Skills & hobbies entrance handled by GsapScrollBatch (uniform GSAP behavior).
 
   return (
     <div className={cn("max-w-4xl pb-8", !mounted && "opacity-0")}>
-      <motion.div variants={container} initial="hidden" animate="show">
+      <motion.div variants={container} initial={useGsap ? "show" : "hidden"} animate="show">
         <header className="mb-14 sm:mb-20">
           <motion.div variants={item} className="mb-4">
              <h2 className="text-2xl font-medium text-indigo-500">{t.about.name}</h2>
@@ -122,33 +110,43 @@ export default function About() {
               <span>{t.about.skills}</span>
             </motion.h2>
 
-            <motion.div
-              variants={listContainer}
-              initial="hidden"
-              whileInView="show"
-              viewport={smoothViewport}
+            <GsapScrollBatch
               className="flex-1 flex flex-col justify-between gap-4 sm:gap-5 min-h-0"
+              itemSelector="[data-scroll-batch-item]"
+              stagger={0.06}
+              y={20}
             >
               {t.about.skillDetails.map((skill, index) => (
-                <GlassHoverCard
+                <div
                   key={index}
-                  accent="#6366f1"
-                  variants={skillListItem}
-                  wrapperClassName={aboutGlassWrap}
-                  className={cn(aboutGlassTile, "flex items-center")}
+                  data-scroll-batch-item
+                  data-batch-index={index}
+                  className="w-full"
                 >
-                  <div className="flex gap-3 text-xl font-medium leading-snug w-full">
-                    <span
-                      aria-hidden
-                      className="mt-[0.55em] w-2.5 h-2.5 shrink-0 rounded-full bg-indigo-500 transition-transform duration-300 group-hover:scale-125"
-                    />
-                    <span className="text-foreground/85 transition-colors group-hover:text-foreground">
-                      {skill}
-                    </span>
-                  </div>
-                </GlassHoverCard>
+                  <GsapGlassHover
+                    accent="#6366f1"
+                    variant="tile"
+                    className={cn(
+                      "glass relative overflow-hidden group",
+                      aboutGlassTile,
+                      "flex items-center"
+                    )}
+                  >
+                    <div className="relative z-10">
+                      <div className="flex gap-3 text-xl font-medium leading-snug w-full">
+                        <span
+                          aria-hidden
+                          className="mt-[0.55em] w-2.5 h-2.5 shrink-0 rounded-full bg-indigo-500 transition-transform duration-300 group-hover:scale-125"
+                        />
+                        <span className="text-foreground/85 transition-colors group-hover:text-foreground">
+                          {skill}
+                        </span>
+                      </div>
+                    </div>
+                  </GsapGlassHover>
+                </div>
               ))}
-            </motion.div>
+            </GsapScrollBatch>
           </section>
 
           {/* Hobbies Section */}
@@ -164,33 +162,43 @@ export default function About() {
               <span>{t.about.hobbiesTitle}</span>
             </motion.h2>
 
-            <motion.div
-              variants={listContainer}
-              initial="hidden"
-              whileInView="show"
-              viewport={smoothViewport}
+            <GsapScrollBatch
               className="flex-1 flex flex-col justify-between gap-4 sm:gap-5 min-h-0"
+              itemSelector="[data-scroll-batch-item]"
+              stagger={0.06}
+              y={20}
             >
               {t.about.hobbiesGroups.map((group, index) => (
-                <GlassHoverCard
+                <div
                   key={index}
-                  accent="#a855f7"
-                  variants={skillListItem}
-                  wrapperClassName={aboutGlassWrap}
-                  className={cn(aboutGlassTile, "flex flex-col justify-center")}
+                  data-scroll-batch-item
+                  data-batch-index={index}
+                  className="w-full"
                 >
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-2 h-2 shrink-0 rounded-full bg-purple-500 transition-transform duration-300 group-hover:scale-125" />
-                    <h3 className="text-base font-semibold text-foreground/90 transition-colors group-hover:text-foreground">
-                      {group.title}
-                    </h3>
-                  </div>
-                  <p className="text-base text-foreground/60 leading-relaxed transition-colors group-hover:text-foreground/75">
-                    {group.items.join(" / ")}
-                  </p>
-                </GlassHoverCard>
+                  <GsapGlassHover
+                    accent="#a855f7"
+                    variant="tile"
+                    className={cn(
+                      "glass relative overflow-hidden group",
+                      aboutGlassTile,
+                      "flex flex-col justify-center"
+                    )}
+                  >
+                    <div className="relative z-10">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-2 h-2 shrink-0 rounded-full bg-purple-500 transition-transform duration-300 group-hover:scale-125" />
+                        <h3 className="text-base font-semibold text-foreground/90 transition-colors group-hover:text-foreground">
+                          {group.title}
+                        </h3>
+                      </div>
+                      <p className="text-base text-foreground/60 leading-relaxed transition-colors group-hover:text-foreground/75">
+                        {group.items.join(" / ")}
+                      </p>
+                    </div>
+                  </GsapGlassHover>
+                </div>
               ))}
-            </motion.div>
+            </GsapScrollBatch>
           </section>
         </motion.div>
 

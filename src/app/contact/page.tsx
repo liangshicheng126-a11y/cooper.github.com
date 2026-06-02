@@ -1,11 +1,11 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useTranslation } from "@/locales/LanguageProvider";
 import { Mail, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import type { FormEvent } from "react";
+import GsapScrollReveal from "@/components/motion/GsapScrollReveal";
 
 export default function ContactPage() {
   const { t, mounted } = useTranslation();
@@ -23,19 +23,6 @@ export default function ContactPage() {
   const [startedAt, setStartedAt] = useState(() => Date.now());
 
   if (!mounted) return null;
-
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.08 },
-    },
-  };
-
-  const item = {
-    hidden: { opacity: 0, y: 18 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.55 } },
-  };
 
   const submitByMail = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -79,17 +66,18 @@ export default function ContactPage() {
 
   return (
     <div className={cn("max-w-4xl pb-8", !mounted && "opacity-0")}>
-      <motion.div variants={container} initial="hidden" animate="show">
-        <motion.header variants={item} className="mb-12">
+      <GsapScrollReveal as="div" className="mb-12">
+        <header className="mb-0">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
             {t.contact.pageTitle}
           </h1>
           <p className="text-lg sm:text-xl text-foreground/60 leading-relaxed max-w-3xl">
             {t.contact.pageSubtitle}
           </p>
-        </motion.header>
+        </header>
+      </GsapScrollReveal>
 
-        <motion.section variants={item} className="glass rounded-[36px] border-white/15 p-6 sm:p-8 lg:p-10">
+      <GsapScrollReveal as="section" className="glass rounded-[36px] border-white/15 p-6 sm:p-8 lg:p-10">
           <form className="space-y-6" onSubmit={submitByMail}>
             <input
               type="text"
@@ -209,8 +197,7 @@ export default function ContactPage() {
               <p className="text-sm text-rose-500 font-medium">{t.contact.formError}</p>
             )}
           </form>
-        </motion.section>
-      </motion.div>
+      </GsapScrollReveal>
     </div>
   );
 }

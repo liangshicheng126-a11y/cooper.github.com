@@ -8,11 +8,14 @@ import Link from "next/link";
 import ProjectCard from "@/components/ProjectCard";
 import GsapScrollBatch from "@/components/motion/GsapScrollBatch";
 import useMotionTier from "@/hooks/useMotionTier";
-import { heroMaskVariants } from "@/lib/motion";
+import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
+import { heroMaskVariants, shouldUseGsap } from "@/lib/motion";
 
 export default function Portfolio() {
   const { t, mounted } = useTranslation();
   const tier = useMotionTier();
+  const reduced = usePrefersReducedMotion();
+  const useGsap = shouldUseGsap(reduced);
 
   if (!mounted) return null;
 
@@ -66,7 +69,7 @@ export default function Portfolio() {
 
   return (
     <div className={cn("pb-4 sm:pb-6", !mounted && "opacity-0")}>
-      <motion.div variants={container} initial="hidden" animate="show">
+      <motion.div variants={container} initial={useGsap ? "show" : "hidden"} animate="show">
         <header className="mb-16">
           <motion.div variants={heroMask} className="overflow-hidden mb-6">
             <motion.h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">

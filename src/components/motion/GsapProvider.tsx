@@ -4,6 +4,9 @@ import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import useMotionTier from "@/hooks/useMotionTier";
+import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
+import { shouldUseGsap } from "@/lib/motion";
 
 let registered = false;
 
@@ -15,6 +18,9 @@ function ensureScrollTrigger() {
 
 export default function GsapProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const tier = useMotionTier();
+  const reduced = usePrefersReducedMotion();
+  const useGsap = shouldUseGsap(reduced);
   const refreshTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const rafId = useRef<number | null>(null);
 
@@ -27,14 +33,14 @@ export default function GsapProvider({ children }: { children: React.ReactNode }
     rafId.current = requestAnimationFrame(() => {
       refreshTimer.current = setTimeout(() => {
         ScrollTrigger.refresh();
-      }, 100);
+      }, !useGsap ? 120 : tier === "full" ? 820 : tier === "reduced" ? 560 : 140);
     });
 
     return () => {
       if (rafId.current) cancelAnimationFrame(rafId.current);
       if (refreshTimer.current) clearTimeout(refreshTimer.current);
     };
-  }, [pathname]);
+  }, [pathname, tier, useGsap]);
 
   return <>{children}</>;
 }

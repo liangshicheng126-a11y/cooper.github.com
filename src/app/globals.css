@@ -573,6 +573,12 @@ body.lightbox-open .mobile-top-shell {
   overflow: visible;
 }
 
+/* Shared hover: keep spotlight layers behind content */
+.gsap-glass-hover__spotlight,
+.gsap-glass-hover__border {
+  z-index: 0;
+}
+
 /* Drop backdrop-filter while batch items animate (transform + blur is costly) */
 .gsap-batch-item.is-revealing .glass,
 [data-scroll-batch-item].is-revealing .glass,
@@ -637,11 +643,6 @@ body.lightbox-open .mobile-top-shell {
   }
 
   .gsap-page-transition__content {
-    transform: none !important;
-    opacity: 1 !important;
-  }
-
-  .gsap-about-avatar [data-about-avatar-part] {
     transform: none !important;
     opacity: 1 !important;
   }
