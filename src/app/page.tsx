@@ -45,8 +45,16 @@ export default function Home() {
 
     buttons.forEach((btn) => {
       const icon = btn.querySelector("svg");
+      const magnetWrapper = btn.closest(".hero-cta-magnet");
 
       const enter = () => {
+        if (magnetWrapper) {
+          gsap.to(magnetWrapper, {
+            zIndex: 30,
+            duration: 0.2,
+            overwrite: "auto",
+          });
+        }
         gsap.to(btn, {
           y: -4,
           scale: tier === "full" ? 1.02 : 1.01,
@@ -66,6 +74,13 @@ export default function Home() {
       };
 
       const leave = () => {
+        if (magnetWrapper) {
+          gsap.to(magnetWrapper, {
+            zIndex: 0,
+            duration: 0.2,
+            overwrite: "auto",
+          });
+        }
         gsap.to(btn, {
           y: 0,
           scale: 1,
@@ -164,18 +179,18 @@ export default function Home() {
             />
           </motion.div>
 
-          <motion.div variants={heroSoft} className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-0 sm:space-x-6">
-            <Magnet padding={50} magnetStrength={4.5}>
+          <motion.div variants={heroSoft} className="relative overflow-visible flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-0 sm:space-x-6">
+            <Magnet padding={50} magnetStrength={4.5} wrapperClassName="hero-cta-magnet relative z-0">
               <Link
                 ref={portfolioBtnRef}
                 href="/portfolio"
-                className="relative z-0 w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 bg-indigo-600 text-white rounded-2xl font-bold flex items-center justify-center space-x-3 hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-500/20"
+                className="relative z-0 w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 bg-indigo-600 text-white rounded-2xl font-bold flex items-center justify-center space-x-3 hover:bg-indigo-700 transition-all"
               >
                 <span>{t.nav.portfolio}</span>
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </Magnet>
-            <Magnet padding={50} magnetStrength={4.5}>
+            <Magnet padding={50} magnetStrength={4.5} wrapperClassName="hero-cta-magnet relative z-0">
               <Link
                 ref={aboutBtnRef}
                 href="/about"
