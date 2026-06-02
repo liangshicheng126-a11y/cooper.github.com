@@ -68,8 +68,8 @@ export default function GsapScrollBatch({
 
         const idx = Number((item as HTMLElement).dataset.batchIndex ?? 0);
         const x = entrance === "portfolio" ? (idx % 2 === 0 ? -36 : 36) : 0;
-        const startY = entrance === "portfolio" ? 56 : entrance === "flip" ? 36 : y;
-        const startScale = entrance === "portfolio" ? 0.92 : entrance === "flip" ? 0.88 : 1;
+        const startY = entrance === "portfolio" ? 56 : entrance === "flip" ? 22 : y;
+        const startScale = entrance === "portfolio" ? 0.92 : entrance === "flip" ? 0.96 : 1;
         gsap.set(item, {
           autoAlpha: 0,
           y: startY,
@@ -77,9 +77,10 @@ export default function GsapScrollBatch({
           scale: startScale,
           ...(entrance === "flip"
             ? {
-                rotateX: -24,
-                rotateY: idx % 2 === 0 ? -30 : 30,
-                transformPerspective: 1000,
+                rotateX: 0,
+                rotateY: 180,
+                transformPerspective: 1200,
+                transformStyle: "preserve-3d",
                 transformOrigin: "50% 50%",
               }
             : {}),
@@ -119,16 +120,16 @@ export default function GsapScrollBatch({
         if (entrance === "flip") {
           batch.forEach((el, i) => {
             const idx = Number((el as HTMLElement).dataset.batchIndex ?? i);
-            const ry = idx % 2 === 0 ? -30 : 30;
             gsap.fromTo(
               el,
               {
                 autoAlpha: 0,
-                y: 36,
-                scale: 0.88,
-                rotateX: -24,
-                rotateY: ry,
-                transformPerspective: 1000,
+                y: 22,
+                scale: 0.96,
+                rotateX: 0,
+                rotateY: 180,
+                transformPerspective: 1200,
+                transformStyle: "preserve-3d",
                 force3D: true,
               },
               {
@@ -137,9 +138,9 @@ export default function GsapScrollBatch({
                 scale: 1,
                 rotateX: 0,
                 rotateY: 0,
-                duration: 0.88,
+                duration: 0.92,
                 delay: idx * (stagger || 0.1),
-                ease: "back.out(1.2)",
+                ease: "power3.out",
                 overwrite: "auto",
                 onComplete: () => finishReveal(el),
               }

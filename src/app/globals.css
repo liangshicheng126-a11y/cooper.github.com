@@ -571,6 +571,9 @@ body.lightbox-open .mobile-top-shell {
 .gsap-scroll-batch--flip [data-scroll-batch-item] {
   opacity: 0;
   visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
 }
 
 .portfolio-genie-grid [data-genie-item] {
