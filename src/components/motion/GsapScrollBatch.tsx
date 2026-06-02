@@ -21,7 +21,7 @@ function finishReveal(el: Element) {
   (el as HTMLElement).style.willChange = "auto";
 }
 
-type EntranceVariant = "default" | "portfolio";
+type EntranceVariant = "default" | "portfolio" | "flip";
 
 type GsapScrollBatchProps = {
   children: React.ReactNode;
@@ -58,7 +58,7 @@ export default function GsapScrollBatch({
 
       const pending: Element[] = [];
       /** Portfolio cards sit below the hero on most viewports — always reveal with stagger. */
-      const forceEntrance = entrance === "portfolio";
+      const forceEntrance = entrance === "portfolio" || entrance === "flip";
 
       items.forEach((item) => {
         if (!forceEntrance && isElementInViewport(item)) {
@@ -68,13 +68,14 @@ export default function GsapScrollBatch({
 
         const idx = Number((item as HTMLElement).dataset.batchIndex ?? 0);
         const x = entrance === "portfolio" ? (idx % 2 === 0 ? -36 : 36) : 0;
-        const startY = entrance === "portfolio" ? 56 : y;
-        const startScale = entrance === "portfolio" ? 0.92 : 1;
+        const startY = entrance === "portfolio" ? 56 : entrance === "flip" ? 20 : y;
+        const startScale = entrance === "portfolio" ? 0.92 : entrance === "flip" ? 0.94 : 1;
         gsap.set(item, {
           autoAlpha: 0,
           y: startY,
           x,
           scale: startScale,
+          ...(entrance === "flip" ? { rotateX: -16, rotateY: idx % 2 === 0 ? -18 : 18, transformPerspective: 900, transformOrigin: "50% 50%" } : {}),
           force3D: true,
         });
         pending.push(item);
@@ -108,6 +109,30 @@ export default function GsapScrollBatch({
           return;
         }
 
+        if (entrance === "flip") {
+          batch.forEach((el, i) => {
+            const idx = Number((el as HTMLElement).dataset.batchIndex ?? i);
+            const ry = idx % 2 === 0 ? -18 : 18;
+            gsap.fromTo(
+              el,
+              { autoAlpha: 0, y: 20, scale: 0.94, rotateX: -16, rotateY: ry, transformPerspective: 900, force3D: true },
+              {
+                autoAlpha: 1,
+                y: 0,
+                scale: 1,
+                rotateX: 0,
+                rotateY: 0,
+                duration: 0.72,
+                delay: idx * (stagger || 0.08),
+                ease: "power3.out",
+                overwrite: "auto",
+                onComplete: () => finishReveal(el),
+              }
+            );
+          });
+          return;
+        }
+
         gsap.fromTo(
           batch,
           { autoAlpha: 0, y, force3D: true },
@@ -129,7 +154,7 @@ export default function GsapScrollBatch({
       }
 
       ScrollTrigger.batch(pending, {
-        start: entrance === "portfolio" ? "top 92%" : "top 90%",
+        start: entrance === "portfolio" ? "top 92%" : entrance === "flip" ? "top 94%" : "top 90%",
         onEnter: reveal,
         once: true,
       });

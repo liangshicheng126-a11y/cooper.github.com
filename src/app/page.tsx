@@ -1,6 +1,10 @@
 "use client";
 
+import { useRef } from "react";
 import { motion } from "framer-motion";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { CustomEase } from "gsap/CustomEase";
 import { useTranslation } from "@/locales/LanguageProvider";
 import { ArrowRight, Briefcase, User, Mail, Sparkles, Zap, Figma, Palette, Video, PenTool, Layout, Image as ImageIcon, Scissors, Clapperboard, Film } from "lucide-react";
 import Link from "next/link";
@@ -18,12 +22,77 @@ import useMotionTier from "@/hooks/useMotionTier";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import { heroMaskVariants, shouldUseGsap } from "@/lib/motion";
 
+gsap.registerPlugin(CustomEase);
+
 export default function Home() {
   const { t, mounted } = useTranslation();
   const tier = useMotionTier();
   const reduced = usePrefersReducedMotion();
   const useGsap = shouldUseGsap(reduced);
   const heroMask = heroMaskVariants(tier);
+  const portfolioBtnRef = useRef<HTMLAnchorElement>(null);
+  const aboutBtnRef = useRef<HTMLAnchorElement>(null);
+
+  useGSAP(() => {
+    if (!useGsap || tier === "minimal") return;
+
+    const ease = CustomEase.create("heroCtaEase", "0.2,0.9,0.25,1");
+    const buttons = [portfolioBtnRef.current, aboutBtnRef.current].filter(
+      Boolean
+    ) as HTMLAnchorElement[];
+
+    const cleanups: Array<() => void> = [];
+
+    buttons.forEach((btn, idx) => {
+      const icon = btn.querySelector("svg");
+      const glowColor = idx === 0 ? "rgba(79,70,229,0.35)" : "rgba(168,85,247,0.28)";
+
+      const enter = () => {
+        gsap.to(btn, {
+          y: -4,
+          scale: tier === "full" ? 1.02 : 1.01,
+          boxShadow: `0 16px 30px ${glowColor}`,
+          duration: 0.32,
+          ease,
+          overwrite: "auto",
+        });
+        if (icon) {
+          gsap.to(icon, {
+            x: 3,
+            duration: 0.28,
+            ease: "power2.out",
+            overwrite: "auto",
+          });
+        }
+      };
+
+      const leave = () => {
+        gsap.to(btn, {
+          y: 0,
+          scale: 1,
+          boxShadow: "0 0 0 rgba(0,0,0,0)",
+          duration: 0.28,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+        if (icon) {
+          gsap.to(icon, { x: 0, duration: 0.24, ease: "power2.out", overwrite: "auto" });
+        }
+      };
+
+      btn.addEventListener("mouseenter", enter);
+      btn.addEventListener("mouseleave", leave);
+      cleanups.push(() => {
+        btn.removeEventListener("mouseenter", enter);
+        btn.removeEventListener("mouseleave", leave);
+      });
+    });
+
+    return () => {
+      cleanups.forEach((fn) => fn());
+      buttons.forEach((btn) => gsap.killTweensOf(btn));
+    };
+  }, { dependencies: [useGsap, tier] });
 
   const container = {
     hidden: { opacity: 0 },
@@ -99,6 +168,7 @@ export default function Home() {
           <motion.div variants={heroSoft} className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-0 sm:space-x-6">
             <Magnet padding={50} magnetStrength={4.5}>
               <Link
+                ref={portfolioBtnRef}
                 href="/portfolio"
                 className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 bg-indigo-600 text-white rounded-2xl font-bold flex items-center justify-center space-x-3 hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-500/20"
               >
@@ -108,6 +178,7 @@ export default function Home() {
             </Magnet>
             <Magnet padding={50} magnetStrength={4.5}>
               <Link
+                ref={aboutBtnRef}
                 href="/about"
                 className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 glass rounded-2xl font-bold flex items-center justify-center space-x-3 hover:bg-white/10 transition-all"
               >

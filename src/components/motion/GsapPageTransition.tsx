@@ -74,7 +74,6 @@ export default function GsapPageTransition({ children }: GsapPageTransitionProps
       return;
     }
 
-    const direction = getRouteTransitionDirection(prevPathRef.current, pathname);
     const instant = !useGsap || tier === "minimal";
 
     if (instant || !el) {
@@ -91,35 +90,34 @@ export default function GsapPageTransition({ children }: GsapPageTransitionProps
     shellRef.current?.classList.add("is-page-transitioning");
     el.style.willChange = "transform, opacity";
 
+    const direction = getRouteTransitionDirection(prevPathRef.current, pathname);
     const forward = direction >= 0;
-    const exitX = forward ? -32 : 32;
-    const enterX = forward ? 40 : -40;
+    const fromX = forward ? 28 : -28;
 
-    const runEnter = () => {
-      prevPathRef.current = pathname;
-      setDisplayChildren(pendingChildrenRef.current);
+    prevPathRef.current = pathname;
+    setDisplayChildren(pendingChildrenRef.current);
 
-      requestAnimationFrame(() => {
-        const node = contentRef.current;
-        if (!node) {
-          animatingRef.current = false;
-          shellRef.current?.classList.remove("is-page-transitioning");
-          return;
-        }
+    requestAnimationFrame(() => {
+      const node = contentRef.current;
+      if (!node) {
+        animatingRef.current = false;
+        shellRef.current?.classList.remove("is-page-transitioning");
+        return;
+      }
 
-        node.style.willChange = "transform, opacity";
+      node.style.willChange = "transform, opacity";
 
-        const from =
-          tier === "full"
-            ? { autoAlpha: 0, x: enterX, scale: 0.988, force3D: true }
-            : { autoAlpha: 0, y: 14, force3D: true };
-
-        gsap.fromTo(node, from, {
+      gsap.fromTo(
+        node,
+        tier === "full"
+          ? { autoAlpha: 0, x: fromX, scale: 0.992, force3D: true }
+          : { autoAlpha: 0, y: 10, force3D: true },
+        {
           autoAlpha: 1,
           x: 0,
           y: 0,
           scale: 1,
-          duration: tier === "full" ? 0.5 : 0.34,
+          duration: tier === "full" ? 0.42 : 0.3,
           ease: "power3.out",
           overwrite: "auto",
           onComplete: () => {
@@ -128,19 +126,8 @@ export default function GsapPageTransition({ children }: GsapPageTransitionProps
             animatingRef.current = false;
             shellRef.current?.classList.remove("is-page-transitioning");
           },
-        });
-      });
-    };
-
-    const exit =
-      tier === "full"
-        ? { autoAlpha: 0, x: exitX, scale: 0.992, duration: 0.28, ease: "power2.in" }
-        : { autoAlpha: 0, y: -8, duration: 0.2, ease: "power2.in" };
-
-    gsap.to(el, {
-      ...exit,
-      overwrite: "auto",
-      onComplete: runEnter,
+        }
+      );
     });
 
     return () => {

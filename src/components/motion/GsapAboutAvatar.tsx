@@ -120,7 +120,7 @@ export default function GsapAboutAvatar({
         accent={ACCENT}
         variant="avatar"
         className={cn(
-          "rounded-[40px] glass p-4 border-white/10 overflow-visible",
+          "h-full w-full rounded-[40px] glass p-4 border-white/10 overflow-visible",
           className
         )}
         onHoverChange={(hovered) => {

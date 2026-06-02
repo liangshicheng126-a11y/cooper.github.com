@@ -115,6 +115,7 @@ export default function About() {
               itemSelector="[data-scroll-batch-item]"
               stagger={0.06}
               y={20}
+              entrance="flip"
             >
               {t.about.skillDetails.map((skill, index) => (
                 <div
@@ -167,6 +168,7 @@ export default function About() {
               itemSelector="[data-scroll-batch-item]"
               stagger={0.06}
               y={20}
+              entrance="flip"
             >
               {t.about.hobbiesGroups.map((group, index) => (
                 <div
