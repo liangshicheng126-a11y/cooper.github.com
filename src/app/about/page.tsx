@@ -7,6 +7,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import GlassHoverCard from "@/components/GlassHoverCard";
 import GsapScrollReveal from "@/components/motion/GsapScrollReveal";
+import GsapAboutAvatar from "@/components/motion/GsapAboutAvatar";
 import useMotionTier from "@/hooks/useMotionTier";
 import { heroMaskVariants } from "@/lib/motion";
 
@@ -93,33 +94,7 @@ export default function About() {
               </div>
             </motion.div>
 
-            <div className="relative aspect-square rounded-[40px] overflow-hidden glass p-4 border-white/10 group">
-              <div
-                className="w-full h-full rounded-[30px] transition-transform duration-700 group-hover:scale-105"
-                style={{
-                  backgroundImage: `url(/experience-badge.png)`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              >
-                <div className="absolute inset-0 bg-indigo-500/10 mix-blend-overlay" />
-              </div>
-
-              {/* Experience Badge */}
-              <div
-                className="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 w-28 h-28 sm:w-32 sm:h-32 rounded-full shadow-2xl border border-white/30 overflow-hidden text-center flex flex-col items-center justify-center"
-                style={{
-                  background:
-                    "radial-gradient(circle at 30% 30%, rgba(99,102,241,0.95), rgba(79,70,229,0.9) 45%, rgba(67,56,202,0.95))",
-                }}
-              >
-                <div className="absolute inset-0 bg-black/40" />
-                <span className="relative z-10 text-3xl font-bold text-white tabular-nums">5+</span>
-                <span className="relative z-10 text-[10px] uppercase font-bold text-white/90 tracking-widest">
-                  {t.about.experience}
-                </span>
-              </div>
-            </div>
+            <GsapAboutAvatar experienceLabel={t.about.experience} />
           </div>
         </header>
 

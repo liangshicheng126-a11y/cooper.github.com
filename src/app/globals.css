@@ -640,5 +640,10 @@ body.lightbox-open .mobile-top-shell {
     transform: none !important;
     opacity: 1 !important;
   }
+
+  .gsap-about-avatar [data-about-avatar-part] {
+    transform: none !important;
+    opacity: 1 !important;
+  }
 }
 
