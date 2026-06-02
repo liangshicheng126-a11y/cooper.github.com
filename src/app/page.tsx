@@ -262,21 +262,23 @@ export default function Home() {
             </Link>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <GsapScrollBatch className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {[
               {
                 id: "p1",
                 title: t.portfolio.projects.p1.title,
                 category: t.portfolio.categories.graphic,
                 image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80",
+                accent: "#6366f1",
               },
               {
                 id: "p3",
                 title: t.portfolio.projects.p3.title,
                 category: t.portfolio.categories.photography,
                 image: "https://images.unsplash.com/photo-1493863641943-9b68992a8d07?w=800&q=80",
+                accent: "#3b82f6",
               },
-            ].map((project) => (
+            ].map((project, i) => (
               <ProjectCard
                 key={project.id}
                 id={project.id}
@@ -284,9 +286,12 @@ export default function Home() {
                 category={project.category}
                 image={project.image}
                 viewProject={t.hero.viewAllWork}
+                accent={project.accent}
+                batchIndex={i}
+                variant="preview"
               />
             ))}
-          </div>
+          </GsapScrollBatch>
         </ScrollDirectionSection>
         </HomeScrollStack>
       </motion.div>

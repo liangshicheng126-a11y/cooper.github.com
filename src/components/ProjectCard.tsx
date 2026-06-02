@@ -6,8 +6,7 @@
  */
 
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
-import GlassHoverCard from "@/components/GlassHoverCard";
+import GsapProjectCardHover from "@/components/motion/GsapProjectCardHover";
 import { cn } from "@/lib/utils";
 
 type ProjectCardProps = {
@@ -19,6 +18,8 @@ type ProjectCardProps = {
   accent?: string;
   /** GSAP batch entrance index (portfolio page) */
   batchIndex?: number;
+  /** preview: lighter hover for homepage featured row */
+  variant?: "portfolio" | "preview";
 };
 
 const cardHeights =
@@ -35,41 +36,18 @@ export default function ProjectCard({
   viewProject,
   accent = "#6366f1",
   batchIndex,
+  variant = "portfolio",
 }: ProjectCardProps) {
   const card = (
-    <GlassHoverCard
+    <GsapProjectCardHover
       accent={accent}
-      fill
-      enableTilt={false}
-      hoverScale={1}
-      reducedHoverScale={1}
-      spotlight={false}
-      className={cn(cardHeights, "border-white/10")}
-    >
-      <div className="relative block h-full overflow-hidden rounded-[inherit]">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${image})` }}
-          aria-hidden
-        />
-        <div className="absolute inset-0 bg-black/40" aria-hidden />
-
-        <div className="absolute inset-0 p-6 sm:p-10 lg:p-12 flex flex-col justify-end">
-          <span className="text-white/60 text-sm font-medium mb-2 block uppercase tracking-widest">
-            {category}
-          </span>
-          <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6 leading-tight">
-            {title}
-          </h3>
-          <div className="inline-flex items-center space-x-3 text-white font-semibold">
-            <span>{viewProject}</span>
-            <div className="p-3 rounded-full bg-white/20 text-white">
-              <ArrowUpRight className="w-5 h-5" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </GlassHoverCard>
+      image={image}
+      category={category}
+      title={title}
+      viewProject={viewProject}
+      variant={variant}
+      className={cn(cardHeights)}
+    />
   );
 
   return (
