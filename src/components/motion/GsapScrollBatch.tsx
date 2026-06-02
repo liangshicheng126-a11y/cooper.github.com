@@ -185,6 +185,7 @@ export default function GsapScrollBatch({
       className={cn(
         useGsap && MOTION_V2_ENABLED && "gsap-scroll-batch",
         entrance === "portfolio" && useGsap && MOTION_V2_ENABLED && "gsap-scroll-batch--portfolio",
+        entrance === "flip" && useGsap && MOTION_V2_ENABLED && "gsap-scroll-batch--flip",
         className
       )}
     >
