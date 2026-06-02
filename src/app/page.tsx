@@ -139,8 +139,8 @@ export default function Home() {
         className="flex flex-col flex-1"
       >
         {/* Hero Section */}
-        <GsapParallaxLayer className="relative z-50 min-h-[36vh] lg:min-h-[44vh] flex flex-col justify-start pt-1 sm:pt-2 pb-20 sm:pb-28">
-        <section className="flex flex-col relative z-50">
+        <GsapParallaxLayer className="relative z-[90] min-h-[36vh] lg:min-h-[44vh] flex flex-col justify-start pt-1 sm:pt-2 pb-20 sm:pb-28">
+        <section className="flex flex-col relative z-[90]">
           <motion.div 
             variants={heroSoft}
             className="mb-8 inline-flex items-center space-x-3 px-4 py-1.5 rounded-full glass border-white/10 text-indigo-500 text-sm font-medium w-fit max-w-full"
@@ -179,7 +179,7 @@ export default function Home() {
             />
           </motion.div>
 
-          <motion.div variants={heroSoft} className="relative overflow-visible flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-0 sm:space-x-6">
+          <motion.div variants={heroSoft} className="relative z-[80] overflow-visible flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-0 sm:space-x-6">
             <Magnet padding={50} magnetStrength={4.5} wrapperClassName="hero-cta-magnet relative z-0">
               <Link
                 ref={portfolioBtnRef}
@@ -231,7 +231,7 @@ export default function Home() {
         </section>
         </GsapParallaxLayer>
 
-        <HomeScrollStack className="relative z-10 mt-4 sm:mt-8">
+        <HomeScrollStack className="relative z-0 mt-4 sm:mt-8">
         {/* Services / Focus Section */}
         <ScrollDirectionSection
           id="services-block"
