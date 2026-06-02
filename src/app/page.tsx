@@ -43,15 +43,14 @@ export default function Home() {
 
     const cleanups: Array<() => void> = [];
 
-    buttons.forEach((btn, idx) => {
+    buttons.forEach((btn) => {
       const icon = btn.querySelector("svg");
-      const glowColor = idx === 0 ? "rgba(79,70,229,0.35)" : "rgba(168,85,247,0.28)";
 
       const enter = () => {
         gsap.to(btn, {
           y: -4,
           scale: tier === "full" ? 1.02 : 1.01,
-          boxShadow: `0 16px 30px ${glowColor}`,
+          zIndex: 20,
           duration: 0.32,
           ease,
           overwrite: "auto",
@@ -70,7 +69,7 @@ export default function Home() {
         gsap.to(btn, {
           y: 0,
           scale: 1,
-          boxShadow: "0 0 0 rgba(0,0,0,0)",
+          zIndex: 0,
           duration: 0.28,
           ease: "power2.out",
           overwrite: "auto",
@@ -170,7 +169,7 @@ export default function Home() {
               <Link
                 ref={portfolioBtnRef}
                 href="/portfolio"
-                className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 bg-indigo-600 text-white rounded-2xl font-bold flex items-center justify-center space-x-3 hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-500/20"
+                className="relative z-0 w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 bg-indigo-600 text-white rounded-2xl font-bold flex items-center justify-center space-x-3 hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-500/20"
               >
                 <span>{t.nav.portfolio}</span>
                 <ArrowRight className="w-5 h-5" />
@@ -180,7 +179,7 @@ export default function Home() {
               <Link
                 ref={aboutBtnRef}
                 href="/about"
-                className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 glass rounded-2xl font-bold flex items-center justify-center space-x-3 hover:bg-white/10 transition-all"
+                className="relative z-0 w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 glass rounded-2xl font-bold flex items-center justify-center space-x-3 hover:bg-white/10 transition-all"
               >
                 <span>{t.nav.about}</span>
               </Link>
