@@ -648,15 +648,15 @@ def build_shelf_cubbies(mats, col, root, origin, rows=2, cols=2):
 
 def build_kitchen_island(mats, col):
     """
-    三步精修岛台：
-    1) L 壳体 bmesh + 倒角 + 细分
-    2) 内外 L 布尔差集（木吧台围合 / 内腔）
-    3) 内圈石台面布尔贴合 + 逐格格架
+    严格按参考图：
+    - J/L 主岛台：外圈高木吧台 + 内圈低石操作台 + 短臂开放格架
+    - 独立直条吧台（长边外侧平行）+ 种植槽
+    - 4 把木高脚凳排于直吧台前
     """
     root = bpy.data.objects.new("KitchenIsland", None)
     col.objects.link(root)
 
-    def link_child(obj):
+    def P(obj):
         for c in list(obj.users_collection):
             if c != col:
                 c.objects.unlink(obj)
@@ -665,97 +665,93 @@ def build_kitchen_island(mats, col):
         parent_keep_world(obj, root)
         return obj
 
-    BAR = 1.03
-    KIT = 0.875
-    ox, oy = -0.94, -1.05
-    LONG, SHORT, THICK = 3.35, 2.25, 0.58
+    LONG = 3.15
+    SHORT = 1.05
+    WALL = 0.50
+    BAR = 1.02
+    KIT = 0.86
+    kit_depth = 0.60
 
-    # ── Step 1: L 吧台木围合（圆角墙拼装） ──
-    for p in create_l_bar_walls("BarShell", LONG, SHORT, THICK, BAR, (ox, oy), mats["wood"], col):
-        link_child(p)
+    # ── A. 主岛外圈 L 木吧台 ──
+    P(box("MI_BarWallLong", (LONG, WALL, BAR), (LONG / 2, WALL / 2, BAR / 2), mat=mats["wood"], col=col))
+    P(box("MI_BarWallShort", (WALL, SHORT, BAR), (-WALL / 2, -SHORT / 2, BAR / 2), mat=mats["wood"], col=col))
+    corner = box("MI_BarCorner", (WALL, WALL, BAR), (-WALL / 2, WALL / 2, BAR / 2), mat=mats["wood"], col=col)
+    bevel(corner, width=0.18, segments=4)
+    P(corner)
+    end_cap = box("MI_BarEndCap", (WALL, 0.42, BAR), (-WALL / 2, -SHORT + 0.21, BAR / 2), mat=mats["wood"], col=col)
+    bevel(end_cap, width=0.14, segments=4)
+    P(end_cap)
+    P(box("MI_BarTopLong", (LONG, WALL, 0.055), (LONG / 2, WALL / 2, BAR), mat=mats["wood"], col=col))
+    P(box("MI_BarTopShort", (WALL, SHORT - 0.38, 0.055), (-WALL / 2, -SHORT / 2 + 0.19, BAR), mat=mats["wood"], col=col))
+    tc = box("MI_BarTopCorner", (WALL, WALL, 0.055), (-WALL / 2, WALL / 2, BAR), mat=mats["wood"], col=col)
+    bevel(tc, width=0.14, segments=3)
+    P(tc)
+    P(box("MI_PlanterTrough", (LONG - 0.35, 0.13, 0.075), (LONG / 2, WALL - 0.18, BAR + 0.08), mat=mats["fabric_dark"], col=col))
+    for i in range(11):
+        P(box(f"MI_Herb{i}", (0.038, 0.028, 0.085), (0.28 + i * 0.26, WALL - 0.18, BAR + 0.15), mat=mats["plant"], col=col))
 
-    for p in create_l_counter_top("BarTop", LONG, SHORT, THICK, 0.055, (ox, oy), mats["wood"], col):
-        p.location.z = BAR
-        bpy.context.view_layer.update()
-        link_child(p)
-
-    # 种植槽 + 挡板
-    trough = box("PlanterTrough", (2.85, 0.14, 0.07), (0.55, 0.30, BAR + 0.10), mat=mats["fabric_dark"], col=col)
-    link_child(trough)
-    for i in range(12):
-        leaf = box(f"Herb{i}", (0.04, 0.03, 0.08), (-0.85 + i * 0.24, 0.30, BAR + 0.16), mat=mats["plant"], col=col)
-        link_child(leaf)
-    splash = box("BarSplash", (2.9, 0.05, 0.20), (0.55, 0.42, BAR + 0.08), mat=mats["wood"], col=col)
-    link_child(splash)
-
-    # ── Step 2: 内圈石台面（L bmesh + 倒角 + 细分，嵌入木围合内腔） ──
-    kit_top = create_l_solid(
-        "KitCounter",
-        2.45,
-        1.52,
-        0.44,
-        0.042,
-        (ox + 0.08, oy + 0.08),
-        mats["stone"],
-        col,
-        bevel_w=0.16,
-        subsurf=1,
-    )
-    kit_top.location.z = KIT
-    bpy.context.view_layer.update()
-    link_child(kit_top)
-
-    # 石台与木吧台高差立面条（强化层次）
-    reveal = box("CounterReveal", (2.40, 0.012, 0.155), (0.55, 0.17, KIT + 0.04), mat=mats["wood"], col=col)
-    link_child(reveal)
-
-    cab_l = box("CabLong", (2.45, 0.66, 0.78), (0.55, 0.0, 0.39), mat=mats["cab_grey"], col=col)
-    cab_s = box("CabShort", (0.66, 1.55, 0.78), (-0.68, -0.55, 0.39), mat=mats["cab_grey"], col=col)
-    link_child(cab_l)
-    link_child(cab_s)
-    for i, z in enumerate((0.18, 0.40, 0.62)):
-        seam = box(f"DrawerSeam{i}", (0.52, 0.008, 0.012), (0.85, -0.31, z), mat=mats["black"], col=col)
-        link_child(seam)
-
-    # 灶台 / 水槽 / 道具
-    hob = box("HobGlass", (0.50, 0.46, 0.016), (0.35, 0.0, KIT + 0.024), mat=mats["black"], col=col)
-    link_child(hob)
+    # ── B. 内圈 L 石操作台 + 灰柜体 ──
+    P(box("MI_KitLong", (LONG - WALL - 0.10, kit_depth, 0.042), ((LONG - WALL) / 2 + 0.05, -kit_depth / 2 + 0.04, KIT), mat=mats["stone"], col=col))
+    P(box("MI_KitShort", (kit_depth, SHORT - WALL - 0.08, 0.042), (-kit_depth / 2 + 0.04, -SHORT / 2, KIT), mat=mats["stone"], col=col))
+    kc = box("MI_KitCorner", (kit_depth, kit_depth, 0.042), (-kit_depth / 2 + 0.04, -kit_depth / 2 + 0.04, KIT), mat=mats["stone"], col=col)
+    bevel(kc, width=0.12, segments=3)
+    P(kc)
+    P(box("MI_CabLong", (LONG - WALL - 0.10, kit_depth, 0.76), ((LONG - WALL) / 2 + 0.05, -kit_depth / 2 + 0.04, 0.38), mat=mats["cab_grey"], col=col))
+    P(box("MI_CabShort", (kit_depth, SHORT - WALL - 0.06, 0.76), (-kit_depth / 2 + 0.04, -SHORT / 2, 0.38), mat=mats["cab_grey"], col=col))
+    for i, z in enumerate((0.16, 0.38, 0.60)):
+        P(box(f"MI_DrawerSeam{i}", (0.48, 0.006, 0.010), (1.4, -kit_depth + 0.04, z), mat=mats["black"], col=col))
+    P(box("MI_Hob", (0.46, 0.44, 0.015), (0.95, -kit_depth / 2 + 0.04, KIT + 0.022), mat=mats["black"], col=col))
     for i in range(4):
-        bx = 0.18 + (i % 2) * 0.20
-        by = -0.10 + (i // 2) * 0.20
-        b = cylinder(f"Burner{i}", 0.046, 0.012, (bx, by, KIT + 0.034), mat=mats["black"], col=col)
-        link_child(b)
-    hood = box("VentStrip", (0.52, 0.07, 0.022), (0.35, 0.28, KIT + 0.05), mat=mats["metal"], col=col)
-    link_child(hood)
-    sink = cylinder("Sink", 0.15, 0.028, (1.25, -0.05, KIT + 0.005), mat=mats["metal"], col=col)
-    link_child(sink)
-    tap = box("TapNeck", (0.014, 0.014, 0.13), (1.25, -0.20, KIT + 0.09), mat=mats["metal"], col=col)
-    spout = box("TapSpout", (0.09, 0.014, 0.014), (1.20, -0.13, KIT + 0.055), mat=mats["metal"], col=col)
-    link_child(tap)
-    link_child(spout)
-    kettle = cylinder("Kettle", 0.065, 0.11, (1.05, 0.20, KIT + 0.06), mat=mats["metal"], col=col)
-    link_child(kettle)
-    for i, x in enumerate((1.55, 1.70)):
-        jar = cylinder(f"Jar{i}", 0.032, 0.075, (x, 0.16, KIT + 0.04), mat=mats["fabric_grey"], col=col)
-        link_child(jar)
-    board = box("CuttingBoard", (0.20, 0.13, 0.012), (0.75, 0.22, KIT + 0.008), mat=mats["wood_dark"], col=col)
-    link_child(board)
+        bx = 0.78 + (i % 2) * 0.20
+        by = -kit_depth / 2 - 0.06 + (i // 2) * 0.20
+        P(cylinder(f"MI_Burner{i}", 0.044, 0.011, (bx, by, KIT + 0.032), mat=mats["black"], col=col))
+    P(cylinder("MI_Sink", 0.145, 0.028, (2.15, -kit_depth / 2 + 0.04, KIT + 0.004), mat=mats["metal"], col=col))
+    P(box("MI_Tap", (0.012, 0.012, 0.12), (2.15, -kit_depth / 2 - 0.12, KIT + 0.08), mat=mats["metal"], col=col))
+    P(box("MI_Spout", (0.085, 0.012, 0.012), (2.10, -kit_depth / 2 - 0.06, KIT + 0.048), mat=mats["metal"], col=col))
+    P(cylinder("MI_Kettle", 0.06, 0.10, (1.75, -0.08, KIT + 0.055), mat=mats["metal"], col=col))
+    P(cylinder("MI_Jar0", 0.028, 0.07, (2.45, -0.05, KIT + 0.038), mat=mats["fabric_grey"], col=col))
+    P(cylinder("MI_Jar1", 0.024, 0.06, (2.58, -0.02, KIT + 0.035), mat=mats["fabric_grey"], col=col))
+    P(box("MI_Board", (0.18, 0.12, 0.010), (1.35, 0.02, KIT + 0.006), mat=mats["wood_dark"], col=col))
 
-    # ── Step 3: 逐格开放层架 ──
-    build_shelf_cubbies(mats, col, root, (-1.02, -0.95, 0.18), rows=2, cols=2)
+    # ── C. 短臂外端开放格架（2×2 + 圆角外端） ──
+    sx, sy = -WALL - 0.02, -SHORT / 2
+    P(box("MI_ShelfBack", (0.44, 0.020, 0.74), (sx, sy, 0.37), mat=mats["wood"], col=col))
+    P(box("MI_ShelfSideL", (0.020, 0.24, 0.74), (sx - 0.21, sy, 0.37), mat=mats["wood"], col=col))
+    sr = box("MI_ShelfRound", (0.24, 0.24, 0.74), (sx - 0.21, sy - 0.72, 0.37), mat=mats["wood"], col=col)
+    bevel(sr, width=0.10, segments=4)
+    P(sr)
+    for ri, z in enumerate((0.18, 0.42, 0.66)):
+        P(box(f"MI_ShelfH{ri}", (0.40, 0.22, 0.018), (sx, sy, z), mat=mats["wood"], col=col))
+    P(box("MI_ShelfDiv", (0.012, 0.22, 0.68), (sx, sy, 0.37), mat=mats["wood"], col=col))
+    for i, (dx, dz, h) in enumerate(((0.06, 0.50, 0.07), (-0.08, 0.28, 0.06), (0.10, 0.28, 0.05))):
+        P(box(f"MI_Book{i}", (0.05, 0.014, h), (sx + dx, sy + 0.04, dz), mat=mats["fabric_dark"], col=col))
 
-    # 高脚凳 ×5 + 脚踏杆
-    for i, x in enumerate((0.25, 0.85, 1.45, 2.05, 2.65)):
-        island_bar_stool(mats, col, root, x, -0.38, i)
-    rail = box("FootRail", (2.30, 0.032, 0.032), (1.45, -0.52, 0.14), mat=mats["wood_dark"], col=col)
-    link_child(rail)
-    for x in (0.25, 2.65):
-        rl = box(f"FootRailLeg_{int(x*100)}", (0.032, 0.032, 0.13), (x, -0.52, 0.065), mat=mats["wood_dark"], col=col)
-        link_child(rl)
-    kick_l = box("KickLong", (2.45, 0.022, 0.075), (0.55, -0.31, 0.038), mat=mats["wood_dark"], col=col)
-    kick_s = box("KickShort", (0.022, 1.55, 0.075), (-0.68, -0.55, 0.038), mat=mats["wood_dark"], col=col)
-    link_child(kick_l)
-    link_child(kick_s)
+    # ── D. 独立直条吧台（主岛长边外侧平行） ──
+    bar_y = WALL + 0.80
+    bar_len = LONG + 0.15
+    P(box("SB_TopMain", (bar_len - 0.44, 0.46, 0.055), (LONG / 2, bar_y, BAR), mat=mats["wood"], col=col))
+    P(cylinder("SB_TopCapL", 0.23, 0.055, (0.23, bar_y, BAR), mat=mats["wood"], col=col))
+    P(cylinder("SB_TopCapR", 0.23, 0.055, (LONG - 0.08, bar_y, BAR), mat=mats["wood"], col=col))
+    P(box("SB_Face", (bar_len - 0.10, 0.04, 0.68), (LONG / 2, bar_y - 0.21, 0.34), mat=mats["wood"], col=col))
+    P(box("SB_Trough", (bar_len - 0.30, 0.12, 0.07), (LONG / 2, bar_y + 0.16, BAR + 0.07), mat=mats["fabric_dark"], col=col))
+    for i in range(10):
+        P(box(f"SB_Plant{i}", (0.035, 0.025, 0.08), (0.35 + i * 0.28, bar_y + 0.16, BAR + 0.14), mat=mats["plant"], col=col))
+
+    # ── E. 4 把木高脚凳（直吧台前） ──
+    stool_y = bar_y - 0.58
+    for i, x in enumerate((0.55, 1.25, 1.95, 2.65)):
+        P(cylinder(f"SB_StoolSeat{i}", 0.145, 0.042, (x, stool_y, 0.74), mat=mats["wood"], col=col))
+        for j in range(4):
+            ang = j * (math.pi / 2) + math.pi / 4
+            P(cylinder(
+                f"SB_StoolLeg{i}_{j}",
+                0.016,
+                0.66,
+                (x + math.sin(ang) * 0.09, stool_y + math.cos(ang) * 0.09, 0.35),
+                mat=mats["wood"],
+                col=col,
+            ))
+        P(cylinder(f"SB_StoolFoot{i}", 0.115, 0.020, (x, stool_y, 0.21), mat=mats["wood"], col=col))
 
     return root
 
@@ -832,7 +828,6 @@ CATALOG_LAYOUT = [
     ("CurvedSofa", (-5.8, 1.2, 0), radians(8)),
     ("StraightSofa", (-1.2, 1.0, 0), 0),
     ("Armchair", (2.4, 1.4, 0), radians(-15)),
-    ("BarStool", (6.2, 4.8, 0), 0),
     ("LowStool_4L", (6.8, 3.2, 0), 0),
     ("LowStool_3L", (7.2, 1.8, 0), 0),
     ("Pouf", (5.4, 0.6, 0), 0),
@@ -840,7 +835,7 @@ CATALOG_LAYOUT = [
     ("CoffeeTable_Tripod", (-2.0, -2.2, 0), 0),
     ("SideTable_Metal", (0.8, -1.8, 0), 0),
     ("SideTable_Wood", (3.5, -2.2, 0), 0),
-    ("KitchenIsland", (0.5, -0.4, 0), 0),
+    ("KitchenIsland", (0.0, -0.2, 0), 0),
     ("Bookshelf_3x3", (-6.5, -4.5, 0), 0),
     ("Bookshelf_4x2", (-2.8, -4.8, 0), 0),
     ("CatTree", (0.8, -4.2, 0), 0),
@@ -858,7 +853,6 @@ BUILDERS = {
     "CurvedSofa": lambda m, c: build_curved_sofa(m, c),
     "StraightSofa": lambda m, c: build_straight_sofa(m, c),
     "Armchair": lambda m, c: build_armchair(m, c),
-    "BarStool": lambda m, c: build_bar_stool(m, c),
     "LowStool_4L": lambda m, c: build_low_stool(m, c, 4),
     "LowStool_3L": lambda m, c: build_low_stool(m, c, 3),
     "Pouf": lambda m, c: build_pouf(m, c),
