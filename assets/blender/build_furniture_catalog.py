@@ -21,15 +21,15 @@ ROOT_DIR = os.path.dirname(ASSET_DIR)
 CACHE = os.path.join(ROOT_DIR, "blender-cache")
 BLEND_OUT = os.path.join(ROOT_DIR, "furniture-catalog.blend")
 
-WOOD = (0.78, 0.62, 0.44, 1.0)
-WOOD_DARK = (0.68, 0.52, 0.36, 1.0)
-FABRIC = (0.86, 0.80, 0.72, 1.0)
-FABRIC_DARK = (0.62, 0.56, 0.50, 1.0)
-FABRIC_GREY = (0.72, 0.70, 0.66, 1.0)
+WOOD = (0.82, 0.67, 0.46, 1.0)
+WOOD_DARK = (0.72, 0.56, 0.38, 1.0)
+FABRIC = (0.90, 0.84, 0.76, 1.0)
+FABRIC_DARK = (0.68, 0.60, 0.52, 1.0)
+FABRIC_GREY = (0.74, 0.72, 0.68, 1.0)
 METAL = (0.78, 0.76, 0.72, 1.0)
-STONE = (0.94, 0.92, 0.88, 1.0)
-PLANT = (0.42, 0.58, 0.38, 1.0)
-RUG = (0.82, 0.74, 0.62, 1.0)
+STONE = (0.96, 0.94, 0.90, 1.0)
+PLANT = (0.38, 0.58, 0.36, 1.0)
+RUG = (0.80, 0.72, 0.58, 1.0)
 
 
 def clear_scene():
@@ -113,10 +113,21 @@ def cylinder(name, radius, depth, loc=(0, 0, 0), rot=(0, 0, 0), mat=None, col=No
     return obj
 
 
+def get_principled_bsdf(mat):
+    bsdf = mat.node_tree.nodes.get("Principled BSDF")
+    if bsdf is None:
+        for node in mat.node_tree.nodes:
+            if node.type == "BSDF_PRINCIPLED":
+                return node
+    return bsdf
+
+
 def make_material(name, color, roughness=0.55, specular=0.25, tex_path=None):
     mat = bpy.data.materials.new(name)
     mat.use_nodes = True
-    bsdf = mat.node_tree.nodes.get("Principled BSDF")
+    bsdf = get_principled_bsdf(mat)
+    if bsdf is None:
+        raise RuntimeError("Principled BSDF node not found")
     bsdf.inputs["Base Color"].default_value = color
     bsdf.inputs["Roughness"].default_value = roughness
     if "Specular IOR Level" in bsdf.inputs:
@@ -169,11 +180,14 @@ def build_materials():
 def build_conference_desk(mats, col):
     root = bpy.data.objects.new("ConferenceDesk", None)
     col.objects.link(root)
-    top = box("DeskTop", (3.2, 1.0, 0.05), (0, 0, 0.74), mat=mats["wood"], col=col)
-    divider = box("Divider", (3.0, 0.025, 0.18), (0, 0, 0.84), mat=mats["wood"], col=col)
-    for x in (-1.45, 0, 1.45):
-        leg = box("Leg", (0.08, 0.95, 0.72), (x, 0, 0.36), mat=mats["wood"], col=col)
+    top = box("DeskTop", (3.6, 1.05, 0.055), (0, 0, 0.74), mat=mats["wood"], col=col)
+    divider = box("Divider", (3.4, 0.022, 0.22), (0, 0, 0.855), mat=mats["wood"], col=col)
+    for i, x in enumerate((-1.65, 0.0, 1.65)):
+        leg = box(f"Leg{i}", (0.06, 1.0, 0.72), (x, 0, 0.36), mat=mats["wood"], col=col)
         parent_keep_world(leg, root)
+    for i, x in enumerate((-0.55, 0.55)):
+        cut = box(f"Cutout{i}", (0.12, 0.03, 0.08), (x, 0, 0.88), mat=mats["wood_dark"], col=col)
+        parent_keep_world(cut, root)
     parent_keep_world(top, root)
     parent_keep_world(divider, root)
     return root
@@ -253,28 +267,26 @@ def build_office_chair(mats, col):
 def build_curved_sofa(mats, col):
     root = bpy.data.objects.new("CurvedSofa", None)
     col.objects.link(root)
-    arc_segments = 14
-    inner_r, depth, height = 1.15, 0.48, 0.36
+    arc_segments = 18
+    inner_r, depth, height = 1.2, 0.52, 0.34
     for i in range(arc_segments):
         t0 = i / arc_segments
         t1 = (i + 1) / arc_segments
-        a0 = math.pi * 0.55 + t0 * math.pi * 0.85
-        a1 = math.pi * 0.55 + t1 * math.pi * 0.85
+        a0 = math.pi * 0.52 + t0 * math.pi * 0.82
+        a1 = math.pi * 0.52 + t1 * math.pi * 0.82
         mid_a = (a0 + a1) / 2
         cx = math.cos(mid_a) * (inner_r + depth * 0.5)
         cy = math.sin(mid_a) * (inner_r + depth * 0.5)
-        seg_len = inner_r * (a1 - a0) * 1.05
+        seg_len = inner_r * (a1 - a0) * 1.08
         seg = box(
             f"Seg{i}",
-            (seg_len, depth, height),
-            (cx, cy, 0.38),
+            (seg_len, depth + 0.02, height),
+            (cx, cy, 0.36),
             rot=(0, 0, mid_a + math.pi / 2),
             mat=mats["fabric"],
             col=col,
         )
         parent_keep_world(seg, root)
-    back_h = box("BackRail", (2.6, 0.12, 0.28), (0.15, 1.55, 0.58), rot=(0, 0, 0.35), mat=mats["fabric"], col=col)
-    parent_keep_world(back_h, root)
     for i, (x, y, s, dark) in enumerate(
         [
             (-0.15, 1.35, 0.22, False),
@@ -315,29 +327,21 @@ def build_straight_sofa(mats, col):
 def build_armchair(mats, col):
     root = bpy.data.objects.new("Armchair", None)
     col.objects.link(root)
-    bm = bmesh.new()
-    ring = []
-    for i in range(32):
-        ang = (i / 32) * 2 * math.pi
-        r = 0.42 + 0.06 * math.sin(ang * 2)
-        ring.append(Vector((math.cos(ang) * r, math.sin(ang) * r * 0.85, 0.22)))
-    bottom, top = [], []
-    for p in ring:
-        bottom.append(bm.verts.new(p))
-        top.append(bm.verts.new(p + Vector((0, 0, 0.42))))
-    for i in range(32):
-        n = (i + 1) % 32
-        bm.faces.new((bottom[i], bottom[n], top[n], top[i]))
-    mesh = bpy.data.meshes.new("ArmFrame")
-    bm.to_mesh(mesh)
-    bm.free()
-    frame = bpy.data.objects.new("Frame", mesh)
-    col.objects.link(frame)
-    assign_mat(frame, mats["wood"])
-    shade_smooth(frame)
-    seat = cylinder("SeatCushion", 0.28, 0.12, (0, 0.02, 0.28), mat=mats["fabric"], col=col)
-    back = box("BackCushion", (0.38, 0.12, 0.34), (0, -0.24, 0.48), mat=mats["fabric"], col=col)
-    parent_keep_world(frame, root)
+    # 环抱式木框 — 三段弧板 + 四脚
+    for i, (x, y, rot, size) in enumerate(
+        [
+            (0, 0.28, 0, (0.48, 0.06, 0.38)),
+            (-0.24, 0.0, radians(90), (0.42, 0.06, 0.38)),
+            (0.24, 0.0, radians(90), (0.42, 0.06, 0.38)),
+        ]
+    ):
+        rail = box(f"Rail{i}", size, (x, y, 0.38), rot=(0, 0, rot), mat=mats["wood"], col=col)
+        parent_keep_world(rail, root)
+    for x, y in ((0.18, 0.18), (-0.18, 0.18), (0.18, -0.18), (-0.18, -0.18)):
+        leg = cylinder("Leg", 0.025, 0.18, (x, y, 0.09), mat=mats["wood"], col=col)
+        parent_keep_world(leg, root)
+    seat = box("SeatCushion", (0.38, 0.38, 0.1), (0, 0.02, 0.24), mat=mats["fabric"], col=col)
+    back = box("BackCushion", (0.36, 0.1, 0.32), (0, -0.2, 0.46), mat=mats["fabric"], col=col)
     parent_keep_world(seat, root)
     parent_keep_world(back, root)
     return root
@@ -553,28 +557,28 @@ def build_rug(mats, col, size=(1.8, 1.2)):
 # Layout — mirrors reference catalog spread
 # ---------------------------------------------------------------------------
 CATALOG_LAYOUT = [
-    ("ConferenceDesk", (-5.5, 4.0, 0), 0),
-    ("OfficeDesk", (-2.5, 4.2, 0), 0),
-    ("OfficeDesk_Drawers", (0.0, 4.2, 0), 0),
-    ("OfficeChair", (2.5, 4.0, 0), radians(25)),
-    ("CurvedSofa", (-5.0, 1.0, 0), radians(12)),
-    ("StraightSofa", (-1.5, 0.8, 0), 0),
-    ("Armchair", (2.0, 1.2, 0), radians(-20)),
-    ("BarStool", (5.0, 3.5, 0), 0),
-    ("LowStool_4L", (5.5, 2.2, 0), 0),
-    ("LowStool_3L", (6.0, 1.0, 0), 0),
-    ("Pouf", (4.2, 0.5, 0), 0),
-    ("CoffeeTable_Pedestal", (-4.5, -1.5, 0), 0),
-    ("CoffeeTable_Tripod", (-1.8, -1.8, 0), 0),
-    ("SideTable_Metal", (0.5, -1.5, 0), 0),
-    ("SideTable_Wood", (2.2, -1.8, 0), 0),
-    ("KitchenIsland", (4.5, -1.0, 0), radians(-8)),
-    ("Bookshelf_3x3", (-5.8, -3.5, 0), 0),
-    ("Bookshelf_4x2", (-2.5, -3.8, 0), 0),
-    ("CatTree", (0.5, -3.5, 0), 0),
-    ("Plant_Large", (-0.8, -3.2, 0), 0),
-    ("Plant_Small", (2.8, -3.4, 0), 0),
-    ("Rug", (-2.0, 0.2, 0), radians(5)),
+    ("ConferenceDesk", (-6.2, 5.0, 0), 0),
+    ("OfficeDesk", (-2.8, 5.2, 0), 0),
+    ("OfficeDesk_Drawers", (0.2, 5.2, 0), 0),
+    ("OfficeChair", (3.2, 4.8, 0), radians(18)),
+    ("CurvedSofa", (-5.8, 1.2, 0), radians(8)),
+    ("StraightSofa", (-1.2, 1.0, 0), 0),
+    ("Armchair", (2.4, 1.4, 0), radians(-15)),
+    ("BarStool", (6.2, 4.8, 0), 0),
+    ("LowStool_4L", (6.8, 3.2, 0), 0),
+    ("LowStool_3L", (7.2, 1.8, 0), 0),
+    ("Pouf", (5.4, 0.6, 0), 0),
+    ("CoffeeTable_Pedestal", (-5.2, -1.8, 0), 0),
+    ("CoffeeTable_Tripod", (-2.0, -2.2, 0), 0),
+    ("SideTable_Metal", (0.8, -1.8, 0), 0),
+    ("SideTable_Wood", (2.8, -2.2, 0), 0),
+    ("KitchenIsland", (5.8, -0.8, 0), radians(-6)),
+    ("Bookshelf_3x3", (-6.5, -4.5, 0), 0),
+    ("Bookshelf_4x2", (-2.8, -4.8, 0), 0),
+    ("CatTree", (0.8, -4.2, 0), 0),
+    ("Plant_Large", (-0.5, -4.0, 0), 0),
+    ("Plant_Small", (3.0, -4.2, 0), 0),
+    ("Rug", (-2.2, 0.5, 0), radians(3)),
 ]
 
 
@@ -605,30 +609,60 @@ BUILDERS = {
 
 
 def setup_studio():
-    bpy.context.scene.world.use_nodes = True
-    bg = bpy.context.scene.world.node_tree.nodes["Background"]
-    bg.inputs[0].default_value = (0.97, 0.96, 0.94, 1.0)
-    bg.inputs[1].default_value = 1.0
+    world = bpy.context.scene.world
+    world.use_nodes = True
+    bg = None
+    for node in world.node_tree.nodes:
+        if node.type == "BACKGROUND":
+            bg = node
+            break
+    if bg is None:
+        bg = world.node_tree.nodes.get("Background")
+    if bg:
+        bg.inputs[0].default_value = (1.0, 1.0, 1.0, 1.0)
+        bg.inputs[1].default_value = 1.2
 
-    bpy.ops.object.light_add(type="AREA", location=(6, -6, 9))
+    # 纯白地面接收柔和阴影
+    bpy.ops.mesh.primitive_plane_add(size=40, location=(0, 0, 0))
+    floor = bpy.context.active_object
+    floor.name = "StudioFloor"
+    mat = bpy.data.materials.new("Floor_White")
+    mat.use_nodes = True
+    bsdf = get_principled_bsdf(mat)
+    bsdf.inputs["Base Color"].default_value = (0.99, 0.99, 0.98, 1.0)
+    bsdf.inputs["Roughness"].default_value = 0.85
+    floor.data.materials.append(mat)
+
+    bpy.ops.object.light_add(type="AREA", location=(8, -8, 12))
     key = bpy.context.active_object
-    key.data.energy = 900
-    key.data.size = 6
-    key.rotation_euler = (radians(55), 0, radians(35))
+    key.name = "KeyLight"
+    key.data.energy = 1200
+    key.data.size = 8
+    key.data.color = (1.0, 0.98, 0.95)
+    key.rotation_euler = (radians(52), 0, radians(32))
 
-    bpy.ops.object.light_add(type="AREA", location=(-5, 5, 6))
+    bpy.ops.object.light_add(type="AREA", location=(-7, 6, 8))
     fill = bpy.context.active_object
-    fill.data.energy = 350
-    fill.data.size = 5
-    fill.rotation_euler = (radians(60), 0, radians(-140))
+    fill.name = "FillLight"
+    fill.data.energy = 500
+    fill.data.size = 7
+    fill.data.color = (0.95, 0.97, 1.0)
+    fill.rotation_euler = (radians(58), 0, radians(-145))
+
+    bpy.ops.object.light_add(type="AREA", location=(0, 10, 6))
+    rim = bpy.context.active_object
+    rim.name = "RimLight"
+    rim.data.energy = 280
+    rim.data.size = 6
+    rim.rotation_euler = (radians(65), 0, radians(180))
 
     cam_data = bpy.data.cameras.new("CatalogCam")
     cam_data.type = "ORTHO"
-    cam_data.ortho_scale = 16
+    cam_data.ortho_scale = 20
     cam = bpy.data.objects.new("CatalogCam", cam_data)
     bpy.context.scene.collection.objects.link(cam)
-    cam.location = (0, -14, 10)
-    cam.rotation_euler = (radians(58), 0, 0)
+    cam.location = (0, -18, 12)
+    cam.rotation_euler = (radians(52), 0, 0)
     bpy.context.scene.camera = cam
 
 
@@ -674,9 +708,15 @@ def build_catalog():
         placed += 1
 
     setup_studio()
-    bpy.context.scene.render.engine = "BLENDER_EEVEE"
-    if hasattr(bpy.context.scene, "eevee"):
-        bpy.context.scene.eevee.taa_render_samples = 64
+    for engine in ("BLENDER_EEVEE", "BLENDER_EEVEE_NEXT", "CYCLES"):
+        try:
+            bpy.context.scene.render.engine = engine
+            break
+        except Exception:
+            continue
+    eevee = getattr(bpy.context.scene, "eevee", None)
+    if eevee and hasattr(eevee, "taa_render_samples"):
+        eevee.taa_render_samples = 64
     return placed
 
 
