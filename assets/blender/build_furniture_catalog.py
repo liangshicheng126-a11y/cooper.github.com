@@ -35,10 +35,15 @@ RUG = (0.80, 0.72, 0.58, 1.0)
 def clear_scene():
     bpy.ops.object.select_all(action="SELECT")
     bpy.ops.object.delete(use_global=False)
+    for col in list(bpy.data.collections):
+        if col.name != "Collection":
+            bpy.data.collections.remove(col)
+    root = bpy.context.scene.collection
+    for child in list(root.children):
+        root.children.unlink(child)
     for block in (
         bpy.data.meshes,
         bpy.data.materials,
-        bpy.data.collections,
         bpy.data.cameras,
         bpy.data.lights,
     ):
@@ -447,48 +452,137 @@ def build_bookshelf(mats, col, cols, rows):
 
 
 def build_kitchen_island(mats, col):
+    """L 形厨房岛台 + 后侧直吧台 + 4 高脚凳 — 对齐参考图中心构件"""
     root = bpy.data.objects.new("KitchenIsland", None)
     col.objects.link(root)
-    bar_main = box("BarMain", (2.15, 0.52, 0.05), (-0.35, 0.92, 1.02), mat=mats["wood"], col=col)
-    cap_l = cylinder("BarCapL", 0.26, 0.05, (-1.42, 0.92, 1.02), mat=mats["wood"], col=col)
-    cap_r = cylinder("BarCapR", 0.26, 0.05, (0.72, 0.92, 1.02), mat=mats["wood"], col=col)
-    bar_return = box("BarReturn", (0.52, 1.35, 0.05), (0.78, 0.2, 1.02), mat=mats["wood"], col=col)
-    bar_short = box("BarShort", (1.05, 0.52, 0.05), (-0.95, -0.52, 1.02), mat=mats["wood"], col=col)
-    for obj in (bar_main, cap_l, cap_r, bar_return, bar_short):
+
+    def add(name, size, loc, rot=(0, 0, 0), mat=None):
+        obj = box(name, size, loc, rot=rot, mat=mat or mats["wood"], col=col)
         parent_keep_world(obj, root)
-    planter = cylinder("Planter", 0.12, 0.14, (0.55, 0.92, 1.12), mat=mats["fabric_dark"], col=col)
-    for i in range(4):
+        return obj
+
+    # --- 尺寸基准 ---
+    bar_z = 1.05
+    kit_z = 0.88
+    long_x = 3.0
+    short_y = 2.1
+    shell = 0.56
+
+    # === 1. 外侧 L 形木壳体（高吧台围合） ===
+    add("ShellLong", (long_x, shell, bar_z), (0.15, 0.92, bar_z / 2))
+    add("ShellShort", (shell, short_y, bar_z), (-1.35, -0.15, bar_z / 2))
+
+    # === 2. L 形吧台台面（顶面） ===
+    add("BarTopLong", (long_x, shell, 0.06), (0.15, 0.92, bar_z))
+    add("BarTopShort", (shell, short_y, 0.06), (-1.35, -0.15, bar_z))
+
+    # 外侧种植槽（沿长边）
+    trough = add("PlanterTrough", (long_x - 0.25, 0.14, 0.09), (0.15, 1.18, bar_z + 0.06))
+    assign_mat(trough, mats["fabric_dark"])
+    for i in range(int(long_x / 0.18)):
+        x = -1.25 + i * 0.18
         leaf = box(
-            f"PlanterLeaf{i}",
-            (0.02, 0.04, 0.08),
-            (0.55 + (i - 1.5) * 0.04, 0.92, 1.22),
+            f"TroughPlant{i}",
+            (0.06, 0.05, 0.1),
+            (x, 1.18, bar_z + 0.14),
             mat=mats["plant"],
             col=col,
         )
         parent_keep_world(leaf, root)
-    parent_keep_world(planter, root)
-    counter = box("Counter", (1.95, 0.72, 0.04), (-0.15, -0.52, 0.88), mat=mats["stone"], col=col)
-    base = box("Cabinet", (1.95, 0.72, 0.82), (-0.15, -0.52, 0.41), mat=mats["wood"], col=col)
-    sink = cylinder("Sink", 0.16, 0.035, (0.42, -0.52, 0.905), mat=mats["metal"], col=col)
-    hob = box("Hob", (0.38, 0.38, 0.015), (-0.55, -0.52, 0.905), mat=mats["metal"], col=col)
+
+    # === 3. 内侧 L 形操作台（白石英台面） ===
+    kit_long = box(
+        "KitTopLong",
+        (long_x - shell - 0.15, 0.68, 0.045),
+        (0.35, 0.08, kit_z),
+        mat=mats["stone"],
+        col=col,
+    )
+    kit_short = box(
+        "KitTopShort",
+        (0.68, short_y - shell - 0.12, 0.045),
+        (-0.95, -0.35, kit_z),
+        mat=mats["stone"],
+        col=col,
+    )
+    parent_keep_world(kit_long, root)
+    parent_keep_world(kit_short, root)
+
+    # 转角圆角过渡
+    corner = cylinder(
+        "KitCorner",
+        0.38,
+        0.045,
+        (-0.62, -0.02, kit_z),
+        mat=mats["stone"],
+        col=col,
+    )
+    parent_keep_world(corner, root)
+
+    # 下方木柜体
+    add("CabLong", (long_x - shell - 0.15, 0.68, 0.78), (0.35, 0.08, 0.39))
+    add("CabShort", (0.68, short_y - shell - 0.12, 0.78), (-0.95, -0.35, 0.39))
+
+    # === 4. 灶台 / 水槽 / 龙头 ===
+    hob4 = box("Hob4", (0.42, 0.42, 0.018), (-0.15, 0.08, kit_z + 0.025), mat=mats["metal"], col=col)
+    parent_keep_world(hob4, root)
     for i in range(4):
-        bx = -0.64 + (i % 2) * 0.16
-        by = -0.62 + (i // 2) * 0.16
-        burner = cylinder(f"Burner{i}", 0.04, 0.012, (bx, by, 0.915), mat=mats["metal"], col=col)
-        parent_keep_world(burner, root)
-    for z in (0.18, 0.38, 0.58):
-        drawer = box(f"DrawerFront{z}", (0.55, 0.02, 0.14), (0.35, -0.86, z), mat=mats["wood_dark"], col=col)
-        parent_keep_world(drawer, root)
-    shelf_unit = build_bookshelf(mats, col, 2, 3)
-    shelf_unit.location = (-1.25, -0.52, 0)
-    parent_keep_world(shelf_unit, root)
-    for x, y in [(-1.35, 0.92), (0.65, 0.92), (0.78, -0.15), (-1.35, -0.52)]:
-        leg = box("BarLeg", (0.06, 0.06, 1.0), (x, y, 0.5), mat=mats["wood"], col=col)
-        parent_keep_world(leg, root)
-    parent_keep_world(counter, root)
-    parent_keep_world(base, root)
+        bx = -0.28 + (i % 2) * 0.22
+        by = -0.02 + (i // 2) * 0.22
+        b = cylinder(f"Burner4_{i}", 0.042, 0.012, (bx, by, kit_z + 0.035), mat=mats["metal"], col=col)
+        parent_keep_world(b, root)
+
+    hob2 = box("Hob2", (0.28, 0.42, 0.018), (0.55, 0.08, kit_z + 0.025), mat=mats["metal"], col=col)
+    parent_keep_world(hob2, root)
+    for i in range(2):
+        b = cylinder(f"Burner2_{i}", 0.038, 0.012, (0.48 + i * 0.14, 0.08, kit_z + 0.035), mat=mats["metal"], col=col)
+        parent_keep_world(b, root)
+
+    sink = cylinder("Sink", 0.17, 0.03, (0.95, -0.05, kit_z + 0.01), mat=mats["metal"], col=col)
+    faucet = box("Faucet", (0.02, 0.02, 0.16), (0.95, -0.22, kit_z + 0.1), mat=mats["metal"], col=col)
     parent_keep_world(sink, root)
-    parent_keep_world(hob, root)
+    parent_keep_world(faucet, root)
+
+    # 抽屉面板
+    for i, x in enumerate((0.55, 0.85)):
+        drawer = box(f"Drawer{i}", (0.28, 0.02, 0.13), (x, -0.28, 0.32 + i * 0.22), mat=mats["wood_dark"], col=col)
+        parent_keep_world(drawer, root)
+
+    # === 5. 短臂外端开放层架 ===
+    for r, z in enumerate((0.22, 0.52, 0.82)):
+        shelf = box(f"OpenShelf{r}", (0.48, 0.28, 0.025), (-1.62, -0.15 - r * 0.05, z), mat=mats["wood"], col=col)
+        parent_keep_world(shelf, root)
+    add("ShelfPanelL", (0.025, 0.28, 0.78), (-1.86, -0.15, 0.39))
+    add("ShelfPanelR", (0.025, 0.28, 0.78), (-1.38, -0.15, 0.39))
+    add("ShelfBack", (0.48, 0.025, 0.78), (-1.62, -0.28, 0.39))
+
+    # === 6. 后侧直条吧台（带种植槽，参考图长边后方） ===
+    back_y = 1.55
+    add("BackBarTop", (long_x + 0.35, 0.5, 0.06), (0.15, back_y, bar_z))
+    add("BackBarFace", (long_x + 0.35, 0.08, 0.72), (0.15, back_y - 0.21, 0.36))
+    back_trough = add("BackTrough", (long_x, 0.12, 0.08), (0.15, back_y + 0.22, bar_z + 0.06))
+    assign_mat(back_trough, mats["fabric_dark"])
+    for i in range(8):
+        leaf = box(
+            f"BackPlant{i}",
+            (0.05, 0.04, 0.08),
+            (-1.2 + i * 0.32, back_y + 0.22, bar_z + 0.14),
+            mat=mats["plant"],
+            col=col,
+        )
+        parent_keep_world(leaf, root)
+
+    # === 7. 四把高脚凳（吧台下方） ===
+    for i, x in enumerate((-0.9, -0.15, 0.6, 1.35)):
+        stool_root = build_bar_stool(mats, col)
+        stool_root.location = (x, back_y - 0.55, 0)
+        stool_root.rotation_euler = (0, 0, 0)
+        parent_keep_world(stool_root, root)
+
+    # 结构支撑腿
+    for x, y in [(-1.35, 0.92), (1.55, 0.92), (-1.35, -1.2), (0.2, -1.2)]:
+        leg = add("SupportLeg", (0.07, 0.07, bar_z - 0.05), (x, y, (bar_z - 0.05) / 2))
+
     return root
 
 
@@ -571,8 +665,8 @@ CATALOG_LAYOUT = [
     ("CoffeeTable_Pedestal", (-5.2, -1.8, 0), 0),
     ("CoffeeTable_Tripod", (-2.0, -2.2, 0), 0),
     ("SideTable_Metal", (0.8, -1.8, 0), 0),
-    ("SideTable_Wood", (2.8, -2.2, 0), 0),
-    ("KitchenIsland", (5.8, -0.8, 0), radians(-6)),
+    ("SideTable_Wood", (3.5, -2.2, 0), 0),
+    ("KitchenIsland", (0.5, -0.4, 0), 0),
     ("Bookshelf_3x3", (-6.5, -4.5, 0), 0),
     ("Bookshelf_4x2", (-2.8, -4.8, 0), 0),
     ("CatTree", (0.8, -4.2, 0), 0),
