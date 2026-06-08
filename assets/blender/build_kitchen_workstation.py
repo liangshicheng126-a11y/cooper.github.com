@@ -20,8 +20,8 @@ CACHE = os.path.join(ROOT_DIR, "blender-cache")
 BLEND_OUT = os.path.join(ROOT_DIR, "kitchen-workstation.blend")
 RENDER_OUT = os.path.join(ROOT_DIR, "renders", "kitchen-workstation-v1.png")
 
-WOOD = (0.78, 0.62, 0.42, 1.0)
-WOOD_DARK = (0.68, 0.52, 0.34, 1.0)
+WOOD = (0.86, 0.72, 0.52, 1.0)
+WOOD_DARK = (0.74, 0.58, 0.40, 1.0)
 STONE = (0.97, 0.96, 0.94, 1.0)
 METAL = (0.82, 0.82, 0.84, 1.0)
 BLACK = (0.05, 0.05, 0.05, 1.0)
@@ -39,7 +39,7 @@ BASE_H = 0.88
 TOP_SLAB = 0.06
 TOE_KICK = 0.10
 TOE_RECESS = 0.06
-MODEL_VERSION = "v2"
+MODEL_VERSION = "v3-final"
 
 
 # ---------------------------------------------------------------------------
@@ -277,46 +277,14 @@ def create_rounded_bar(name, length, depth, height, origin, mat, col, end_radius
     return obj
 
 
-def create_u_footprint_solid(name, height, mat, col, bevel_w=0.16):
-    """
-    统一 U 型轮廓（俯视图对齐参考图）：
-    主臂底边 → 右端 90° 弧 → 回臂顶边，左侧开口。
-    """
-    r = 0.24
-    main_y0 = 0.0
-    main_y1 = DEPTH
-    ret_y0 = DEPTH + GAP
-    ret_y1 = ret_y0 + DEPTH
-    right_x = MAIN_LEN
-    ret_left = RETURN_OFFSET
-
-    bm = bmesh.new()
-    pts = [
-        (r, main_y0),
-        (right_x - r, main_y0),
-        (right_x, main_y0 + r),
-        (right_x, ret_y1 - r),
-        (right_x - r, ret_y1),
-        (ret_left + r, ret_y1),
-        (ret_left, ret_y1 - r),
-        (ret_left, ret_y0 + r),
-        (ret_left + r, ret_y0),
-        (right_x - DEPTH * 0.85, ret_y0),
-        (right_x - DEPTH * 0.85, main_y1),
-        (r, main_y1),
-        (0.0, main_y1 - r),
-        (0.0, main_y0 + r),
-    ]
-    verts = [bm.verts.new((x, y, 0.0)) for x, y in pts]
-    bm.faces.new(verts)
-    geom = bmesh.ops.extrude_face_region(bm, geom=bm.faces[:])["geom"]
-    top = [v for v in geom if isinstance(v, bmesh.types.BMVert)]
-    bmesh.ops.translate(bm, verts=top, vec=(0, 0, height))
-    obj = mesh_from_bm(name, bm, mat, col)
-    bevel(obj, width=bevel_w, segments=4)
+def create_curve_connector(name, height, mat, col):
+    """右端 90° 圆角连接段（独立实体，避免 U 轮廓自交）"""
+    cx = MAIN_LEN - 0.30
+    cy = DEPTH + GAP / 2 + DEPTH / 2
+    obj = box(name, (0.62, GAP + DEPTH * 0.92, height), (cx, cy, height / 2), mat=mat, col=col)
+    bevel(obj, width=0.28, segments=5)
     sub = obj.modifiers.new("Subsurf", "SUBSURF")
     sub.levels = 1
-    sub.render_levels = 2
     apply_all_modifiers(obj)
     return obj
 
@@ -539,23 +507,19 @@ def build_kitchen_workstation(mats, col):
     main_cy = main_y + DEPTH / 2
     return_cy = return_y + DEPTH / 2
 
-    # ── A. 统一木质基座 + 踢脚 ──
-    P(create_u_footprint_solid("Base_U", BASE_H, mats["wood"], col, bevel_w=0.18))
+    # ── A. 三段木质基座（主臂 + 回臂 + 右弯） + 踢脚 ──
+    P(create_rounded_bar("Base_Main", MAIN_LEN, DEPTH, BASE_H, (0, main_y), mats["wood"], col, 0.22))
+    P(create_rounded_bar("Base_Return", RETURN_LEN, DEPTH, BASE_H, (RETURN_OFFSET, return_y), mats["wood"], col, 0.20))
+    P(create_curve_connector("Base_Curve", BASE_H, mats["wood"], col))
     add_toe_kick(mats, col, root)
 
-    # ── B. 石质台面（分块：主臂 + 回臂 + 转角补块） ──
+    # ── B. 石质台面（分块：主臂 + 回臂 + 转角） ──
     top_z = BASE_H
-    P(add_counter_slab("Top_Main", MAIN_LEN - 0.04, DEPTH, TOP_SLAB, (0, main_y, top_z), mats["stone"], col, 0.22))
-    P(add_counter_slab("Top_Return", RETURN_LEN - 0.02, DEPTH, TOP_SLAB, (RETURN_OFFSET, return_y, top_z), mats["stone"], col, 0.18))
-    curve_cap = box(
-        "Top_CurveCap",
-        (DEPTH + 0.04, GAP + DEPTH * 0.5, TOP_SLAB),
-        (MAIN_LEN - DEPTH / 2, main_y + DEPTH / 2 + GAP / 2, top_z + TOP_SLAB / 2),
-        mat=mats["stone"],
-        col=col,
-    )
-    bevel(curve_cap, width=0.14, segments=4)
-    P(curve_cap)
+    P(add_counter_slab("Top_Main", MAIN_LEN, DEPTH, TOP_SLAB, (0, main_y, top_z), mats["stone"], col, 0.22))
+    P(add_counter_slab("Top_Return", RETURN_LEN, DEPTH, TOP_SLAB, (RETURN_OFFSET, return_y, top_z), mats["stone"], col, 0.18))
+    curve_top = create_curve_connector("Top_Curve", TOP_SLAB, mats["stone"], col)
+    curve_top.location.z = top_z
+    P(curve_top)
 
     # ── C. 厨电 ──
     top_surface = top_z + TOP_SLAB
@@ -626,19 +590,28 @@ def setup_studio():
     bsdf.inputs["Roughness"].default_value = 0.88
     floor.data.materials.append(mat)
 
-    bpy.ops.object.light_add(type="AREA", location=(5, -4, 8))
+    bpy.ops.object.light_add(type="AREA", location=(4, -3, 7))
     key = bpy.context.active_object
     key.name = "KeyLight"
-    key.data.energy = 900
-    key.data.size = 6
-    key.rotation_euler = (radians(55), 0, radians(25))
+    key.data.energy = 1400
+    key.data.size = 7
+    key.data.color = (1.0, 0.97, 0.92)
+    key.rotation_euler = (radians(52), 0, radians(28))
 
-    bpy.ops.object.light_add(type="AREA", location=(-3, 5, 6))
+    bpy.ops.object.light_add(type="AREA", location=(-2, 4, 5))
     fill = bpy.context.active_object
     fill.name = "FillLight"
-    fill.data.energy = 400
-    fill.data.size = 5
-    fill.rotation_euler = (radians(60), 0, radians(-140))
+    fill.data.energy = 650
+    fill.data.size = 6
+    fill.data.color = (0.95, 0.97, 1.0)
+    fill.rotation_euler = (radians(58), 0, radians(-135))
+
+    bpy.ops.object.light_add(type="AREA", location=(1.7, 5, 3))
+    top = bpy.context.active_object
+    top.name = "TopLight"
+    top.data.energy = 320
+    top.data.size = 5
+    top.rotation_euler = (radians(70), 0, radians(180))
 
     # 四视图相机
     views = [
