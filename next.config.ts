@@ -19,14 +19,9 @@ const isGitHubActions = Boolean(process.env.GITHUB_ACTIONS);
 const motionV2Env = process.env.NEXT_PUBLIC_MOTION_V2;
 const motionV2Enabled = motionV2Env !== "false";
 
-// Hero cloud tunnel (Three.js). Set to "false" to disable without git revert.
-const heroCloudsEnv = process.env.NEXT_PUBLIC_HERO_CLOUDS;
-const heroCloudsEnabled = heroCloudsEnv !== "false";
-
 const nextConfig: NextConfig = {
   env: {
     NEXT_PUBLIC_MOTION_V2: motionV2Enabled ? "true" : "false",
-    NEXT_PUBLIC_HERO_CLOUDS: heroCloudsEnabled ? "true" : "false",
   },
   // GitHub Pages requires static export; Vercel uses server mode to support API routes
   ...(isGitHubActions ? { output: "export" } : {}),
