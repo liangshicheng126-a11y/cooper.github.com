@@ -21,12 +21,14 @@
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "resend": "^6.12.2",
-    "tailwind-merge": "^2.5.5"
+    "tailwind-merge": "^2.5.5",
+    "three": "^0.184.0"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/three": "^0.184.1",
     "autoprefixer": "^10",
     "postcss": "^8",
     "sharp": "^0.34.5",

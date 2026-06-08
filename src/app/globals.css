@@ -663,3 +663,126 @@ body.lightbox-open .mobile-top-shell {
   }
 }
 
+/* Homepage hero: NodeToy-inspired cloud tunnel + indigo scroll gradient */
+.hero-cloud-experience {
+  --hero-cloud-scroll: 0px;
+  --hero-cloud-scroll-slow: 0px;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero-cloud-gradient {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero-cloud-gradient__layer {
+  position: absolute;
+  left: -10%;
+  width: 120%;
+  height: 72vh;
+  transform: translateY(calc(var(--hero-cloud-scroll-slow) * -1));
+  opacity: 0.55;
+}
+
+.hero-cloud-gradient__layer--a {
+  top: -8vh;
+  background: linear-gradient(
+    180deg,
+    rgba(99, 102, 241, 0.42) 0%,
+    rgba(129, 140, 248, 0.28) 38%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  filter: blur(2px);
+}
+
+.hero-cloud-gradient__layer--b {
+  top: 18vh;
+  background: linear-gradient(
+    180deg,
+    rgba(79, 70, 229, 0.22) 0%,
+    rgba(165, 180, 252, 0.16) 55%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: translateY(calc(var(--hero-cloud-scroll) * -1));
+  opacity: 0.45;
+}
+
+.hero-cloud-gradient__mirror {
+  position: absolute;
+  left: -10%;
+  bottom: -42vh;
+  width: 120%;
+  height: 58vh;
+  transform: scaleY(-1) translateY(var(--hero-cloud-scroll));
+  background: linear-gradient(
+    180deg,
+    rgba(99, 102, 241, 0.18) 0%,
+    rgba(129, 140, 248, 0.08) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  opacity: 0.35;
+}
+
+.hero-cloud-canvas-host {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.hero-cloud-canvas-host canvas,
+.hero-cloud-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-cloud-fallback {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero-cloud-fallback__band {
+  position: absolute;
+  left: -12%;
+  width: 124%;
+  border-radius: 50%;
+  filter: blur(48px);
+}
+
+.hero-cloud-fallback__band--top {
+  top: 8vh;
+  height: 34vh;
+  background: radial-gradient(ellipse at 50% 40%, rgba(129, 140, 248, 0.45), transparent 70%);
+}
+
+.hero-cloud-fallback__band--mid {
+  top: 28vh;
+  height: 40vh;
+  background: radial-gradient(ellipse at 40% 50%, rgba(99, 102, 241, 0.32), transparent 72%);
+}
+
+.hero-cloud-fallback__band--bottom {
+  top: 52vh;
+  height: 36vh;
+  background: radial-gradient(ellipse at 60% 40%, rgba(165, 180, 252, 0.24), transparent 70%);
+}
+
+.hero-cloud-zone {
+  position: relative;
+  isolation: isolate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-cloud-gradient__layer,
+  .hero-cloud-gradient__mirror {
+    transform: none;
+  }
+}
+

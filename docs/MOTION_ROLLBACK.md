@@ -2,7 +2,8 @@
 
 基线标签：`pre-motion-refresh-20260529`（动效改造前的 `main` 快照）  
 功能分支：`feat/motion-bold-hybrid`  
-运行时开关：`NEXT_PUBLIC_MOTION_V2`（`true` 启用新动效，`false` 回退为 Framer 默认行为）
+运行时开关：`NEXT_PUBLIC_MOTION_V2`（`true` 启用新动效，`false` 回退为 Framer 默认行为）  
+首页云隧道开关：`NEXT_PUBLIC_HERO_CLOUDS`（`true` 启用 Three.js 云隧道，`false` 关闭并恢复纯 Hero 布局）
 
 ## 路径 1：改动尚未合并到 main
 
@@ -43,6 +44,24 @@ NEXT_PUBLIC_MOTION_V2=false
 ```
 
 然后重新 `npm run build` 并部署。GSAP 组件会回退为 Framer 行为。
+
+## 路径 5：仅关闭首页云隧道（Three.js Hero）
+
+不改动 git 历史，仅关闭首页「云隧道 + 渐变」层：
+
+```
+NEXT_PUBLIC_HERO_CLOUDS=false
+```
+
+然后重新 `npm run build` 并部署。`HeroCloudExperience` 不会挂载，首页 Hero 恢复为原有 GSAP/Framer 布局。
+
+相关文件（便于手动 revert）：
+
+- `src/components/motion/HeroCloudExperience.tsx`
+- `src/lib/hero-cloud-engine.ts`
+- `src/lib/hero-clouds.ts`
+- `src/app/page.tsx`（`HeroCloudExperience` 与 `heroEndRef`）
+- `src/app/globals.css`（`.hero-cloud-*` 样式块）
 
 ## 满意后合并（需你确认）
 

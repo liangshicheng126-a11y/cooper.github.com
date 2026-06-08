@@ -18,6 +18,7 @@ import ProjectCard from "@/components/ProjectCard";
 import GsapParallaxLayer from "@/components/motion/GsapParallaxLayer";
 import GsapScrollBatch from "@/components/motion/GsapScrollBatch";
 import HomeScrollStack from "@/components/motion/HomeScrollStack";
+import HeroCloudExperience from "@/components/motion/HeroCloudExperience";
 import useMotionTier from "@/hooks/useMotionTier";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import { heroMaskVariants, shouldUseGsap } from "@/lib/motion";
@@ -32,6 +33,7 @@ export default function Home() {
   const heroMask = heroMaskVariants(tier);
   const portfolioBtnRef = useRef<HTMLAnchorElement>(null);
   const aboutBtnRef = useRef<HTMLAnchorElement>(null);
+  const heroEndRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
     if (!useGsap || tier === "minimal") return;
@@ -130,8 +132,9 @@ export default function Home() {
 
   return (
     <div
-      className={cn("flex flex-col pb-4 sm:pb-6", !mounted && "opacity-0")}
+      className={cn("flex flex-col pb-4 sm:pb-6 hero-cloud-zone", !mounted && "opacity-0")}
     >
+      <HeroCloudExperience heroEndRef={heroEndRef} />
       <motion.div
         variants={container}
         initial={useGsap ? "show" : "hidden"}
@@ -229,9 +232,10 @@ export default function Home() {
             </motion.div>
           </motion.div>
         </section>
+        <div ref={heroEndRef} className="pointer-events-none h-px w-full" aria-hidden />
         </GsapParallaxLayer>
 
-        <HomeScrollStack className="relative z-0 mt-4 sm:mt-8">
+        <HomeScrollStack className="relative z-[2] mt-4 sm:mt-8">
         {/* Services / Focus Section */}
         <ScrollDirectionSection
           id="services-block"
