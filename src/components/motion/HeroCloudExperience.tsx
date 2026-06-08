@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import useMotionTier from "@/hooks/useMotionTier";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
-import { HERO_CLOUDS_ENABLED } from "@/lib/hero-clouds";
-import { createHeroCloudEngine } from "@/lib/hero-cloud-engine";
+import { HERO_CLOUDS_ENABLED, heroCloudVisibility } from "@/lib/hero-clouds";
+import type { HeroCloudEngine } from "@/lib/hero-cloud-engine";
 
 type HeroCloudExperienceProps = {
   heroEndRef: React.RefObject<HTMLElement | null>;
@@ -27,6 +27,9 @@ export default function HeroCloudExperience({ heroEndRef, className }: HeroCloud
   const reducedMotion = usePrefersReducedMotion();
   const canvasHostRef = useRef<HTMLDivElement>(null);
   const gradientRef = useRef<HTMLDivElement>(null);
+  const engineRef = useRef<HeroCloudEngine | null>(null);
+  const [webglReady, setWebglReady] = useState(false);
+  const [webglFailed, setWebglFailed] = useState(false);
 
   const useWebGL = HERO_CLOUDS_ENABLED && tier !== "minimal" && !reducedMotion;
   const showLayers = HERO_CLOUDS_ENABLED;
@@ -56,31 +59,52 @@ export default function HeroCloudExperience({ heroEndRef, className }: HeroCloud
   }, [showLayers]);
 
   useEffect(() => {
-    if (!useWebGL) return;
+    if (!useWebGL) {
+      setWebglReady(false);
+      setWebglFailed(false);
+      return;
+    }
 
-    const host = canvasHostRef.current;
-    if (!host) return;
-
-    const engine = createHeroCloudEngine({
-      container: host,
-      tier,
-      mouseEnabled: tier === "full" || tier === "reduced",
-    });
-
+    let cancelled = false;
     let raf = 0;
+
+    const boot = async () => {
+      const host = canvasHostRef.current;
+      if (!host || cancelled) return;
+
+      try {
+        const { createHeroCloudEngine } = await import("@/lib/hero-cloud-engine");
+        if (cancelled || !canvasHostRef.current) return;
+
+        engineRef.current?.dispose();
+        engineRef.current = createHeroCloudEngine({
+          container: canvasHostRef.current,
+          tier,
+          mouseEnabled: tier === "full" || tier === "reduced",
+        });
+        setWebglFailed(false);
+        setWebglReady(true);
+      } catch (error) {
+        console.warn("[HeroCloud] WebGL init failed:", error);
+        setWebglFailed(true);
+        setWebglReady(false);
+      }
+    };
+
+    void boot();
+
     const sync = () => {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
+        const engine = engineRef.current;
+        if (!engine) return;
+
         engine.setScrollOffset(window.scrollY);
 
         const sentinel = heroEndRef.current;
-        if (sentinel) {
-          const rect = sentinel.getBoundingClientRect();
-          const progress = Math.min(1, Math.max(0, rect.top / window.innerHeight));
-          engine.setHeroProgress(progress);
-        } else {
-          engine.setHeroProgress(1);
-        }
+        const bottom = sentinel ? sentinel.getBoundingClientRect().bottom : window.innerHeight;
+        const opacity = heroCloudVisibility(bottom, window.innerHeight);
+        engine.setVisibility(opacity);
       });
     };
 
@@ -89,14 +113,20 @@ export default function HeroCloudExperience({ heroEndRef, className }: HeroCloud
     window.addEventListener("resize", sync);
 
     return () => {
+      cancelled = true;
       cancelAnimationFrame(raf);
       window.removeEventListener("scroll", sync);
       window.removeEventListener("resize", sync);
-      engine.dispose();
+      engineRef.current?.dispose();
+      engineRef.current = null;
+      setWebglReady(false);
     };
   }, [useWebGL, tier, heroEndRef]);
 
   if (!showLayers) return null;
+
+  const showCanvas = useWebGL && !webglFailed;
+  const showFallback = !useWebGL || webglFailed || !webglReady;
 
   return (
     <div className={cn("hero-cloud-experience", className)} aria-hidden>
@@ -106,11 +136,14 @@ export default function HeroCloudExperience({ heroEndRef, className }: HeroCloud
         <div className="hero-cloud-gradient__mirror" />
       </div>
 
-      {useWebGL ? (
-        <div ref={canvasHostRef} className="hero-cloud-canvas-host" />
-      ) : (
-        <HeroCloudStaticFallback />
-      )}
+      {showCanvas ? (
+        <div
+          ref={canvasHostRef}
+          className={cn("hero-cloud-canvas-host", webglReady && "hero-cloud-canvas-host--ready")}
+        />
+      ) : null}
+
+      {showFallback ? <HeroCloudStaticFallback /> : null}
     </div>
   );
 }

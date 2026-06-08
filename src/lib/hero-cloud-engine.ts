@@ -7,13 +7,12 @@ export type HeroCloudEngineOptions = {
   container: HTMLElement;
   tier: MotionTier;
   mouseEnabled: boolean;
-  onScrollOpacity?: (opacity: number) => void;
 };
 
 export type HeroCloudEngine = {
   dispose: () => void;
   setScrollOffset: (scrollY: number) => void;
-  setHeroProgress: (progress: number) => void;
+  setVisibility: (opacity: number) => void;
 };
 
 const FOG_COLOR = 0x6366f1;
@@ -48,17 +47,19 @@ void main() {
   vec2 toFrag = screenPos - uMouse;
   vec2 uvPush = vec2(0.0);
   if (uMouseStrength > 0.0 && mouseDist > 0.001) {
-    uvPush = normalize(toFrag) * (1.0 - push) * uMouseStrength * 0.12;
+    uvPush = normalize(toFrag) * (1.0 - push) * uMouseStrength * 0.14;
   }
 
   vec4 sampled = texture2D(map, vUv + uvPush);
   float depth = gl_FragCoord.z / gl_FragCoord.w;
   float fogFactor = smoothstep(fogNear, fogFar, depth);
 
-  gl_FragColor = sampled;
-  gl_FragColor.a *= pow(gl_FragCoord.z, 18.0);
-  gl_FragColor.a *= mix(0.08, 1.0, push);
-  gl_FragColor = mix(gl_FragColor, vec4(fogColor, gl_FragColor.a), fogFactor);
+  vec3 cloudRgb = mix(sampled.rgb, vec3(0.78, 0.82, 1.0), 0.22);
+  float alpha = sampled.a * (0.55 + 0.45 * pow(clamp(gl_FragCoord.z, 0.0, 1.0), 2.8));
+  alpha *= mix(0.12, 1.0, push);
+
+  gl_FragColor = vec4(cloudRgb, alpha);
+  gl_FragColor = mix(gl_FragColor, vec4(fogColor, gl_FragColor.a), fogFactor * 0.65);
 }
 `;
 
@@ -71,9 +72,9 @@ function createCloudTexture(): THREE.CanvasTexture {
   if (!ctx) throw new Error("Canvas 2D unavailable");
 
   const gradient = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
-  gradient.addColorStop(0, "rgba(255,255,255,0.92)");
-  gradient.addColorStop(0.35, "rgba(255,255,255,0.45)");
-  gradient.addColorStop(0.72, "rgba(255,255,255,0.12)");
+  gradient.addColorStop(0, "rgba(255,255,255,0.98)");
+  gradient.addColorStop(0.32, "rgba(255,255,255,0.62)");
+  gradient.addColorStop(0.68, "rgba(230,235,255,0.22)");
   gradient.addColorStop(1, "rgba(255,255,255,0)");
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, size, size);
@@ -144,7 +145,7 @@ export function createHeroCloudEngine(options: HeroCloudEngineOptions): HeroClou
   const texture = createCloudTexture();
 
   const mouseStrength = mouseEnabled ? (tier === "full" ? 1 : 0.55) : 0;
-  const mouseRadius = tier === "full" ? 220 : 160;
+  const mouseRadius = tier === "full" ? 240 : 170;
 
   const material = new THREE.ShaderMaterial({
     uniforms: {
@@ -179,7 +180,7 @@ export function createHeroCloudEngine(options: HeroCloudEngineOptions): HeroClou
 
   const clockStart = performance.now();
   let scrollY = 0;
-  let heroProgress = 1;
+  let visibility = 1;
   let targetMouse = new THREE.Vector2(-9999, -9999);
   let smoothMouse = new THREE.Vector2(-9999, -9999);
   let rafId = 0;
@@ -207,16 +208,9 @@ export function createHeroCloudEngine(options: HeroCloudEngineOptions): HeroClou
     const elapsed = (performance.now() - clockStart) * 0.03;
     const loop = elapsed % depth;
     camera.position.z = depth - loop;
+    camera.position.y = 30 - scrollY * 0.006;
 
-    camera.position.y = 30 - scrollY * 0.018;
-
-    const fadeIn = THREE.MathUtils.clamp(THREE.MathUtils.mapLinear(camera.position.y, 25, 15, 0, 1), 0, 1);
-    const fadeOut = THREE.MathUtils.clamp(THREE.MathUtils.mapLinear(camera.position.y, 0, -30, 1, 0), 0, 1);
-    const scrollOpacity = camera.position.y > 25 ? 0 : camera.position.y < 0 ? fadeOut : fadeIn;
-    const opacity = scrollOpacity * heroProgress;
-
-    container.style.opacity = String(opacity);
-    options.onScrollOpacity?.(opacity);
+    container.style.opacity = String(THREE.MathUtils.clamp(visibility, 0, 1));
 
     smoothMouse.lerp(targetMouse, mouseEnabled ? 0.12 : 1);
     material.uniforms.uMouse.value.copy(smoothMouse);
@@ -251,8 +245,8 @@ export function createHeroCloudEngine(options: HeroCloudEngineOptions): HeroClou
     setScrollOffset(y: number) {
       scrollY = y;
     },
-    setHeroProgress(progress: number) {
-      heroProgress = THREE.MathUtils.clamp(progress, 0, 1);
+    setVisibility(opacity: number) {
+      visibility = THREE.MathUtils.clamp(opacity, 0, 1);
     },
   };
 }

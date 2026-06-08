@@ -669,7 +669,7 @@ body.lightbox-open .mobile-top-shell {
   --hero-cloud-scroll-slow: 0px;
   position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: 1;
   pointer-events: none;
   overflow: hidden;
 }
@@ -693,11 +693,12 @@ body.lightbox-open .mobile-top-shell {
   top: -8vh;
   background: linear-gradient(
     180deg,
-    rgba(99, 102, 241, 0.42) 0%,
-    rgba(129, 140, 248, 0.28) 38%,
+    rgba(99, 102, 241, 0.52) 0%,
+    rgba(129, 140, 248, 0.34) 38%,
     rgba(255, 255, 255, 0) 100%
   );
   filter: blur(2px);
+  opacity: 0.72;
 }
 
 .hero-cloud-gradient__layer--b {
@@ -732,7 +733,11 @@ body.lightbox-open .mobile-top-shell {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.35s ease;
+}
+
+.hero-cloud-canvas-host--ready {
+  opacity: 1;
 }
 
 .hero-cloud-canvas-host canvas,
@@ -746,6 +751,7 @@ body.lightbox-open .mobile-top-shell {
   position: absolute;
   inset: 0;
   overflow: hidden;
+  z-index: 2;
 }
 
 .hero-cloud-fallback__band {
