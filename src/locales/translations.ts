@@ -153,8 +153,8 @@ export const translations = {
           },
           technical: {
             title: "技术实现与可访问性",
-            body: "站点基于 Next.js 15 与 React 19 构建，输出为静态页面以适配 GitHub Pages。动效层采用 GSAP ScrollTrigger 处理滚动入场与图集 stagger，导航与布局过渡交由 Framer Motion 管理，在表现力与包体之间取得平衡。",
-            body2: "我实现了 useMotionTier 三档动效策略（full / reduced / minimal），并尊重 prefers-reduced-motion，确保低动效偏好用户仍能获得完整信息。图片采用视口懒加载，布局在 sm / lg / xl 断点间平滑重排。后续可优化项包括：站点 metadata 个性化与 html lang 随语言切换。",
+            body: "站点基于 Next.js 15 与 React 19 构建，输出为静态页面以适配 GitHub Pages。动效层采用 GSAP ScrollTrigger 处理滚动入场与图集 stagger，导航与布局过渡交由 Framer Motion 管理，支持移动端手机平板和电脑端使用，在表现力与载体之间取得平衡。",
+            body2: "网页使用了 useMotionTier 三档动效策略（full / reduced / minimal），并尊重 prefers-reduced-motion，确保低动效偏好用户仍能获得完整信息。图片采用视口懒加载，布局在 sm / lg / xl 断点间平滑重排。后续可优化项包括：站点 metadata 个性化与 html lang 随语言切换。",
             points: [
               "静态导出 + CI 自动部署，发布流程可复现",
               "动效分档：重动效、轻动效、极简静态三模式",
@@ -165,7 +165,7 @@ export const translations = {
           emotional: {
             title: "情感化设计与品牌共鸣",
             body: "首页通过 BlurText 标题揭示、CountUp 数据动效与 Magnet 按钮磁吸，在首屏建立「精致且有趣」的第一印象。滚动驱动的 blob 视差与页面过渡则让浏览过程像一次连续的体验旅程，而非冷冰冰的作品列表。",
-            body2: "关于页融入极限运动与自然探索的个人叙事，配合哲学引言区块，把「设计师」还原为有温度、有故事的创作者。工具卡 GsapGlassHover 在 full 档位提供轻微 tilt 与光斑反馈，在 reduced/minimal 档自动降级为静态样式，保证表达力不牺牲可读性。",
+            body2: "关于页融入极限运动与自然探索，把「设计师」还原为有温度、有故事的创作者。工具卡 GsapGlassHover 在 full 档位提供轻微 tilt 与光斑反馈，在 reduced/minimal 档自动降级为静态样式，保证表达力不牺牲可读性。",
             points: [
               "首屏微交互：吸引注意但不遮挡核心信息",
               "叙事型关于页：专业能力与个人气质双线并行",
