@@ -10,7 +10,7 @@ import { useMemo, useState } from "react";
 import LazyInViewImage from "@/components/LazyInViewImage";
 import GalleryLightbox from "@/components/GalleryLightbox";
 import MasonryGallery, { MasonryItem } from "@/components/MasonryGallery";
-import { mapDisplaySources, thumbSrc } from "@/lib/galleryImageUrl";
+import { displaySrc, mapDisplaySources, thumbSrc } from "@/lib/galleryImageUrl";
 import SiteDesignAnalysis from "@/components/portfolio/SiteDesignAnalysis";
 import GsapGalleryStagger from "@/components/motion/GsapGalleryStagger";
 import useMotionTier from "@/hooks/useMotionTier";
@@ -221,7 +221,7 @@ export default function ProjectDetailClient({
           </div>
           <div className="aspect-[4/3] sm:aspect-[21/9] rounded-[28px] sm:rounded-[40px] overflow-hidden glass border-white/10 mb-6 sm:mb-8">
             <LazyInViewImage
-              src={thumbSrc(designHero)}
+              src={displaySrc(designHero)}
               fallbackSrc={designHero}
               alt={`${t.portfolio.projectDetail.designAlt} 1`}
               variant="cover"

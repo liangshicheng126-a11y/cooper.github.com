@@ -1,4 +1,8 @@
-const GALLERY_PREFIXES = ["/photos/posters/", "/photos/photography/"] as const;
+const GALLERY_PREFIXES = [
+  "/photos/posters/",
+  "/photos/photography/",
+  "/photos/portfolio/p2/",
+] as const;
 
 function isGalleryOriginal(src: string): boolean {
   if (!src.startsWith("/photos/")) return false;
@@ -9,7 +13,9 @@ function isGalleryOriginal(src: string): boolean {
 function variantPath(original: string, variant: "_thumb" | "_display"): string {
   if (!isGalleryOriginal(original)) return original;
 
-  const match = original.match(/^(\/photos\/(?:posters|photography)\/)(.+)$/);
+  const match = original.match(
+    /^(\/photos\/(?:posters|photography|portfolio\/p2)\/)(.+)$/,
+  );
   if (!match) return original;
 
   const [, prefix, rest] = match;

@@ -191,7 +191,9 @@ async function getDesignScreenshots(): Promise<string[]> {
     `/photos/portfolio/p2/${encodeURIComponent(fileName)}`;
   const preferredOrder = [
     "home-hero.png",
+    "home-services.png",
     "portfolio-grid.png",
+    "p2-detail.png",
     "about-page.png",
     "contact-page.png",
   ];

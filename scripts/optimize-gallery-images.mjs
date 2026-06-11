@@ -10,6 +10,7 @@ const PUBLIC = path.join(ROOT, "public");
 const GALLERY_DIRS = [
   path.join(PUBLIC, "photos", "posters"),
   path.join(PUBLIC, "photos", "photography"),
+  path.join(PUBLIC, "photos", "portfolio", "p2"),
 ];
 
 const IMAGE_RE = /\.(jpe?g|png|webp|avif|gif)$/i;
@@ -43,8 +44,10 @@ async function collectImages(dirAbs, relParts = []) {
   return out;
 }
 
-function webPath(galleryRootName, relParts, fileName) {
-  const segments = [galleryRootName, ...relParts, fileName].map((s) => encodeURIComponent(s));
+function webPath(galleryWebPrefix, relParts, fileName) {
+  const segments = [...galleryWebPrefix.split("/"), ...relParts, fileName].map((s) =>
+    encodeURIComponent(s),
+  );
   return `/photos/${segments.join("/")}`;
 }
 
@@ -85,16 +88,15 @@ async function readImageDimensions(sourceAbs) {
 }
 
 async function processGallery(galleryAbs, manifest) {
-  const galleryRootName = path.basename(path.dirname(galleryAbs)) === "photos"
-    ? path.basename(galleryAbs)
-    : path.basename(galleryAbs);
+  const photosRoot = path.join(PUBLIC, "photos");
+  const galleryWebPrefix = path.relative(photosRoot, galleryAbs).split(path.sep).join("/");
 
   const images = await collectImages(galleryAbs);
   let generated = 0;
   let skipped = 0;
 
   for (const image of images) {
-    const originalWeb = webPath(galleryRootName, image.relParts, image.fileName);
+    const originalWeb = webPath(galleryWebPrefix, image.relParts, image.fileName);
     manifest[originalWeb] = await readImageDimensions(image.abs);
 
     for (const variant of VARIANTS) {

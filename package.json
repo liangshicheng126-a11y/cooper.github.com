@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "optimize-images": "node scripts/optimize-gallery-images.mjs",
-    "export-figma": "node scripts/export-figma-design.mjs"
+    "export-figma": "node scripts/export-figma-design.mjs",
+    "capture-p2-design": "node scripts/capture-p2-design.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
