@@ -82,29 +82,42 @@ async function createTextStyles(tokens) {
   return created;
 }
 
-async function placeScreenshot(parent, item, yOffset) {
+const FIGMA_MAX_EDGE = 4096;
+
+async function createScreenshotFrame(item) {
   const data = PAYLOAD.images[item.fileName];
-  if (!data) return yOffset;
+  if (!data) throw new Error("missing image data");
+
   const img = await loadImage(data.base64);
   const size = await img.getSizeAsync();
-  const scale = item.width / size.width;
-  const h = size.height * scale;
+  if (size.width > FIGMA_MAX_EDGE || size.height > FIGMA_MAX_EDGE) {
+    throw new Error("image exceeds 4096px (" + size.width + "x" + size.height + ")");
+  }
+
+  const w = item.width || size.width;
+  const scale = w / size.width;
+  const h = Math.round(size.height * scale);
 
   const frame = figma.createFrame();
   frame.name = item.frameName;
-  frame.resize(item.width, h);
-  frame.x = 0;
-  frame.y = yOffset;
+  frame.resize(w, h);
   frame.fills = [{ type: "SOLID", color: { r: 1, g: 1, b: 1 } }];
   frame.clipsContent = true;
 
   const rect = figma.createRectangle();
-  rect.resize(item.width, h);
+  rect.resize(w, h);
   rect.fills = [{ type: "IMAGE", imageHash: img.hash, scaleMode: "FILL" }];
   frame.appendChild(rect);
+  return frame;
+}
 
-  parent.appendChild(frame);
-  return yOffset + h + 120;
+function findOrCreatePage(name) {
+  const existing = figma.root.children.find((p) => p.type === "PAGE" && p.name === name);
+  if (existing) {
+    for (const child of [...existing.children]) child.remove();
+    return existing;
+  }
+  return figma.createPage();
 }
 
 async function buildTokensPage(tokens) {
@@ -157,27 +170,69 @@ async function buildTokensPage(tokens) {
   }
 }
 
-async function buildScreensPage(pageName, viewport) {
-  const page = figma.createPage();
+async function buildScreensPage(pageName) {
+  const page = findOrCreatePage(pageName);
   page.name = pageName;
   figma.currentPage = page;
 
-  const items = PAYLOAD.manifest.filter((s) => s.viewport === viewport);
-  let y = 0;
-  const wrapper = figma.createFrame();
-  wrapper.name = \`\${viewport} screens\`;
-  wrapper.layoutMode = "VERTICAL";
-  wrapper.primaryAxisSizingMode = "AUTO";
-  wrapper.counterAxisSizingMode = "AUTO";
-  wrapper.itemSpacing = 120;
-  wrapper.fills = [];
-  wrapper.x = 0;
-  wrapper.y = 0;
-  page.appendChild(wrapper);
+  const gap = 80;
+  const colGap = 120;
+  let desktopY = 0;
+  let mobileY = 0;
+  let desktopX = 0;
+  let mobileX = 1560;
+  let placed = 0;
 
-  for (const item of items) {
-    y = await placeScreenshot(wrapper, item, y);
+  const desktopItems = PAYLOAD.manifest.filter((s) => s.viewport === "desktop");
+  const mobileItems = PAYLOAD.manifest.filter((s) => s.viewport === "mobile");
+
+  for (const item of desktopItems) {
+    try {
+      const frame = await createScreenshotFrame(item);
+      frame.x = desktopX;
+      frame.y = desktopY;
+      page.appendChild(frame);
+      desktopY += frame.height + gap;
+      placed += 1;
+    } catch (err) {
+      figma.notify("Skip " + item.fileName + ": " + err.message, { error: true });
+    }
   }
+
+  for (const item of mobileItems) {
+    try {
+      const frame = await createScreenshotFrame(item);
+      frame.x = mobileX;
+      frame.y = mobileY;
+      page.appendChild(frame);
+      mobileY += frame.height + gap;
+      placed += 1;
+    } catch (err) {
+      figma.notify("Skip " + item.fileName + ": " + err.message, { error: true });
+    }
+  }
+
+  if (placed === 0) throw new Error("no screenshots placed — re-run npm run export-figma");
+
+  const labelDesktop = figma.createText();
+  await ensureFont("Bold");
+  labelDesktop.fontName = { family: "Inter", style: "Bold" };
+  labelDesktop.characters = "Desktop (1440 viewport)";
+  labelDesktop.fontSize = 14;
+  labelDesktop.x = desktopX;
+  labelDesktop.y = -36;
+  page.appendChild(labelDesktop);
+
+  const labelMobile = figma.createText();
+  labelMobile.fontName = { family: "Inter", style: "Bold" };
+  labelMobile.characters = "Mobile (390 viewport)";
+  labelMobile.fontSize = 14;
+  labelMobile.x = mobileX;
+  labelMobile.y = -36;
+  page.appendChild(labelMobile);
+
+  figma.viewport.scrollAndZoomIntoView(page.children);
+  return placed;
 }
 
 async function run() {
@@ -186,28 +241,18 @@ async function run() {
 
   figma.notify("Importing cooperliang.top…");
 
-  await createColorStyles(PAYLOAD.tokens);
-  await createTextStyles(PAYLOAD.tokens);
-  await buildTokensPage(PAYLOAD.tokens);
-  await buildScreensPage("🖥 Desktop", "desktop");
-  await buildScreensPage("📱 Mobile", "mobile");
+  const hasTokensPage = figma.root.children.some(
+    (p) => p.type === "PAGE" && String(p.name).includes("Design Tokens"),
+  );
+  if (!hasTokensPage) {
+    await createColorStyles(PAYLOAD.tokens);
+    await createTextStyles(PAYLOAD.tokens);
+    await buildTokensPage(PAYLOAD.tokens);
+  }
 
-  const cover = figma.createPage();
-  cover.name = "📋 Cover";
-  figma.currentPage = cover;
-  await ensureFont("Bold");
-  const t = figma.createText();
-  t.fontName = { family: "Inter", style: "Bold" };
-  t.characters = "cooperliang.top\\nFigma export — reference screens + tokens\\nRegenerate: npm run export-figma";
-  t.fontSize = 28;
-  t.x = 120;
-  t.y = 120;
-  t.resize(900, 200);
-  cover.appendChild(t);
-
-  figma.currentPage = cover;
-  figma.viewport.scrollAndZoomIntoView(cover.children);
-  figma.notify("Import complete ✓");
+  const count = await buildScreensPage("Desktop");
+  figma.currentPage = figma.root.children.find((p) => p.name === "Desktop");
+  figma.notify("Import complete — " + count + " screens");
   figma.closePlugin();
 }
 

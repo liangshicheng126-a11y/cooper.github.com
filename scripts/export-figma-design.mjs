@@ -6,6 +6,10 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
+import sharp from "sharp";
+
+/** Figma raster limit — taller/wider images fail silently in plugins */
+const MAX_EDGE = 4096;
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
@@ -34,7 +38,7 @@ async function capture() {
   for (const vp of VIEWPORTS) {
     const context = await browser.newContext({
       viewport: { width: vp.width, height: vp.height },
-      deviceScaleFactor: 2,
+      deviceScaleFactor: 1,
     });
     const page = await context.newPage();
 
@@ -47,7 +51,20 @@ async function capture() {
       await page.goto(url, { waitUntil: "networkidle", timeout: 90_000 });
       await page.waitForTimeout(1500);
 
-      await page.screenshot({ path: filePath, fullPage: true });
+      // Viewport capture — fullPage often exceeds Figma's 4096px image limit
+      await page.screenshot({ path: filePath, fullPage: false });
+
+      const meta = await sharp(filePath)
+        .rotate()
+        .resize({
+          width: MAX_EDGE,
+          height: MAX_EDGE,
+          fit: "inside",
+          withoutEnlargement: true,
+        })
+        .toFile(`${filePath}.opt`);
+
+      await fs.rename(`${filePath}.opt`, filePath);
       const stat = await fs.stat(filePath);
 
       manifest.push({
@@ -55,7 +72,8 @@ async function capture() {
         page: route.id,
         label: `${vp.id === "desktop" ? "Desktop" : "Mobile"} / ${route.id}`,
         fileName,
-        width: vp.width,
+        width: meta.width,
+        height: meta.height,
         frameName: `${route.id} (${vp.id})`,
       });
       console.log(`  → ${fileName} (${Math.round(stat.size / 1024)} KB)`);
