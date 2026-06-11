@@ -121,7 +121,59 @@ export const translations = {
         solutionText: "我们提出了一套基于“动态交互”逻辑的视觉方案，结合动态模糊与半透明层级感，营造更清晰且更具节奏的界面体验。这种方案成功平衡了表达力与易用性。",
         results: "成果展示",
         userEngagement: "全平台播放",
-        activeUsers: "5秒完播率"
+        activeUsers: "5秒完播率",
+        designGallery: "设计稿展示",
+        designCount: "页面截图",
+        designAlt: "网站设计稿",
+        p2ResultsModules: "作品模块",
+        p2ResultsLanguages: "语言支持",
+        p2Analysis: {
+          sectionTitle: "网站设计分析",
+          strategy: {
+            title: "战略与定位",
+            body: "cooperliang.top 是我作为独立设计师与视觉开发者的个人品牌阵地。网站以「为需求而创造」为核心主张，将品牌视觉、UI/UX、摄影与视频剪辑四类能力整合在同一叙事框架中，让访客在单次浏览中建立完整的专业认知。",
+            body2: "我选择静态站点架构与 GitHub Pages 部署，在保证访问速度与稳定性的同时，把维护成本压到最低，把精力留给内容迭代与视觉打磨。中英双语切换则让作品叙事同时服务本土合作方与海外潜在客户。",
+            points: [
+              "个人品牌一站式展示：能力、作品、叙事、联系入口同屏可达",
+              "价值主张清晰：美学与功能并重，强调可落地的创意输出",
+              "多媒介作品矩阵：平面、界面、影像、剪辑形成互补证据链",
+              "轻量发布策略：设计—开发—部署闭环，便于持续更新"
+            ]
+          },
+          visual: {
+            title: "视觉语言与美学表现",
+            body: "整体视觉延续 indigo 玻璃拟态语言：半透明面板、柔和描边与背景渐变 blob 共同构成「流动中的秩序感」。侧栏导航与内容卡片共享同一套圆角与层级规则，让全站像一套可扩展的设计系统，而非零散页面拼接。",
+            body2: "排版以 Inter 为主，标题采用紧凑字距与大字号对比；强调信息则通过 fuchsia→indigo→cyan 渐变文字与 accent 色卡片区分作品品类。背景三层 blob（indigo / cyan / rose）在滚动中缓慢位移，为界面注入呼吸感而不干扰阅读。",
+            points: [
+              "玻璃拟态组件：glass 面板 + 低对比 border-white/10",
+              "渐变 blob 背景：ScrollBlobs 三层结构营造空间深度",
+              "大圆角容器：28–40px 统一曲率，柔和且现代",
+              "品类 accent 色：各作品卡片用独特色相建立视觉索引"
+            ]
+          },
+          technical: {
+            title: "技术实现与可访问性",
+            body: "站点基于 Next.js 15 与 React 19 构建，输出为静态页面以适配 GitHub Pages。动效层采用 GSAP ScrollTrigger 处理滚动入场与图集 stagger，导航与布局过渡交由 Framer Motion 管理，在表现力与包体之间取得平衡。",
+            body2: "我实现了 useMotionTier 三档动效策略（full / reduced / minimal），并尊重 prefers-reduced-motion，确保低动效偏好用户仍能获得完整信息。图片采用视口懒加载，布局在 sm / lg / xl 断点间平滑重排。后续可优化项包括：站点 metadata 个性化与 html lang 随语言切换。",
+            points: [
+              "静态导出 + CI 自动部署，发布流程可复现",
+              "动效分档：重动效、轻动效、极简静态三模式",
+              "组件化图库：灯箱预览、懒加载与响应式网格",
+              "可访问性基线：语义标题、键盘可操作灯箱、对比度可控"
+            ]
+          },
+          emotional: {
+            title: "情感化设计与品牌共鸣",
+            body: "首页通过 BlurText 标题揭示、CountUp 数据动效与 Magnet 按钮磁吸，在首屏建立「精致且有趣」的第一印象。滚动驱动的 blob 视差与页面过渡则让浏览过程像一次连续的体验旅程，而非冷冰冰的作品列表。",
+            body2: "关于页融入极限运动与自然探索的个人叙事，配合哲学引言区块，把「设计师」还原为有温度、有故事的创作者。工具卡 GsapGlassHover 在 full 档位提供轻微 tilt 与光斑反馈，在 reduced/minimal 档自动降级为静态样式，保证表达力不牺牲可读性。",
+            points: [
+              "首屏微交互：吸引注意但不遮挡核心信息",
+              "叙事型关于页：专业能力与个人气质双线并行",
+              "滚动节奏：区块 stagger 入场引导阅读顺序",
+              "克制原则：动效为信息 hierarchy 服务，而非炫技"
+            ]
+          }
+        }
       }
     },
     contact: {
@@ -276,7 +328,59 @@ export const translations = {
         solutionText: "We proposed a visual framework based on dynamic interaction principles, combining motion blur and translucent layering to create a clearer and more rhythmic interface experience. The approach balanced expressive style with everyday usability.",
         results: "Results",
         userEngagement: "Plays Across Platforms",
-        activeUsers: "5s Completion Rate"
+        activeUsers: "5s Completion Rate",
+        designGallery: "Design Showcase",
+        designCount: "Screenshots",
+        designAlt: "Website design",
+        p2ResultsModules: "Work Modules",
+        p2ResultsLanguages: "Languages",
+        p2Analysis: {
+          sectionTitle: "Website Design Analysis",
+          strategy: {
+            title: "Strategy & Purpose",
+            body: "cooperliang.top is my personal brand home as an independent designer and visual developer. Built around the promise \"Where Aesthetics Meet Function,\" it unifies brand identity, UI/UX, photography, and video editing into one narrative so visitors can form a complete picture of my practice in a single session.",
+            body2: "I chose a static site architecture deployed on GitHub Pages for speed, stability, and low maintenance—freeing time for content and visual iteration. Bilingual zh/en switching serves both local collaborators and international prospects.",
+            points: [
+              "One-stop personal brand: skills, work, story, and contact in one flow",
+              "Clear value proposition: creativity that ships, not just concepts",
+              "Multi-medium portfolio matrix: graphic, UI, photo, and video as proof",
+              "Lightweight release loop: design → build → deploy for continuous updates"
+            ]
+          },
+          visual: {
+            title: "Visual System & Aesthetics",
+            body: "The visual language follows an indigo glassmorphism system: translucent panels, soft borders, and pastel gradient blobs create a sense of flow within structure. Sidebar navigation and content cards share the same corner radius and layering rules, making the site feel like an extensible design system rather than disconnected pages.",
+            body2: "Typography centers on Inter with tight tracking on headlines; emphasis uses fuchsia→indigo→cyan gradient text and per-category accent colors on project cards. Three background blobs (indigo / cyan / rose) drift on scroll, adding depth without hurting readability.",
+            points: [
+              "Glass components: frosted panels + low-contrast border-white/10",
+              "Gradient blob backdrop: ScrollBlobs three-layer depth",
+              "Large-radius containers: 28–40px consistent curvature",
+              "Category accent colors: unique hues per work type for quick scanning"
+            ]
+          },
+          technical: {
+            title: "Technical Execution & Accessibility",
+            body: "The site is built with Next.js 15 and React 19, exported as static pages for GitHub Pages. GSAP ScrollTrigger handles scroll reveals and gallery staggers; Framer Motion covers navigation and layout transitions, balancing expressiveness and bundle size.",
+            body2: "A useMotionTier system (full / reduced / minimal) respects prefers-reduced-motion so low-motion users still get full content. Images lazy-load in view; layouts reflow across sm / lg / xl breakpoints. Future improvements: personalized site metadata and html lang synced to locale.",
+            points: [
+              "Static export + CI deploy for reproducible releases",
+              "Motion tiers: full, reduced, and minimal static modes",
+              "Componentized galleries: lightbox, lazy load, responsive grids",
+              "Accessibility baseline: semantic headings, keyboard lightbox, readable contrast"
+            ]
+          },
+          emotional: {
+            title: "Emotional Design & Delight",
+            body: "The homepage uses BlurText title reveals, CountUp stats, and Magnet button hover to set a polished yet playful first impression. Scroll-driven blob parallax and page transitions turn browsing into a continuous journey—not a cold project list.",
+            body2: "The about page weaves in personal narrative from extreme sports and nature exploration, paired with a philosophy quote block, presenting the designer as a human storyteller. GsapGlassHover on tool cards adds subtle tilt and spotlight in full tier, degrading gracefully in reduced/minimal modes.",
+            points: [
+              "Hero micro-interactions: attention-grabbing without blocking content",
+              "Narrative about page: craft and personality in parallel",
+              "Scroll rhythm: staggered section reveals guide reading order",
+              "Restraint principle: motion serves hierarchy, not spectacle"
+            ]
+          }
+        }
       }
     },
     contact: {

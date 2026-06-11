@@ -29,7 +29,15 @@ export default async function ProjectDetailPage({
   const { id } = await params;
   const photographyGroups = id === "p3" ? await getPhotographyGroups() : [];
   const posters = id === "p1" ? await getPosters() : [];
-  return <ProjectDetailClient id={id} photographyGroups={photographyGroups} posters={posters} />;
+  const designScreenshots = id === "p2" ? await getDesignScreenshots() : [];
+  return (
+    <ProjectDetailClient
+      id={id}
+      photographyGroups={photographyGroups}
+      posters={posters}
+      designScreenshots={designScreenshots}
+    />
+  );
 }
 
 async function getPhotographyGroups(): Promise<PhotographyGroup[]> {
@@ -171,6 +179,33 @@ async function getPhotographyGroups(): Promise<PhotographyGroup[]> {
         if (b.latestTimestamp !== a.latestTimestamp) return b.latestTimestamp - a.latestTimestamp;
         return a.location.localeCompare(b.location, "en");
       });
+  } catch {
+    return [];
+  }
+}
+
+async function getDesignScreenshots(): Promise<string[]> {
+  const screenshotsDir = path.join(process.cwd(), "public", "photos", "portfolio", "p2");
+  const isImage = (name: string) => /\.(jpg|jpeg|png|webp|avif)$/i.test(name);
+  const joinWebPath = (fileName: string) =>
+    `/photos/portfolio/p2/${encodeURIComponent(fileName)}`;
+  const preferredOrder = [
+    "home-hero.png",
+    "portfolio-grid.png",
+    "about-page.png",
+    "contact-page.png",
+  ];
+
+  try {
+    const entries = await fs.readdir(screenshotsDir, { withFileTypes: true });
+    const images = entries
+      .filter((entry) => entry.isFile() && isImage(entry.name))
+      .map((entry) => entry.name);
+    const ordered = [
+      ...preferredOrder.filter((name) => images.includes(name)),
+      ...images.filter((name) => !preferredOrder.includes(name)).sort((a, b) => a.localeCompare(b, "en")),
+    ];
+    return ordered.map(joinWebPath);
   } catch {
     return [];
   }

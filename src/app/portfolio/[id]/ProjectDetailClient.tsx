@@ -11,7 +11,7 @@ import LazyInViewImage from "@/components/LazyInViewImage";
 import GalleryLightbox from "@/components/GalleryLightbox";
 import MasonryGallery, { MasonryItem } from "@/components/MasonryGallery";
 import { mapDisplaySources, thumbSrc } from "@/lib/galleryImageUrl";
-import ConstructionHero from "@/components/motion/ConstructionHero";
+import SiteDesignAnalysis from "@/components/portfolio/SiteDesignAnalysis";
 import GsapGalleryStagger from "@/components/motion/GsapGalleryStagger";
 import useMotionTier from "@/hooks/useMotionTier";
 import { heroMaskVariants } from "@/lib/motion";
@@ -43,9 +43,15 @@ type Props = {
     photos: string[];
   }>;
   posters?: string[];
+  designScreenshots?: string[];
 };
 
-export default function ProjectDetailClient({ id, photographyGroups = [], posters = [] }: Props) {
+export default function ProjectDetailClient({
+  id,
+  photographyGroups = [],
+  posters = [],
+  designScreenshots = [],
+}: Props) {
   const { t, mounted } = useTranslation();
   const tier = useMotionTier();
   const [lightboxPhotos, setLightboxPhotos] = useState<string[] | null>(null);
@@ -55,6 +61,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
   const [activeVideoIndex, setActiveVideoIndex] = useState<number | null>(null);
   const shuffledPosters = useMemo(() => stableShufflePosters(posters), [posters]);
   const shuffledPosterDisplay = useMemo(() => mapDisplaySources(shuffledPosters), [shuffledPosters]);
+  const designDisplay = useMemo(() => mapDisplaySources(designScreenshots), [designScreenshots]);
 
   const projectKey = id as keyof typeof t.portfolio.projects;
   const project = t.portfolio.projects[projectKey];
@@ -100,6 +107,9 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
   const hasVideoPreview = Boolean(videoByProject[id]?.length);
   const hasPhotographyGallery = id === "p3" && photographyGroups.length > 0;
   const hasPosterGallery = id === "p1" && posters.length > 0;
+  const hasDesignGallery = id === "p2" && designScreenshots.length > 0;
+  const designHero = designScreenshots[0];
+  const designThumbs = designScreenshots.slice(1);
   const photographyByYear = photographyGroups.reduce<Record<string, typeof photographyGroups>>((acc, group) => {
     if (!acc[group.year]) acc[group.year] = [];
     acc[group.year].push(group);
@@ -124,7 +134,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0, transition: { duration: 0.6 } },
   };
-  const resultsSection = (
+  const videoResultsSection = (
     <section className="text-center max-w-3xl mx-auto">
       <h2 className="text-3xl font-bold mb-8 flex items-center justify-center space-x-3">
         <CheckCircle className="w-6 h-6 text-indigo-500" />
@@ -143,35 +153,26 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
     </section>
   );
 
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 },
-    },
-  };
+  const siteResultsSection = (
+    <section className="text-center max-w-3xl mx-auto">
+      <h2 className="text-3xl font-bold mb-8 flex items-center justify-center space-x-3">
+        <CheckCircle className="w-6 h-6 text-indigo-500" />
+        <span>{t.portfolio.projectDetail.results}</span>
+      </h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
+        <div className="p-8 rounded-3xl bg-indigo-500/5 border border-indigo-500/10 transition-all hover:bg-indigo-500/10">
+          <span className="text-4xl font-bold text-indigo-500 mb-2 block">4</span>
+          <span className="text-sm text-foreground/40 font-medium">{t.portfolio.projectDetail.p2ResultsModules}</span>
+        </div>
+        <div className="p-8 rounded-3xl bg-purple-500/5 border border-purple-500/10 transition-all hover:bg-purple-500/10">
+          <span className="text-4xl font-bold text-purple-500 mb-2 block">2</span>
+          <span className="text-sm text-foreground/40 font-medium">{t.portfolio.projectDetail.p2ResultsLanguages}</span>
+        </div>
+      </div>
+    </section>
+  );
 
   const heroMask = heroMaskVariants(tier);
-
-  if (id === "p2") {
-    return (
-      <motion.div variants={container} initial="hidden" animate="show" className="max-w-5xl pb-8">
-        <motion.div variants={item} className="mb-12">
-          <Link
-            href="/portfolio"
-            className="inline-flex items-center space-x-2 text-foreground/60 hover:text-indigo-500 transition-colors group"
-          >
-            <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
-            <span className="font-medium">{t.portfolio.projectDetail.back}</span>
-          </Link>
-        </motion.div>
-
-        <motion.div variants={item}>
-          <ConstructionHero title="正在施工中" subtitle="敬请期待" />
-        </motion.div>
-      </motion.div>
-    );
-  }
 
   if (!mounted) {
     return (
@@ -234,7 +235,49 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
         </div>
       </div>
 
-      {!hasVideoPreview && (
+      {hasDesignGallery && designHero && (
+        <section className="gallery-section mb-16 lg:mb-24">
+          <div className="flex items-center justify-between gap-4 mb-5">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t.portfolio.projectDetail.designGallery}</h2>
+            <span className="text-base sm:text-lg text-foreground/55 font-medium">
+              {t.portfolio.projectDetail.designCount} {designScreenshots.length}
+            </span>
+          </div>
+          <div className="aspect-[4/3] sm:aspect-[21/9] rounded-[28px] sm:rounded-[40px] overflow-hidden glass border-white/10 mb-6 sm:mb-8">
+            <LazyInViewImage
+              src={thumbSrc(designHero)}
+              fallbackSrc={designHero}
+              alt={`${t.portfolio.projectDetail.designAlt} 1`}
+              variant="cover"
+              className="h-full w-full cursor-pointer transition-transform duration-500 sm:hover:scale-[1.01]"
+              onClick={() => openLightbox(designDisplay, 0, designScreenshots)}
+            />
+          </div>
+          {designThumbs.length > 0 && (
+            <GsapGalleryStagger>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                {designThumbs.map((shot, index) => (
+                  <div
+                    key={shot}
+                    className="gallery-thumb group aspect-[16/10] rounded-2xl sm:rounded-3xl overflow-hidden glass border-white/10 shadow-[0_2px_16px_rgba(15,23,42,0.08)]"
+                  >
+                    <LazyInViewImage
+                      src={thumbSrc(shot)}
+                      fallbackSrc={shot}
+                      alt={`${t.portfolio.projectDetail.designAlt} ${index + 2}`}
+                      variant="cover"
+                      className="h-full w-full transition-transform duration-500 sm:group-hover:scale-[1.02]"
+                      onClick={() => openLightbox(designDisplay, index + 1, designScreenshots)}
+                    />
+                  </div>
+                ))}
+              </div>
+            </GsapGalleryStagger>
+          )}
+        </section>
+      )}
+
+      {!hasVideoPreview && !hasDesignGallery && (
         <div className="aspect-[4/3] sm:aspect-[21/9] rounded-[28px] sm:rounded-[40px] overflow-hidden glass border-white/10 mb-12 sm:mb-16">
           <div
             className="w-full h-full"
@@ -350,7 +393,7 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
         <>
         {id === "p4" && (
           <div className="mb-12 lg:mb-16">
-            {resultsSection}
+            {videoResultsSection}
           </div>
         )}
         <section className="gallery-section mb-16 lg:mb-24">
@@ -372,11 +415,15 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
         </>
       )}
 
-      <div className="space-y-16 lg:space-y-24">
-        {id === "p2" && (
-          resultsSection
-        )}
-      </div>
+      {id === "p2" && (
+        <SiteDesignAnalysis analysis={t.portfolio.projectDetail.p2Analysis} />
+      )}
+
+      {id === "p2" && (
+        <div className="space-y-16 lg:space-y-24">
+          {siteResultsSection}
+        </div>
+      )}
 
       {activeVideoIndex !== null && videoByProject[id] && (
         <VideoPreviewLightbox
@@ -402,8 +449,20 @@ export default function ProjectDetailClient({ id, photographyGroups = [], poster
           onIndexChange={setLightboxIndex}
           backLabel={t.portfolio.projectDetail.lightboxBack}
           closeLabel={t.portfolio.projectDetail.lightboxClose}
-          altPrefix={id === "p1" ? t.portfolio.projectDetail.posterAlt : t.portfolio.projectDetail.photoAlt}
-          galleryLabel={id === "p1" ? t.portfolio.projectDetail.posterGallery : t.portfolio.projectDetail.photoGallery}
+          altPrefix={
+            id === "p1"
+              ? t.portfolio.projectDetail.posterAlt
+              : id === "p2"
+                ? t.portfolio.projectDetail.designAlt
+                : t.portfolio.projectDetail.photoAlt
+          }
+          galleryLabel={
+            id === "p1"
+              ? t.portfolio.projectDetail.posterGallery
+              : id === "p2"
+                ? t.portfolio.projectDetail.designGallery
+                : t.portfolio.projectDetail.photoGallery
+          }
         />
       )}
     </div>
