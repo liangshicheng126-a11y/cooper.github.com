@@ -484,27 +484,27 @@
     "height": 3712
   },
   "/photos/portfolio/p2/about-page.png": {
-    "width": 3840,
-    "height": 1800
+    "width": 1386,
+    "height": 2400
   },
   "/photos/portfolio/p2/contact-page.png": {
-    "width": 3840,
-    "height": 1102
+    "width": 1612,
+    "height": 2400
   },
   "/photos/portfolio/p2/home-hero.png": {
-    "width": 1208,
-    "height": 1620
+    "width": 2560,
+    "height": 1403
   },
   "/photos/portfolio/p2/home-services.png": {
-    "width": 1208,
-    "height": 562
+    "width": 2560,
+    "height": 2218
   },
   "/photos/portfolio/p2/p2-detail.png": {
-    "width": 3840,
-    "height": 1800
+    "width": 2560,
+    "height": 1577
   },
   "/photos/portfolio/p2/portfolio-grid.png": {
-    "width": 3840,
-    "height": 1800
+    "width": 1788,
+    "height": 2400
   }
 }
