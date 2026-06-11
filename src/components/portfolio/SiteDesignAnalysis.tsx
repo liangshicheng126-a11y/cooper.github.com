@@ -1,7 +1,8 @@
 "use client";
 
 import { Target, Palette, Code2, Sparkles } from "lucide-react";
-import GsapScrollReveal from "@/components/motion/GsapScrollReveal";
+import HomeScrollStack from "@/components/motion/HomeScrollStack";
+import ScrollDirectionSection from "@/components/ScrollDirectionSection";
 import type { TranslationType } from "@/locales/translations";
 
 type AnalysisDimension = {
@@ -33,13 +34,13 @@ export default function SiteDesignAnalysis({ analysis }: SiteDesignAnalysisProps
       <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-10 sm:mb-12">
         {analysis.sectionTitle}
       </h2>
-      <div className="space-y-8 sm:space-y-10 lg:space-y-12">
+      <HomeScrollStack className="relative z-0">
         {dimensions.map(({ key, icon: Icon }) => {
           const dim = analysis[key] as AnalysisDimension;
           return (
-            <GsapScrollReveal
+            <ScrollDirectionSection
               key={key}
-              className="glass border-white/10 rounded-[28px] sm:rounded-[40px] p-6 sm:p-10"
+              className="glass border-white/10 rounded-[28px] sm:rounded-[40px] p-6 sm:p-10 section-block"
             >
               <div className="flex items-center gap-3 mb-5 sm:mb-6">
                 <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/15 border border-indigo-400/25">
@@ -62,10 +63,10 @@ export default function SiteDesignAnalysis({ analysis }: SiteDesignAnalysisProps
                   </li>
                 ))}
               </ul>
-            </GsapScrollReveal>
+            </ScrollDirectionSection>
           );
         })}
-      </div>
+      </HomeScrollStack>
     </section>
   );
 }

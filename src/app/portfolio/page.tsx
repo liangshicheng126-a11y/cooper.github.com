@@ -31,7 +31,7 @@ export default function Portfolio() {
       id: "p2",
       title: t.portfolio.projects.p2.title,
       category: t.portfolio.categories.uiux,
-      image: "/photos/portfolio/p2/home-hero.png",
+      image: "https://images.unsplash.com/photo-1545235617-9465d2a55698?w=1200&q=80",
       accent: "#a855f7",
     },
     {

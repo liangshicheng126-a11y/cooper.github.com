@@ -153,25 +153,6 @@ export default function ProjectDetailClient({
     </section>
   );
 
-  const siteResultsSection = (
-    <section className="text-center max-w-3xl mx-auto">
-      <h2 className="text-3xl font-bold mb-8 flex items-center justify-center space-x-3">
-        <CheckCircle className="w-6 h-6 text-indigo-500" />
-        <span>{t.portfolio.projectDetail.results}</span>
-      </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
-        <div className="p-8 rounded-3xl bg-indigo-500/5 border border-indigo-500/10 transition-all hover:bg-indigo-500/10">
-          <span className="text-4xl font-bold text-indigo-500 mb-2 block">4</span>
-          <span className="text-sm text-foreground/40 font-medium">{t.portfolio.projectDetail.p2ResultsModules}</span>
-        </div>
-        <div className="p-8 rounded-3xl bg-purple-500/5 border border-purple-500/10 transition-all hover:bg-purple-500/10">
-          <span className="text-4xl font-bold text-purple-500 mb-2 block">2</span>
-          <span className="text-sm text-foreground/40 font-medium">{t.portfolio.projectDetail.p2ResultsLanguages}</span>
-        </div>
-      </div>
-    </section>
-  );
-
   const heroMask = heroMaskVariants(tier);
 
   if (!mounted) {
@@ -417,12 +398,6 @@ export default function ProjectDetailClient({
 
       {id === "p2" && (
         <SiteDesignAnalysis analysis={t.portfolio.projectDetail.p2Analysis} />
-      )}
-
-      {id === "p2" && (
-        <div className="space-y-16 lg:space-y-24">
-          {siteResultsSection}
-        </div>
       )}
 
       {activeVideoIndex !== null && videoByProject[id] && (
