@@ -26,15 +26,9 @@ const EXPORTS = [
   { file: "home-hero.png", nodeId: "2:623", crop: { top: 0, height: VIEWPORT_HEIGHT } },
   { file: "home-services.png", nodeId: "2:623", crop: { top: 529, height: VIEWPORT_HEIGHT } },
   { file: "portfolio-grid.png", nodeId: "2:1925", crop: { top: 0, height: VIEWPORT_HEIGHT } },
-  {
-    file: "p2-detail.png",
-    fallback: { path: "/portfolio/p2", waitMs: 2500 },
-  },
   { file: "about-page.png", nodeId: "2:1434", crop: { top: 0, height: VIEWPORT_HEIGHT } },
-  {
-    file: "contact-page.png",
-    fallback: { path: "/contact", waitMs: 2500 },
-  },
+  { file: "p2-detail.png", nodeId: "2:2417", crop: { top: 0, height: VIEWPORT_HEIGHT } },
+  { file: "contact-page.png", nodeId: "2:2417", crop: { top: 529, height: VIEWPORT_HEIGHT } },
 ];
 
 async function readFigmaToken() {
@@ -170,7 +164,17 @@ async function main() {
   console.log("\nDone. Run npm run optimize-images to refresh WebP variants.");
 }
 
-main().catch((err) => {
+async function runPlaywrightFallback() {
+  console.warn("\nFigma REST API unavailable — falling back to Playwright capture…\n");
+  const { execSync } = await import("node:child_process");
+  execSync("node scripts/capture-figma-p2-design.mjs", { cwd: ROOT, stdio: "inherit" });
+}
+
+main().catch(async (err) => {
+  if (/rate limit/i.test(String(err))) {
+    await runPlaywrightFallback();
+    return;
+  }
   console.error(err);
   process.exit(1);
 });
