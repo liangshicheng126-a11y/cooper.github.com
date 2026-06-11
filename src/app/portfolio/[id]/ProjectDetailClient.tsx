@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useTranslation } from "@/locales/LanguageProvider";
 import { ArrowLeft, Calendar, User, Layout, CheckCircle } from "lucide-react";
 import VideoPreviewGrid from "@/components/VideoPreviewGrid";
-import VideoPreviewLightbox, { type VideoPreviewItem } from "@/components/VideoPreviewLightbox";
+import type { VideoPreviewItem } from "@/components/VideoPreviewLightbox";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import LazyInViewImage from "@/components/LazyInViewImage";
@@ -57,8 +57,6 @@ export default function ProjectDetailClient({
   const [lightboxPhotos, setLightboxPhotos] = useState<string[] | null>(null);
   const [lightboxFallbacks, setLightboxFallbacks] = useState<string[] | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState(0);
-  const [videoLoadErrors, setVideoLoadErrors] = useState<Record<string, boolean>>({});
-  const [activeVideoIndex, setActiveVideoIndex] = useState<number | null>(null);
   const shuffledPosters = useMemo(() => stableShufflePosters(posters), [posters]);
   const shuffledPosterDisplay = useMemo(() => mapDisplaySources(shuffledPosters), [shuffledPosters]);
   const designDisplay = useMemo(() => mapDisplaySources(designScreenshots), [designScreenshots]);
@@ -100,9 +98,6 @@ export default function ProjectDetailClient({
         poster: "/videos/thumbnails/color-reboot-edit.jpg",
       },
     ],
-  };
-  const markVideoLoadError = (videoKey: string) => {
-    setVideoLoadErrors((prev) => ({ ...prev, [videoKey]: true }));
   };
   const hasVideoPreview = Boolean(videoByProject[id]?.length);
   const hasPhotographyGallery = id === "p3" && photographyGroups.length > 0;
@@ -389,7 +384,6 @@ export default function ProjectDetailClient({
               videos={videoByProject[id]!}
               watchVideoLabel={t.portfolio.projectDetail.watchVideo}
               openOriginalLabel={t.portfolio.projectDetail.openOriginalVideo}
-              onOpenPreview={setActiveVideoIndex}
             />
           </GsapGalleryStagger>
         </section>
@@ -398,21 +392,6 @@ export default function ProjectDetailClient({
 
       {id === "p2" && (
         <SiteDesignAnalysis analysis={t.portfolio.projectDetail.p2Analysis} />
-      )}
-
-      {activeVideoIndex !== null && videoByProject[id] && (
-        <VideoPreviewLightbox
-          videos={videoByProject[id]!}
-          index={activeVideoIndex}
-          onClose={() => setActiveVideoIndex(null)}
-          onIndexChange={setActiveVideoIndex}
-          backLabel={t.portfolio.projectDetail.lightboxBack}
-          closeLabel={t.portfolio.projectDetail.lightboxClose}
-          openOriginalLabel={t.portfolio.projectDetail.openOriginalVideo}
-          galleryLabel={t.portfolio.projectDetail.videoPreview}
-          videoLoadErrors={videoLoadErrors}
-          onVideoError={markVideoLoadError}
-        />
       )}
 
       {lightboxPhotos && (

@@ -7,33 +7,28 @@ type Props = {
   videos: VideoPreviewItem[];
   watchVideoLabel: string;
   openOriginalLabel: string;
-  onOpenPreview: (index: number) => void;
 };
 
 function thumbnailFor(video: VideoPreviewItem) {
   return video.poster;
 }
 
-export default function VideoPreviewGrid({
-  videos,
-  watchVideoLabel,
-  openOriginalLabel,
-  onOpenPreview,
-}: Props) {
+export default function VideoPreviewGrid({ videos, watchVideoLabel, openOriginalLabel }: Props) {
   return (
     <div className="video-preview-grid grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-3">
       {videos.map((video, index) => {
         const thumb = thumbnailFor(video);
-        const originalHref = video.fallbackHref || video.href;
+        const platformHref = video.href || video.fallbackHref;
 
         return (
           <article
-            key={video.href}
+            key={platformHref}
             className="gallery-thumb video-preview-card group flex flex-col"
           >
-            <button
-              type="button"
-              onClick={() => onOpenPreview(index)}
+            <a
+              href={platformHref}
+              target="_blank"
+              rel="noopener noreferrer"
               className="relative aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-black/40 text-left shadow-[0_2px_16px_rgba(15,23,42,0.08)] transition-shadow duration-300 sm:hover:shadow-[0_12px_32px_rgba(15,23,42,0.14)]"
               aria-label={`${watchVideoLabel} ${index + 1}: ${video.title}`}
             >
@@ -56,25 +51,21 @@ export default function VideoPreviewGrid({
                   <Play className="h-5 w-5 fill-white translate-x-0.5" />
                 </span>
               </span>
-            </button>
+            </a>
 
             <div className="mt-3 flex min-w-0 flex-col gap-2">
-              <button
-                type="button"
-                onClick={() => onOpenPreview(index)}
+              <a
+                href={platformHref}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="line-clamp-2 text-left text-sm font-semibold leading-snug text-foreground transition-colors hover:text-indigo-500 sm:text-base"
               >
                 {video.title}
-              </button>
-              <a
-                href={originalHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex w-fit items-center gap-1.5 text-xs font-medium text-foreground/55 transition-colors hover:text-indigo-500 sm:text-sm"
-              >
+              </a>
+              <span className="inline-flex w-fit items-center gap-1.5 text-xs font-medium text-foreground/55 sm:text-sm">
                 <span>{openOriginalLabel}</span>
                 <ExternalLink className="h-3.5 w-3.5 shrink-0" />
-              </a>
+              </span>
             </div>
           </article>
         );
