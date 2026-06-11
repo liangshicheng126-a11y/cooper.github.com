@@ -113,7 +113,8 @@ export default function About() {
             <GsapScrollBatch
               className="flex-1 flex flex-col justify-between gap-4 sm:gap-5 min-h-0"
               itemSelector="[data-scroll-batch-item]"
-              stagger={0.06}
+              stagger={0.16}
+              duration={1.45}
               y={20}
               entrance="flip"
             >
@@ -166,7 +167,8 @@ export default function About() {
             <GsapScrollBatch
               className="flex-1 flex flex-col justify-between gap-4 sm:gap-5 min-h-0"
               itemSelector="[data-scroll-batch-item]"
-              stagger={0.06}
+              stagger={0.16}
+              duration={1.45}
               y={20}
               entrance="flip"
             >

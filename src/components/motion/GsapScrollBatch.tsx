@@ -29,6 +29,8 @@ type GsapScrollBatchProps = {
   itemSelector?: string;
   stagger?: number;
   y?: number;
+  /** Per-item tween duration (flip / portfolio entrances) */
+  duration?: number;
   /** portfolio: alternate slide + scale for project cards */
   entrance?: EntranceVariant;
   /** Play entrance on mount instead of waiting for scroll into view */
@@ -41,6 +43,7 @@ export default function GsapScrollBatch({
   itemSelector = "[data-scroll-batch-item], .gsap-batch-item",
   stagger = STAGGER.cards,
   y = 28,
+  duration,
   entrance = "default",
   playOnMount = false,
 }: GsapScrollBatchProps) {
@@ -118,6 +121,8 @@ export default function GsapScrollBatch({
         }
 
         if (entrance === "flip") {
+          const flipDuration = duration ?? 0.92;
+          const flipStagger = stagger || 0.1;
           batch.forEach((el, i) => {
             const idx = Number((el as HTMLElement).dataset.batchIndex ?? i);
             gsap.fromTo(
@@ -138,8 +143,8 @@ export default function GsapScrollBatch({
                 scale: 1,
                 rotateX: 0,
                 rotateY: 0,
-                duration: 0.92,
-                delay: idx * (stagger || 0.1),
+                duration: flipDuration,
+                delay: idx * flipStagger,
                 ease: "power3.out",
                 overwrite: "auto",
                 onComplete: () => finishReveal(el),
@@ -177,7 +182,7 @@ export default function GsapScrollBatch({
 
       requestAnimationFrame(() => ScrollTrigger.refresh());
     },
-    { scope: ref, dependencies: [useGsap, itemSelector, stagger, y, entrance, playOnMount] }
+    { scope: ref, dependencies: [useGsap, itemSelector, stagger, y, duration, entrance, playOnMount] }
   );
 
   return (
