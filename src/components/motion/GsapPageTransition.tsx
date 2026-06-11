@@ -8,6 +8,9 @@ import {
 } from "react";
 import { usePathname } from "next/navigation";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 import useMotionTier from "@/hooks/useMotionTier";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import { getRouteTransitionDirection } from "@/lib/routeTransition";
@@ -61,6 +64,7 @@ export default function GsapPageTransition({ children }: GsapPageTransitionProps
             gsap.set(el, { clearProps: "transform" });
             el.style.willChange = "auto";
             animatingRef.current = false;
+            requestAnimationFrame(() => ScrollTrigger.refresh());
           },
         }
       );

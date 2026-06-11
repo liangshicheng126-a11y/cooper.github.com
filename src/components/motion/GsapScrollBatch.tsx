@@ -94,6 +94,19 @@ export default function GsapScrollBatch({
 
       if (!pending.length) return;
 
+      const revealed = new Set<Element>();
+      const start =
+        entrance === "portfolio" ? "top 92%" : entrance === "flip" ? "top 88%" : "top 90%";
+      const triggerRatio = (() => {
+        const match = start.match(/top\s+(\d+(?:\.\d+)?)%/);
+        return match ? Number(match[1]) / 100 : 0.9;
+      })();
+
+      const isPastStart = (el: Element) => {
+        const rect = el.getBoundingClientRect();
+        return rect.top <= window.innerHeight * triggerRatio && rect.bottom > 0;
+      };
+
       const reveal = (batch: Element[]) => {
         batch.forEach((el) => markRevealing(el, true));
 
@@ -169,18 +182,50 @@ export default function GsapScrollBatch({
         );
       };
 
+      const revealOnce = (batch: Element[]) => {
+        const fresh = batch.filter((el) => !revealed.has(el));
+        if (!fresh.length) return;
+        fresh.forEach((el) => revealed.add(el));
+        reveal(fresh);
+      };
+
+      /** Catch items already in the trigger zone after layout / page transition settles. */
+      const syncVisibleEntrances = () => {
+        ScrollTrigger.refresh();
+        const due = pending.filter((el) => !revealed.has(el) && isPastStart(el));
+        if (due.length) revealOnce(due);
+      };
+
       if (playOnMount) {
-        requestAnimationFrame(() => reveal(pending));
+        requestAnimationFrame(() => revealOnce(pending));
         return;
       }
 
       ScrollTrigger.batch(pending, {
-        start: entrance === "portfolio" ? "top 92%" : entrance === "flip" ? "top 94%" : "top 90%",
-        onEnter: reveal,
+        start,
+        onEnter: revealOnce,
         once: true,
       });
 
-      requestAnimationFrame(() => ScrollTrigger.refresh());
+      const settleDelay =
+        entrance === "flip" || entrance === "portfolio" ? 0.52 : 0.12;
+
+      if (entrance === "flip" || entrance === "portfolio") {
+        const settleTimer = gsap.delayedCall(settleDelay, syncVisibleEntrances);
+        return () => {
+          settleTimer.kill();
+        };
+      }
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(syncVisibleEntrances);
+      });
+
+      const settleTimer = gsap.delayedCall(settleDelay, syncVisibleEntrances);
+
+      return () => {
+        settleTimer.kill();
+      };
     },
     { scope: ref, dependencies: [useGsap, itemSelector, stagger, y, duration, entrance, playOnMount] }
   );
