@@ -484,24 +484,36 @@
     "height": 3712
   },
   "/photos/portfolio/p2/about-page.png": {
-    "width": 1386,
+    "width": 1591,
     "height": 2400
   },
   "/photos/portfolio/p2/contact-page.png": {
-    "width": 1612,
+    "width": 1653,
+    "height": 2400
+  },
+  "/photos/portfolio/p2/design-icons.png": {
+    "width": 700,
+    "height": 2200
+  },
+  "/photos/portfolio/p2/design-modules-buttons.png": {
+    "width": 430,
+    "height": 2400
+  },
+  "/photos/portfolio/p2/design-modules-stats.png": {
+    "width": 467,
     "height": 2400
   },
   "/photos/portfolio/p2/home-hero.png": {
-    "width": 2560,
-    "height": 1403
+    "width": 1916,
+    "height": 820
   },
   "/photos/portfolio/p2/home-services.png": {
-    "width": 2560,
-    "height": 2218
+    "width": 1916,
+    "height": 1660
   },
   "/photos/portfolio/p2/p2-detail.png": {
-    "width": 2560,
-    "height": 1577
+    "width": 1916,
+    "height": 1050
   },
   "/photos/portfolio/p2/portfolio-grid.png": {
     "width": 1788,
