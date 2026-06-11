@@ -79,20 +79,8 @@ export default function GsapGlassHover({
 
   const preset = HOVER_PRESETS[variant];
   const capability = useMemo(() => getHoverCapability(tier), [tier]);
-
-  // Minimal tier: no transform/spotlight; keep a static accent border.
-  if (tier === "minimal") {
-    return (
-      <div
-        className={cn("relative cursor-default", className)}
-        style={{ borderColor: `${accent}55` }}
-      >
-        {children}
-      </div>
-    );
-  }
-
-  const interactive = gsapActive;
+  const isMinimal = tier === "minimal";
+  const interactive = !isMinimal && gsapActive;
   const tiltActive = interactive && capability.canTilt;
   const spotlightActive = interactive && capability.canSpotlight;
 
@@ -108,6 +96,7 @@ export default function GsapGlassHover({
 
   useGSAP(
     () => {
+      if (isMinimal) return;
       const root = rootRef.current;
       if (!root) return;
 
@@ -237,8 +226,19 @@ export default function GsapGlassHover({
         });
       }
     },
-    { scope: rootRef, dependencies: [interactive, tier, variant] }
+    { scope: rootRef, dependencies: [isMinimal, interactive, tier, variant] }
   );
+
+  if (isMinimal) {
+    return (
+      <div
+        className={cn("relative cursor-default", className)}
+        style={{ borderColor: `${accent}55` }}
+      >
+        {children}
+      </div>
+    );
+  }
 
   const applyHover = () => {
     if (!interactive) return;

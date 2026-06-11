@@ -30,7 +30,9 @@ export function getMotionTier(): MotionTier {
 }
 
 export default function useMotionTier(): MotionTier {
-  const [tier, setTier] = useState<MotionTier>("full");
+  const [tier, setTier] = useState<MotionTier>(() =>
+    typeof window !== "undefined" ? computeTier() : "full",
+  );
 
   useEffect(() => {
     const update = () => setTier(computeTier());

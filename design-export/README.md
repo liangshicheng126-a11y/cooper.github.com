@@ -3,16 +3,14 @@
 将线上站点以**参考画板 + 设计令牌**形式导入 Figma 文件  
 [cooper](https://www.figma.com/design/nKd47PkEOE3f2HgK62BAAZ/cooper)。
 
-## 免费版能还原到什么程度？
+## 两种导出方式
 
-| 层级 | 方式 | 还原度 |
-|------|------|--------|
-| 视觉参考 | 视口截图画板（Desktop 1440×900 / Mobile 390×844，首屏） | 高 |
-| 设计系统 | Color / Text Styles + Tokens 页色板 | 中高 |
-| 可编辑组件 | 需手动按截图重建 Auto Layout | 中 |
-| 动效 / GSAP / 玻璃模糊 | Figma 免费版仅近似（截图或静态模糊） | 低 |
+| 方式 | 可编辑？ | 说明 |
+|------|----------|------|
+| **Cooper Site Import 插件** | 否（截图参考） | `npm run export-figma` 生成 |
+| **html.to.design 插件** | **是** | 见 [FIGMA-EDITABLE-IMPORT.md](./FIGMA-EDITABLE-IMPORT.md) |
 
-动效、blob 背景、backdrop-filter 等无法 1:1 转为可编辑矢量，以截图参考 + 令牌为主。
+动效、blob、backdrop-filter 在 Figma 中只能近似为静态样式。
 
 ## 一键重新生成
 
