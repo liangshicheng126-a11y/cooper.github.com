@@ -20,6 +20,11 @@ Thumbs.db
 public/photos/**/_thumb/
 public/photos/**/_display/
 
+# Figma export artifacts (regenerate with npm run export-figma)
+design-export/screenshots/
+design-export/export-manifest.json
+design-export/figma-plugin/code.js
+
 # 小程序本地密钥（勿提交）
 activity-miniapp/miniprogram/utils/config.local.js
 activity-miniapp/backend/.env

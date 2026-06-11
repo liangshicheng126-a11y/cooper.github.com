@@ -1,0 +1,60 @@
+{
+  "meta": {
+    "site": "https://cooperliang.top",
+    "source": "X:/A/1",
+    "font": "Inter",
+    "layout": {
+      "sidebarWidth": 320,
+      "mainPaddingDesktop": { "x": 48, "top": 48, "right": 96 },
+      "mainPaddingMobile": { "x": 16, "top": 96 },
+      "breakpointXl": 1280
+    }
+  },
+  "colors": {
+    "background": { "hex": "#FFFFFF", "rgb": { "r": 1, "g": 1, "b": 1 } },
+    "foreground": { "hex": "#171717", "rgb": { "r": 0.09, "g": 0.09, "b": 0.09 } },
+    "indigo-500": { "hex": "#6366F1", "rgb": { "r": 0.388, "g": 0.4, "b": 0.945 } },
+    "indigo-600": { "hex": "#4F46E5", "rgb": { "r": 0.31, "g": 0.275, "b": 0.898 } },
+    "purple-500": { "hex": "#A855F7", "rgb": { "r": 0.659, "g": 0.333, "b": 0.969 } },
+    "blue-500": { "hex": "#3B82F6", "rgb": { "r": 0.231, "g": 0.51, "b": 0.965 } },
+    "teal-400": { "hex": "#2DD4BF", "rgb": { "r": 0.176, "g": 0.831, "b": 0.749 } },
+    "foreground-muted": { "hex": "#171717", "opacity": 0.6 },
+    "glass-fill": { "hex": "#FFFFFF", "opacity": 0.08 },
+    "glass-border": { "hex": "#FFFFFF", "opacity": 0.2 },
+    "blob-indigo-c1": { "hex": "#7B86FF" },
+    "blob-indigo-c2": { "hex": "#8B5CF6" },
+    "blob-cyan-c1": { "hex": "#53B8FF" },
+    "blob-rose-c1": { "hex": "#FB7185" }
+  },
+  "projectAccents": {
+    "p1": "#6366F1",
+    "p2": "#A855F7",
+    "p3": "#3B82F6",
+    "p4": "#2DD4BF"
+  },
+  "typography": {
+    "display-xl": { "size": 60, "weight": 700, "lineHeight": 1.1, "letterSpacing": -0.02 },
+    "display-lg": { "size": 48, "weight": 700, "lineHeight": 1.15, "letterSpacing": -0.02 },
+    "heading": { "size": 36, "weight": 700, "lineHeight": 1.2, "letterSpacing": -0.01 },
+    "body-lg": { "size": 20, "weight": 400, "lineHeight": 1.5 },
+    "body": { "size": 16, "weight": 400, "lineHeight": 1.5 },
+    "label": { "size": 11, "weight": 700, "letterSpacing": 0.08 }
+  },
+  "radius": {
+    "card": 24,
+    "button": 16,
+    "cta-section": 40,
+    "pill": 12
+  },
+  "effects": {
+    "glass-blur": 14,
+    "section-blur": 18,
+    "card-shadow": "0 8px 28px rgba(15, 23, 42, 0.06)"
+  },
+  "components": [
+    { "name": "Sidebar", "width": 320, "notes": "Fixed left, glass nav, gradient COOPER. logo" },
+    { "name": "ProjectCard", "height": { "mobile": 320, "tablet": 380, "desktop": 450 }, "radius": 24 },
+    { "name": "LanguageToggle", "notes": "Fixed top-right pill, glass" },
+    { "name": "MasonryGallery", "notes": "Poster/photo grid with natural aspect ratios" }
+  ]
+}

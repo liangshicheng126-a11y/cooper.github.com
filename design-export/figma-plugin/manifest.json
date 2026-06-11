@@ -1,0 +1,9 @@
+{
+  "name": "Cooper Site Import",
+  "id": "cooper-site-import-local",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": [
+    "figma"
+  ]
+}
