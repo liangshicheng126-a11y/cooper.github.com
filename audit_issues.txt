@@ -1,0 +1,25 @@
+﻿P0 [Paper Title] size: exp=18 got=11.0 | '鞝曥箻 靹犼卑 韽姢韯办棎靹?瓴€鞚€ 甑奠潃 旮€昙?韮€鞚错彫攴鸽灅頂?霐旍瀽鞚胳潣 鞁滉皝鞝?鞓來枼鞐?甏€頃?鞐瓣惮雲茧' style=雲茧攵€鞝滊
+P0 [Paper Title] scale: exp=90 got=missing | '鞝曥箻 靹犼卑 韽姢韯办棎靹?瓴€鞚€ 甑奠潃 旮€昙?韮€鞚错彫攴鸽灅頂?霐旍瀽鞚胳潣 鞁滉皝鞝?鞓來枼鞐?甏€頃?鞐瓣惮雲茧' style=雲茧攵€鞝滊
+P1 [body_h3] bold: exp=True got=None | '霟夓壃觳?LIANG SHICHENG)' style=雲茧攵€鞝滊
+P1 [body_h3] size: exp=10 got=11.0 | '霟夓壃觳?LIANG SHICHENG)' style=雲茧攵€鞝滊
+P1 [body_h3] csp: exp=-5 got=-10 | '霟夓壃觳?LIANG SHICHENG)' style=雲茧攵€鞝滊
+P1 [body_h3] line: exp=1.6 got=1.3 | '霟夓壃觳?LIANG SHICHENG)' style=雲茧攵€鞝滊
+P1 [body_h3] align: exp=left got=center | '霟夓壃觳?LIANG SHICHENG)' style=雲茧攵€鞝滊
+P39 [body] size: exp=10 got=9.0 | '欷戩暀靹犼卑甏€毽渼鞗愴殞. (2025). 瓿奠靹犼卑甏€毽窚旃?鞝?9臁?靹犼卑氩诫炒). 甑皜氩曤牴鞝曤炒靹柬劙.' style=彀戈碃氍疙棇
+P39 [body] csp: exp=-5 got=missing | '欷戩暀靹犼卑甏€毽渼鞗愴殞. (2025). 瓿奠靹犼卑甏€毽窚旃?鞝?9臁?靹犼卑氩诫炒). 甑皜氩曤牴鞝曤炒靹柬劙.' style=彀戈碃氍疙棇
+P39 [body] align: exp=justify got=left | '欷戩暀靹犼卑甏€毽渼鞗愴殞. (2025). 瓿奠靹犼卑甏€毽窚旃?鞝?9臁?靹犼卑氩诫炒). 甑皜氩曤牴鞝曤炒靹柬劙.' style=彀戈碃氍疙棇
+P40 [body] size: exp=10 got=9.0 | '鞚挫榿頇? (2017). 鞝?9雽€ 雽€韱惦牴 靹犼卑韽姢韯办棎 雮橅儉雮?鞁滉皝響滍槃 鞖旍唽 鞐瓣惮. 頃滉淡鞙淀暕頃? style=彀戈碃氍疙棇
+P40 [body] csp: exp=-5 got=missing | '鞚挫榿頇? (2017). 鞝?9雽€ 雽€韱惦牴 靹犼卑韽姢韯办棎 雮橅儉雮?鞁滉皝響滍槃 鞖旍唽 鞐瓣惮. 頃滉淡鞙淀暕頃? style=彀戈碃氍疙棇
+P40 [body] align: exp=justify got=left | '鞚挫榿頇? (2017). 鞝?9雽€ 雽€韱惦牴 靹犼卑韽姢韯办棎 雮橅儉雮?鞁滉皝響滍槃 鞖旍唽 鞐瓣惮. 頃滉淡鞙淀暕頃? style=彀戈碃氍疙棇
+P41 [body] size: exp=10 got=9.0 | '頇嶌敖鞚? 鞝曧槃欤? (2017). 靹犼卑頇嶋炒 靾橂嫧鞙茧靹?頉勲炒鞛愴彫鞀ろ劙鞕€ 順勳垬毵夓棎 雮橅儉雮?鞁滉皝鞝?' style=彀戈碃氍疙棇
+P41 [body] csp: exp=-5 got=missing | '頇嶌敖鞚? 鞝曧槃欤? (2017). 靹犼卑頇嶋炒 靾橂嫧鞙茧靹?頉勲炒鞛愴彫鞀ろ劙鞕€ 順勳垬毵夓棎 雮橅儉雮?鞁滉皝鞝?' style=彀戈碃氍疙棇
+P41 [body] align: exp=justify got=left | '頇嶌敖鞚? 鞝曧槃欤? (2017). 靹犼卑頇嶋炒 靾橂嫧鞙茧靹?頉勲炒鞛愴彫鞀ろ劙鞕€ 順勳垬毵夓棎 雮橅儉雮?鞁滉皝鞝?' style=彀戈碃氍疙棇
+P42 [body] size: exp=10 got=9.0 | '鞚挫鞗? (2025). 靹滌泊 鞙犿槙(靹鸽Μ頂?vs. 靷办劯毽攧)鞚?鞝曥箻 旌犿帢鞚?韮滊弰鞕€ 韴憸 鞚橅枼' style=彀戈碃氍疙棇
+P42 [body] csp: exp=-5 got=missing | '鞚挫鞗? (2025). 靹滌泊 鞙犿槙(靹鸽Μ頂?vs. 靷办劯毽攧)鞚?鞝曥箻 旌犿帢鞚?韮滊弰鞕€ 韴憸 鞚橅枼' style=彀戈碃氍疙棇
+P42 [body] align: exp=justify got=left | '鞚挫鞗? (2025). 靹滌泊 鞙犿槙(靹鸽Μ頂?vs. 靷办劯毽攧)鞚?鞝曥箻 旌犿帢鞚?韮滊弰鞕€ 韴憸 鞚橅枼' style=彀戈碃氍疙棇
+P43 [body] size: exp=10 got=9.0 | 'Haenschen, K., & Tamul, D. J. (2021). Font Matters' style=彀戈碃氍疙棇
+P43 [body] csp: exp=-5 got=missing | 'Haenschen, K., & Tamul, D. J. (2021). Font Matters' style=彀戈碃氍疙棇
+P43 [body] align: exp=justify got=left | 'Haenschen, K., & Tamul, D. J. (2021). Font Matters' style=彀戈碃氍疙棇
+P44 [body] size: exp=10 got=9.0 | 'Legge, G. E., & Bigelow, C. A. (2013). The effect ' style=彀戈碃氍疙棇
+P44 [body] csp: exp=-5 got=missing | 'Legge, G. E., & Bigelow, C. A. (2013). The effect ' style=彀戈碃氍疙棇
+P44 [body] align: exp=justify got=left | 'Legge, G. E., & Bigelow, C. A. (2013). The effect ' style=彀戈碃氍疙棇

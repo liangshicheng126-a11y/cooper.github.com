@@ -1,0 +1,10 @@
+﻿python :   File "<string>", line 9
+所在位置 C:\Users\L\AppData\Local\Temp\ps-script-b4f148c8-7490-4f68-95dc-e9b64a768361.ps1:80 字符: 90
++ ... 333_audit.md" | Format-Table Name, Length, LastWriteTime; python -c "
++                                                               ~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (  File "<string>", line 9:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+    print(f' sec{i} cols={cols.get(qn(" w:num\))
+                                      ^
+SyntaxError: unterminated string literal (detected at line 9)
