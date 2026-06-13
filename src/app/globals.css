@@ -322,7 +322,7 @@ body {
 
 .liquid-bg--intro-active .blob-route,
 .liquid-bg--intro-active .blob-route .blob {
-  animation-play-state: paused !important;
+  animation: none !important;
 }
 
 html[data-intro-active] .layout-chrome {

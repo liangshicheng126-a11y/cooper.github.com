@@ -10,8 +10,18 @@ import GsapProvider from "@/components/motion/GsapProvider";
 import MotionTierProvider from "@/components/motion/MotionTierProvider";
 import { IntroPlaybackProvider } from "@/components/motion/IntroPlaybackContext";
 import BlobSplashIntro from "@/components/motion/BlobSplashIntro";
+import {
+  getBlobIntroEarlyGateScript,
+  getPagesBasePath,
+} from "@/lib/blobIntro";
 
 const inter = Inter({ subsets: ["latin"] });
+const introEnabled = process.env.NEXT_PUBLIC_INTRO_ENABLED !== "false";
+const pagesBasePath = getPagesBasePath();
+const introEarlyGateScript = getBlobIntroEarlyGateScript(
+  pagesBasePath,
+  introEnabled
+);
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ??
   (process.env.GITHUB_REPOSITORY_OWNER
@@ -48,6 +58,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
+        <script
+          dangerouslySetInnerHTML={{ __html: introEarlyGateScript }}
+        />
         <LanguageProvider>
           <MotionTierProvider>
           <IntroPlaybackProvider>

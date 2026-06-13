@@ -6,9 +6,9 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useIntroPlayback } from "@/components/motion/IntroPlaybackContext";
 import {
-  BLOB_CENTER_POSE,
   BLOB_ROUTE_ORIGIN,
   BLOB_ROUTE_SELECTORS,
+  getBlobCenterPosePixels,
   INTRO_TIMING,
   markIntroPlayed,
 } from "@/lib/blobIntro";
@@ -46,20 +46,17 @@ export default function BlobSplashIntro() {
 
       if (routes.length !== BLOB_ROUTE_SELECTORS.length) return;
 
-      const visuals = routes.map(
-        (route) => route.querySelector<HTMLElement>(".blob-visual") ?? route
-      );
+      const container = document.querySelector<HTMLElement>(".liquid-bg");
+      container?.classList.add("liquid-bg--intro-active");
 
-      visuals.forEach((el) => {
-        el.style.animationPlayState = "paused";
-      });
+      const center = getBlobCenterPosePixels();
 
       routes.forEach((el) => {
         gsap.set(el, {
-          x: BLOB_CENTER_POSE.x,
-          y: BLOB_CENTER_POSE.y,
-          scale: BLOB_CENTER_POSE.scale,
-          rotation: BLOB_CENTER_POSE.rotation,
+          x: center.x,
+          y: center.y,
+          scale: 0,
+          rotation: 0,
           opacity: 0,
           force3D: true,
         });
@@ -81,12 +78,7 @@ export default function BlobSplashIntro() {
         delay: bloomStart,
         onComplete: () => {
           routes.forEach((el) => {
-            gsap.set(el, { clearProps: "transform,opacity" });
             el.style.animationDelay = "0s";
-          });
-
-          visuals.forEach((el) => {
-            el.style.animationPlayState = "";
           });
 
           markIntroPlayed();
@@ -94,7 +86,14 @@ export default function BlobSplashIntro() {
           setIntroActive(false);
           setIntroComplete(true);
           document.documentElement.removeAttribute("data-intro-active");
-          requestAnimationFrame(() => ScrollTrigger.refresh());
+          document.documentElement.removeAttribute("data-intro-needed");
+
+          requestAnimationFrame(() => {
+            routes.forEach((el) => {
+              gsap.set(el, { clearProps: "all" });
+            });
+            ScrollTrigger.refresh();
+          });
         },
       });
 
@@ -153,13 +152,11 @@ export default function BlobSplashIntro() {
 
       return () => {
         tl.kill();
+        container?.classList.remove("liquid-bg--intro-active");
         routes.forEach((el) => {
           gsap.killTweensOf(el);
-          gsap.set(el, { clearProps: "transform,opacity" });
+          gsap.set(el, { clearProps: "all" });
           el.style.animationDelay = "";
-        });
-        visuals.forEach((el) => {
-          el.style.animationPlayState = "";
         });
       };
     },

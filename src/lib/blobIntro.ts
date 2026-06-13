@@ -65,6 +65,54 @@ export function markIntroPlayed(): void {
   }
 }
 
+export function getBlobCenterPosePixels(): { x: number; y: number } {
+  if (typeof window === "undefined") return { x: 0, y: 0 };
+  const blobSize = Math.min(window.innerWidth * 0.56, 760);
+  return {
+    x: (window.innerWidth - blobSize) / 2,
+    y: (window.innerHeight - blobSize) / 2,
+  };
+}
+
+export function getPagesBasePath(): string {
+  const repository = process.env.GITHUB_REPOSITORY?.split("/")[1] ?? "";
+  const isUserSiteRepo = repository.endsWith(".github.io");
+  const useRepoPrefix =
+    Boolean(process.env.GITHUB_ACTIONS) &&
+    Boolean(repository) &&
+    !isUserSiteRepo &&
+    process.env.GITHUB_PAGES_CUSTOM_DOMAIN_ROOT !== "true";
+  return useRepoPrefix ? `/${repository}` : "";
+}
+
+export function getBlobIntroEarlyGateScript(
+  basePath: string,
+  introEnabled: boolean
+): string {
+  const storageKey = BLOB_INTRO_STORAGE_KEY;
+  const escapedBase = basePath.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+  return `
+try {
+  if (!${introEnabled}) throw 0;
+  if (sessionStorage.getItem("${storageKey}") === "1") throw 0;
+  if (window.matchMedia("(max-width:640px),(hover:none)").matches) throw 0;
+  if (!window.matchMedia("(hover:hover)").matches) throw 0;
+  if (window.matchMedia("(prefers-reduced-motion:reduce)").matches) throw 0;
+  var base = "${escapedBase}";
+  var path = location.pathname;
+  var isHome = path === "/" || path === base + "/" || (base && path === base);
+  if (!isHome) throw 0;
+  document.documentElement.setAttribute("data-intro-active", "");
+  document.documentElement.setAttribute("data-intro-needed", "");
+} catch (e) {}
+`.trim();
+}
+
+export function readIntroNeededFromDom(): boolean {
+  if (typeof window === "undefined") return false;
+  return document.documentElement.hasAttribute("data-intro-needed");
+}
+
 export function shouldPlayBlobIntro(opts: {
   pathname: string;
   tier: MotionTier;

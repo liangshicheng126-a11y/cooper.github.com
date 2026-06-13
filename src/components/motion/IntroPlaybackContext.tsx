@@ -3,6 +3,7 @@
 import {
   createContext,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
@@ -12,6 +13,7 @@ import useMotionTier from "@/hooks/useMotionTier";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import {
   type BlobIntroMode,
+  readIntroNeededFromDom,
   shouldPlayBlobIntro,
 } from "@/lib/blobIntro";
 import { INTRO_ENABLED } from "@/lib/motion";
@@ -35,22 +37,31 @@ export function IntroPlaybackProvider({ children }: { children: ReactNode }) {
   const tier = useMotionTier();
   const reduced = usePrefersReducedMotion();
 
-  const shouldPlayIntro = useMemo(
-    () =>
-      shouldPlayBlobIntro({
-        pathname,
-        tier,
-        reducedMotion: reduced,
-        introEnabled: INTRO_ENABLED,
-      }),
-    [pathname, tier, reduced]
+  const [shouldPlayIntro, setShouldPlayIntro] = useState(readIntroNeededFromDom);
+  const [introActive, setIntroActive] = useState(readIntroNeededFromDom);
+  const [introComplete, setIntroComplete] = useState(
+    () => !readIntroNeededFromDom()
+  );
+  const [introMode, setIntroMode] = useState<BlobIntroMode>(() =>
+    readIntroNeededFromDom() ? "hold" : "idle"
   );
 
-  const [introActive, setIntroActive] = useState(shouldPlayIntro);
-  const [introComplete, setIntroComplete] = useState(!shouldPlayIntro);
-  const [introMode, setIntroMode] = useState<BlobIntroMode>(
-    shouldPlayIntro ? "hold" : "idle"
-  );
+  useEffect(() => {
+    const next = shouldPlayBlobIntro({
+      pathname,
+      tier,
+      reducedMotion: reduced,
+      introEnabled: INTRO_ENABLED,
+    });
+    setShouldPlayIntro(next);
+    if (!next) {
+      setIntroActive(false);
+      setIntroComplete(true);
+      setIntroMode("idle");
+      document.documentElement.removeAttribute("data-intro-active");
+      document.documentElement.removeAttribute("data-intro-needed");
+    }
+  }, [pathname, tier, reduced]);
 
   const value = useMemo(
     () => ({
