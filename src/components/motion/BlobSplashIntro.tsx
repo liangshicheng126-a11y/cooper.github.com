@@ -8,7 +8,6 @@ import { useIntroPlayback } from "@/components/motion/IntroPlaybackContext";
 import {
   BLOB_ROUTE_ORIGIN,
   BLOB_ROUTE_SELECTORS,
-  formatBlobRouteTransform,
   getBlobCenterPosePixels,
   INTRO_TIMING,
   markIntroPlayed,
@@ -17,16 +16,17 @@ import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/**
+ * Kill tweens and set animation-delay=0s so CSS keyframes start from 0%.
+ * Does NOT call clearProps — we clean GSAP's inline matrix after CSS
+ * animations are running (inside resumeBlobRouteCssAnimations).
+ */
 function snapBlobRoutesToKeyframe0(routes: readonly HTMLElement[]): void {
   routes.forEach((route, i) => {
-    const pose = BLOB_ROUTE_ORIGIN[i];
-    if (!pose) return;
+    if (!BLOB_ROUTE_ORIGIN[i]) return;
 
     gsap.killTweensOf(route);
-    route.style.transform = formatBlobRouteTransform(pose);
-    route.style.opacity = "";
     route.style.animationDelay = "0s";
-    gsap.set(route, { clearProps: "x,y,scale,rotation,opacity" });
 
     const visual = route.querySelector<HTMLElement>(".blob-visual");
     if (visual) {
@@ -35,6 +35,12 @@ function snapBlobRoutesToKeyframe0(routes: readonly HTMLElement[]): void {
   });
 }
 
+/**
+ * Remove animation:none class so CSS animations take over, then clean up
+ * GSAP's inline transform AFTER the CSS animation is running. Because CSS
+ * animations sit above inline styles in the cascade, clearProps here won't
+ * cause a position flash.
+ */
 function resumeBlobRouteCssAnimations(
   routes: readonly HTMLElement[],
   container: HTMLElement | null
@@ -44,6 +50,7 @@ function resumeBlobRouteCssAnimations(
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
       routes.forEach((route) => {
+        gsap.set(route, { clearProps: "x,y,scale,rotation,opacity" });
         route.style.removeProperty("transform");
       });
       ScrollTrigger.refresh();
@@ -112,7 +119,7 @@ export default function BlobSplashIntro() {
       const tl = gsap.timeline({
         delay: bloomStart,
         onComplete: () => {
-          snapBlobRoutesToKeyframe0(routes);
+          // CSS animations resume; GSAP cleanup deferred inside resume fn
           resumeBlobRouteCssAnimations(routes, container);
 
           markIntroPlayed();
@@ -164,6 +171,7 @@ export default function BlobSplashIntro() {
         );
       });
 
+      // Snap anim-delays at the exact end of release — before onComplete cleans up
       tl.add(() => snapBlobRoutesToKeyframe0(routes), handoffAt);
 
       if (overlay) {
@@ -184,12 +192,10 @@ export default function BlobSplashIntro() {
         routes.forEach((el) => {
           gsap.killTweensOf(el);
           gsap.set(el, { clearProps: "all" });
-          el.style.animationDelay = "";
           el.style.removeProperty("transform");
+          el.style.animationDelay = "";
           const visual = el.querySelector<HTMLElement>(".blob-visual");
-          if (visual) {
-            visual.style.animationDelay = "";
-          }
+          if (visual) visual.style.animationDelay = "";
         });
       };
     },

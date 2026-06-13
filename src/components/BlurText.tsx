@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState, useMemo } from "react";
 import useMotionTier from "@/hooks/useMotionTier";
+import { useIntroRevealReady } from "@/components/motion/IntroPlaybackContext";
 
 type BlurTextProps = {
   text?: string;
@@ -43,12 +44,17 @@ export default function BlurText({
   onAnimationComplete,
 }: BlurTextProps) {
   const tier = useMotionTier();
+  const introRevealReady = useIntroRevealReady();
   const useBlur = tier === "full";
   const elements = animateBy === "words" ? text.split(" ") : text.split("");
   const [inView, setInView] = useState(false);
   const ref = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
+    // Wait until any splash intro is complete before observing. If we fire
+    // before introRevealReady, the observer triggers while the parent
+    // Framer Motion container is still hidden, creating a double-entrance.
+    if (!introRevealReady) return;
     if (!ref.current) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -61,7 +67,7 @@ export default function BlurText({
     );
     observer.observe(ref.current);
     return () => observer.disconnect();
-  }, [threshold, rootMargin]);
+  }, [introRevealReady, threshold, rootMargin]);
 
   const defaultFrom = useMemo(() => {
     if (useBlur) {
