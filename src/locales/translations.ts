@@ -125,6 +125,22 @@ export const translations = {
         designGallery: "设计稿展示",
         designCount: "页面截图",
         designAlt: "网站设计稿",
+        p2Subprojects: {
+          sectionTitle: "作品集选择",
+          viewDetail: "查看详情",
+          backToP2: "返回动态交互系统",
+          personalWebsite: {
+            title: "个人网站设计",
+            desc: "cooperliang.top 全站视觉与交互体系，涵盖首页、作品集、关于我与组件规范。",
+            category: "Web 设计",
+          },
+          smartGlasses: {
+            title: "智能眼镜 App 设计",
+            desc: "面向 AR 眼镜的移动端配套体验，聚焦实时信息与轻量交互场景。",
+            category: "App 设计",
+            comingSoon: "智能眼镜 App 设计稿筹备中，敬请期待。",
+          },
+        },
         p2ResultsModules: "作品模块",
         p2ResultsLanguages: "语言支持",
         p2Analysis: {
@@ -332,6 +348,22 @@ export const translations = {
         designGallery: "Design Showcase",
         designCount: "Screenshots",
         designAlt: "Website design",
+        p2Subprojects: {
+          sectionTitle: "Choose a Case Study",
+          viewDetail: "View Details",
+          backToP2: "Back to Dynamic Interaction System",
+          personalWebsite: {
+            title: "Personal Website Design",
+            desc: "The cooperliang.top visual and interaction system—home, portfolio, about, and component specs.",
+            category: "Web Design",
+          },
+          smartGlasses: {
+            title: "Smart Glasses App Design",
+            desc: "A companion mobile experience for AR glasses—real-time info and lightweight interactions.",
+            category: "App Design",
+            comingSoon: "Smart glasses app designs are in progress. Stay tuned.",
+          },
+        },
         p2ResultsModules: "Work Modules",
         p2ResultsLanguages: "Languages",
         p2Analysis: {

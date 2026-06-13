@@ -11,7 +11,6 @@ import LazyInViewImage from "@/components/LazyInViewImage";
 import GalleryLightbox from "@/components/GalleryLightbox";
 import MasonryGallery, { MasonryItem } from "@/components/MasonryGallery";
 import { mapDisplaySources, thumbSrc } from "@/lib/galleryImageUrl";
-import SiteDesignAnalysis from "@/components/portfolio/SiteDesignAnalysis";
 import GsapGalleryStagger from "@/components/motion/GsapGalleryStagger";
 import useMotionTier from "@/hooks/useMotionTier";
 import { heroMaskVariants } from "@/lib/motion";
@@ -43,14 +42,12 @@ type Props = {
     photos: string[];
   }>;
   posters?: string[];
-  designScreenshots?: string[];
 };
 
 export default function ProjectDetailClient({
   id,
   photographyGroups = [],
   posters = [],
-  designScreenshots = [],
 }: Props) {
   const { t, mounted } = useTranslation();
   const tier = useMotionTier();
@@ -59,7 +56,6 @@ export default function ProjectDetailClient({
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const shuffledPosters = useMemo(() => stableShufflePosters(posters), [posters]);
   const shuffledPosterDisplay = useMemo(() => mapDisplaySources(shuffledPosters), [shuffledPosters]);
-  const designDisplay = useMemo(() => mapDisplaySources(designScreenshots), [designScreenshots]);
 
   const projectKey = id as keyof typeof t.portfolio.projects;
   const project = t.portfolio.projects[projectKey];
@@ -102,7 +98,6 @@ export default function ProjectDetailClient({
   const hasVideoPreview = Boolean(videoByProject[id]?.length);
   const hasPhotographyGallery = id === "p3" && photographyGroups.length > 0;
   const hasPosterGallery = id === "p1" && posters.length > 0;
-  const hasDesignGallery = id === "p2" && designScreenshots.length > 0;
   const photographyByYear = photographyGroups.reduce<Record<string, typeof photographyGroups>>((acc, group) => {
     if (!acc[group.year]) acc[group.year] = [];
     acc[group.year].push(group);
@@ -209,36 +204,7 @@ export default function ProjectDetailClient({
         </div>
       </div>
 
-      {hasDesignGallery && (
-        <section className="gallery-section mb-16 lg:mb-24">
-          <div className="flex items-center justify-between gap-4 mb-6">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t.portfolio.projectDetail.designGallery}</h2>
-            <span className="text-base sm:text-lg text-foreground/55 font-medium">
-              {t.portfolio.projectDetail.designCount} {designScreenshots.length}
-            </span>
-          </div>
-          <GsapGalleryStagger>
-            <MasonryGallery
-              items={designScreenshots}
-              getOriginalSrc={(shot) => shot}
-              renderItem={(shot, index) => (
-                <MasonryItem className="gallery-thumb group shadow-[0_2px_16px_rgba(15,23,42,0.08)] transition-shadow duration-300 sm:hover:shadow-[0_12px_32px_rgba(15,23,42,0.14)]">
-                  <LazyInViewImage
-                    src={thumbSrc(shot)}
-                    fallbackSrc={shot}
-                    alt={`${t.portfolio.projectDetail.designAlt} ${index + 1}`}
-                    variant="natural"
-                    className="cursor-pointer transition-transform duration-500 sm:group-hover:scale-[1.02]"
-                    onClick={() => openLightbox(designDisplay, index, designScreenshots)}
-                  />
-                </MasonryItem>
-              )}
-            />
-          </GsapGalleryStagger>
-        </section>
-      )}
-
-      {!hasVideoPreview && !hasDesignGallery && (
+      {!hasVideoPreview && (
         <div className="aspect-[4/3] sm:aspect-[21/9] rounded-[28px] sm:rounded-[40px] overflow-hidden glass border-white/10 mb-12 sm:mb-16">
           <div
             className="w-full h-full"
@@ -375,9 +341,6 @@ export default function ProjectDetailClient({
         </>
       )}
 
-      {id === "p2" && (
-        <SiteDesignAnalysis analysis={t.portfolio.projectDetail.p2Analysis} />
-      )}
 
       {lightboxPhotos && (
         <GalleryLightbox
@@ -391,16 +354,12 @@ export default function ProjectDetailClient({
           altPrefix={
             id === "p1"
               ? t.portfolio.projectDetail.posterAlt
-              : id === "p2"
-                ? t.portfolio.projectDetail.designAlt
-                : t.portfolio.projectDetail.photoAlt
+              : t.portfolio.projectDetail.photoAlt
           }
           galleryLabel={
             id === "p1"
               ? t.portfolio.projectDetail.posterGallery
-              : id === "p2"
-                ? t.portfolio.projectDetail.designGallery
-                : t.portfolio.projectDetail.photoGallery
+              : t.portfolio.projectDetail.photoGallery
           }
         />
       )}

@@ -2,7 +2,7 @@ import ProjectDetailClient from "./ProjectDetailClient";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 
-const PROJECT_IDS = ["p1", "p2", "p3", "p4"] as const;
+const PROJECT_IDS = ["p1", "p3", "p4"] as const;
 
 export const dynamicParams = false;
 
@@ -29,13 +29,11 @@ export default async function ProjectDetailPage({
   const { id } = await params;
   const photographyGroups = id === "p3" ? await getPhotographyGroups() : [];
   const posters = id === "p1" ? await getPosters() : [];
-  const designScreenshots = id === "p2" ? await getDesignScreenshots() : [];
   return (
     <ProjectDetailClient
       id={id}
       photographyGroups={photographyGroups}
       posters={posters}
-      designScreenshots={designScreenshots}
     />
   );
 }
@@ -179,32 +177,6 @@ async function getPhotographyGroups(): Promise<PhotographyGroup[]> {
         if (b.latestTimestamp !== a.latestTimestamp) return b.latestTimestamp - a.latestTimestamp;
         return a.location.localeCompare(b.location, "en");
       });
-  } catch {
-    return [];
-  }
-}
-
-async function getDesignScreenshots(): Promise<string[]> {
-  const screenshotsDir = path.join(process.cwd(), "public", "photos", "portfolio", "p2");
-  const isImage = (name: string) => /\.(jpg|jpeg|png|webp|avif)$/i.test(name);
-  const joinWebPath = (fileName: string) =>
-    `/photos/portfolio/p2/${encodeURIComponent(fileName)}`;
-  const preferredOrder = [
-    "home.png",
-    "portfolio.png",
-    "about.png",
-    "project-detail.png",
-    "design-components-home.png",
-    "design-components-about.png",
-  ];
-
-  try {
-    const entries = await fs.readdir(screenshotsDir, { withFileTypes: true });
-    const images = entries
-      .filter((entry) => entry.isFile() && isImage(entry.name))
-      .map((entry) => entry.name);
-    const ordered = preferredOrder.filter((name) => images.includes(name));
-    return ordered.map(joinWebPath);
   } catch {
     return [];
   }
