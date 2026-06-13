@@ -11,7 +11,15 @@ const PAGE_FILES = ["home.png", "portfolio.png", "about.png", "project-detail.pn
 const PAGE_TRIM_THRESHOLD = 15;
 
 /** Component strips: trim dark Figma canvas margins on the sides. */
-const COMPONENT_FILES = ["design-components-home.png", "design-components-about.png"];
+const COMPONENT_FILES = [
+  "design-components-nav.png",
+  "design-icons.png",
+  "design-components-tags.png",
+  "design-modules-buttons.png",
+  "design-modules-process.png",
+  "design-modules-stats.png",
+  "design-modules-stats-card.png",
+];
 const COMPONENT_TRIM_THRESHOLD = 50;
 
 async function trimInPlace(fileName, threshold) {

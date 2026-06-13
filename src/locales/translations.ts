@@ -149,7 +149,7 @@ export const translations = {
           components: {
             title: "按钮与组件",
             caption:
-              "灰色底稿展示全站可复用组件体系：渐变 CTA 按钮（作品集/关于我）含 default 与 hover 状态、CountUp 统计卡片与服务流程卡片，统一大圆角与 indigo 渐变高亮，构成跨页面一致的设计系统规范。",
+              "灰色底稿展示全站可复用组件体系：导航与 CTA（欢迎打扰 / 关于我）、Lucide 图标集、工具与兴趣标签卡、渐变 CTA 按钮（作品集 / 关于我）含 default 与 hover 状态、CountUp 统计卡片与服务流程四步卡片，统一大圆角与 indigo 渐变高亮。",
           },
         },
         p2SmartGlassesGroups: {
@@ -474,7 +474,7 @@ export const translations = {
           components: {
             title: "Buttons & Components",
             caption:
-              "Gray artboards document the reusable design system: gradient CTA buttons (Portfolio / About Me) in default and hover states, CountUp stat cards, and service-flow cards—unified large radius and indigo gradient highlights across pages.",
+              "Gray artboards document the reusable design system: nav and contact CTAs (Welcome / About Me), Lucide icon set, tool and hobby tag cards, gradient CTA buttons (Portfolio / About Me) in default and hover states, CountUp stat cards, and four-step service-flow cards—unified large radius and indigo gradient highlights.",
           },
         },
         p2SmartGlassesGroups: {
