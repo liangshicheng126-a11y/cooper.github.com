@@ -190,15 +190,13 @@ async function getDesignScreenshots(): Promise<string[]> {
   const joinWebPath = (fileName: string) =>
     `/photos/portfolio/p2/${encodeURIComponent(fileName)}`;
   const preferredOrder = [
-    "home-hero.png",
-    "home-services.png",
-    "portfolio-grid.png",
-    "about-page.png",
-    "p2-detail.png",
-    "contact-page.png",
-    "design-modules-stats.png",
-    "design-modules-buttons.png",
-    "design-icons.png",
+    "home.png",
+    "portfolio.png",
+    "about.png",
+    "project-detail.png",
+    "design-colors.png",
+    "design-components-home.png",
+    "design-components-about.png",
   ];
 
   try {
