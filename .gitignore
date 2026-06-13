@@ -29,3 +29,11 @@ design-export/figma-plugin/code.js
 activity-miniapp/miniprogram/utils/config.local.js
 activity-miniapp/backend/.env
 
+# Brand intro QA artifacts (logo.svg + motion_spec.md are tracked)
+docs/brand-intro/outputs/
+docs/brand-intro/source.png
+
+
+# Brand intro QA artifacts (logo.svg + motion_spec.md are tracked)
+docs/brand-intro/outputs/
+docs/brand-intro/source.png

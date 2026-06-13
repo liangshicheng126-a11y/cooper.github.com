@@ -320,6 +320,21 @@ body {
   animation: none;
 }
 
+.liquid-bg--intro-active .blob-route,
+.liquid-bg--intro-active .blob-route .blob {
+  animation-play-state: paused !important;
+}
+
+html[data-intro-active] .layout-chrome {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.blob-splash-overlay {
+  backdrop-filter: blur(2px) saturate(120%);
+  -webkit-backdrop-filter: blur(2px) saturate(120%);
+}
+
 .liquid-bg--lite .blob {
   filter: blur(14px) saturate(115%);
 }
