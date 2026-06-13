@@ -138,8 +138,65 @@ export const translations = {
             title: "智能眼镜 App 设计",
             desc: "面向 AR 眼镜的移动端配套体验，聚焦实时信息与轻量交互场景。",
             category: "App 设计",
-            comingSoon: "智能眼镜 App 设计稿筹备中，敬请期待。",
           },
+        },
+        p2SmartGlassesGroups: {
+          core: {
+            title: "核心界面",
+            caption:
+              "信息聚合首页整合航班、待办、股市、导航与天气 Widget；眼镜详情页管理设备连接与电量；个人中心与资料编辑构成眼镜配套 App 的一站式总控入口。",
+          },
+          calendar: {
+            title: "日历",
+            caption:
+              "日、周、年三种视图与多日活动条并列呈现，飞行与运动卡片以色彩编码区分类型，让行程规划与身体负荷在同一屏内可读。",
+          },
+          files: {
+            title: "文件与工具",
+            caption:
+              "眼镜本地存储按翻译、地图、提词器与视频分类管理，容量条与地理元数据辅助离线场景下的文件检索，支撑 AR 生产力工具链。",
+          },
+          data: {
+            title: "数据量化",
+            caption:
+              "周、月、年统计与疲劳曲线可视化，结合 AI 助理建议形成可穿戴数据闭环，帮助用户理解活动规律与恢复节奏。",
+          },
+        },
+        p2SmartGlassesAnalysis: {
+          sectionTitle: "设计分析",
+          layout: {
+            title: "排版",
+            body: "整体采用卡片化 Dashboard 结构：首页以 Widget 网格聚合多源信息，底部四 Tab 固定主导航，数据与文件页顶部分段筛选（周/月/年、文件类型 Tab）降低层级切换成本。",
+            body2: "色彩编码贯穿全局——绿色标识运动、红色标识飞行、蓝色标识会议；大圆角容器配合浅灰底层次，在移动端长屏阅读中保持信息块边界清晰而不显拥挤。",
+            points: [
+              "卡片化 Dashboard：Widget 网格 + 底部四 Tab 主导航",
+              "顶部分段筛选：时间维度与文件类型 Tab 快速切换",
+              "色彩编码：运动/飞行/会议等活动类型一眼可辨",
+              "大圆角 + 浅灰层次：移动端长屏阅读的清晰区块划分"
+            ]
+          },
+          motion: {
+            title: "动效",
+            body: "界面内动效聚焦状态反馈：时间维度切换伴随内容滑动过渡，存储进度条以填充动画呈现容量变化，图表折线在数据页入场时逐段绘制，Tab 高亮以柔和过渡引导当前上下文。",
+            body2: "展示页沿用站点 GSAP stagger 图库入场与 scroll-stack 分析区滚动结构，在 full 档位呈现与个人网站一致的浏览节奏，reduced/minimal 档自动降级为静态展示。",
+            points: [
+              "时间维度切换：日/周/年视图滑动过渡",
+              "存储进度条：容量变化的填充反馈",
+              "图表折线入场：数据页曲线逐段绘制",
+              "站点一致：stagger 图库 + scroll-stack 分析区入场"
+            ]
+          },
+          content: {
+            title: "内容方向",
+            body: "产品定位覆盖旅行、办公与健康量化三条主线：眼镜端离线文件管理支撑无网场景下的翻译、导航与提词；日历与数据模块将飞行行程、运动负荷与疲劳指标串联，形成可回顾的活动档案。",
+            body2: "AI 助理结合历史活动给出恢复与训练建议，为可穿戴生态预留扩展接口（手表、手环、车辆），使 App 成为 AR 眼镜与周边设备的信息中枢而非孤立工具页。",
+            points: [
+              "旅行 + 办公 + 健康：三条主线同屏可达",
+              "离线文件管理：翻译/地图/提词器/视频本地可用",
+              "AI 建议：基于历史活动的恢复与训练提示",
+              "生态扩展：手表/手环/车辆等设备接入预留"
+            ]
+          }
         },
         p2ResultsModules: "作品模块",
         p2ResultsLanguages: "语言支持",
@@ -361,8 +418,65 @@ export const translations = {
             title: "Smart Glasses App Design",
             desc: "A companion mobile experience for AR glasses—real-time info and lightweight interactions.",
             category: "App Design",
-            comingSoon: "Smart glasses app designs are in progress. Stay tuned.",
           },
+        },
+        p2SmartGlassesGroups: {
+          core: {
+            title: "Core Screens",
+            caption:
+              "The home dashboard aggregates flight, todo, market, navigation, and weather widgets; the glasses detail page handles device pairing and battery; profile and personal-info screens form a one-stop control hub for the AR companion app.",
+          },
+          calendar: {
+            title: "Calendar",
+            caption:
+              "Day, week, and year views with multi-day event bars; flight and workout cards use color coding so schedule planning and physical load stay readable on one screen.",
+          },
+          files: {
+            title: "Files & Tools",
+            caption:
+              "On-glasses local storage organized by translate, map, teleprompter, and video; capacity bars and geo metadata support offline file lookup and AR productivity workflows.",
+          },
+          data: {
+            title: "Activity Metrics",
+            caption:
+              "Weekly, monthly, and yearly stats with fatigue curves; AI assistant suggestions close the wearable data loop so users can track activity patterns and recovery rhythm.",
+          },
+        },
+        p2SmartGlassesAnalysis: {
+          sectionTitle: "Design Analysis",
+          layout: {
+            title: "Layout",
+            body: "A card-based dashboard structure: the home screen uses a widget grid for multi-source info, a fixed four-tab bottom bar for primary navigation, and top segmented filters (week/month/year, file-type tabs) on data and files screens to reduce context-switching cost.",
+            body2: "Color coding runs throughout—green for workouts, red for flights, blue for meetings; large-radius containers on a light gray hierarchy keep blocks distinct on tall mobile screens without feeling cramped.",
+            points: [
+              "Card dashboard: widget grid + four-tab bottom navigation",
+              "Top segmented filters: time range and file-type tabs",
+              "Color coding: workout / flight / meeting at a glance",
+              "Large radius + gray layers: clear blocks for mobile scrolling"
+            ]
+          },
+          motion: {
+            title: "Motion",
+            body: "In-app motion focuses on state feedback: time-range switches slide content, storage bars fill to show capacity changes, chart lines draw in on the data screens, and tab highlights transition softly to anchor context.",
+            body2: "This showcase page reuses the site’s GSAP gallery stagger and scroll-stack analysis reveals—full tier matches the personal-website browsing rhythm; reduced/minimal tiers fall back to static presentation.",
+            points: [
+              "Time-range transitions: day/week/year view slides",
+              "Storage bars: fill animation for capacity feedback",
+              "Chart line entrance: progressive draw on data screens",
+              "Site-consistent: stagger gallery + scroll-stack analysis"
+            ]
+          },
+          content: {
+            title: "Content Direction",
+            body: "The product spans travel, work, and health quantification: on-glasses offline file management covers translate, navigation, and teleprompter without network; calendar and data modules link flight schedules, workout load, and fatigue into a reviewable activity archive.",
+            body2: "An AI assistant offers recovery and training tips from historical activity, with extension points for watch, band, and vehicle integrations—positioning the app as an information hub for AR glasses and peripherals, not isolated utility screens.",
+            points: [
+              "Travel + work + health: three pillars in one flow",
+              "Offline files: translate / map / teleprompter / video on device",
+              "AI suggestions: recovery and training from activity history",
+              "Ecosystem hooks: watch, band, vehicle integrations planned"
+            ]
+          }
         },
         p2ResultsModules: "Work Modules",
         p2ResultsLanguages: "Languages",

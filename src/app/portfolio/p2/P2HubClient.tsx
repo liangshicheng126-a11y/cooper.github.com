@@ -39,7 +39,7 @@ export default function P2HubClient({ previewImage }: Props) {
       title: sub.smartGlasses.title,
       desc: sub.smartGlasses.desc,
       category: sub.smartGlasses.category,
-      image: "https://images.unsplash.com/photo-1544117764-31db2ede41cf?w=1200&q=80",
+      image: "/photos/portfolio/p2/smart-glasses/home-dashboard.png",
       accent: "#a855f7",
       viewLabel: sub.viewDetail,
     },

@@ -506,5 +506,65 @@
   "/photos/portfolio/p2/project-detail.png": {
     "width": 1920,
     "height": 3937
+  },
+  "/photos/portfolio/p2/smart-glasses/calendar-day.png": {
+    "width": 430,
+    "height": 932
+  },
+  "/photos/portfolio/p2/smart-glasses/calendar-week.png": {
+    "width": 430,
+    "height": 932
+  },
+  "/photos/portfolio/p2/smart-glasses/calendar-year.png": {
+    "width": 430,
+    "height": 932
+  },
+  "/photos/portfolio/p2/smart-glasses/data-detail.png": {
+    "width": 430,
+    "height": 932
+  },
+  "/photos/portfolio/p2/smart-glasses/data-month.png": {
+    "width": 430,
+    "height": 932
+  },
+  "/photos/portfolio/p2/smart-glasses/data-year.png": {
+    "width": 430,
+    "height": 932
+  },
+  "/photos/portfolio/p2/smart-glasses/files-detail.png": {
+    "width": 430,
+    "height": 932
+  },
+  "/photos/portfolio/p2/smart-glasses/files-map.png": {
+    "width": 430,
+    "height": 932
+  },
+  "/photos/portfolio/p2/smart-glasses/files-teleprompter.png": {
+    "width": 430,
+    "height": 932
+  },
+  "/photos/portfolio/p2/smart-glasses/files-translate.png": {
+    "width": 430,
+    "height": 932
+  },
+  "/photos/portfolio/p2/smart-glasses/files-video.png": {
+    "width": 430,
+    "height": 932
+  },
+  "/photos/portfolio/p2/smart-glasses/glasses-detail.png": {
+    "width": 430,
+    "height": 1116
+  },
+  "/photos/portfolio/p2/smart-glasses/home-dashboard.png": {
+    "width": 430,
+    "height": 932
+  },
+  "/photos/portfolio/p2/smart-glasses/personal-info.png": {
+    "width": 430,
+    "height": 1014
+  },
+  "/photos/portfolio/p2/smart-glasses/profile.png": {
+    "width": 430,
+    "height": 1048
   }
 }

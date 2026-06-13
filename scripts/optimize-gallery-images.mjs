@@ -10,7 +10,7 @@ const PUBLIC = path.join(ROOT, "public");
 const GALLERY_DIRS = [
   path.join(PUBLIC, "photos", "posters"),
   path.join(PUBLIC, "photos", "photography"),
-  path.join(PUBLIC, "photos", "portfolio", "p2"),
+  path.join(PUBLIC, "photos", "portfolio", "p2"), // includes smart-glasses/ subtree
 ];
 
 const IMAGE_RE = /\.(jpe?g|png|webp|avif|gif)$/i;

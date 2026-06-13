@@ -2,6 +2,7 @@ const GALLERY_PREFIXES = [
   "/photos/posters/",
   "/photos/photography/",
   "/photos/portfolio/p2/",
+  "/photos/portfolio/p2/smart-glasses/",
 ] as const;
 
 function isGalleryOriginal(src: string): boolean {

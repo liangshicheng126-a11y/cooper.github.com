@@ -2,20 +2,28 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Layout, Target, Zap } from "lucide-react";
 import { useTranslation } from "@/locales/LanguageProvider";
 import useMotionTier from "@/hooks/useMotionTier";
 import { heroMaskVariants } from "@/lib/motion";
 import DesignGallerySection from "@/components/portfolio/DesignGallerySection";
+import GroupedDesignGallerySection from "@/components/portfolio/GroupedDesignGallerySection";
+import DesignAnalysisSection from "@/components/portfolio/DesignAnalysisSection";
 import SiteDesignAnalysis from "@/components/portfolio/SiteDesignAnalysis";
+import type { SmartGlassesScreenshotGroup } from "@/lib/p2SmartGlassesScreenshots";
 import type { P2SubId } from "@/lib/p2Subprojects";
 
 type Props = {
   subId: P2SubId;
   designScreenshots?: string[];
+  smartGlassesGroups?: SmartGlassesScreenshotGroup[];
 };
 
-export default function P2SubClient({ subId, designScreenshots = [] }: Props) {
+export default function P2SubClient({
+  subId,
+  designScreenshots = [],
+  smartGlassesGroups = [],
+}: Props) {
   const { t, mounted } = useTranslation();
   const tier = useMotionTier();
   const sub = t.portfolio.projectDetail.p2Subprojects;
@@ -28,6 +36,43 @@ export default function P2SubClient({ subId, designScreenshots = [] }: Props) {
 
   const detail =
     subId === "personal-website" ? sub.personalWebsite : sub.smartGlasses;
+
+  const galleryLabels = {
+    title: t.portfolio.projectDetail.designGallery,
+    countLabel: t.portfolio.projectDetail.designCount,
+    altPrefix: t.portfolio.projectDetail.designAlt,
+    lightboxBack: t.portfolio.projectDetail.lightboxBack,
+    lightboxClose: t.portfolio.projectDetail.lightboxClose,
+  };
+
+  const smartGlassesGalleryGroups =
+    subId === "smart-glasses"
+      ? smartGlassesGroups
+          .map((group) => {
+            const copy =
+              t.portfolio.projectDetail.p2SmartGlassesGroups[group.groupId];
+            return {
+              groupId: group.groupId,
+              title: copy.title,
+              caption: copy.caption,
+              images: group.images,
+            };
+          })
+          .filter((group) => group.images.length > 0)
+      : [];
+
+  const smartGlassesAnalysisDimensions =
+    subId === "smart-glasses"
+      ? ([
+          { key: "layout", icon: Layout },
+          { key: "motion", icon: Zap },
+          { key: "content", icon: Target },
+        ] as const).map(({ key, icon }) => ({
+          key,
+          icon,
+          ...t.portfolio.projectDetail.p2SmartGlassesAnalysis[key],
+        }))
+      : [];
 
   if (!mounted) {
     return (
@@ -72,24 +117,26 @@ export default function P2SubClient({ subId, designScreenshots = [] }: Props) {
 
       {subId === "personal-website" ? (
         <>
-          <DesignGallerySection
-            screenshots={designScreenshots}
-            labels={{
-              title: t.portfolio.projectDetail.designGallery,
-              countLabel: t.portfolio.projectDetail.designCount,
-              altPrefix: t.portfolio.projectDetail.designAlt,
-              lightboxBack: t.portfolio.projectDetail.lightboxBack,
-              lightboxClose: t.portfolio.projectDetail.lightboxClose,
-            }}
-          />
+          <DesignGallerySection screenshots={designScreenshots} labels={galleryLabels} />
           <SiteDesignAnalysis analysis={t.portfolio.projectDetail.p2Analysis} />
         </>
       ) : (
-        <section className="glass border-white/10 rounded-[28px] sm:rounded-[40px] p-10 sm:p-14 text-center mb-16">
-          <p className="text-lg sm:text-xl text-foreground/55 leading-relaxed max-w-xl mx-auto">
-            {sub.smartGlasses.comingSoon}
-          </p>
-        </section>
+        <>
+          <GroupedDesignGallerySection
+            groups={smartGlassesGalleryGroups}
+            labels={{
+              sectionTitle: galleryLabels.title,
+              countLabel: galleryLabels.countLabel,
+              altPrefix: galleryLabels.altPrefix,
+              lightboxBack: galleryLabels.lightboxBack,
+              lightboxClose: galleryLabels.lightboxClose,
+            }}
+          />
+          <DesignAnalysisSection
+            sectionTitle={t.portfolio.projectDetail.p2SmartGlassesAnalysis.sectionTitle}
+            dimensions={smartGlassesAnalysisDimensions}
+          />
+        </>
       )}
     </div>
   );

@@ -13,7 +13,8 @@
     "capture-p2-design": "node scripts/capture-p2-design.mjs",
     "import-figma-p2": "node scripts/import-figma-p2-design.mjs",
     "capture-figma-p2": "node scripts/capture-figma-p2-design.mjs",
-    "crop-cooper-p2": "node scripts/crop-cooper-p2-design.mjs"
+    "crop-cooper-p2": "node scripts/crop-cooper-p2-design.mjs",
+    "import-smart-glasses-p2": "node scripts/import-smart-glasses-p2.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
