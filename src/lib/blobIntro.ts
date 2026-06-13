@@ -45,6 +45,13 @@ export const BLOB_ROUTE_SELECTORS = [
   ".blob-route.blob-c",
 ] as const;
 
+/** CSS class defaults — inline 0s after intro avoids phase jump on handoff */
+export const BLOB_ROUTE_ANIMATION_DELAYS = ["-2s", "-9s", "-16s"] as const;
+
+export function formatBlobRouteTransform(pose: BlobPose): string {
+  return `translate3d(${pose.x}, ${pose.y}, 0) scale(${pose.scale}) rotate(${pose.rotation}deg)`;
+}
+
 export type BlobIntroMode = "hold" | "handoff" | "idle";
 
 export function hasIntroBeenPlayed(): boolean {

@@ -8,6 +8,7 @@ import { useIntroPlayback } from "@/components/motion/IntroPlaybackContext";
 import {
   BLOB_ROUTE_ORIGIN,
   BLOB_ROUTE_SELECTORS,
+  formatBlobRouteTransform,
   getBlobCenterPosePixels,
   INTRO_TIMING,
   markIntroPlayed,
@@ -15,6 +16,40 @@ import {
 import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
+
+function snapBlobRoutesToKeyframe0(routes: readonly HTMLElement[]): void {
+  routes.forEach((route, i) => {
+    const pose = BLOB_ROUTE_ORIGIN[i];
+    if (!pose) return;
+
+    gsap.killTweensOf(route);
+    route.style.transform = formatBlobRouteTransform(pose);
+    route.style.opacity = "";
+    route.style.animationDelay = "0s";
+    gsap.set(route, { clearProps: "x,y,scale,rotation,opacity" });
+
+    const visual = route.querySelector<HTMLElement>(".blob-visual");
+    if (visual) {
+      visual.style.animationDelay = "0s";
+    }
+  });
+}
+
+function resumeBlobRouteCssAnimations(
+  routes: readonly HTMLElement[],
+  container: HTMLElement | null
+): void {
+  container?.classList.remove("liquid-bg--intro-active");
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      routes.forEach((route) => {
+        route.style.removeProperty("transform");
+      });
+      ScrollTrigger.refresh();
+    });
+  });
+}
 
 export default function BlobSplashIntro() {
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -57,7 +92,6 @@ export default function BlobSplashIntro() {
           y: center.y,
           scale: 0,
           rotation: 0,
-          opacity: 0,
           force3D: true,
         });
       });
@@ -73,13 +107,13 @@ export default function BlobSplashIntro() {
         INTRO_TIMING.bloomDuration +
         INTRO_TIMING.bloomStagger * 2 +
         INTRO_TIMING.bloomSettleDuration;
+      const handoffAt = releaseAt + INTRO_TIMING.releaseDuration;
 
       const tl = gsap.timeline({
         delay: bloomStart,
         onComplete: () => {
-          routes.forEach((el) => {
-            el.style.animationDelay = "0s";
-          });
+          snapBlobRoutesToKeyframe0(routes);
+          resumeBlobRouteCssAnimations(routes, container);
 
           markIntroPlayed();
           setIntroMode("idle");
@@ -87,13 +121,6 @@ export default function BlobSplashIntro() {
           setIntroComplete(true);
           document.documentElement.removeAttribute("data-intro-active");
           document.documentElement.removeAttribute("data-intro-needed");
-
-          requestAnimationFrame(() => {
-            routes.forEach((el) => {
-              gsap.set(el, { clearProps: "all" });
-            });
-            ScrollTrigger.refresh();
-          });
         },
       });
 
@@ -102,7 +129,6 @@ export default function BlobSplashIntro() {
         tl.to(
           el,
           {
-            opacity: 1,
             scale: INTRO_TIMING.bloomOvershoot,
             duration: INTRO_TIMING.bloomDuration * 0.75,
             ease: INTRO_TIMING.bloomEase,
@@ -120,7 +146,7 @@ export default function BlobSplashIntro() {
       });
 
       tl.addLabel("release", releaseAt);
-      setIntroMode("handoff");
+      tl.add(() => setIntroMode("handoff"), releaseAt);
 
       routes.forEach((el, i) => {
         const target = BLOB_ROUTE_ORIGIN[i];
@@ -137,6 +163,8 @@ export default function BlobSplashIntro() {
           "release"
         );
       });
+
+      tl.add(() => snapBlobRoutesToKeyframe0(routes), handoffAt);
 
       if (overlay) {
         tl.to(
@@ -157,6 +185,11 @@ export default function BlobSplashIntro() {
           gsap.killTweensOf(el);
           gsap.set(el, { clearProps: "all" });
           el.style.animationDelay = "";
+          el.style.removeProperty("transform");
+          const visual = el.querySelector<HTMLElement>(".blob-visual");
+          if (visual) {
+            visual.style.animationDelay = "";
+          }
         });
       };
     },
