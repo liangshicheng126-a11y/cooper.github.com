@@ -523,9 +523,33 @@
     "width": 1600,
     "height": 900
   },
-  "/photos/portfolio/p2/design-components-board.png": {
+  "/photos/portfolio/p2/design-components-nav.png": {
     "width": 1024,
-    "height": 487
+    "height": 898
+  },
+  "/photos/portfolio/p2/design-components-tags.png": {
+    "width": 921,
+    "height": 1024
+  },
+  "/photos/portfolio/p2/design-icons.png": {
+    "width": 887,
+    "height": 992
+  },
+  "/photos/portfolio/p2/design-modules-buttons.png": {
+    "width": 945,
+    "height": 806
+  },
+  "/photos/portfolio/p2/design-modules-process.png": {
+    "width": 813,
+    "height": 892
+  },
+  "/photos/portfolio/p2/design-modules-stats-card.png": {
+    "width": 623,
+    "height": 479
+  },
+  "/photos/portfolio/p2/design-modules-stats.png": {
+    "width": 1024,
+    "height": 387
   },
   "/photos/portfolio/p2/home.png": {
     "width": 1920,

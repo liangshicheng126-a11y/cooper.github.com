@@ -149,7 +149,7 @@ export const translations = {
           components: {
             title: "按钮与组件",
             caption:
-              "整板设计稿汇总全站可复用组件：导航与 CTA、Lucide 图标集、工具与兴趣标签、渐变按钮、CountUp 统计卡与服务流程卡片，统一 indigo 玻璃拟态与大圆角规范。",
+              "设计稿展示全站可复用组件：导航与 CTA、Lucide 图标集、工具与兴趣标签、渐变 CTA 按钮、CountUp 统计卡与服务流程卡片，统一 indigo 玻璃拟态与大圆角规范。",
           },
         },
         p2SmartGlassesGroups: {
@@ -474,7 +474,7 @@ export const translations = {
           components: {
             title: "Buttons & Components",
             caption:
-              "A single artboard summarizing the reusable system: nav and CTAs, Lucide icons, tool and hobby tags, gradient buttons, CountUp stat cards, and service-flow cards—unified indigo glassmorphism and large-radius language.",
+              "Design artboards for the reusable system: nav and CTAs, Lucide icons, tool and hobby tags, gradient buttons, CountUp stat cards, and service-flow cards—unified indigo glassmorphism and large-radius language.",
           },
         },
         p2SmartGlassesGroups: {
