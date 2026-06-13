@@ -68,26 +68,43 @@ export default function GroupedDesignGallerySection({ groups, labels }: Props) {
                 {group.caption}
               </p>
               <GsapGalleryStagger entrance="slide">
-                <MasonryGallery
-                  items={group.images}
-                  getOriginalSrc={(shot) => shot}
-                  renderItem={(shot, index) => (
-                    <MasonryItem className="gallery-thumb group shadow-[0_2px_16px_rgba(15,23,42,0.08)] transition-shadow duration-300 sm:hover:shadow-[0_12px_32px_rgba(15,23,42,0.14)]">
-                      <LazyInViewImage
-                        src={thumbSrc(shot)}
-                        fallbackSrc={shot}
-                        alt={`${labels.altPrefix} ${group.title} ${index + 1}`}
-                        variant="natural"
-                        className="cursor-pointer transition-transform duration-500 sm:group-hover:scale-[1.02]"
-                        onClick={() => {
-                          setLightboxPhotos(designDisplay);
-                          setLightboxFallbacks(flatScreenshots);
-                          setLightboxIndex(groupOffsets[group.groupId] + index);
-                        }}
-                      />
-                    </MasonryItem>
-                  )}
-                />
+                {group.images.length === 1 ? (
+                  <MasonryItem className="gallery-thumb group w-full shadow-[0_2px_16px_rgba(15,23,42,0.08)] transition-shadow duration-300 sm:hover:shadow-[0_12px_32px_rgba(15,23,42,0.14)]">
+                    <LazyInViewImage
+                      src={thumbSrc(group.images[0])}
+                      fallbackSrc={group.images[0]}
+                      alt={`${labels.altPrefix} ${group.title}`}
+                      variant="natural"
+                      className="cursor-pointer transition-transform duration-500 sm:group-hover:scale-[1.01]"
+                      onClick={() => {
+                        setLightboxPhotos(designDisplay);
+                        setLightboxFallbacks(flatScreenshots);
+                        setLightboxIndex(groupOffsets[group.groupId]);
+                      }}
+                    />
+                  </MasonryItem>
+                ) : (
+                  <MasonryGallery
+                    items={group.images}
+                    getOriginalSrc={(shot) => shot}
+                    renderItem={(shot, index) => (
+                      <MasonryItem className="gallery-thumb group shadow-[0_2px_16px_rgba(15,23,42,0.08)] transition-shadow duration-300 sm:hover:shadow-[0_12px_32px_rgba(15,23,42,0.14)]">
+                        <LazyInViewImage
+                          src={thumbSrc(shot)}
+                          fallbackSrc={shot}
+                          alt={`${labels.altPrefix} ${group.title} ${index + 1}`}
+                          variant="natural"
+                          className="cursor-pointer transition-transform duration-500 sm:group-hover:scale-[1.02]"
+                          onClick={() => {
+                            setLightboxPhotos(designDisplay);
+                            setLightboxFallbacks(flatScreenshots);
+                            setLightboxIndex(groupOffsets[group.groupId] + index);
+                          }}
+                        />
+                      </MasonryItem>
+                    )}
+                  />
+                )}
               </GsapGalleryStagger>
             </div>
           ))}

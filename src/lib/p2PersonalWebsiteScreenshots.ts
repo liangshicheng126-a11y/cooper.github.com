@@ -17,15 +17,7 @@ const GROUP_FILES: Array<{ groupId: PersonalWebsiteGroupId; files: readonly stri
   },
   {
     groupId: "components",
-    files: [
-      "design-components-nav.png",
-      "design-icons.png",
-      "design-components-tags.png",
-      "design-modules-buttons.png",
-      "design-modules-process.png",
-      "design-modules-stats.png",
-      "design-modules-stats-card.png",
-    ],
+    files: ["design-components-board.png"],
   },
 ];
 

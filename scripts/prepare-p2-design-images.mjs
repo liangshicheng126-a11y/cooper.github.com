@@ -11,15 +11,7 @@ const PAGE_FILES = ["home.png", "portfolio.png", "about.png", "project-detail.pn
 const PAGE_TRIM_THRESHOLD = 15;
 
 /** Component strips: trim dark Figma canvas margins on the sides. */
-const COMPONENT_FILES = [
-  "design-components-nav.png",
-  "design-icons.png",
-  "design-components-tags.png",
-  "design-modules-buttons.png",
-  "design-modules-process.png",
-  "design-modules-stats.png",
-  "design-modules-stats-card.png",
-];
+const COMPONENT_FILES = ["design-components-board.png"];
 const COMPONENT_TRIM_THRESHOLD = 50;
 
 async function trimInPlace(fileName, threshold) {
@@ -49,6 +41,10 @@ async function main() {
 
   console.log("Trimming component strips…");
   for (const file of COMPONENT_FILES) {
+    if (file === "design-components-board.png") {
+      console.log(`  skip ${file} (full artboard, no trim)`);
+      continue;
+    }
     await trimInPlace(file, COMPONENT_TRIM_THRESHOLD);
   }
 
