@@ -21,7 +21,7 @@ import HomeScrollStack from "@/components/motion/HomeScrollStack";
 import useMotionTier from "@/hooks/useMotionTier";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import { useIntroRevealReady } from "@/components/motion/IntroPlaybackContext";
-import { heroMaskVariants, shouldUseGsap } from "@/lib/motion";
+import { shouldUseGsap } from "@/lib/motion";
 
 gsap.registerPlugin(CustomEase);
 
@@ -31,7 +31,6 @@ export default function Home() {
   const reduced = usePrefersReducedMotion();
   const useGsap = shouldUseGsap(reduced);
   const introRevealReady = useIntroRevealReady();
-  const heroMask = heroMaskVariants(tier);
   const portfolioBtnRef = useRef<HTMLAnchorElement>(null);
   const aboutBtnRef = useRef<HTMLAnchorElement>(null);
 
@@ -110,12 +109,14 @@ export default function Home() {
     };
   }, { dependencies: [useGsap, tier] });
 
+  // Container holds NO opacity — each child handles its own hidden state.
+  // This avoids compounded opacity (container 0→1 while children also 0→1).
   const container = {
-    hidden: { opacity: 0 },
+    hidden: {},
     show: {
-      opacity: 1,
       transition: {
         staggerChildren: 0.1,
+        delayChildren: 0.08,
       },
     },
   };
@@ -154,7 +155,9 @@ export default function Home() {
             <span className="whitespace-normal break-words leading-snug">{t.hero.status}</span>
           </motion.div>
 
-          <motion.div variants={heroMask} className="overflow-hidden mb-6 sm:mb-8">
+          {/* Plain div — BlurText is the sole animation for hero title.
+               heroMask's clip-path and BlurText's word-by-word conflict visually. */}
+          <div className="overflow-hidden mb-6 sm:mb-8">
             <h1 className="text-4xl sm:text-6xl lg:text-8xl font-bold tracking-tight max-w-5xl leading-[1.1]">
               <BlurText
                 text={t.hero.title}
@@ -165,12 +168,10 @@ export default function Home() {
                 className="inline-flex flex-wrap"
               />
             </h1>
-          </motion.div>
+          </div>
 
-          <motion.div
-            variants={heroSoft}
-            className="text-lg sm:text-xl lg:text-2xl text-foreground/60 mb-8 sm:mb-12 max-w-3xl leading-relaxed font-light"
-          >
+          {/* Plain div — same reasoning: heroSoft y/opacity + BlurText opacity would compound */}
+          <div className="text-lg sm:text-xl lg:text-2xl text-foreground/60 mb-8 sm:mb-12 max-w-3xl leading-relaxed font-light">
             <BlurText
               text={t.hero.description}
               delay={40}
@@ -179,7 +180,7 @@ export default function Home() {
               stepDuration={0.32}
               className="inline-flex flex-wrap leading-relaxed"
             />
-          </motion.div>
+          </div>
 
           <motion.div variants={heroSoft} className="relative z-[80] overflow-visible flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-0 sm:space-x-6">
             <Magnet padding={50} magnetStrength={4.5} wrapperClassName="hero-cta-magnet relative z-0">

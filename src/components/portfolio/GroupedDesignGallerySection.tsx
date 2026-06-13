@@ -67,7 +67,7 @@ export default function GroupedDesignGallerySection({ groups, labels }: Props) {
               <p className="text-base sm:text-lg text-foreground/60 leading-relaxed max-w-3xl mb-6 sm:mb-8">
                 {group.caption}
               </p>
-              <GsapGalleryStagger>
+              <GsapGalleryStagger entrance="slide">
                 <MasonryGallery
                   items={group.images}
                   getOriginalSrc={(shot) => shot}

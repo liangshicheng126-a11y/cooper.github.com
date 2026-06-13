@@ -155,12 +155,22 @@ export default function GsapPageTransition({ children }: GsapPageTransitionProps
     const currentOpacity = gsap.getProperty(el, "opacity") as number;
     if (currentOpacity >= 1) return;
 
-    // Instantly reveal the wrapper — Framer Motion children handle the
-    // staggered entrance. A gsap.to here would create a double-animation
-    // (GSAP fading the wrapper while FM fades individual children).
-    gsap.set(el, { autoAlpha: 1 });
-    animatingRef.current = false;
-    requestAnimationFrame(() => ScrollTrigger.refresh());
+    // Short wrapper reveal (0.22s) — fast enough not to compete with the
+    // 0.8–0.9s Framer Motion child animations that handle the actual reveal.
+    // Also resets y: 18 that was set on first-mount to hide content during intro.
+    gsap.to(el, {
+      autoAlpha: 1,
+      y: 0,
+      duration: 0.22,
+      ease: "power2.out",
+      force3D: true,
+      onComplete: () => {
+        gsap.set(el, { clearProps: "transform,y" });
+        el.style.willChange = "auto";
+        animatingRef.current = false;
+        requestAnimationFrame(() => ScrollTrigger.refresh());
+      },
+    });
   }, [introComplete, shouldPlayIntro, useGsap, tier]);
 
   return (

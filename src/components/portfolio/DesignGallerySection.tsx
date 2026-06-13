@@ -37,7 +37,7 @@ export default function DesignGallerySection({ screenshots, labels }: Props) {
             {labels.countLabel} {screenshots.length}
           </span>
         </div>
-        <GsapGalleryStagger>
+        <GsapGalleryStagger entrance="slide">
           <MasonryGallery
             items={screenshots}
             getOriginalSrc={(shot) => shot}
