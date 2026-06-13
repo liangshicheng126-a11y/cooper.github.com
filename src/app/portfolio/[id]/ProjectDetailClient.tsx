@@ -211,30 +211,29 @@ export default function ProjectDetailClient({
 
       {hasDesignGallery && (
         <section className="gallery-section mb-16 lg:mb-24">
-          <div className="flex items-center justify-between gap-4 mb-5">
+          <div className="flex items-center justify-between gap-4 mb-6">
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t.portfolio.projectDetail.designGallery}</h2>
             <span className="text-base sm:text-lg text-foreground/55 font-medium">
               {t.portfolio.projectDetail.designCount} {designScreenshots.length}
             </span>
           </div>
           <GsapGalleryStagger>
-            <div className="flex flex-col gap-4 sm:gap-6">
-              {designScreenshots.map((shot, index) => (
-                <div
-                  key={shot}
-                  className="overflow-hidden rounded-2xl sm:rounded-3xl glass border-white/10 shadow-[0_2px_16px_rgba(15,23,42,0.08)]"
-                >
+            <MasonryGallery
+              items={designScreenshots}
+              getOriginalSrc={(shot) => shot}
+              renderItem={(shot, index) => (
+                <MasonryItem className="gallery-thumb group shadow-[0_2px_16px_rgba(15,23,42,0.08)] transition-shadow duration-300 sm:hover:shadow-[0_12px_32px_rgba(15,23,42,0.14)]">
                   <LazyInViewImage
-                    src={shot}
+                    src={thumbSrc(shot)}
                     fallbackSrc={shot}
                     alt={`${t.portfolio.projectDetail.designAlt} ${index + 1}`}
                     variant="natural"
-                    className="cursor-pointer transition-transform duration-500 sm:hover:scale-[1.005]"
+                    className="cursor-pointer transition-transform duration-500 sm:group-hover:scale-[1.02]"
                     onClick={() => openLightbox(designDisplay, index, designScreenshots)}
                   />
-                </div>
-              ))}
-            </div>
+                </MasonryItem>
+              )}
+            />
           </GsapGalleryStagger>
         </section>
       )}

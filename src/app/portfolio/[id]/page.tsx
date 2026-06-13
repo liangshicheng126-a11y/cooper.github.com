@@ -194,7 +194,6 @@ async function getDesignScreenshots(): Promise<string[]> {
     "portfolio.png",
     "about.png",
     "project-detail.png",
-    "design-colors.png",
     "design-components-home.png",
     "design-components-about.png",
   ];

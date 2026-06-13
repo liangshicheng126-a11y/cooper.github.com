@@ -484,31 +484,27 @@
     "height": 3712
   },
   "/photos/portfolio/p2/about.png": {
-    "width": 1543,
-    "height": 2188
-  },
-  "/photos/portfolio/p2/design-colors.png": {
-    "width": 2313,
-    "height": 819
+    "width": 1487,
+    "height": 2156
   },
   "/photos/portfolio/p2/design-components-about.png": {
-    "width": 1186,
-    "height": 3940
+    "width": 799,
+    "height": 3699
   },
   "/photos/portfolio/p2/design-components-home.png": {
-    "width": 1324,
-    "height": 4712
+    "width": 1108,
+    "height": 4463
   },
   "/photos/portfolio/p2/home.png": {
-    "width": 1976,
-    "height": 2613
+    "width": 1920,
+    "height": 2581
   },
   "/photos/portfolio/p2/portfolio.png": {
-    "width": 1976,
-    "height": 1654
+    "width": 1920,
+    "height": 1622
   },
   "/photos/portfolio/p2/project-detail.png": {
-    "width": 1976,
-    "height": 3969
+    "width": 1920,
+    "height": 3937
   }
 }
