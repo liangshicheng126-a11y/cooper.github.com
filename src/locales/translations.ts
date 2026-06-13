@@ -140,6 +140,18 @@ export const translations = {
             category: "App 设计",
           },
         },
+        p2PersonalWebsiteGroups: {
+          pages: {
+            title: "核心页面",
+            caption:
+              "首页以玻璃拟态侧栏、渐变 blob 背景与 BlurText 标题建立品牌第一印象；作品集页以品类 accent 色卡片网格索引多媒介作品；关于页融入极限运动叙事与工具能力展示；项目详情页承载深度案例与元信息结构。",
+          },
+          components: {
+            title: "按钮与组件",
+            caption:
+              "灰色底稿展示全站可复用组件体系：渐变 CTA 按钮（作品集/关于我）含 default 与 hover 状态、CountUp 统计卡片与服务流程卡片，统一大圆角与 indigo 渐变高亮，构成跨页面一致的设计系统规范。",
+          },
+        },
         p2SmartGlassesGroups: {
           core: {
             title: "核心界面",
@@ -161,6 +173,39 @@ export const translations = {
             caption:
               "周、月、年统计与疲劳曲线可视化，结合 AI 助理建议形成可穿戴数据闭环，帮助用户理解活动规律与恢复节奏。",
           },
+        },
+        p2SmartGlassesChallenges: {
+          sectionTitle: "设计挑战与痛点",
+          hardware: {
+            title: "硬件痛点",
+            body: "AR 眼镜受限于微型显示屏、续航与佩戴舒适度，难以承载复杂多层级界面；旅行与户外场景网络不稳定，眼镜端算力与存储有限，导致实时信息同步与离线工具难以兼顾。",
+            points: [
+              "显示面积小：信息密度与可读性之间的天然矛盾",
+              "续航约束：常亮显示与后台同步加剧电量消耗",
+              "离线场景：飞行、徒步等弱网环境依赖本地存储",
+              "佩戴状态：用户难以同时操作手机多应用切换"
+            ]
+          },
+          software: {
+            title: "软件痛点",
+            body: "现有移动端方案将航班、日历、健康、文件管理分散在多个 App 中，用户在佩戴眼镜时需频繁切换上下文；可穿戴数据缺乏统一解读，AI 建议与离线 AR 工具（翻译、地图、提词器）也未形成闭环体验。",
+            points: [
+              "信息碎片化：航班/待办/健康/文件各自独立",
+              "认知负荷高：眼镜场景下多 App 切换成本陡增",
+              "数据孤岛：运动负荷与行程数据无法同屏关联",
+              "工具割裂：离线 AR 功能缺少统一入口与容量管理"
+            ]
+          },
+          solution: {
+            title: "本设计的解决方案",
+            body: "以卡片化 Dashboard 聚合 Widget 信息，底部四 Tab 固定主导航降低切换成本；日历模块将行程与身体负荷色彩编码同屏呈现；文件页按类型管理眼镜本地存储；数据量化结合 AI 助理形成可穿戴闭环，并预留手表/手环/车辆生态接口。",
+            points: [
+              "一站式总控：首页 Widget 网格 + 四 Tab 固定导航",
+              "行程与负荷同屏：日历日/周/年视图 + 活动色彩编码",
+              "离线 AR 工具链：翻译/地图/提词器/视频分类存储",
+              "数据闭环：疲劳曲线 + AI 建议 + 多设备扩展预留"
+            ]
+          }
         },
         p2SmartGlassesAnalysis: {
           sectionTitle: "设计分析",
@@ -420,6 +465,18 @@ export const translations = {
             category: "App Design",
           },
         },
+        p2PersonalWebsiteGroups: {
+          pages: {
+            title: "Core Pages",
+            caption:
+              "The home page establishes brand presence with a glassmorphism sidebar, gradient blobs, and BlurText hero; the portfolio grid indexes multi-medium work by category accent; the about page weaves extreme-sports narrative with tool cards; the project detail page carries in-depth case studies and metadata.",
+          },
+          components: {
+            title: "Buttons & Components",
+            caption:
+              "Gray artboards document the reusable design system: gradient CTA buttons (Portfolio / About Me) in default and hover states, CountUp stat cards, and service-flow cards—unified large radius and indigo gradient highlights across pages.",
+          },
+        },
         p2SmartGlassesGroups: {
           core: {
             title: "Core Screens",
@@ -441,6 +498,39 @@ export const translations = {
             caption:
               "Weekly, monthly, and yearly stats with fatigue curves; AI assistant suggestions close the wearable data loop so users can track activity patterns and recovery rhythm.",
           },
+        },
+        p2SmartGlassesChallenges: {
+          sectionTitle: "Design Challenges & Pain Points",
+          hardware: {
+            title: "Hardware Constraints",
+            body: "AR glasses are limited by micro-displays, battery life, and wear comfort—making dense multi-level UIs impractical. Travel and outdoor weak-network scenarios strain on-device compute and storage, forcing a trade-off between live sync and offline tools.",
+            points: [
+              "Small display: inherent tension between density and readability",
+              "Battery limits: always-on display and background sync drain power",
+              "Offline contexts: flights and hikes depend on local storage",
+              "Worn state: hard to juggle multiple phone apps while wearing glasses"
+            ]
+          },
+          software: {
+            title: "Software Pain Points",
+            body: "Mobile solutions scatter flights, calendars, health, and files across separate apps—forcing constant context switches while wearing glasses. Wearable data lacks unified interpretation; AI tips and offline AR tools (translate, map, teleprompter) remain disconnected.",
+            points: [
+              "Fragmented info: flights, todos, health, and files live apart",
+              "High cognitive load: multi-app switching is costly in glasses use",
+              "Data silos: workout load and schedules cannot be read together",
+              "Tool fragmentation: offline AR lacks a unified entry and capacity view"
+            ]
+          },
+          solution: {
+            title: "Design Response",
+            body: "A card dashboard aggregates widgets; a fixed four-tab bar cuts navigation depth. Calendar color-codes schedule and physical load on one screen. Files are categorized on-glasses storage. Activity metrics plus an AI assistant close the wearable loop, with hooks for watch, band, and vehicle integrations.",
+            points: [
+              "One-stop hub: widget grid + four-tab bottom navigation",
+              "Schedule + load together: day/week/year calendar with color coding",
+              "Offline AR toolchain: translate / map / teleprompter / video storage",
+              "Data loop: fatigue curves + AI tips + multi-device expansion"
+            ]
+          }
         },
         p2SmartGlassesAnalysis: {
           sectionTitle: "Design Analysis",

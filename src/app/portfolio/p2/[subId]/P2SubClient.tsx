@@ -2,26 +2,27 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowLeft, Layout, Target, Zap } from "lucide-react";
+import { ArrowLeft, Cpu, Layout, Lightbulb, Monitor, Target, Zap } from "lucide-react";
 import { useTranslation } from "@/locales/LanguageProvider";
 import useMotionTier from "@/hooks/useMotionTier";
 import { heroMaskVariants } from "@/lib/motion";
-import DesignGallerySection from "@/components/portfolio/DesignGallerySection";
 import GroupedDesignGallerySection from "@/components/portfolio/GroupedDesignGallerySection";
 import DesignAnalysisSection from "@/components/portfolio/DesignAnalysisSection";
+import DesignChallengesSection from "@/components/portfolio/DesignChallengesSection";
 import SiteDesignAnalysis from "@/components/portfolio/SiteDesignAnalysis";
+import type { PersonalWebsiteScreenshotGroup } from "@/lib/p2PersonalWebsiteScreenshots";
 import type { SmartGlassesScreenshotGroup } from "@/lib/p2SmartGlassesScreenshots";
 import type { P2SubId } from "@/lib/p2Subprojects";
 
 type Props = {
   subId: P2SubId;
-  designScreenshots?: string[];
+  personalWebsiteGroups?: PersonalWebsiteScreenshotGroup[];
   smartGlassesGroups?: SmartGlassesScreenshotGroup[];
 };
 
 export default function P2SubClient({
   subId,
-  designScreenshots = [],
+  personalWebsiteGroups = [],
   smartGlassesGroups = [],
 }: Props) {
   const { t, mounted } = useTranslation();
@@ -45,6 +46,21 @@ export default function P2SubClient({
     lightboxClose: t.portfolio.projectDetail.lightboxClose,
   };
 
+  const personalWebsiteGalleryGroups =
+    subId === "personal-website"
+      ? personalWebsiteGroups
+          .map((group) => {
+            const copy = t.portfolio.projectDetail.p2PersonalWebsiteGroups[group.groupId];
+            return {
+              groupId: group.groupId,
+              title: copy.title,
+              caption: copy.caption,
+              images: group.images,
+            };
+          })
+          .filter((group) => group.images.length > 0)
+      : [];
+
   const smartGlassesGalleryGroups =
     subId === "smart-glasses"
       ? smartGlassesGroups
@@ -59,6 +75,19 @@ export default function P2SubClient({
             };
           })
           .filter((group) => group.images.length > 0)
+      : [];
+
+  const smartGlassesChallenges =
+    subId === "smart-glasses"
+      ? ([
+          { key: "hardware", icon: Cpu },
+          { key: "software", icon: Monitor },
+          { key: "solution", icon: Lightbulb },
+        ] as const).map(({ key, icon }) => ({
+          key,
+          icon,
+          ...t.portfolio.projectDetail.p2SmartGlassesChallenges[key],
+        }))
       : [];
 
   const smartGlassesAnalysisDimensions =
@@ -117,7 +146,16 @@ export default function P2SubClient({
 
       {subId === "personal-website" ? (
         <>
-          <DesignGallerySection screenshots={designScreenshots} labels={galleryLabels} />
+          <GroupedDesignGallerySection
+            groups={personalWebsiteGalleryGroups}
+            labels={{
+              sectionTitle: galleryLabels.title,
+              countLabel: galleryLabels.countLabel,
+              altPrefix: galleryLabels.altPrefix,
+              lightboxBack: galleryLabels.lightboxBack,
+              lightboxClose: galleryLabels.lightboxClose,
+            }}
+          />
           <SiteDesignAnalysis analysis={t.portfolio.projectDetail.p2Analysis} />
         </>
       ) : (
@@ -131,6 +169,10 @@ export default function P2SubClient({
               lightboxBack: galleryLabels.lightboxBack,
               lightboxClose: galleryLabels.lightboxClose,
             }}
+          />
+          <DesignChallengesSection
+            sectionTitle={t.portfolio.projectDetail.p2SmartGlassesChallenges.sectionTitle}
+            challenges={smartGlassesChallenges}
           />
           <DesignAnalysisSection
             sectionTitle={t.portfolio.projectDetail.p2SmartGlassesAnalysis.sectionTitle}

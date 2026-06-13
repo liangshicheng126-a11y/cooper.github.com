@@ -8,11 +8,7 @@ import useMotionTier from "@/hooks/useMotionTier";
 import { heroMaskVariants } from "@/lib/motion";
 import P2SubProjectPicker from "@/components/portfolio/P2SubProjectPicker";
 
-type Props = {
-  previewImage: string;
-};
-
-export default function P2HubClient({ previewImage }: Props) {
+export default function P2HubClient() {
   const { t, mounted } = useTranslation();
   const tier = useMotionTier();
   const project = t.portfolio.projects.p2;
@@ -30,7 +26,7 @@ export default function P2HubClient({ previewImage }: Props) {
       title: sub.personalWebsite.title,
       desc: sub.personalWebsite.desc,
       category: sub.personalWebsite.category,
-      image: previewImage,
+      image: "/photos/portfolio/p2/home.png",
       accent: "#6366f1",
       viewLabel: sub.viewDetail,
     },
