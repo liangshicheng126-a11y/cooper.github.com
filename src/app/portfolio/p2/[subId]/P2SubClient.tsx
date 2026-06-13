@@ -6,14 +6,16 @@ import { ArrowLeft } from "lucide-react";
 import { useTranslation } from "@/locales/LanguageProvider";
 import useMotionTier from "@/hooks/useMotionTier";
 import { heroMaskVariants } from "@/lib/motion";
+import DesignGallerySection from "@/components/portfolio/DesignGallerySection";
 import SiteDesignAnalysis from "@/components/portfolio/SiteDesignAnalysis";
 import type { P2SubId } from "@/lib/p2Subprojects";
 
 type Props = {
   subId: P2SubId;
+  designScreenshots?: string[];
 };
 
-export default function P2SubClient({ subId }: Props) {
+export default function P2SubClient({ subId, designScreenshots = [] }: Props) {
   const { t, mounted } = useTranslation();
   const tier = useMotionTier();
   const sub = t.portfolio.projectDetail.p2Subprojects;
@@ -69,7 +71,19 @@ export default function P2SubClient({ subId }: Props) {
       </header>
 
       {subId === "personal-website" ? (
-        <SiteDesignAnalysis analysis={t.portfolio.projectDetail.p2Analysis} />
+        <>
+          <DesignGallerySection
+            screenshots={designScreenshots}
+            labels={{
+              title: t.portfolio.projectDetail.designGallery,
+              countLabel: t.portfolio.projectDetail.designCount,
+              altPrefix: t.portfolio.projectDetail.designAlt,
+              lightboxBack: t.portfolio.projectDetail.lightboxBack,
+              lightboxClose: t.portfolio.projectDetail.lightboxClose,
+            }}
+          />
+          <SiteDesignAnalysis analysis={t.portfolio.projectDetail.p2Analysis} />
+        </>
       ) : (
         <section className="glass border-white/10 rounded-[28px] sm:rounded-[40px] p-10 sm:p-14 text-center mb-16">
           <p className="text-lg sm:text-xl text-foreground/55 leading-relaxed max-w-xl mx-auto">

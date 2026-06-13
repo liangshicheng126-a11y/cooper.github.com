@@ -6,14 +6,13 @@ import { ArrowLeft, Calendar, Layout, User } from "lucide-react";
 import { useTranslation } from "@/locales/LanguageProvider";
 import useMotionTier from "@/hooks/useMotionTier";
 import { heroMaskVariants } from "@/lib/motion";
-import DesignGallerySection from "@/components/portfolio/DesignGallerySection";
 import P2SubProjectPicker from "@/components/portfolio/P2SubProjectPicker";
 
 type Props = {
-  designScreenshots: string[];
+  previewImage: string;
 };
 
-export default function P2HubClient({ designScreenshots }: Props) {
+export default function P2HubClient({ previewImage }: Props) {
   const { t, mounted } = useTranslation();
   const tier = useMotionTier();
   const project = t.portfolio.projects.p2;
@@ -31,7 +30,7 @@ export default function P2HubClient({ designScreenshots }: Props) {
       title: sub.personalWebsite.title,
       desc: sub.personalWebsite.desc,
       category: sub.personalWebsite.category,
-      image: designScreenshots[0] ?? "/photos/portfolio/p2/home.png",
+      image: previewImage,
       accent: "#6366f1",
       viewLabel: sub.viewDetail,
     },
@@ -105,17 +104,6 @@ export default function P2HubClient({ designScreenshots }: Props) {
           <p className="text-lg font-bold">{t.portfolio.categories.uiux}</p>
         </div>
       </div>
-
-      <DesignGallerySection
-        screenshots={designScreenshots}
-        labels={{
-          title: t.portfolio.projectDetail.designGallery,
-          countLabel: t.portfolio.projectDetail.designCount,
-          altPrefix: t.portfolio.projectDetail.designAlt,
-          lightboxBack: t.portfolio.projectDetail.lightboxBack,
-          lightboxClose: t.portfolio.projectDetail.lightboxClose,
-        }}
-      />
 
       <P2SubProjectPicker sectionTitle={sub.sectionTitle} projects={subProjects} />
     </div>
