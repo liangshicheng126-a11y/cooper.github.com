@@ -54,3 +54,49 @@ git push origin main
 ```
 
 `main` 推送会触发 `.github/workflows/deploy-pages.yml`，自动发布到 https://cooperliang.top
+
+---
+
+## Blob Splash Intro 回滚
+
+基线标签：`pre-blob-splash-intro`（三球开局动画合并前的 `main` 快照）  
+功能分支：`feat/blob-splash-intro`  
+运行时开关：`NEXT_PUBLIC_INTRO_ENABLED`（`true` 启用首页开局动画，`false` 关闭且保留代码）
+
+与 `pre-motion-refresh-20260529` 的关系：后者覆盖更早的 GSAP 动效 v2；`pre-blob-splash-intro` 仅回退本次开局动画，不影响其他动效。
+
+### 路径 A：改动尚未合并到 main
+
+```powershell
+cd X:\A\1
+git checkout main
+git branch -D feat/blob-splash-intro
+```
+
+### 路径 B：已合并到 main，撤销一次合并
+
+```powershell
+cd X:\A\1
+git log --oneline -5   # 找到 merge commit SHA
+git revert -m 1 <merge_commit_sha>
+git push origin main
+```
+
+### 路径 C：不 revert，仅关闭开局动画
+
+在 `.env.local` 或 CI build env 中设置：
+
+```
+NEXT_PUBLIC_INTRO_ENABLED=false
+```
+
+然后 `npm run build` 并 push（或改 `deploy-pages.yml` 的 build env）。站点跳过三球开局，其余动效不变。
+
+### 路径 D：回到合并前快照
+
+```powershell
+cd X:\A\1
+git fetch origin --tags
+git checkout -b hotfix/restore-blob-intro pre-blob-splash-intro
+# 验证后合并到 main（需你确认）
+```

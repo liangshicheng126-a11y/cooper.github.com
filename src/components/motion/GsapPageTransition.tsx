@@ -15,6 +15,7 @@ import useMotionTier from "@/hooks/useMotionTier";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import { getRouteTransitionDirection } from "@/lib/routeTransition";
 import { MOTION_V2_ENABLED, shouldUseGsap } from "@/lib/motion";
+import { useIntroPlayback } from "@/components/motion/IntroPlaybackContext";
 import { cn } from "@/lib/utils";
 
 type GsapPageTransitionProps = {
@@ -26,6 +27,7 @@ export default function GsapPageTransition({ children }: GsapPageTransitionProps
   const tier = useMotionTier();
   const reduced = usePrefersReducedMotion();
   const useGsap = shouldUseGsap(reduced);
+  const { shouldPlayIntro, introComplete } = useIntroPlayback();
 
   const shellRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -46,6 +48,11 @@ export default function GsapPageTransition({ children }: GsapPageTransitionProps
       setDisplayChildren(children);
 
       if (!el || !useGsap || tier === "minimal") return;
+
+      if (shouldPlayIntro && !introComplete) {
+        gsap.set(el, { autoAlpha: 0, y: 18, force3D: true });
+        return;
+      }
 
       animatingRef.current = true;
       el.style.willChange = "transform, opacity";
@@ -137,7 +144,33 @@ export default function GsapPageTransition({ children }: GsapPageTransitionProps
     return () => {
       gsap.killTweensOf(el);
     };
-  }, [pathname, children, tier, useGsap]);
+  }, [pathname, children, tier, useGsap, shouldPlayIntro, introComplete]);
+
+  useLayoutEffect(() => {
+    const el = contentRef.current;
+    if (!el || !useGsap || tier === "minimal") return;
+    if (!shouldPlayIntro || !introComplete) return;
+    if (animatingRef.current) return;
+
+    const currentOpacity = gsap.getProperty(el, "opacity") as number;
+    if (currentOpacity >= 1) return;
+
+    animatingRef.current = true;
+    el.style.willChange = "transform, opacity";
+
+    gsap.to(el, {
+      autoAlpha: 1,
+      y: 0,
+      duration: tier === "full" ? 0.45 : 0.28,
+      ease: "power3.out",
+      onComplete: () => {
+        gsap.set(el, { clearProps: "transform" });
+        el.style.willChange = "auto";
+        animatingRef.current = false;
+        requestAnimationFrame(() => ScrollTrigger.refresh());
+      },
+    });
+  }, [introComplete, shouldPlayIntro, useGsap, tier]);
 
   return (
     <div

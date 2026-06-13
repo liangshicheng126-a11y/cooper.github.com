@@ -5,18 +5,20 @@ import { motion } from "framer-motion";
 import { useTranslation } from "@/locales/LanguageProvider";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
+import { useIntroRevealReady } from "@/components/motion/IntroPlaybackContext";
 
 const LanguageToggle = () => {
   const { language, setLanguage, mounted } = useTranslation();
   const pathname = usePathname();
+  const introRevealReady = useIntroRevealReady();
   const showToggle = pathname === "/";
   const [pinged, setPinged] = useState(false);
 
   useEffect(() => {
-    if (!mounted) return;
+    if (!mounted || !introRevealReady) return;
     const t = setTimeout(() => setPinged(true), 2200);
     return () => clearTimeout(t);
-  }, [mounted]);
+  }, [mounted, introRevealReady]);
 
   if (!mounted) return null;
 
@@ -27,13 +29,20 @@ const LanguageToggle = () => {
   const isZh = language === "zh";
 
   return (
-    <div
+    <motion.div
       className={cn(
         "hidden xl:block fixed top-8 right-8 z-[60] transition-all duration-300",
         showToggle
           ? "opacity-100 translate-y-0 pointer-events-auto"
           : "opacity-0 -translate-y-2 pointer-events-none"
       )}
+      initial={{ opacity: 0, y: -10 }}
+      animate={
+        introRevealReady
+          ? { opacity: showToggle ? 1 : 0, y: showToggle ? 0 : -8 }
+          : { opacity: 0, y: -10 }
+      }
+      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
     >
       <div className="relative">
         {/* Ping ring — fires once after page load to catch attention */}
@@ -77,7 +86,7 @@ const LanguageToggle = () => {
           </span>
         </motion.button>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

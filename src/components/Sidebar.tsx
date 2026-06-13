@@ -16,10 +16,22 @@ import {
 import WeChatIcon from "./icons/WeChatIcon";
 import SidebarNavLinks from "./SidebarNavLinks";
 import { useTranslation } from "@/locales/LanguageProvider";
+import { useIntroRevealReady } from "@/components/motion/IntroPlaybackContext";
+import { INTRO_TIMING } from "@/lib/blobIntro";
 
 const Sidebar = () => {
   const { language, setLanguage, t, mounted } = useTranslation();
+  const introRevealReady = useIntroRevealReady();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+
+  const chromeReveal = {
+    hidden: { opacity: 0, y: 12 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: INTRO_TIMING.revealDuration, ease: [0.22, 1, 0.36, 1] },
+    },
+  };
 
   React.useEffect(() => {
     if (!mobileOpen) return;
@@ -43,7 +55,12 @@ const Sidebar = () => {
   return (
     <>
       {/* Mobile Top Bar */}
-      <div className="mobile-top-shell fixed left-4 right-4 top-4 z-50 xl:hidden">
+      <motion.div
+        className="mobile-top-shell fixed left-4 right-4 top-4 z-50 xl:hidden"
+        variants={chromeReveal}
+        initial="hidden"
+        animate={introRevealReady ? "show" : "hidden"}
+      >
         <div className="glass rounded-2xl border-white/10 px-4 py-3 flex items-center justify-between">
           <Link href="/" className="flex items-center" onClick={() => setMobileOpen(false)}>
             <span className="text-lg font-bold bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent tracking-wider">
@@ -69,7 +86,7 @@ const Sidebar = () => {
             </button>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Mobile Drawer — light scrim + solid panel for readability */}
       <AnimatePresence>
@@ -155,7 +172,12 @@ const Sidebar = () => {
       </AnimatePresence>
 
       {/* Desktop Sidebar */}
-      <aside className="sidebar-shell hidden xl:flex fixed left-6 top-6 bottom-6 w-64 rounded-3xl z-[70] flex-col p-8 transition-all duration-500 border border-white/25 bg-white/20 backdrop-blur-2xl shadow-[0_24px_80px_rgba(15,23,42,0.22)]">
+      <motion.aside
+        className="sidebar-shell hidden xl:flex fixed left-6 top-6 bottom-6 w-64 rounded-3xl z-[70] flex-col p-8 transition-all duration-500 border border-white/25 bg-white/20 backdrop-blur-2xl shadow-[0_24px_80px_rgba(15,23,42,0.22)]"
+        variants={chromeReveal}
+        initial="hidden"
+        animate={introRevealReady ? "show" : "hidden"}
+      >
         {/* Logo */}
         <div className="mb-12">
           <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent tracking-wider">
@@ -198,7 +220,7 @@ const Sidebar = () => {
         </div>
 
       </div>
-      </aside>
+      </motion.aside>
     </>
   );
 };

@@ -8,6 +8,8 @@ import PageTransition from "@/components/PageTransition";
 import ScrollBlobs from "@/components/ScrollBlobs";
 import GsapProvider from "@/components/motion/GsapProvider";
 import MotionTierProvider from "@/components/motion/MotionTierProvider";
+import { IntroPlaybackProvider } from "@/components/motion/IntroPlaybackContext";
+import BlobSplashIntro from "@/components/motion/BlobSplashIntro";
 
 const inter = Inter({ subsets: ["latin"] });
 const siteUrl =
@@ -48,11 +50,13 @@ export default function RootLayout({
       <body className={inter.className} suppressHydrationWarning>
         <LanguageProvider>
           <MotionTierProvider>
+          <IntroPlaybackProvider>
           <GsapProvider>
             <ScrollBlobs />
+            <BlobSplashIntro />
 
             {/* Layout Structure */}
-            <div className="flex min-h-screen">
+            <div className="layout-chrome flex min-h-screen">
               <Sidebar />
               <LanguageToggle />
               <main className="flex-1 ml-0 xl:ml-80 px-4 sm:px-8 xl:px-12 pb-8 sm:pb-10 xl:pb-12 pt-24 xl:pt-12 xl:pr-24 relative z-10">
@@ -62,6 +66,7 @@ export default function RootLayout({
               </main>
             </div>
           </GsapProvider>
+          </IntroPlaybackProvider>
           </MotionTierProvider>
         </LanguageProvider>
       </body>

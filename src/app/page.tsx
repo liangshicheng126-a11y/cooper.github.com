@@ -20,6 +20,7 @@ import GsapScrollBatch from "@/components/motion/GsapScrollBatch";
 import HomeScrollStack from "@/components/motion/HomeScrollStack";
 import useMotionTier from "@/hooks/useMotionTier";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
+import { useIntroRevealReady } from "@/components/motion/IntroPlaybackContext";
 import { heroMaskVariants, shouldUseGsap } from "@/lib/motion";
 
 gsap.registerPlugin(CustomEase);
@@ -29,6 +30,7 @@ export default function Home() {
   const tier = useMotionTier();
   const reduced = usePrefersReducedMotion();
   const useGsap = shouldUseGsap(reduced);
+  const introRevealReady = useIntroRevealReady();
   const heroMask = heroMaskVariants(tier);
   const portfolioBtnRef = useRef<HTMLAnchorElement>(null);
   const aboutBtnRef = useRef<HTMLAnchorElement>(null);
@@ -134,8 +136,8 @@ export default function Home() {
     >
       <motion.div
         variants={container}
-        initial={useGsap ? "show" : "hidden"}
-        animate="show"
+        initial={introRevealReady ? (useGsap ? "show" : "hidden") : "hidden"}
+        animate={introRevealReady ? "show" : "hidden"}
         className="flex flex-col flex-1"
       >
         {/* Hero Section */}

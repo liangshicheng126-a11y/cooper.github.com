@@ -6,6 +6,10 @@ export const MOTION_V2_ENABLED =
   typeof process !== "undefined" &&
   process.env.NEXT_PUBLIC_MOTION_V2 !== "false";
 
+export const INTRO_ENABLED =
+  typeof process !== "undefined" &&
+  process.env.NEXT_PUBLIC_INTRO_ENABLED !== "false";
+
 export const EASE_OUT_EXPO = "power3.out";
 export const EASE_SPRING = [0.22, 1, 0.36, 1] as const;
 

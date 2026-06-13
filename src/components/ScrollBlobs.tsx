@@ -7,6 +7,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import useMotionTier from "@/hooks/useMotionTier";
+import { useIntroPlayback } from "@/components/motion/IntroPlaybackContext";
 import { MOTION_V2_ENABLED, shouldUseGsap } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
@@ -71,6 +72,8 @@ export default function ScrollBlobs() {
   const containerRef = useRef<HTMLDivElement>(null);
   const reduced = usePrefersReducedMotion();
   const tier = useMotionTier();
+  const { introMode } = useIntroPlayback();
+  const introPaused = introMode === "hold" || introMode === "handoff";
   const useGsap = shouldUseGsap(reduced);
   const enableScrub = useGsap && MOTION_V2_ENABLED && tier === "full";
   const enableMouse =
@@ -240,6 +243,7 @@ export default function ScrollBlobs() {
       ref={containerRef}
       className={cn(
         "liquid-bg pointer-events-none gsap-parallax",
+        introPaused && "liquid-bg--intro-active",
         tier === "minimal" && "liquid-bg--static",
         tier === "minimal" && "liquid-bg--lite",
         isGalleryDetail && "liquid-bg--gallery"
