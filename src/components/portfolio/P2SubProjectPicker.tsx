@@ -39,6 +39,7 @@ export default function P2SubProjectPicker({ sectionTitle, projects }: Props) {
                 title={project.title}
                 viewProject={project.viewLabel}
                 variant="portfolio"
+                imageOverlay="gradient"
                 className="h-[280px] sm:h-[340px] lg:h-[380px] rounded-3xl"
               />
               <p className="mt-4 px-2 text-sm sm:text-base text-foreground/60 leading-relaxed max-w-prose">
