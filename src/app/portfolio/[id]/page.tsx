@@ -204,10 +204,7 @@ async function getDesignScreenshots(): Promise<string[]> {
     const images = entries
       .filter((entry) => entry.isFile() && isImage(entry.name))
       .map((entry) => entry.name);
-    const ordered = [
-      ...preferredOrder.filter((name) => images.includes(name)),
-      ...images.filter((name) => !preferredOrder.includes(name)).sort((a, b) => a.localeCompare(b, "en")),
-    ];
+    const ordered = preferredOrder.filter((name) => images.includes(name));
     return ordered.map(joinWebPath);
   } catch {
     return [];

@@ -10,7 +10,7 @@ import { useMemo, useState } from "react";
 import LazyInViewImage from "@/components/LazyInViewImage";
 import GalleryLightbox from "@/components/GalleryLightbox";
 import MasonryGallery, { MasonryItem } from "@/components/MasonryGallery";
-import { displaySrc, mapDisplaySources, thumbSrc } from "@/lib/galleryImageUrl";
+import { mapDisplaySources, thumbSrc } from "@/lib/galleryImageUrl";
 import SiteDesignAnalysis from "@/components/portfolio/SiteDesignAnalysis";
 import GsapGalleryStagger from "@/components/motion/GsapGalleryStagger";
 import useMotionTier from "@/hooks/useMotionTier";
@@ -103,8 +103,6 @@ export default function ProjectDetailClient({
   const hasPhotographyGallery = id === "p3" && photographyGroups.length > 0;
   const hasPosterGallery = id === "p1" && posters.length > 0;
   const hasDesignGallery = id === "p2" && designScreenshots.length > 0;
-  const designHero = designScreenshots[0];
-  const designThumbs = designScreenshots.slice(1);
   const photographyByYear = photographyGroups.reduce<Record<string, typeof photographyGroups>>((acc, group) => {
     if (!acc[group.year]) acc[group.year] = [];
     acc[group.year].push(group);
@@ -211,7 +209,7 @@ export default function ProjectDetailClient({
         </div>
       </div>
 
-      {hasDesignGallery && designHero && (
+      {hasDesignGallery && (
         <section className="gallery-section mb-16 lg:mb-24">
           <div className="flex items-center justify-between gap-4 mb-5">
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t.portfolio.projectDetail.designGallery}</h2>
@@ -219,37 +217,25 @@ export default function ProjectDetailClient({
               {t.portfolio.projectDetail.designCount} {designScreenshots.length}
             </span>
           </div>
-          <div className="aspect-[4/3] sm:aspect-[21/9] rounded-[28px] sm:rounded-[40px] overflow-hidden glass border-white/10 mb-6 sm:mb-8">
-            <LazyInViewImage
-              src={displaySrc(designHero)}
-              fallbackSrc={designHero}
-              alt={`${t.portfolio.projectDetail.designAlt} 1`}
-              variant="cover"
-              className="h-full w-full cursor-pointer transition-transform duration-500 sm:hover:scale-[1.01]"
-              onClick={() => openLightbox(designDisplay, 0, designScreenshots)}
-            />
-          </div>
-          {designThumbs.length > 0 && (
-            <GsapGalleryStagger>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                {designThumbs.map((shot, index) => (
-                  <div
-                    key={shot}
-                    className="gallery-thumb group aspect-[16/10] rounded-2xl sm:rounded-3xl overflow-hidden glass border-white/10 shadow-[0_2px_16px_rgba(15,23,42,0.08)]"
-                  >
-                    <LazyInViewImage
-                      src={thumbSrc(shot)}
-                      fallbackSrc={shot}
-                      alt={`${t.portfolio.projectDetail.designAlt} ${index + 2}`}
-                      variant="cover"
-                      className="h-full w-full transition-transform duration-500 sm:group-hover:scale-[1.02]"
-                      onClick={() => openLightbox(designDisplay, index + 1, designScreenshots)}
-                    />
-                  </div>
-                ))}
-              </div>
-            </GsapGalleryStagger>
-          )}
+          <GsapGalleryStagger>
+            <div className="flex flex-col gap-4 sm:gap-6">
+              {designScreenshots.map((shot, index) => (
+                <div
+                  key={shot}
+                  className="overflow-hidden rounded-2xl sm:rounded-3xl glass border-white/10 shadow-[0_2px_16px_rgba(15,23,42,0.08)]"
+                >
+                  <LazyInViewImage
+                    src={shot}
+                    fallbackSrc={shot}
+                    alt={`${t.portfolio.projectDetail.designAlt} ${index + 1}`}
+                    variant="natural"
+                    className="cursor-pointer transition-transform duration-500 sm:hover:scale-[1.005]"
+                    onClick={() => openLightbox(designDisplay, index, designScreenshots)}
+                  />
+                </div>
+              ))}
+            </div>
+          </GsapGalleryStagger>
         </section>
       )}
 
