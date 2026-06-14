@@ -13,7 +13,7 @@ import ScrollDirectionSection from "@/components/ScrollDirectionSection";
 import BlurText from "@/components/BlurText";
 import CountUp from "@/components/CountUp";
 import Magnet from "@/components/Magnet";
-import ToolCard from "@/components/ToolCard";
+import { DockTabs } from "@/components/ui/dock-tabs";
 import ProjectCard from "@/components/ProjectCard";
 import GsapParallaxLayer from "@/components/motion/GsapParallaxLayer";
 import GsapScrollBatch from "@/components/motion/GsapScrollBatch";
@@ -301,19 +301,18 @@ export default function Home() {
             <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />
             <span className="text-foreground/40 text-sm sm:text-right">{t.hero.tools.subtitle}</span>
           </div>
-          <GsapScrollBatch className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4" itemSelector="[data-scroll-batch-item]">
-            {[
-              { name: "Photoshop", icon: ImageIcon, color: "#31A8FF" },
-              { name: "Illustrator", icon: PenTool, color: "#FF9A00" },
-              { name: "Figma", icon: Figma, color: "#F24E1E" },
-              { name: "After Effects", icon: Clapperboard, color: "#9999FF" },
-              { name: "CapCut", icon: Scissors, color: "#00C4CC" },
-              { name: "Premiere", icon: Film, color: "#9999FF" },
-            ].map((tool, i) => (
-              <div key={i} data-scroll-batch-item style={{ perspective: "800px" }}>
-                <ToolCard index={i} batchReveal {...tool} />
-              </div>
-            ))}
+          <GsapScrollBatch className="flex justify-center" itemSelector="[data-scroll-batch-item]">
+            <DockTabs
+              batchReveal
+              items={[
+                { id: "photoshop", name: "Photoshop", icon: <ImageIcon className="text-white" />, color: "#31A8FF" },
+                { id: "illustrator", name: "Illustrator", icon: <PenTool className="text-white" />, color: "#FF9A00" },
+                { id: "figma", name: "Figma", icon: <Figma className="text-white" />, color: "#F24E1E" },
+                { id: "after-effects", name: "After Effects", icon: <Clapperboard className="text-white" />, color: "#9999FF" },
+                { id: "capcut", name: "CapCut", icon: <Scissors className="text-white" />, color: "#00C4CC" },
+                { id: "premiere", name: "Premiere", icon: <Film className="text-white" />, color: "#9999FF" },
+              ]}
+            />
           </GsapScrollBatch>
         </ScrollDirectionSection>
 
