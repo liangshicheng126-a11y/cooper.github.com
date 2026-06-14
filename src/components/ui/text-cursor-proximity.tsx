@@ -31,21 +31,48 @@ interface TextProps extends React.HTMLAttributes<HTMLSpanElement> {
 
 interface LetterProps {
   letter: string;
-  letterIndex: number;
-  proximity: MotionValue<number>;
   styles: TextProps["styles"];
-  setRef: (el: HTMLSpanElement | null, index: number) => void;
   className?: string;
+  containerRef: React.RefObject<HTMLElement | null>;
+  mousePositionRef: React.RefObject<{ x: number; y: number }>;
+  radius: number;
+  falloff: NonNullable<TextProps["falloff"]>;
+}
+
+function calculateDistance(x1: number, y1: number, x2: number, y2: number) {
+  return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+}
+
+function calculateFalloff(
+  distance: number,
+  radius: number,
+  falloff: NonNullable<TextProps["falloff"]>
+) {
+  const normalizedDistance = Math.min(Math.max(1 - distance / radius, 0), 1);
+
+  switch (falloff) {
+    case "exponential":
+      return normalizedDistance ** 2;
+    case "gaussian":
+      return Math.exp(-((distance / (radius / 2)) ** 2) / 2);
+    case "linear":
+    default:
+      return normalizedDistance;
+  }
 }
 
 function ProximityLetter({
   letter,
-  letterIndex,
-  proximity,
   styles,
-  setRef,
   className,
+  containerRef,
+  mousePositionRef,
+  radius,
+  falloff,
 }: LetterProps) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const proximity = useMotionValue(0);
+
   const transformStyle = useTransform(
     proximity,
     [0, 1],
@@ -61,9 +88,29 @@ function ProximityLetter({
   if (styles.transform) motionStyle.transform = transformStyle;
   if (styles.color) motionStyle.color = colorStyle;
 
+  useAnimationFrame(() => {
+    const container = containerRef.current;
+    const letterEl = ref.current;
+    if (!container || !letterEl) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const rect = letterEl.getBoundingClientRect();
+    const letterCenterX = rect.left + rect.width / 2 - containerRect.left;
+    const letterCenterY = rect.top + rect.height / 2 - containerRect.top;
+
+    const distance = calculateDistance(
+      mousePositionRef.current.x,
+      mousePositionRef.current.y,
+      letterCenterX,
+      letterCenterY
+    );
+
+    proximity.set(calculateFalloff(distance, radius, falloff));
+  });
+
   return (
     <motion.span
-      ref={(el) => setRef(el, letterIndex)}
+      ref={ref}
       className={className ? `inline-block ${className}` : "inline-block"}
       aria-hidden="true"
       style={motionStyle}
@@ -87,57 +134,7 @@ const TextCursorProximity = forwardRef<HTMLSpanElement, TextProps>(
     },
     ref
   ) => {
-    const letterRefs = useRef<(HTMLSpanElement | null)[]>([]);
     const mousePositionRef = useMousePositionRef(containerRef);
-
-    const letterCount = label.replace(/\s/g, "").length;
-    const letterProximities = useRef<MotionValue<number>[]>(
-      Array.from({ length: letterCount }, () => useMotionValue(0))
-    );
-
-    const calculateDistance = (x1: number, y1: number, x2: number, y2: number) =>
-      Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
-
-    const calculateFalloff = (distance: number) => {
-      const normalizedDistance = Math.min(Math.max(1 - distance / radius, 0), 1);
-
-      switch (falloff) {
-        case "exponential":
-          return normalizedDistance ** 2;
-        case "gaussian":
-          return Math.exp(-((distance / (radius / 2)) ** 2) / 2);
-        case "linear":
-        default:
-          return normalizedDistance;
-      }
-    };
-
-    useAnimationFrame(() => {
-      if (!containerRef.current) return;
-      const containerRect = containerRef.current.getBoundingClientRect();
-
-      letterRefs.current.forEach((letterRef, index) => {
-        if (!letterRef) return;
-
-        const rect = letterRef.getBoundingClientRect();
-        const letterCenterX = rect.left + rect.width / 2 - containerRect.left;
-        const letterCenterY = rect.top + rect.height / 2 - containerRect.top;
-
-        const distance = calculateDistance(
-          mousePositionRef.current.x,
-          mousePositionRef.current.y,
-          letterCenterX,
-          letterCenterY
-        );
-
-        letterProximities.current[index]?.set(calculateFalloff(distance));
-      });
-    });
-
-    const setLetterRef = (el: HTMLSpanElement | null, index: number) => {
-      letterRefs.current[index] = el;
-    };
-
     const words = label.split(" ");
     let letterIndex = 0;
 
@@ -152,17 +149,16 @@ const TextCursorProximity = forwardRef<HTMLSpanElement, TextProps>(
           <span key={wordIndex} className="inline-block whitespace-nowrap">
             {word.split("").map((letter) => {
               const currentLetterIndex = letterIndex++;
-              const proximity = letterProximities.current[currentLetterIndex];
-
               return (
                 <ProximityLetter
-                  key={currentLetterIndex}
+                  key={`${label}-${currentLetterIndex}`}
                   letter={letter}
-                  letterIndex={currentLetterIndex}
-                  proximity={proximity}
                   styles={styles}
-                  setRef={setLetterRef}
                   className={className}
+                  containerRef={containerRef}
+                  mousePositionRef={mousePositionRef}
+                  radius={radius}
+                  falloff={falloff}
                 />
               );
             })}
@@ -178,4 +174,9 @@ const TextCursorProximity = forwardRef<HTMLSpanElement, TextProps>(
 );
 
 TextCursorProximity.displayName = "TextCursorProximity";
-export default TextCursorProximity;
+
+function TextCursorProximityKeyed(props: TextProps) {
+  return <TextCursorProximity key={props.label} {...props} />;
+}
+
+export default TextCursorProximityKeyed;

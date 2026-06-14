@@ -51,9 +51,11 @@ export default function BlurText({
   const ref = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
-    // Wait until any splash intro is complete before observing. If we fire
-    // before introRevealReady, the observer triggers while the parent
-    // Framer Motion container is still hidden, creating a double-entrance.
+    if (!introRevealReady) return;
+    setInView(false);
+  }, [text, introRevealReady]);
+
+  useEffect(() => {
     if (!introRevealReady) return;
     if (!ref.current) return;
     const observer = new IntersectionObserver(
@@ -67,7 +69,7 @@ export default function BlurText({
     );
     observer.observe(ref.current);
     return () => observer.disconnect();
-  }, [introRevealReady, threshold, rootMargin]);
+  }, [introRevealReady, threshold, rootMargin, text]);
 
   const defaultFrom = useMemo(() => {
     if (useBlur) {
@@ -101,7 +103,7 @@ export default function BlurText({
 
         return (
           <motion.span
-            key={index}
+            key={`${text}-${index}`}
             initial={defaultFrom as Record<string, number | string>}
             animate={
               inView

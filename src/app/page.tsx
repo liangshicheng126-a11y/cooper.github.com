@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import TextCursorProximity from "@/components/ui/text-cursor-proximity";
 import { useGSAP } from "@gsap/react";
@@ -27,7 +27,6 @@ import { shouldUseGsap } from "@/lib/motion";
 gsap.registerPlugin(CustomEase);
 
 export default function Home() {
-  const { t, mounted } = useTranslation();
   const tier = useMotionTier();
   const reduced = usePrefersReducedMotion();
   const useGsap = shouldUseGsap(reduced);
@@ -35,8 +34,13 @@ export default function Home() {
   const pageContainerRef = useRef<HTMLDivElement>(null);
   const portfolioBtnRef = useRef<HTMLAnchorElement>(null);
   const aboutBtnRef = useRef<HTMLAnchorElement>(null);
+  const { t, mounted, language } = useTranslation();
   const [heroTitleReady, setHeroTitleReady] = useState(false);
   const useHeroProximity = tier === "full" && heroTitleReady;
+
+  useEffect(() => {
+    setHeroTitleReady(false);
+  }, [language]);
 
   useGSAP(() => {
     if (!useGsap || tier === "minimal") return;
