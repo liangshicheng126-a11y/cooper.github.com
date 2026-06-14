@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import WeChatIcon from "./icons/WeChatIcon";
 import SidebarNavLinks from "./SidebarNavLinks";
+import SidebarBackdrop from "./SidebarBackdrop";
 import { useTranslation } from "@/locales/LanguageProvider";
 import { useIntroRevealReady } from "@/components/motion/IntroPlaybackContext";
 import { INTRO_TIMING } from "@/lib/blobIntro";
@@ -173,11 +174,14 @@ const Sidebar = () => {
 
       {/* Desktop Sidebar */}
       <motion.aside
-        className="sidebar-shell hidden xl:flex fixed left-6 top-6 bottom-6 w-64 rounded-3xl z-[70] flex-col p-8 transition-all duration-500 border border-white/25 bg-white/20 backdrop-blur-2xl shadow-[0_24px_80px_rgba(15,23,42,0.22)]"
+        className="sidebar-shell hidden xl:flex fixed left-6 top-6 bottom-6 w-64 rounded-3xl z-[70] flex-col transition-all duration-500 border border-white/25 shadow-[0_24px_80px_rgba(15,23,42,0.22)] overflow-hidden"
         variants={chromeReveal}
         initial="hidden"
         animate={introRevealReady ? "show" : "hidden"}
       >
+        <SidebarBackdrop />
+
+        <div className="relative z-10 flex flex-col flex-1 p-8 min-h-0">
         {/* Logo */}
         <div className="mb-12">
           <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent tracking-wider">
@@ -220,6 +224,7 @@ const Sidebar = () => {
         </div>
 
       </div>
+        </div>
       </motion.aside>
     </>
   );
