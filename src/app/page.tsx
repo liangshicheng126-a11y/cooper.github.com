@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
+import TextCursorProximity from "@/components/ui/text-cursor-proximity";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { CustomEase } from "gsap/CustomEase";
@@ -31,8 +32,11 @@ export default function Home() {
   const reduced = usePrefersReducedMotion();
   const useGsap = shouldUseGsap(reduced);
   const introRevealReady = useIntroRevealReady();
+  const pageContainerRef = useRef<HTMLDivElement>(null);
   const portfolioBtnRef = useRef<HTMLAnchorElement>(null);
   const aboutBtnRef = useRef<HTMLAnchorElement>(null);
+  const [heroTitleReady, setHeroTitleReady] = useState(false);
+  const useHeroProximity = tier === "full" && heroTitleReady;
 
   useGSAP(() => {
     if (!useGsap || tier === "minimal") return;
@@ -133,6 +137,7 @@ export default function Home() {
 
   return (
     <div
+      ref={pageContainerRef}
       className={cn("flex flex-col pb-4 sm:pb-6", !mounted && "opacity-0")}
     >
       <motion.div
@@ -159,14 +164,29 @@ export default function Home() {
                heroMask's clip-path and BlurText's word-by-word conflict visually. */}
           <div className="overflow-hidden mb-6 sm:mb-8">
             <h1 className="text-4xl sm:text-6xl lg:text-8xl font-bold tracking-tight max-w-5xl leading-[1.1]">
-              <BlurText
-                text={t.hero.title}
-                delay={80}
-                direction="bottom"
-                animateBy="words"
-                stepDuration={0.4}
-                className="inline-flex flex-wrap"
-              />
+              {useHeroProximity ? (
+                <TextCursorProximity
+                  label={t.hero.title}
+                  className="will-change-transform"
+                  styles={{
+                    transform: { from: "scale(1)", to: "scale(1.15)" },
+                    color: { from: "#171717", to: "#6366f1" },
+                  }}
+                  falloff="gaussian"
+                  radius={100}
+                  containerRef={pageContainerRef}
+                />
+              ) : (
+                <BlurText
+                  text={t.hero.title}
+                  delay={80}
+                  direction="bottom"
+                  animateBy="words"
+                  stepDuration={0.4}
+                  className="inline-flex flex-wrap"
+                  onAnimationComplete={() => setHeroTitleReady(true)}
+                />
+              )}
             </h1>
           </div>
 
