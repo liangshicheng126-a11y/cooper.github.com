@@ -35,6 +35,7 @@ interface LetterProps {
   proximity: MotionValue<number>;
   styles: TextProps["styles"];
   setRef: (el: HTMLSpanElement | null, index: number) => void;
+  className?: string;
 }
 
 function ProximityLetter({
@@ -43,6 +44,7 @@ function ProximityLetter({
   proximity,
   styles,
   setRef,
+  className,
 }: LetterProps) {
   const transformStyle = useTransform(
     proximity,
@@ -62,7 +64,7 @@ function ProximityLetter({
   return (
     <motion.span
       ref={(el) => setRef(el, letterIndex)}
-      className="inline-block"
+      className={className ? `inline-block ${className}` : "inline-block"}
       aria-hidden="true"
       style={motionStyle}
     >
@@ -142,7 +144,7 @@ const TextCursorProximity = forwardRef<HTMLSpanElement, TextProps>(
     return (
       <span
         ref={ref}
-        className={`${className ?? ""} inline`}
+        className="inline"
         onClick={onClick}
         {...props}
       >
@@ -160,6 +162,7 @@ const TextCursorProximity = forwardRef<HTMLSpanElement, TextProps>(
                   proximity={proximity}
                   styles={styles}
                   setRef={setLetterRef}
+                  className={className}
                 />
               );
             })}
