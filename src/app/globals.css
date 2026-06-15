@@ -131,9 +131,126 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-/* Desktop sidebar: liquid glass surface (see LiquidGlassSurface) */
+/* Desktop sidebar: frosted glass — gradient mesh + blobs + blur sheen */
 .sidebar-backdrop {
   isolation: isolate;
+}
+
+.sidebar-backdrop__mesh {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    168deg,
+    rgba(214, 217, 255, 0.72) 0%,
+    rgba(232, 212, 245, 0.48) 38%,
+    rgba(255, 241, 232, 0.58) 72%,
+    rgba(224, 252, 245, 0.42) 88%,
+    rgba(255, 255, 255, 0.35) 100%
+  );
+}
+
+.dark .sidebar-backdrop__mesh {
+  background: linear-gradient(
+    168deg,
+    rgba(67, 56, 202, 0.35) 0%,
+    rgba(91, 33, 182, 0.28) 40%,
+    rgba(30, 27, 75, 0.42) 100%
+  );
+}
+
+.sidebar-backdrop__blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(32px);
+  opacity: 0.5;
+  will-change: transform;
+}
+
+.sidebar-backdrop__blob--a {
+  width: 9.5rem;
+  height: 9.5rem;
+  top: 6%;
+  left: -18%;
+  background: radial-gradient(circle at 40% 35%, #8b5cf6 0%, rgba(139, 92, 246, 0) 68%);
+}
+
+.sidebar-backdrop__blob--b {
+  width: 7.5rem;
+  height: 7.5rem;
+  top: 42%;
+  right: -22%;
+  background: radial-gradient(circle at 50% 50%, #7b86ff 0%, rgba(123, 134, 255, 0) 70%);
+}
+
+.sidebar-backdrop__blob--c {
+  width: 8.5rem;
+  height: 8.5rem;
+  bottom: 8%;
+  left: 10%;
+  background: radial-gradient(circle at 45% 55%, #fb7185 0%, rgba(251, 113, 133, 0) 72%);
+  opacity: 0.38;
+}
+
+.sidebar-backdrop__sheen {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.dark .sidebar-backdrop__sheen {
+  background: rgba(15, 23, 42, 0.2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-backdrop--animated .sidebar-backdrop__blob--a {
+  animation: sidebar-blob-drift-a 20s ease-in-out infinite;
+}
+
+.sidebar-backdrop--animated .sidebar-backdrop__blob--b {
+  animation: sidebar-blob-drift-b 24s ease-in-out infinite;
+}
+
+.sidebar-backdrop--animated .sidebar-backdrop__blob--c {
+  animation: sidebar-blob-drift-c 22s ease-in-out infinite;
+}
+
+@keyframes sidebar-blob-drift-a {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(12px, 18px) scale(1.06); }
+}
+
+@keyframes sidebar-blob-drift-b {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-14px, 10px) scale(1.04); }
+}
+
+@keyframes sidebar-blob-drift-c {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(8px, -12px) scale(1.05); }
+}
+
+[data-motion-tier="reduced"] .sidebar-backdrop__blob,
+[data-motion-tier="minimal"] .sidebar-backdrop__blob {
+  animation: none !important;
+  will-change: auto;
+}
+
+[data-motion-tier="minimal"] .sidebar-backdrop__blob {
+  opacity: 0.28;
+}
+
+[data-motion-tier="minimal"] .sidebar-backdrop__sheen {
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-backdrop__blob {
+    animation: none !important;
+  }
 }
 
 .section-block {

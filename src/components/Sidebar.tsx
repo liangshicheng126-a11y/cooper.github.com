@@ -180,7 +180,7 @@ const Sidebar = () => {
       {/* Desktop Sidebar */}
       <motion.aside
         ref={sidebarRef}
-        className="sidebar-shell hidden xl:flex fixed left-6 top-6 bottom-6 w-64 rounded-3xl z-[70] flex-col transition-all duration-500 border border-white/20 overflow-hidden"
+        className="sidebar-shell hidden xl:flex fixed left-6 top-6 bottom-6 w-64 rounded-3xl z-[70] flex-col transition-all duration-500 border border-white/30 shadow-[0_20px_64px_rgba(15,23,42,0.14),0_4px_16px_rgba(15,23,42,0.06)] overflow-hidden"
         variants={chromeReveal}
         initial="hidden"
         animate={introRevealReady ? "show" : "hidden"}

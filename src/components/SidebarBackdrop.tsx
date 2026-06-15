@@ -2,32 +2,29 @@
 
 import { cn } from "@/lib/utils";
 import useMotionTier from "@/hooks/useMotionTier";
-import LiquidGlassSurface from "@/components/ui/liquid-glass-surface";
 
 /**
- * Desktop sidebar inner background — liquid glass with motion-tier fallback.
+ * Desktop sidebar: frosted glass with gradient mesh + soft color blobs.
+ * Matches reference mockup (blur + pastel bleed), not SVG displacement.
  */
 export default function SidebarBackdrop() {
   const tier = useMotionTier();
-  const useFilter = tier === "full";
-
-  if (tier === "minimal") {
-    return (
-      <div
-        className={cn(
-          "pointer-events-none absolute inset-0 rounded-[inherit] glass",
-          "bg-gradient-to-br from-indigo-200/20 via-white/15 to-purple-200/15"
-        )}
-        aria-hidden
-      />
-    );
-  }
+  const animated = tier === "full";
 
   return (
-    <LiquidGlassSurface
-      className="sidebar-backdrop"
-      filterId="sidebar-container-glass"
-      useFilter={useFilter}
-    />
+    <div
+      className={cn(
+        "sidebar-backdrop absolute inset-0 rounded-[inherit] pointer-events-none",
+        animated && "sidebar-backdrop--animated",
+        tier === "minimal" && "sidebar-backdrop--static"
+      )}
+      aria-hidden
+    >
+      <div className="sidebar-backdrop__mesh" />
+      <div className="sidebar-backdrop__blob sidebar-backdrop__blob--a" />
+      <div className="sidebar-backdrop__blob sidebar-backdrop__blob--b" />
+      <div className="sidebar-backdrop__blob sidebar-backdrop__blob--c" />
+      <div className="sidebar-backdrop__sheen" />
+    </div>
   );
 }
