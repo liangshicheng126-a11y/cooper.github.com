@@ -6,15 +6,15 @@ import { Zap, ArrowRight, Coffee } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import GsapScrollReveal from "@/components/motion/GsapScrollReveal";
+import GsapScrollBatch from "@/components/motion/GsapScrollBatch";
 import GsapAboutAvatar from "@/components/motion/GsapAboutAvatar";
-import AboutSkillsHobbiesDisplayCards from "@/components/about/AboutSkillsHobbiesDisplayCards";
-import AboutSkillsHobbiesLegacy from "@/components/about/AboutSkillsHobbiesLegacy";
+import GsapGlassHover from "@/components/motion/GsapGlassHover";
 import useMotionTier from "@/hooks/useMotionTier";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import { heroMaskVariants, shouldUseGsap } from "@/lib/motion";
 
-const useAboutDisplayCards =
-  process.env.NEXT_PUBLIC_ABOUT_DISPLAY_CARDS !== "false";
+const aboutGlassTile =
+  "px-8 py-7 sm:px-12 sm:py-10 rounded-[1.25rem] sm:rounded-3xl min-h-[6.5rem] sm:min-h-[7.5rem] border-white/15 bg-white/[0.11] dark:bg-white/[0.07]";
 
 export default function About() {
   const { t, mounted } = useTranslation();
@@ -41,12 +41,8 @@ export default function About() {
 
   const heroMask = heroMaskVariants(tier);
 
-  const skillsHobbiesCopy = {
-    skills: t.about.skills,
-    skillDetails: t.about.skillDetails,
-    hobbiesTitle: t.about.hobbiesTitle,
-    hobbiesGroups: t.about.hobbiesGroups,
-  };
+  const scrollSlideViewport = { once: true, amount: 0.35, margin: "0px 0px -40px 0px" as const };
+  const scrollEase = [0.22, 1, 0.36, 1] as const;
 
   return (
     <div className={cn("max-w-4xl pb-8", !mounted && "opacity-0")}>
@@ -95,16 +91,123 @@ export default function About() {
           </p>
         </GsapScrollReveal>
 
-        {useAboutDisplayCards ? (
-          <AboutSkillsHobbiesDisplayCards t={skillsHobbiesCopy} />
-        ) : (
-          <AboutSkillsHobbiesLegacy t={skillsHobbiesCopy} />
-        )}
+        <motion.div
+          variants={item}
+          className="grid grid-cols-1 sm:grid-cols-2 gap-10 sm:gap-x-12 sm:gap-y-14 sm:items-stretch"
+        >
+          {/* Skills Section */}
+          <section className="min-w-0 flex flex-col h-full">
+            <motion.h2
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={scrollSlideViewport}
+              transition={{ duration: 0.55, ease: scrollEase }}
+              className="text-3xl font-bold mb-10 flex items-center space-x-4 shrink-0"
+            >
+              <div className="w-12 h-1 bg-indigo-500 rounded-full" />
+              <span>{t.about.skills}</span>
+            </motion.h2>
+
+            <GsapScrollBatch
+              className="flex-1 flex flex-col justify-between gap-4 sm:gap-5 min-h-0"
+              itemSelector="[data-scroll-batch-item]"
+              stagger={0.16}
+              duration={1.45}
+              y={20}
+              entrance="flip"
+            >
+              {t.about.skillDetails.map((skill, index) => (
+                <div
+                  key={index}
+                  data-scroll-batch-item
+                  data-batch-index={index}
+                  className="w-full"
+                >
+                  <GsapGlassHover
+                    accent="#6366f1"
+                    variant="tile"
+                    className={cn(
+                      "glass relative overflow-hidden group",
+                      aboutGlassTile,
+                      "flex items-center"
+                    )}
+                  >
+                    <div className="relative z-10">
+                      <div className="flex gap-3 text-xl font-medium leading-snug w-full">
+                        <span
+                          aria-hidden
+                          className="mt-[0.55em] w-2.5 h-2.5 shrink-0 rounded-full bg-indigo-500 transition-transform duration-300 group-hover:scale-125"
+                        />
+                        <span className="text-foreground/85 transition-colors group-hover:text-foreground">
+                          {skill}
+                        </span>
+                      </div>
+                    </div>
+                  </GsapGlassHover>
+                </div>
+              ))}
+            </GsapScrollBatch>
+          </section>
+
+          {/* Hobbies Section */}
+          <section className="min-w-0 flex flex-col h-full">
+            <motion.h2
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={scrollSlideViewport}
+              transition={{ duration: 0.55, ease: scrollEase }}
+              className="text-3xl font-bold mb-10 flex items-center space-x-4 shrink-0"
+            >
+              <div className="w-12 h-1 bg-purple-500 rounded-full" />
+              <span>{t.about.hobbiesTitle}</span>
+            </motion.h2>
+
+            <GsapScrollBatch
+              className="flex-1 flex flex-col justify-between gap-4 sm:gap-5 min-h-0"
+              itemSelector="[data-scroll-batch-item]"
+              stagger={0.16}
+              duration={1.45}
+              y={20}
+              entrance="flip"
+            >
+              {t.about.hobbiesGroups.map((group, index) => (
+                <div
+                  key={index}
+                  data-scroll-batch-item
+                  data-batch-index={index}
+                  className="w-full"
+                >
+                  <GsapGlassHover
+                    accent="#a855f7"
+                    variant="tile"
+                    className={cn(
+                      "glass relative overflow-hidden group",
+                      aboutGlassTile,
+                      "flex flex-col justify-center"
+                    )}
+                  >
+                    <div className="relative z-10">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-2 h-2 shrink-0 rounded-full bg-purple-500 transition-transform duration-300 group-hover:scale-125" />
+                        <h3 className="text-base font-semibold text-foreground/90 transition-colors group-hover:text-foreground">
+                          {group.title}
+                        </h3>
+                      </div>
+                      <p className="text-base text-foreground/60 leading-relaxed transition-colors group-hover:text-foreground/75">
+                        {group.items.join(" / ")}
+                      </p>
+                    </div>
+                  </GsapGlassHover>
+                </div>
+              ))}
+            </GsapScrollBatch>
+          </section>
+        </motion.div>
 
         {/* CTA Section */}
         <motion.section
           variants={item}
-          className="mt-0 p-8 sm:p-16 rounded-[28px] sm:rounded-[40px] glass border-white/10 flex flex-col items-center text-center bg-gradient-to-br from-indigo-500/5 to-purple-500/5 relative overflow-hidden"
+          className="mt-20 sm:mt-32 p-8 sm:p-16 rounded-[28px] sm:rounded-[40px] glass border-white/10 flex flex-col items-center text-center bg-gradient-to-br from-indigo-500/5 to-purple-500/5 relative overflow-hidden"
         >
           <h2 className="relative z-10 text-2xl sm:text-4xl font-bold mb-6 sm:mb-8">{t.about.ctaTitle}</h2>
           <Link
