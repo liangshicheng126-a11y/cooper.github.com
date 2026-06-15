@@ -12,14 +12,16 @@ import {
   Music2,
   Grid3x3,
 } from "lucide-react";
-import DisplayCards, {
-  buildStackedCards,
-  type DisplayCardProps,
-} from "@/components/ui/display-cards";
+import DisplayCards, { type DisplayCardData } from "@/components/ui/display-cards";
 import GsapScrollReveal from "@/components/motion/GsapScrollReveal";
+import useMotionTier from "@/hooks/useMotionTier";
+import { useTranslation } from "@/locales/LanguageProvider";
 
 const scrollSlideViewport = { once: true, amount: 0.35, margin: "0px 0px -40px 0px" as const };
 const scrollEase = [0.22, 1, 0.36, 1] as const;
+
+const STACK_STEP_X = 22;
+const STACK_STEP_Y = 38;
 
 const SKILL_IMAGES = [
   "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=480&q=80",
@@ -58,8 +60,12 @@ function splitSkillLine(skill: string): { title: string; subtitle: string } {
   return { title: skill, subtitle: "" };
 }
 
-function buildSkillCards(skillDetails: string[]): DisplayCardProps[] {
-  const items = skillDetails.map((skill, index) => {
+function buildUnifiedCards(
+  t: SkillHobbiesCopy,
+  skillBadge: string,
+  hobbyBadge: string
+): DisplayCardData[] {
+  const skills: DisplayCardData[] = t.skillDetails.map((skill, index) => {
     const { title, subtitle } = splitSkillLine(skill);
     const Icon = SKILL_ICONS[index] ?? Palette;
     return {
@@ -67,72 +73,91 @@ function buildSkillCards(skillDetails: string[]): DisplayCardProps[] {
       title,
       description: subtitle || title,
       date: "Core",
-      titleClassName: "text-indigo-700",
+      badge: skillBadge,
+      accent: "indigo",
       imageUrl: SKILL_IMAGES[index],
     };
   });
-  return buildStackedCards(items);
-}
 
-function buildHobbyCards(
-  hobbiesGroups: { title: string; items: string[] }[]
-): DisplayCardProps[] {
-  const items = hobbiesGroups.map((group, index) => {
+  const hobbies: DisplayCardData[] = t.hobbiesGroups.map((group, index) => {
     const Icon = HOBBY_ICONS[index] ?? Mountain;
     return {
       icon: <Icon className="size-4 text-purple-100" />,
       title: group.title,
       description: group.items.join(" · "),
       date: `${group.items.length} items`,
-      iconClassName: "text-purple-500",
-      titleClassName: "text-purple-700",
+      badge: hobbyBadge,
+      accent: "purple",
       imageUrl: HOBBY_IMAGES[index],
     };
   });
-  return buildStackedCards(items);
+
+  return [...skills, ...hobbies];
+}
+
+function MinimalCardList({ cards }: { cards: DisplayCardData[] }) {
+  return (
+    <ul className="space-y-3">
+      {cards.map((card, index) => (
+        <li
+          key={`${card.title}-${index}`}
+          className="glass rounded-2xl border border-white/15 px-5 py-4"
+        >
+          <div className="mb-1 flex items-center gap-2">
+            {card.badge ? (
+              <span className="rounded-full bg-foreground/8 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-foreground/50">
+                {card.badge}
+              </span>
+            ) : null}
+            <span className="font-semibold text-foreground/90">{card.title}</span>
+          </div>
+          <p className="text-sm text-foreground/60 leading-relaxed">{card.description}</p>
+        </li>
+      ))}
+    </ul>
+  );
 }
 
 export default function AboutSkillsHobbiesDisplayCards({
   t,
 }: AboutSkillsHobbiesDisplayCardsProps) {
-  const skillCards = buildSkillCards(t.skillDetails);
-  const hobbyCards = buildHobbyCards(t.hobbiesGroups);
+  const tier = useMotionTier();
+  const { language } = useTranslation();
+  const skillBadge = language === "zh" ? "技能" : "Skill";
+  const hobbyBadge = language === "zh" ? "爱好" : "Hobby";
+  const unifiedCards = buildUnifiedCards(t, skillBadge, hobbyBadge);
+  const mergedTitle = `${t.skills} · ${t.hobbiesTitle}`;
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 sm:gap-x-10 sm:gap-y-16">
-      <section className="min-w-0 flex flex-col">
-        <motion.h2
-          initial={{ opacity: 0, x: -40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={scrollSlideViewport}
-          transition={{ duration: 0.55, ease: scrollEase }}
-          className="text-3xl font-bold mb-8 sm:mb-10 flex items-center space-x-4 shrink-0"
-        >
-          <div className="w-12 h-1 bg-indigo-500 rounded-full" />
-          <span>{t.skills}</span>
-        </motion.h2>
+    <section className="min-w-0">
+      <motion.h2
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={scrollSlideViewport}
+        transition={{ duration: 0.55, ease: scrollEase }}
+        className="text-3xl font-bold mb-8 sm:mb-10 flex items-center gap-4 shrink-0"
+      >
+        <div className="flex h-1 w-12 shrink-0 overflow-hidden rounded-full">
+          <span className="h-full w-1/2 bg-indigo-500" />
+          <span className="h-full w-1/2 bg-purple-500" />
+        </div>
+        <span>{mergedTitle}</span>
+      </motion.h2>
 
-        <GsapScrollReveal className="flex justify-center sm:justify-start min-h-[22rem] sm:min-h-[26rem] lg:min-h-[28rem] py-4 overflow-x-auto overflow-y-visible">
-          <DisplayCards cards={skillCards} className="min-w-[17rem] sm:min-w-[20rem]" />
-        </GsapScrollReveal>
-      </section>
-
-      <section className="min-w-0 flex flex-col">
-        <motion.h2
-          initial={{ opacity: 0, x: 40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={scrollSlideViewport}
-          transition={{ duration: 0.55, ease: scrollEase }}
-          className="text-3xl font-bold mb-8 sm:mb-10 flex items-center space-x-4 shrink-0"
-        >
-          <div className="w-12 h-1 bg-purple-500 rounded-full" />
-          <span>{t.hobbiesTitle}</span>
-        </motion.h2>
-
-        <GsapScrollReveal className="flex justify-center sm:justify-start min-h-[20rem] sm:min-h-[24rem] lg:min-h-[26rem] py-4 overflow-x-auto overflow-y-visible">
-          <DisplayCards cards={hobbyCards} className="min-w-[17rem] sm:min-w-[20rem]" />
-        </GsapScrollReveal>
-      </section>
-    </div>
+      <GsapScrollReveal className="flex justify-center overflow-visible pt-8 pb-4">
+        {tier === "minimal" ? (
+          <div className="w-full max-w-xl">
+            <MinimalCardList cards={unifiedCards} />
+          </div>
+        ) : (
+          <DisplayCards
+            cards={unifiedCards}
+            stackStepX={STACK_STEP_X}
+            stackStepY={STACK_STEP_Y}
+            className="mx-auto w-full max-w-[22rem] sm:max-w-[24rem] lg:max-w-[26rem]"
+          />
+        )}
+      </GsapScrollReveal>
+    </section>
   );
 }

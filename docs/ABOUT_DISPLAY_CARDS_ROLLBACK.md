@@ -10,7 +10,7 @@ NEXT_PUBLIC_ABOUT_DISPLAY_CARDS=false
 
 重新 `npm run build` 并部署后，关于页「核心技能」「爱好」恢复为玻璃拟态列表（`AboutSkillsHobbiesLegacy`）。
 
-默认（未设置或 `true`）：使用叠卡交互（`AboutSkillsHobbiesDisplayCards`）。
+默认（未设置或 `true`）：使用**单区块 9 卡叠放**（5 项技能 + 4 项爱好），点击卡片升起并完整展示内容。
 
 ## 文件对照
 
