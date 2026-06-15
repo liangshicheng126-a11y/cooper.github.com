@@ -25,6 +25,7 @@ export interface DisplayCardProps extends DisplayCardData {
   isActive?: boolean;
   stackX?: number;
   stackY?: number;
+  onActivate?: () => void;
 }
 
 const SPRING = { type: "spring" as const, stiffness: 260, damping: 26 };
@@ -59,75 +60,78 @@ export function DisplayCard({
   index = 0,
   isActive = false,
   stackX = 0,
-  stackY = 0,
+  stackY = 32,
+  onActivate,
 }: DisplayCardProps) {
   const accentStyle = ACCENT_STYLES[accent];
 
   return (
-    <motion.div
-      aria-hidden={!isActive}
+    <motion.button
+      type="button"
+      onClick={onActivate}
+      aria-pressed={isActive}
+      aria-label={title}
       initial={false}
       animate={{
         x: isActive ? 0 : stackX,
-        y: isActive ? -(index * stackY + 64) : index * stackY,
-        skewY: isActive ? 0 : -6,
-        scale: isActive ? 1.02 : 1,
-        filter: isActive ? "grayscale(0)" : "grayscale(0.7)",
-        opacity: isActive ? 1 : 0.9,
+        y: isActive ? -16 : index * stackY,
+        skewY: isActive ? 0 : -4,
+        scale: isActive ? 1.01 : 1,
+        filter: isActive ? "grayscale(0)" : "grayscale(0.5)",
       }}
       transition={SPRING}
       style={{ zIndex: isActive ? 50 : index + 1 }}
       className={cn(
-        "pointer-events-none relative flex w-[17rem] sm:w-[20rem] lg:w-[22rem] select-none flex-col justify-between rounded-xl border bg-white/[0.14] backdrop-blur-md px-4 py-3 text-left shadow-[0_12px_40px_rgba(15,23,42,0.12)]",
+        "relative flex w-[17rem] sm:w-[20rem] lg:w-[22rem] select-none flex-col text-left rounded-xl border bg-white/[0.14] backdrop-blur-md shadow-[0_8px_32px_rgba(15,23,42,0.1)]",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/60",
         isActive
-          ? "min-h-[10rem] h-auto border-white/35 bg-white/[0.22] shadow-[0_20px_56px_rgba(15,23,42,0.18)]"
-          : "h-32 sm:h-36",
+          ? "min-h-[9.5rem] h-auto cursor-default gap-2 border-white/35 bg-white/[0.22] px-4 py-3 shadow-[0_16px_48px_rgba(15,23,42,0.14)]"
+          : "h-10 cursor-pointer items-center overflow-hidden border-white/20 px-3 py-0 hover:border-white/35 hover:bg-white/20",
         accentStyle.border,
-        imageUrl && "overflow-hidden",
+        imageUrl && isActive && "overflow-hidden",
         className
       )}
     >
-      {imageUrl ? (
+      {isActive && imageUrl ? (
         <>
           <div
-            className={cn(
-              "pointer-events-none absolute inset-0 z-0 bg-cover bg-center transition-opacity duration-500",
-              isActive ? "opacity-45" : "opacity-28"
-            )}
+            className="pointer-events-none absolute inset-0 z-0 bg-cover bg-center opacity-40"
             style={{ backgroundImage: `url(${imageUrl})` }}
             aria-hidden
           />
           <div
-            className={cn(
-              "pointer-events-none absolute inset-0 z-[1] bg-gradient-to-br transition-opacity duration-500",
-              isActive
-                ? "from-white/90 via-white/75 to-white/58"
-                : "from-white/84 via-white/62 to-white/40"
-            )}
+            className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-br from-white/90 via-white/75 to-white/58"
             aria-hidden
           />
         </>
       ) : null}
 
-      <div className="relative z-[2] flex items-start gap-2">
+      <div
+        className={cn(
+          "relative z-[2] flex min-w-0 items-center gap-2",
+          isActive ? "items-start" : "h-10"
+        )}
+      >
         <span
           className={cn(
-            "relative inline-flex shrink-0 rounded-full p-1.5 shadow-sm",
+            "relative inline-flex shrink-0 rounded-full shadow-sm",
             accentStyle.iconWrap,
+            isActive ? "p-1.5" : "p-1",
             iconClassName
           )}
         >
           {icon}
         </span>
         <div className="min-w-0 flex-1">
-          {badge ? (
+          {isActive && badge ? (
             <span className="mb-1 inline-block rounded-full bg-foreground/8 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-foreground/50">
               {badge}
             </span>
           ) : null}
           <p
             className={cn(
-              "text-base sm:text-lg font-semibold leading-snug",
+              "font-semibold leading-snug",
+              isActive ? "text-base sm:text-lg" : "truncate text-xs",
               accentStyle.title,
               titleClassName
             )}
@@ -137,17 +141,15 @@ export function DisplayCard({
         </div>
       </div>
 
-      <p
-        className={cn(
-          "relative z-[2] text-sm sm:text-base leading-relaxed text-foreground/80",
-          isActive ? "whitespace-normal" : "line-clamp-2"
-        )}
-      >
-        {description}
-      </p>
-
-      <p className="relative z-[2] text-xs sm:text-sm text-foreground/50">{date}</p>
-    </motion.div>
+      {isActive ? (
+        <>
+          <p className="relative z-[2] whitespace-normal text-sm sm:text-base leading-relaxed text-foreground/80">
+            {description}
+          </p>
+          <p className="relative z-[2] text-xs sm:text-sm text-foreground/50">{date}</p>
+        </>
+      ) : null}
+    </motion.button>
   );
 }
 
@@ -160,8 +162,8 @@ interface DisplayCardsProps {
 
 export function buildStackOffsets(
   count: number,
-  stepX = 28,
-  stepY = 36
+  stepX = 22,
+  stepY = 32
 ): { x: number; y: number }[] {
   return Array.from({ length: count }, (_, index) => ({
     x: index * stepX,
@@ -171,11 +173,11 @@ export function buildStackOffsets(
 
 export function stackContainerMinHeight(
   count: number,
-  cardHeight = 144,
-  stepY = 36,
-  liftPadding = 96
+  peekH = 40,
+  expandedH = 160,
+  pad = 32
 ): number {
-  return cardHeight + (count - 1) * stepY + liftPadding;
+  return (count - 1) * peekH + expandedH + pad;
 }
 
 /** @deprecated Use DisplayCards with unified card data instead. */
@@ -186,8 +188,8 @@ export function buildStackedCards(items: DisplayCardData[]): DisplayCardData[] {
 export default function DisplayCards({
   cards,
   className,
-  stackStepX = 28,
-  stackStepY = 36,
+  stackStepX = 22,
+  stackStepY = 32,
 }: DisplayCardsProps) {
   const defaultCards: DisplayCardData[] = [
     { title: "Featured", description: "Discover amazing content", date: "Just now" },
@@ -196,14 +198,14 @@ export default function DisplayCards({
   ];
 
   const displayCards = cards ?? defaultCards;
-  const [activeIndex, setActiveIndex] = useState(displayCards.length - 1);
+  const [activeIndex, setActiveIndex] = useState(0);
   const offsets = buildStackOffsets(displayCards.length, stackStepX, stackStepY);
 
   return (
     <div
-      className={cn("relative w-full opacity-100", className)}
+      className={cn("relative w-full overflow-hidden opacity-100", className)}
       style={{
-        minHeight: stackContainerMinHeight(displayCards.length, 144, stackStepY, 112),
+        minHeight: stackContainerMinHeight(displayCards.length, stackStepY + 8, 160, 32),
       }}
     >
       <div className="relative grid [grid-template-areas:'stack'] place-items-start">
@@ -217,49 +219,9 @@ export default function DisplayCards({
                 stackX={offset.x}
                 stackY={stackStepY}
                 isActive={activeIndex === index}
+                onActivate={() => setActiveIndex(index)}
               />
             </div>
-          );
-        })}
-      </div>
-
-      {/* Dedicated tab layer — always receives clicks, even for middle cards */}
-      <div className="absolute inset-0 pointer-events-none">
-        {displayCards.map((card, index) => {
-          const offset = offsets[index];
-          const isActive = activeIndex === index;
-          const accentStyle = ACCENT_STYLES[card.accent ?? "indigo"];
-          return (
-            <motion.button
-              key={`tab-${card.title}-${index}`}
-              type="button"
-              aria-pressed={isActive}
-              aria-label={card.title}
-              onClick={() => setActiveIndex(index)}
-              initial={false}
-              animate={{
-                left: isActive ? 0 : offset.x,
-                top: isActive ? -(index * stackStepY + 64) : offset.y,
-              }}
-              transition={SPRING}
-              style={{
-                width: "17rem",
-                zIndex: isActive ? 120 : 80 + index,
-              }}
-              className={cn(
-                "pointer-events-auto absolute flex h-10 items-center gap-2 overflow-hidden rounded-xl border px-3 text-left sm:w-[20rem] lg:w-[22rem]",
-                "bg-white/55 backdrop-blur-md shadow-sm",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/60",
-                isActive
-                  ? "cursor-default border-white/40 opacity-0"
-                  : "cursor-pointer border-white/25 hover:border-white/40 hover:bg-white/70",
-                accentStyle.border
-              )}
-            >
-              <span className="truncate text-xs font-semibold text-foreground/80">
-                {card.title}
-              </span>
-            </motion.button>
           );
         })}
       </div>

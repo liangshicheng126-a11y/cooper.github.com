@@ -21,7 +21,7 @@ const scrollSlideViewport = { once: true, amount: 0.35, margin: "0px 0px -40px 0
 const scrollEase = [0.22, 1, 0.36, 1] as const;
 
 const STACK_STEP_X = 22;
-const STACK_STEP_Y = 38;
+const STACK_STEP_Y = 32;
 
 const SKILL_IMAGES = [
   "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=480&q=80",
@@ -129,7 +129,7 @@ export default function AboutSkillsHobbiesDisplayCards({
   const mergedTitle = `${t.skills} · ${t.hobbiesTitle}`;
 
   return (
-    <section className="min-w-0">
+    <section className="min-w-0 mb-16 sm:mb-20">
       <motion.h2
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -144,7 +144,7 @@ export default function AboutSkillsHobbiesDisplayCards({
         <span>{mergedTitle}</span>
       </motion.h2>
 
-      <GsapScrollReveal className="flex justify-center overflow-visible pt-8 pb-4">
+      <GsapScrollReveal className="flex justify-center overflow-hidden pt-2 pb-0">
         {tier === "minimal" ? (
           <div className="w-full max-w-xl">
             <MinimalCardList cards={unifiedCards} />
