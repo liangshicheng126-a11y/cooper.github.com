@@ -2,29 +2,32 @@
 
 import { cn } from "@/lib/utils";
 import useMotionTier from "@/hooks/useMotionTier";
+import LiquidGlassSurface from "@/components/ui/liquid-glass-surface";
 
 /**
- * Dedicated inner background for the desktop sidebar shell.
- * Gradient mesh + soft indigo blobs, degraded per motion tier.
+ * Desktop sidebar inner background — liquid glass with motion-tier fallback.
  */
 export default function SidebarBackdrop() {
   const tier = useMotionTier();
-  const animated = tier === "full";
+  const useFilter = tier === "full";
+
+  if (tier === "minimal") {
+    return (
+      <div
+        className={cn(
+          "pointer-events-none absolute inset-0 rounded-[inherit] glass",
+          "bg-gradient-to-br from-indigo-200/20 via-white/15 to-purple-200/15"
+        )}
+        aria-hidden
+      />
+    );
+  }
 
   return (
-    <div
-      className={cn(
-        "sidebar-backdrop absolute inset-0 rounded-[inherit] pointer-events-none",
-        animated && "sidebar-backdrop--animated",
-        tier === "minimal" && "sidebar-backdrop--static"
-      )}
-      aria-hidden
-    >
-      <div className="sidebar-backdrop__mesh" />
-      <div className="sidebar-backdrop__blob sidebar-backdrop__blob--a" />
-      <div className="sidebar-backdrop__blob sidebar-backdrop__blob--b" />
-      <div className="sidebar-backdrop__blob sidebar-backdrop__blob--c" />
-      <div className="sidebar-backdrop__sheen" />
-    </div>
+    <LiquidGlassSurface
+      className="sidebar-backdrop"
+      filterId="sidebar-container-glass"
+      useFilter={useFilter}
+    />
   );
 }
