@@ -30,15 +30,24 @@ export default function GsapProvider({ children }: { children: React.ReactNode }
     if (rafId.current) cancelAnimationFrame(rafId.current);
     if (refreshTimer.current) clearTimeout(refreshTimer.current);
 
+    let cancelled = false;
+    const refresh = () => {
+      if (!cancelled) ScrollTrigger.refresh();
+    };
     rafId.current = requestAnimationFrame(() => {
       refreshTimer.current = setTimeout(() => {
-        ScrollTrigger.refresh();
+        refresh();
       }, !useGsap ? 120 : tier === "full" ? 820 : tier === "reduced" ? 560 : 140);
     });
 
+    document.fonts?.ready.then(refresh).catch(() => {});
+    window.addEventListener("load", refresh, { once: true });
+
     return () => {
+      cancelled = true;
       if (rafId.current) cancelAnimationFrame(rafId.current);
       if (refreshTimer.current) clearTimeout(refreshTimer.current);
+      window.removeEventListener("load", refresh);
     };
   }, [pathname, tier, useGsap]);
 

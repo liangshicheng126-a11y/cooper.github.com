@@ -36,7 +36,7 @@ export default function GsapParallaxLayer({
       const el = ref.current;
       if (!el || !enableParallax) return;
 
-      gsap.to(el, {
+      const tween = gsap.to(el, {
         y: amount,
         ease: "none",
         force3D: true,
@@ -47,6 +47,11 @@ export default function GsapParallaxLayer({
           scrub,
         },
       });
+
+      return () => {
+        tween.scrollTrigger?.kill();
+        tween.kill();
+      };
     },
     { scope: ref, dependencies: [enableParallax, amount, scrub] }
   );

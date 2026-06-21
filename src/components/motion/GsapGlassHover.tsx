@@ -44,6 +44,11 @@ type QuickRefs = {
   spotlightOpacity: gsap.QuickToFunc | null;
 };
 
+type ElementRefs = {
+  card: HTMLElement | null;
+  image: HTMLElement | null;
+};
+
 const quickNull: QuickRefs = {
   scale: null,
   rotateX: null,
@@ -71,6 +76,7 @@ export default function GsapGlassHover({
   const rootRef = useRef<HTMLDivElement>(null);
   const spotlightRef = useRef<HTMLDivElement>(null);
   const quickRef = useRef<QuickRefs>({ ...quickNull });
+  const elementRef = useRef<ElementRefs>({ card: null, image: null });
   const hoveredRef = useRef(false);
 
   const tier = useMotionTier();
@@ -119,6 +125,7 @@ export default function GsapGlassHover({
         "[data-gsh-badge]"
       ) as HTMLElement | null;
 
+      elementRef.current = { card, image };
       const spotlight = spotlightRef.current;
 
       // Reset inline styles once before wiring quickTo.
@@ -286,11 +293,8 @@ export default function GsapGlassHover({
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!interactive || !hoveredRef.current) return;
-    const root = rootRef.current;
-    if (!root) return;
-
-    const card =
-      (root.querySelector("[data-gsh-card]") as HTMLElement | null) ?? root;
+    const card = elementRef.current.card ?? rootRef.current;
+    if (!card) return;
 
     const rect = card.getBoundingClientRect();
     const nx = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
@@ -300,9 +304,7 @@ export default function GsapGlassHover({
       quickRef.current.rotateX?.(-ny * preset.tiltDeg);
       quickRef.current.rotateY?.(nx * preset.tiltDeg);
 
-      const image = root.querySelector(
-        "[data-gsh-image]"
-      ) as HTMLElement | null;
+      const image = elementRef.current.image;
       if (image) {
         const m = capability.parallaxMultiplier;
         const par = preset.parallaxPx * (preset.imageParallaxScale ?? 1) * m;

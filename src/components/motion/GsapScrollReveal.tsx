@@ -49,7 +49,7 @@ export default function GsapScrollReveal({
 
       if (isElementInViewport(outer)) return;
 
-      gsap.fromTo(
+      const tween = gsap.fromTo(
         inner,
         { autoAlpha: 0, y, force3D: true },
         {
@@ -64,6 +64,11 @@ export default function GsapScrollReveal({
           },
         }
       );
+
+      return () => {
+        tween.scrollTrigger?.kill();
+        tween.kill();
+      };
     },
     { scope: outerRef, dependencies: [useGsap, y, once, start] }
   );

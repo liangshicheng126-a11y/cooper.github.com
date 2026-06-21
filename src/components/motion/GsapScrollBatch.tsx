@@ -201,7 +201,7 @@ export default function GsapScrollBatch({
         return;
       }
 
-      ScrollTrigger.batch(pending, {
+      const batchTriggers = ScrollTrigger.batch(pending, {
         start,
         onEnter: revealOnce,
         once: true,
@@ -213,6 +213,7 @@ export default function GsapScrollBatch({
       if (entrance === "flip" || entrance === "portfolio") {
         const settleTimer = gsap.delayedCall(settleDelay, syncVisibleEntrances);
         return () => {
+          batchTriggers.forEach((trigger) => trigger.kill());
           settleTimer.kill();
         };
       }
@@ -224,6 +225,7 @@ export default function GsapScrollBatch({
       const settleTimer = gsap.delayedCall(settleDelay, syncVisibleEntrances);
 
       return () => {
+        batchTriggers.forEach((trigger) => trigger.kill());
         settleTimer.kill();
       };
     },

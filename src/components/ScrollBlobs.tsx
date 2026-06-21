@@ -85,6 +85,7 @@ export default function ScrollBlobs() {
       if (!root || !useGsap || !MOTION_V2_ENABLED) return;
 
       const wraps = root.querySelectorAll(".blob-scroll-wrap");
+      const tweens: gsap.core.Tween[] = [];
       const scrollTriggers: ScrollTrigger[] = [];
 
       if (enableScrub) {
@@ -100,6 +101,7 @@ export default function ScrollBlobs() {
               scrub: 0.5 + i * 0.1,
             },
           });
+          tweens.push(st);
           const trigger = st.scrollTrigger;
           if (trigger) scrollTriggers.push(trigger);
         });
@@ -107,6 +109,7 @@ export default function ScrollBlobs() {
 
       return () => {
         scrollTriggers.forEach((trigger) => trigger.kill());
+        tweens.forEach((tween) => tween.kill());
       };
     },
     { scope: containerRef, dependencies: [useGsap, enableScrub, pathname] }

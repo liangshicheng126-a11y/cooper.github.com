@@ -24,9 +24,14 @@ export default function Magnet({
   const innerRef = useRef<HTMLDivElement>(null);
   const xTo = useRef<gsap.QuickToFunc | null>(null);
   const yTo = useRef<gsap.QuickToFunc | null>(null);
+  const rectRef = useRef<DOMRect | null>(null);
+  const rafId = useRef(0);
+  const pointerRef = useRef({ x: 0, y: 0, active: false });
 
   useEffect(() => {
-    if (typeof window !== "undefined" && window.matchMedia("(hover: none)").matches) {
+    const noHover =
+      typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
+    if (noHover) {
       return;
     }
 
@@ -39,54 +44,74 @@ export default function Magnet({
     xTo.current = gsap.quickTo(inner, "x", { duration: 0.2, ease: "power2.out" });
     yTo.current = gsap.quickTo(inner, "y", { duration: 0.5, ease: "power2.inOut" });
 
-    let rafId = 0;
-    let pendingX = 0;
-    let pendingY = 0;
-    let pendingActive = false;
-
-    const flush = () => {
-      rafId = 0;
-      if (!magnetRef.current || !xTo.current || !yTo.current) return;
-
-      const { left, top, width, height } = magnetRef.current.getBoundingClientRect();
-      const centerX = left + width / 2;
-      const centerY = top + height / 2;
-
-      if (pendingActive) {
-        xTo.current((pendingX - centerX) / magnetStrength);
-        yTo.current((pendingY - centerY) / magnetStrength);
-      } else {
-        xTo.current(0);
-        yTo.current(0);
-      }
-    };
-
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!magnetRef.current) return;
-      const { left, top, width, height } = magnetRef.current.getBoundingClientRect();
-      const distX = Math.abs(left + width / 2 - e.clientX);
-      const distY = Math.abs(top + height / 2 - e.clientY);
-
-      pendingActive =
-        distX < width / 2 + padding && distY < height / 2 + padding;
-      pendingX = e.clientX;
-      pendingY = e.clientY;
-
-      if (!rafId) rafId = requestAnimationFrame(flush);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      if (rafId) cancelAnimationFrame(rafId);
+      if (rafId.current) cancelAnimationFrame(rafId.current);
       gsap.set(inner, { x: 0, y: 0, clearProps: "transform" });
       xTo.current = null;
       yTo.current = null;
+      rectRef.current = null;
+      pointerRef.current.active = false;
     };
-  }, [padding, disabled, magnetStrength]);
+  }, [disabled]);
+
+  const flush = () => {
+    rafId.current = 0;
+    const rect = rectRef.current;
+    if (!rect || !xTo.current || !yTo.current) return;
+
+    if (pointerRef.current.active) {
+      const { left, top, width, height } = rect;
+      const centerX = left + width / 2;
+      const centerY = top + height / 2;
+
+      xTo.current((pointerRef.current.x - centerX) / magnetStrength);
+      yTo.current((pointerRef.current.y - centerY) / magnetStrength);
+      return;
+    }
+
+    xTo.current(0);
+    yTo.current(0);
+  };
+
+  const scheduleFlush = () => {
+    if (!rafId.current) rafId.current = requestAnimationFrame(flush);
+  };
+
+  const reset = () => {
+    pointerRef.current.active = false;
+    scheduleFlush();
+  };
 
   return (
-    <div ref={magnetRef} className={wrapperClassName} style={{ display: "inline-flex" }}>
+    <div
+      ref={magnetRef}
+      className={wrapperClassName}
+      style={{
+        display: "inline-flex",
+        padding,
+        margin: -padding,
+      }}
+      onPointerEnter={(event) => {
+        if (disabled || window.matchMedia("(hover: none)").matches) return;
+        const inner = innerRef.current;
+        rectRef.current = inner?.getBoundingClientRect() ?? null;
+        pointerRef.current = {
+          x: event.clientX,
+          y: event.clientY,
+          active: Boolean(rectRef.current),
+        };
+        scheduleFlush();
+      }}
+      onPointerMove={(event) => {
+        if (disabled || !rectRef.current) return;
+        pointerRef.current.x = event.clientX;
+        pointerRef.current.y = event.clientY;
+        pointerRef.current.active = true;
+        scheduleFlush();
+      }}
+      onPointerLeave={reset}
+      onPointerCancel={reset}
+    >
       <div
         ref={innerRef}
         className={innerClassName}
