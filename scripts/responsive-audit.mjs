@@ -77,4 +77,4 @@ for (const vp of VIEWPORTS) {
 
 await browser.close();
 console.log(JSON.stringify({ issueCount: issues.length, issues }, null, 2));
-process.exit(issues.some((i) => i.type === "horizontal-overflow" || i.type === "navigation-error") ? 1 : 0);
+process.exit(issues.some((i) => i.overflow === true || i.type === "navigation-error") ? 1 : 0);

@@ -152,7 +152,7 @@ export default function Home() {
       >
         {/* Hero Section */}
         <GsapParallaxLayer className="hero-section-responsive relative z-[90] min-h-[clamp(16rem,36vh,28rem)] lg:min-h-[clamp(18rem,44vh,32rem)] flex flex-col justify-start pt-1 sm:pt-2 pb-12 sm:pb-20 lg:pb-28">
-        <section className="flex flex-col relative z-[90]">
+        <section className="flex flex-col relative z-[90] overflow-x-clip">
           <motion.div 
             variants={heroSoft}
             className="mb-8 inline-flex items-center space-x-3 px-4 py-1.5 rounded-full glass border-white/10 text-indigo-500 text-sm font-medium w-fit max-w-full"

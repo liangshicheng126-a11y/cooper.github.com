@@ -102,7 +102,7 @@ export default function About() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={scrollSlideViewport}
               transition={{ duration: 0.55, ease: scrollEase }}
-              className="text-3xl font-bold mb-10 flex items-center space-x-4 shrink-0"
+              className="text-3xl font-bold mb-10 flex flex-wrap items-center gap-x-4 gap-y-2 min-w-0"
             >
               <div className="w-12 h-1 bg-indigo-500 rounded-full" />
               <span>{t.about.skills}</span>
@@ -156,7 +156,7 @@ export default function About() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={scrollSlideViewport}
               transition={{ duration: 0.55, ease: scrollEase }}
-              className="text-3xl font-bold mb-10 flex items-center space-x-4 shrink-0"
+              className="text-3xl font-bold mb-10 flex flex-wrap items-center gap-x-4 gap-y-2 min-w-0"
             >
               <div className="w-12 h-1 bg-purple-500 rounded-full" />
               <span>{t.about.hobbiesTitle}</span>

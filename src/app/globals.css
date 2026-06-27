@@ -609,7 +609,7 @@ html.dark[data-motion-tier="minimal"] .glass {
   transform: translate3d(0, 0, 0);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 1024px) {
   .year-divider {
     padding: 0.5rem 0;
   }
@@ -621,6 +621,7 @@ html.dark[data-motion-tier="minimal"] .glass {
     animation: none;
     justify-content: center;
     width: 100%;
+    flex-wrap: wrap;
   }
 }
 
