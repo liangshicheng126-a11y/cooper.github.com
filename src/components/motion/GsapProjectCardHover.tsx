@@ -59,7 +59,7 @@ export default function GsapProjectCardHover({
 
         <div
           data-gsh-content
-          className="absolute inset-0 z-10 p-6 sm:p-10 lg:p-12 flex flex-col justify-end"
+          className="absolute inset-0 z-10 p-6 sm:p-10 lg:p-12 flex flex-col justify-end min-h-0"
         >
           <span
             className={cn(

@@ -113,7 +113,11 @@ const Sidebar = () => {
               role="dialog"
               aria-modal="true"
               aria-label="Site navigation"
-              className="absolute left-4 right-4 top-[4.75rem] bottom-4 max-h-[calc(100dvh-5.75rem)] flex flex-col overflow-auto rounded-3xl border border-slate-200/90 bg-white/[0.97] p-6 shadow-[0_24px_64px_rgba(15,23,42,0.16)] backdrop-blur-xl"
+              className="absolute left-4 right-4 bottom-4 flex flex-col overflow-auto rounded-3xl border border-slate-200/90 bg-white/[0.97] p-6 shadow-[0_24px_64px_rgba(15,23,42,0.16)] backdrop-blur-xl"
+              style={{
+                top: "var(--mobile-topbar-offset)",
+                maxHeight: "calc(100dvh - var(--mobile-topbar-offset) - 1rem)",
+              }}
               initial={{ y: 16, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 16, opacity: 0 }}

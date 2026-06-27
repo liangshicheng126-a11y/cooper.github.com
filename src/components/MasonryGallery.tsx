@@ -60,8 +60,9 @@ export default function MasonryGallery<T>({
     if (!node) return;
 
     const updateLayout = () => {
-      setColumnCount(getMasonryColumnCount(window.innerWidth));
-      setContainerWidth(node.offsetWidth);
+      const width = node.offsetWidth;
+      setColumnCount(getMasonryColumnCount(width));
+      setContainerWidth(width);
     };
 
     updateLayout();

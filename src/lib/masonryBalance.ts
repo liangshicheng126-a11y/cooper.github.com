@@ -3,9 +3,9 @@ export type MasonryPlacedItem<T> = {
   index: number;
 };
 
-export function getMasonryColumnCount(viewportWidth: number): number {
-  if (viewportWidth >= 1280) return 4;
-  if (viewportWidth >= 768) return 3;
+export function getMasonryColumnCount(containerWidth: number): number {
+  if (containerWidth >= 960) return 4;
+  if (containerWidth >= 560) return 3;
   return 2;
 }
 

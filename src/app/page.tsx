@@ -142,7 +142,7 @@ export default function Home() {
   return (
     <div
       ref={pageContainerRef}
-      className={cn("flex flex-col pb-4 sm:pb-6", !mounted && "opacity-0")}
+      className={cn("flex flex-col flex-1 pb-4 sm:pb-6 w-full min-w-0 overflow-x-clip", !mounted && "opacity-0")}
     >
       <motion.div
         variants={container}
@@ -151,7 +151,7 @@ export default function Home() {
         className="flex flex-col flex-1"
       >
         {/* Hero Section */}
-        <GsapParallaxLayer className="relative z-[90] min-h-[36vh] lg:min-h-[44vh] flex flex-col justify-start pt-1 sm:pt-2 pb-20 sm:pb-28">
+        <GsapParallaxLayer className="hero-section-responsive relative z-[90] min-h-[clamp(16rem,36vh,28rem)] lg:min-h-[clamp(18rem,44vh,32rem)] flex flex-col justify-start pt-1 sm:pt-2 pb-12 sm:pb-20 lg:pb-28">
         <section className="flex flex-col relative z-[90]">
           <motion.div 
             variants={heroSoft}
@@ -167,7 +167,7 @@ export default function Home() {
           {/* Plain div — BlurText is the sole animation for hero title.
                heroMask's clip-path and BlurText's word-by-word conflict visually. */}
           <div className="overflow-hidden mb-6 sm:mb-8">
-            <h1 className="text-4xl sm:text-6xl lg:text-8xl font-bold tracking-tight max-w-5xl leading-[1.1]">
+            <h1 className="hero-title-responsive text-4xl sm:text-6xl lg:text-8xl font-bold tracking-tight max-w-5xl leading-[1.1]">
               {useHeroProximity ? (
                 <TextCursorProximity
                   label={t.hero.title}

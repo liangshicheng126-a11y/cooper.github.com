@@ -22,8 +22,8 @@ type ProjectCardProps = {
   variant?: "portfolio" | "preview";
 };
 
-const cardHeights =
-  "h-[320px] sm:h-[380px] lg:h-[450px] rounded-3xl";
+const cardHeights = "project-card-responsive rounded-3xl";
+const previewCardHeights = "project-card-responsive project-card-responsive--preview rounded-3xl";
 
 const cardShell =
   "overflow-visible p-2 sm:p-3 block cursor-pointer";
@@ -46,7 +46,7 @@ export default function ProjectCard({
       title={title}
       viewProject={viewProject}
       variant={variant}
-      className={cn(cardHeights)}
+      className={cn(variant === "preview" ? previewCardHeights : cardHeights)}
     />
   );
 

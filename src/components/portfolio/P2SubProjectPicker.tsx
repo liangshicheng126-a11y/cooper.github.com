@@ -24,7 +24,7 @@ export default function P2SubProjectPicker({ sectionTitle, projects }: Props) {
   return (
     <section className="mb-16 lg:mb-24">
       <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-6 sm:mb-8">{sectionTitle}</h2>
-      <GsapScrollBatch entrance="portfolio" playOnMount className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
+      <GsapScrollBatch entrance="portfolio" playOnMount className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 xl:gap-10">
         {projects.map((project, index) => (
           <Link
             key={project.slug}
@@ -40,7 +40,7 @@ export default function P2SubProjectPicker({ sectionTitle, projects }: Props) {
                 viewProject={project.viewLabel}
                 variant="portfolio"
                 imageOverlay="gradient"
-                className="h-[280px] sm:h-[340px] lg:h-[380px] rounded-3xl"
+                className="project-card-responsive rounded-3xl"
               />
               <p className="mt-4 px-2 text-sm sm:text-base text-foreground/60 leading-relaxed max-w-prose">
                 {project.desc}

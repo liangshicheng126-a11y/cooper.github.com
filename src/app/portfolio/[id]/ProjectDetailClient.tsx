@@ -154,7 +154,7 @@ export default function ProjectDetailClient({
   }
 
   return (
-    <div className="max-w-5xl pb-8">
+    <div className="flex flex-col flex-1 max-w-5xl pb-8 w-full">
       <div className="mb-8 sm:mb-12">
         <Link
           href="/portfolio"
@@ -205,7 +205,7 @@ export default function ProjectDetailClient({
       </div>
 
       {!hasVideoPreview && (
-        <div className="aspect-[4/3] sm:aspect-[21/9] rounded-[28px] sm:rounded-[40px] overflow-hidden glass border-white/10 mb-12 sm:mb-16">
+        <div className="aspect-[4/3] sm:aspect-video lg:aspect-[21/9] rounded-[28px] sm:rounded-[40px] overflow-hidden glass border-white/10 mb-12 sm:mb-16 w-full">
           <div
             className="w-full h-full"
             style={{

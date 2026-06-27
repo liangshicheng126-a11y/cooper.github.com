@@ -14,7 +14,7 @@ import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import { heroMaskVariants, shouldUseGsap } from "@/lib/motion";
 
 const aboutGlassTile =
-  "px-8 py-7 sm:px-12 sm:py-10 rounded-[1.25rem] sm:rounded-3xl min-h-[6.5rem] sm:min-h-[7.5rem] border-white/15 bg-white/[0.11] dark:bg-white/[0.07]";
+  "px-8 py-7 sm:px-12 sm:py-10 rounded-[1.25rem] sm:rounded-3xl min-h-0 h-full border-white/15 bg-white/[0.11] dark:bg-white/[0.07]";
 
 export default function About() {
   const { t, mounted } = useTranslation();
@@ -45,7 +45,7 @@ export default function About() {
   const scrollEase = [0.22, 1, 0.36, 1] as const;
 
   return (
-    <div className={cn("max-w-4xl pb-8", !mounted && "opacity-0")}>
+    <div className={cn("flex flex-col flex-1 max-w-4xl pb-8 w-full", !mounted && "opacity-0")}>
       <motion.div variants={container} initial={useGsap ? "show" : "hidden"} animate="show">
         <header className="mb-14 sm:mb-20">
           <motion.div variants={item} className="mb-4">
@@ -57,8 +57,8 @@ export default function About() {
             </motion.h1>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-center">
-            <motion.div variants={item} className="flex flex-col justify-center space-y-8 lg:space-y-12 py-2 lg:py-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-stretch">
+            <motion.div variants={item} className="flex flex-col justify-center space-y-8 lg:space-y-12 py-2 lg:py-4 min-h-0">
               <div>
                 <h3 className="text-xs uppercase font-bold text-foreground/40 tracking-widest mb-4 flex items-center space-x-2">
                   <Zap className="w-3 h-3 text-indigo-500" />
@@ -80,7 +80,7 @@ export default function About() {
               </div>
             </motion.div>
 
-            <GsapAboutAvatar experienceLabel={t.about.experience} />
+            <GsapAboutAvatar experienceLabel={t.about.experience} className="max-w-xs mx-auto md:max-w-none md:mx-0 w-full" />
           </div>
         </header>
 

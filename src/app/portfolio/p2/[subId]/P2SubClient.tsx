@@ -113,7 +113,7 @@ export default function P2SubClient({
   }
 
   return (
-    <div className="max-w-5xl pb-8">
+    <div className="flex flex-col flex-1 max-w-5xl pb-8 w-full min-w-0">
       <div className="mb-8 sm:mb-12">
         <Link
           href="/portfolio/p2"

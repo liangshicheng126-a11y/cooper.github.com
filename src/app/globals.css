@@ -15,6 +15,10 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  /* Align sticky panels, main padding, and mobile drawer with chrome */
+  --mobile-topbar-offset: 4.75rem;
+  --chrome-top-mobile: 6rem;
+  --chrome-top-desktop: 3rem;
 }
 
 /* Note: We intentionally do NOT auto-follow system dark mode.
@@ -61,7 +65,7 @@ body {
 
 .home-stack-panel {
   position: sticky;
-  top: 5.5rem;
+  top: var(--chrome-top-mobile);
   margin-bottom: -1.5rem;
   isolation: isolate;
 }
@@ -72,9 +76,43 @@ body {
 
 @media (min-width: 1280px) {
   .home-stack-panel {
-    top: 3rem;
+    top: var(--chrome-top-desktop);
     margin-bottom: -2rem;
   }
+}
+
+/* Homepage hero: compact on short landscape viewports */
+@media (orientation: landscape) and (max-height: 32rem) {
+  .hero-section-responsive {
+    min-height: auto;
+    padding-bottom: 2rem;
+  }
+
+  .hero-title-responsive {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .hero-title-responsive {
+      font-size: 2.25rem;
+      line-height: 2.5rem;
+    }
+  }
+}
+
+/* Portfolio cards: scale with container width, cap height on tall viewports */
+.project-card-responsive {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  min-height: 280px;
+  max-height: min(450px, 55vh);
+}
+
+.project-card-responsive--preview {
+  aspect-ratio: 16 / 10;
+  min-height: 240px;
+  max-height: min(380px, 45vh);
 }
 
 /* Large section shells: frosted glass so blobs show through (especially lower area) */
@@ -552,6 +590,8 @@ html.dark[data-motion-tier="minimal"] .glass {
   overflow: hidden;
   white-space: nowrap;
   padding: 0.75rem 0;
+  max-width: 100%;
+  contain: inline-size;
 }
 
 .year-divider-track {
@@ -593,6 +633,9 @@ html.dark[data-motion-tier="minimal"] .glass {
 .gallery-section {
   /* Avoid content-visibility on gallery grids — iOS Safari mis-paints during scroll. */
   content-visibility: visible;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 .masonry-grid {
@@ -600,6 +643,9 @@ html.dark[data-motion-tier="minimal"] .glass {
   align-items: flex-start;
   gap: 0.75rem;
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 .masonry-grid_column {

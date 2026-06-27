@@ -68,7 +68,7 @@ export default function Portfolio() {
   const heroMask = heroMaskVariants(tier);
 
   return (
-    <div className={cn("pb-4 sm:pb-6", !mounted && "opacity-0")}>
+    <div className={cn("flex flex-col flex-1 pb-4 sm:pb-6 w-full", !mounted && "opacity-0")}>
       <motion.div variants={container} initial={useGsap ? "show" : "hidden"} animate="show">
         <header className="mb-16">
           <motion.div variants={heroMask} className="overflow-hidden mb-6">
@@ -87,7 +87,7 @@ export default function Portfolio() {
         <GsapScrollBatch
           entrance="portfolio"
           playOnMount
-          className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 xl:gap-10"
         >
           {projects.map((project, i) => (
             <ProjectCard
