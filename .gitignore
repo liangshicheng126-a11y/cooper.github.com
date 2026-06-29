@@ -1,4 +1,6 @@
-node_modules/
+# Playwright MCP browser profile (local automation state)
+.playwright-mcp-profile/
+
 .next/
 out/
 dist/
