@@ -45,7 +45,7 @@ export default function About() {
   const scrollEase = [0.22, 1, 0.36, 1] as const;
 
   return (
-    <div className={cn("flex flex-col flex-1 max-w-4xl pb-8 w-full", !mounted && "opacity-0")}>
+    <div className={cn("flex flex-col flex-1 pb-8 w-full min-w-0", !mounted && "opacity-0")}>
       <motion.div variants={container} initial={useGsap ? "show" : "hidden"} animate="show">
         <header className="mb-14 sm:mb-20">
           <motion.div variants={item} className="mb-4">

@@ -43,7 +43,7 @@ export default function P2HubClient() {
 
   if (!mounted) {
     return (
-      <div className="max-w-5xl pb-8 animate-pulse">
+      <div className="pb-8 animate-pulse w-full">
         <div className="mb-8 h-6 w-32 rounded-lg bg-white/10" />
         <div className="mb-6 h-12 w-2/3 max-w-md rounded-xl bg-white/10" />
         <div className="mb-12 h-48 rounded-3xl bg-white/5 sm:h-64" />
@@ -52,7 +52,7 @@ export default function P2HubClient() {
   }
 
   return (
-    <div className="flex flex-col flex-1 max-w-5xl pb-8 w-full">
+    <div className="flex flex-col flex-1 pb-8 w-full min-w-0">
       <div className="mb-8 sm:mb-12">
         <Link
           href="/portfolio"

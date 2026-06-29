@@ -72,7 +72,7 @@ export default function RootLayout({
             <div className="layout-chrome flex min-h-screen min-w-0 overflow-x-clip">
               <Sidebar />
               <LanguageToggle />
-              <main className="flex flex-col flex-1 min-h-[100dvh] min-w-0 overflow-x-clip ml-0 xl:ml-80 px-4 sm:px-8 lg:px-10 xl:px-12 pb-8 sm:pb-10 xl:pb-12 pt-24 xl:pt-12 xl:pr-24 relative z-10">
+              <main className="flex flex-col flex-1 min-h-[100dvh] min-w-0 overflow-x-clip ml-0 xl:ml-80 px-4 sm:px-8 lg:px-10 xl:px-12 pb-8 sm:pb-10 xl:pb-12 pt-24 xl:pt-12 relative z-10">
                 <PageTransition>
                   {children}
                 </PageTransition>

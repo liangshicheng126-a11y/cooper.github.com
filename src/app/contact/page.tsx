@@ -65,7 +65,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className={cn("max-w-4xl pb-8", !mounted && "opacity-0")}>
+    <div className={cn("flex flex-col flex-1 pb-8 w-full min-w-0", !mounted && "opacity-0")}>
       <GsapScrollReveal as="div" className="mb-12">
         <header className="mb-0">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6">

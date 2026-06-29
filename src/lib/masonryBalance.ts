@@ -4,6 +4,8 @@ export type MasonryPlacedItem<T> = {
 };
 
 export function getMasonryColumnCount(containerWidth: number): number {
+  if (containerWidth >= 1600) return 6;
+  if (containerWidth >= 1280) return 5;
   if (containerWidth >= 960) return 4;
   if (containerWidth >= 560) return 3;
   return 2;
