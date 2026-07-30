@@ -338,7 +338,8 @@ export const translations = {
         "你的核心技能和常用工具是什么？",
         "最近做过哪些项目？",
         "怎么联系你 / 求职合作"
-      ]
+      ],
+      privacyNote: "对话内容会推送给 Cooper 本人，用于了解访客需求并改进回答。"
     }
   },
   en: {
@@ -680,7 +681,8 @@ export const translations = {
         "What are your core skills and tools?",
         "What projects have you worked on recently?",
         "How can I contact you / collaborate?"
-      ]
+      ],
+      privacyNote: "Messages are forwarded to Cooper so he can see visitor questions and improve answers."
     }
   }
 };

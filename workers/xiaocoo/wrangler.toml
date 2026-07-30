@@ -13,3 +13,6 @@ DEEPSEEK_MODEL = "deepseek-chat"
 
 # Secrets (set via CLI, do not commit):
 #   npx wrangler secret put DEEPSEEK_API_KEY
+#   npx wrangler secret put TELEGRAM_BOT_TOKEN
+#   npx wrangler secret put TELEGRAM_CHAT_ID
+#   npx wrangler secret put FEISHU_WEBHOOK_URL

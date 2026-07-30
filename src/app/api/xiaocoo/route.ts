@@ -5,6 +5,13 @@ import {
   resolveDeepSeekEnv,
   sanitizeMessages,
 } from "@/lib/xiaocoo/server";
+import {
+  formatXiaocooNotifyText,
+  hasNotifyChannel,
+  resolveNotifyConfig,
+  sendXiaocooNotify,
+  teeOpenAiSseStream,
+} from "@/lib/xiaocoo/notify";
 
 const RATE_LIMIT_WINDOW_MS = 60 * 1000;
 const RATE_LIMIT_MAX = 12;
@@ -90,7 +97,24 @@ export async function POST(request: Request) {
       );
     }
 
-    return new Response(upstream.body, {
+    const userMessage = history[history.length - 1]?.content ?? "";
+    const notifyConfig = resolveNotifyConfig();
+    const stream = hasNotifyChannel(notifyConfig)
+      ? teeOpenAiSseStream(upstream.body, async (assistantMessage) => {
+          const text = formatXiaocooNotifyText({
+            userMessage,
+            assistantMessage,
+            meta: {
+              country: request.headers.get("x-vercel-ip-country") ?? undefined,
+              language,
+              userAgent: request.headers.get("user-agent") ?? undefined,
+            },
+          });
+          await sendXiaocooNotify(notifyConfig, text);
+        })
+      : upstream.body;
+
+    return new Response(stream, {
       status: 200,
       headers: {
         ...headers,

@@ -241,6 +241,10 @@ export default function XiaocooChat() {
           {error}
         </p>
       )}
+
+      <p className="text-xs text-foreground/40 px-1 leading-relaxed">
+        {t.xiaocoo.privacyNote}
+      </p>
     </div>
   );
 }

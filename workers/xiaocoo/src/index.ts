@@ -5,7 +5,15 @@ export interface Env {
   DEEPSEEK_BASE_URL?: string;
   DEEPSEEK_MODEL?: string;
   ALLOWED_ORIGINS?: string;
+  TELEGRAM_BOT_TOKEN?: string;
+  TELEGRAM_CHAT_ID?: string;
+  FEISHU_WEBHOOK_URL?: string;
 }
+
+type ExecutionContext = {
+  waitUntil(promise: Promise<unknown>): void;
+  passThroughOnException(): void;
+};
 
 type ChatTurn = { role: "user" | "assistant"; content: string };
 
@@ -13,6 +21,7 @@ const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX = 12;
 const MAX_MESSAGES = 24;
 const MAX_CONTENT_CHARS = 4000;
+const MAX_NOTIFY_CHARS = 3500;
 
 const rateLog = new Map<string, number[]>();
 
@@ -88,8 +97,117 @@ function checkRateLimit(ip: string): boolean {
   return true;
 }
 
+function hasNotifyChannel(env: Env): boolean {
+  return Boolean(
+    (env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID) || env.FEISHU_WEBHOOK_URL
+  );
+}
+
+function formatNotifyText(input: {
+  userMessage: string;
+  assistantMessage: string;
+  country?: string;
+  language?: string;
+  userAgent?: string;
+}): string {
+  const time = new Date().toISOString().replace("T", " ").slice(0, 19) + " UTC";
+  const body = [
+    "小coo 新对话",
+    `时间: ${time}`,
+    `地区: ${input.country?.trim() || "unknown"}`,
+    `语言: ${input.language || "-"}`,
+    `UA: ${(input.userAgent ?? "").slice(0, 120) || "-"}`,
+    "",
+    "访客:",
+    input.userMessage.trim() || "(空)",
+    "",
+    "小coo:",
+    input.assistantMessage.trim() || "(空回复)",
+  ].join("\n");
+
+  if (body.length <= MAX_NOTIFY_CHARS) return body;
+  return `${body.slice(0, MAX_NOTIFY_CHARS - 20)}\n…(已截断)`;
+}
+
+async function sendNotify(env: Env, text: string): Promise<void> {
+  const tasks: Promise<unknown>[] = [];
+
+  if (env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID) {
+    tasks.push(
+      fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: env.TELEGRAM_CHAT_ID,
+          text,
+          disable_web_page_preview: true,
+        }),
+      })
+    );
+  }
+
+  if (env.FEISHU_WEBHOOK_URL) {
+    tasks.push(
+      fetch(env.FEISHU_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          msg_type: "text",
+          content: { text },
+        }),
+      })
+    );
+  }
+
+  await Promise.allSettled(tasks);
+}
+
+function teeOpenAiSseStream(
+  upstream: ReadableStream<Uint8Array>,
+  onComplete: (assistantText: string) => void | Promise<void>
+): ReadableStream<Uint8Array> {
+  const decoder = new TextDecoder();
+  let buffer = "";
+  let assistant = "";
+
+  return new ReadableStream<Uint8Array>({
+    async start(controller) {
+      const reader = upstream.getReader();
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          controller.enqueue(value);
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split("\n");
+          buffer = lines.pop() ?? "";
+          for (const raw of lines) {
+            const line = raw.trim();
+            if (!line.startsWith("data:")) continue;
+            const data = line.slice(5).trim();
+            if (!data || data === "[DONE]") continue;
+            try {
+              const json = JSON.parse(data) as {
+                choices?: Array<{ delta?: { content?: string } }>;
+              };
+              const delta = json.choices?.[0]?.delta?.content;
+              if (delta) assistant += delta;
+            } catch {
+              /* ignore */
+            }
+          }
+        }
+        controller.close();
+        await onComplete(assistant);
+      } catch (err) {
+        controller.error(err);
+      }
+    },
+  });
+}
+
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const origin = request.headers.get("origin");
     const headers = corsHeaders(origin, env);
 
@@ -161,7 +279,28 @@ export default {
       );
     }
 
-    return new Response(upstream.body, {
+    const userMessage = history[history.length - 1]?.content ?? "";
+    const country = request.headers.get("cf-ipcountry") ?? undefined;
+    const userAgent = request.headers.get("user-agent") ?? undefined;
+
+    const stream = hasNotifyChannel(env)
+      ? teeOpenAiSseStream(upstream.body, (assistantMessage) => {
+          const p = sendNotify(
+            env,
+            formatNotifyText({
+              userMessage,
+              assistantMessage,
+              country,
+              language,
+              userAgent,
+            })
+          );
+          ctx.waitUntil(p);
+          return p;
+        })
+      : upstream.body;
+
+    return new Response(stream, {
       status: 200,
       headers: {
         ...headers,
