@@ -28,6 +28,18 @@ const MAX_NAME_LEN = 40;
 const MAX_STORED_MESSAGES = 40;
 const CANNED_THINK_MS = 800;
 const CANNED_THINK_REDUCED_MS = 300;
+/** Mobile keeps only these three prompts (zh/en), in this order. */
+const MOBILE_SUGGESTION_MATCHERS = [
+  /一分钟介绍|Introduce yourself in one minute/i,
+  /目前在哪里|Where are you now/i,
+  /未来的规划|future plans/i,
+] as const;
+
+function pickMobileSuggestions(all: string[]) {
+  return MOBILE_SUGGESTION_MATCHERS.map((re) => all.find((s) => re.test(s))).filter(
+    (s): s is string => Boolean(s)
+  );
+}
 
 const BUBBLE_SPRING: Transition = {
   type: "spring",
@@ -131,12 +143,21 @@ export default function XiaocooChat() {
   const [streaming, setStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hydrated, setHydrated] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
   const deviceIdRef = useRef<string>("anonymous");
   const useMotionRef = useRef(useMotion);
   useMotionRef.current = useMotion;
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const sync = () => setIsMobile(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
 
   useEffect(() => {
     try {
@@ -284,6 +305,10 @@ export default function XiaocooChat() {
     void send(input);
   };
 
+  const suggestions = isMobile
+    ? pickMobileSuggestions(t.xiaocoo.suggestions)
+    : t.xiaocoo.suggestions;
+
   if (!visitorName) {
     return (
       <div className="flex flex-col gap-6 w-full min-w-0 flex-1">
@@ -401,14 +426,14 @@ export default function XiaocooChat() {
           <div ref={bottomRef} />
         </div>
 
-        <div className="border-t border-white/10 px-3 sm:px-4 pt-3 pb-1 bg-white/70 dark:bg-black/45">
+        <div className="border-t border-indigo-500/15 px-3 sm:px-4 pt-3 pb-1 bg-indigo-500/[0.12] dark:bg-indigo-400/10">
           {messages.length > 0 && (
-            <p className="text-xs uppercase tracking-[0.18em] text-foreground/40 font-bold mb-2 px-0.5">
+            <p className="text-xs uppercase tracking-[0.18em] text-indigo-500/70 font-bold mb-2 px-0.5">
               {t.xiaocoo.suggestionsHint}
             </p>
           )}
           <div className="grid grid-cols-1 sm:flex sm:flex-wrap gap-2 max-h-[28vh] overflow-y-auto pb-2">
-            {t.xiaocoo.suggestions.map((suggestion) => (
+            {suggestions.map((suggestion) => (
               <button
                 key={suggestion}
                 type="button"
@@ -416,8 +441,9 @@ export default function XiaocooChat() {
                 onClick={() => void send(suggestion)}
                 className={cn(
                   "text-left text-[13px] sm:text-sm px-3.5 py-2.5 sm:py-2 rounded-2xl",
-                  "border border-indigo-500/30 bg-white/85 text-indigo-700 dark:bg-white/10 dark:text-indigo-200",
-                  "hover:bg-white hover:border-indigo-500/45 dark:hover:bg-white/15 transition-colors",
+                  "border border-indigo-400/40 bg-indigo-500/20 text-indigo-800",
+                  "dark:border-indigo-400/30 dark:bg-indigo-400/15 dark:text-indigo-100",
+                  "hover:bg-indigo-500/30 hover:border-indigo-500/55 dark:hover:bg-indigo-400/25 transition-colors",
                   "disabled:opacity-50 w-full sm:w-auto"
                 )}
               >
@@ -429,7 +455,7 @@ export default function XiaocooChat() {
 
         <form
           onSubmit={onSubmit}
-          className="border-t border-white/10 p-3 sm:p-4 flex items-end gap-2 sm:gap-3 bg-white/75 dark:bg-black/45"
+          className="border-t border-indigo-500/15 p-3 sm:p-4 flex items-end gap-2 sm:gap-3 bg-indigo-500/[0.14] dark:bg-indigo-400/10"
         >
           <label className="flex-1 min-w-0">
             <span className="sr-only">{t.xiaocoo.placeholder}</span>
@@ -447,9 +473,9 @@ export default function XiaocooChat() {
               placeholder={t.xiaocoo.placeholder}
               className={cn(
                 "w-full resize-none rounded-2xl px-4 py-3 text-[15px]",
-                "bg-white/60 dark:bg-white/5 border border-white/25",
-                "outline-none focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20",
-                "placeholder:text-foreground/35 disabled:opacity-60"
+                "bg-indigo-50/80 dark:bg-indigo-950/40 border border-indigo-400/30",
+                "outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/25",
+                "placeholder:text-indigo-400/70 disabled:opacity-60"
               )}
             />
           </label>
