@@ -321,12 +321,12 @@ export default function XiaocooChat() {
           <h2 className="text-xl sm:text-2xl font-bold tracking-tight mb-2">
             {t.xiaocoo.gateTitle}
           </h2>
-          <p className="text-foreground/60 leading-relaxed mb-6 text-[15px]">
+          <p className="mb-6 text-[15px] leading-relaxed text-foreground/80">
             {t.xiaocoo.gateHint}
           </p>
           <form onSubmit={commitName} className="space-y-4">
             <label className="block space-y-2">
-              <span className="text-xs uppercase tracking-[0.18em] text-foreground/45 font-bold">
+              <span className="text-xs font-bold uppercase tracking-[0.18em] text-foreground/70">
                 {t.xiaocoo.gateNameLabel}
               </span>
               <input
@@ -341,7 +341,7 @@ export default function XiaocooChat() {
                   "w-full rounded-2xl px-4 py-3 text-[15px]",
                   "bg-white/60 dark:bg-white/5 border border-white/25",
                   "outline-none focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20",
-                  "placeholder:text-foreground/35"
+                  "placeholder:text-foreground/60"
                 )}
               />
             </label>
@@ -364,24 +364,26 @@ export default function XiaocooChat() {
 
   return (
     <div className="flex flex-col gap-6 w-full min-w-0 flex-1">
-      <p className="text-sm text-foreground/50 px-1">
+      <p className="px-1 text-sm font-medium text-foreground/75">
         {t.xiaocoo.chattingAs}
-        <span className="ml-2 font-medium text-indigo-500">{visitorName}</span>
+        <span className="ml-2 font-semibold text-indigo-700 dark:text-indigo-300">
+          {visitorName}
+        </span>
       </p>
 
       <div
         className={cn(
-          "glass rounded-[1.75rem] sm:rounded-[2rem] border-white/15",
+          "glass rounded-[1.75rem] sm:rounded-[2rem] border-white/30 bg-white/70 dark:border-white/10 dark:bg-slate-950/70",
           "flex flex-col min-h-[min(70vh,640px)] max-h-[min(78vh,720px)] overflow-hidden"
         )}
       >
         <div className="flex-1 overflow-y-auto px-3 sm:px-6 py-5 sm:py-6 space-y-4">
           {messages.length === 0 && (
             <div className="space-y-2">
-              <p className="text-foreground/75 leading-relaxed text-[15px] sm:text-base">
+              <p className="text-[15px] font-medium leading-relaxed text-foreground/90 sm:text-base">
                 {t.xiaocoo.welcome}
               </p>
-              <p className="text-xs uppercase tracking-[0.18em] text-foreground/40 font-bold">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-foreground/65">
                 {t.xiaocoo.emptyHint}
               </p>
             </div>
@@ -408,11 +410,11 @@ export default function XiaocooChat() {
                     "max-w-[92%] sm:max-w-[80%] rounded-2xl px-3.5 sm:px-4 py-3 text-[14px] sm:text-[15px] leading-relaxed whitespace-pre-wrap",
                     message.role === "user"
                       ? "bg-indigo-500/90 text-white rounded-br-md"
-                      : "bg-white/50 dark:bg-white/10 border border-white/20 text-foreground rounded-bl-md"
+                      : "rounded-bl-md border border-indigo-500/15 bg-white/85 text-foreground dark:border-white/10 dark:bg-slate-900/85"
                   )}
                 >
                   {showThinking ? (
-                    <span className="inline-flex items-center gap-2 text-foreground/50">
+                    <span className="inline-flex items-center gap-2 text-foreground/70">
                       <Loader2 className="size-4 animate-spin" />
                       {t.xiaocoo.thinking}
                     </span>
@@ -428,7 +430,7 @@ export default function XiaocooChat() {
 
         <div className="border-t border-indigo-500/15 px-3 sm:px-4 pt-3 pb-1 bg-indigo-500/[0.12] dark:bg-indigo-400/10">
           {messages.length > 0 && (
-            <p className="text-xs uppercase tracking-[0.18em] text-indigo-500/70 font-bold mb-2 px-0.5">
+            <p className="mb-2 px-0.5 text-xs font-bold uppercase tracking-[0.18em] text-indigo-700 dark:text-indigo-200">
               {t.xiaocoo.suggestionsHint}
             </p>
           )}
@@ -475,7 +477,7 @@ export default function XiaocooChat() {
                 "w-full resize-none rounded-2xl px-4 py-3 text-[15px]",
                 "bg-indigo-50/80 dark:bg-indigo-950/40 border border-indigo-400/30",
                 "outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/25",
-                "placeholder:text-indigo-400/70 disabled:opacity-60"
+                "text-foreground placeholder:text-indigo-700/70 dark:placeholder:text-indigo-200/70 disabled:opacity-60"
               )}
             />
           </label>

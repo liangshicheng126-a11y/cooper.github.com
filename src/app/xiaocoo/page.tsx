@@ -18,7 +18,7 @@ export default function XiaocooPage() {
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-4">
             {t.xiaocoo.title}
           </h1>
-          <p className="text-lg sm:text-xl text-foreground/60 leading-relaxed max-w-3xl">
+          <p className="max-w-3xl text-lg leading-relaxed text-foreground/80 sm:text-xl">
             {t.xiaocoo.subtitle}
           </p>
         </header>
