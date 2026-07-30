@@ -114,7 +114,10 @@ export async function POST(request: Request) {
           const text = formatXiaocooNotifyText({
             userMessage,
             assistantMessage,
-            meta: { visitorName },
+            meta: {
+              visitorName,
+              userAgent: request.headers.get("user-agent") ?? undefined,
+            },
           });
           await sendXiaocooNotify(notifyConfig, text);
         })

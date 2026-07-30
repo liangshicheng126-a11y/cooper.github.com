@@ -113,11 +113,14 @@ function formatNotifyText(input: {
   userMessage: string;
   assistantMessage: string;
   visitorName?: string;
+  userAgent?: string;
 }): string {
   const name = input.visitorName?.trim() || "未留名访客";
+  const ua = (input.userAgent ?? "").trim().slice(0, 180) || "-";
   const body = [
     "小coo 新对话",
     `访客: ${name}`,
+    `UA: ${ua}`,
     "",
     "问:",
     input.userMessage.trim() || "(空)",
@@ -290,6 +293,7 @@ export default {
     }
 
     const userMessage = history[history.length - 1]?.content ?? "";
+    const userAgent = request.headers.get("user-agent") ?? undefined;
 
     const stream = hasNotifyChannel(env)
       ? teeOpenAiSseStream(upstream.body, (assistantMessage) => {
@@ -299,6 +303,7 @@ export default {
               userMessage,
               assistantMessage,
               visitorName,
+              userAgent,
             })
           );
           ctx.waitUntil(p);
