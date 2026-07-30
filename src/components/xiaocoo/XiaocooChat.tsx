@@ -9,6 +9,7 @@ import useMotionTier from "@/hooks/useMotionTier";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import { shouldUseGsap } from "@/lib/motion";
 import {
+  getOrCreateDeviceId,
   readOpenAiSseStream,
   streamXiaocooChat,
   type ChatMessage,
@@ -21,10 +22,51 @@ type UiMessage = {
 };
 
 const VISITOR_NAME_KEY = "xiaocoo-visitor-name";
+const MESSAGES_KEY = "xiaocoo-chat-messages";
 const MAX_NAME_LEN = 40;
+const MAX_STORED_MESSAGES = 40;
 
 function uid() {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function loadStoredMessages(): UiMessage[] {
+  try {
+    const raw = sessionStorage.getItem(MESSAGES_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed)) return [];
+    const out: UiMessage[] = [];
+    for (const item of parsed) {
+      if (!item || typeof item !== "object") continue;
+      const role = (item as { role?: unknown }).role;
+      const content = (item as { content?: unknown }).content;
+      const id = (item as { id?: unknown }).id;
+      if (role !== "user" && role !== "assistant") continue;
+      if (typeof content !== "string" || !content.trim()) continue;
+      out.push({
+        id: typeof id === "string" ? id : uid(),
+        role,
+        content,
+      });
+      if (out.length >= MAX_STORED_MESSAGES) break;
+    }
+    return out;
+  } catch {
+    return [];
+  }
+}
+
+function persistMessages(messages: UiMessage[]) {
+  try {
+    const slim = messages
+      .filter((m) => m.content.trim())
+      .slice(-MAX_STORED_MESSAGES)
+      .map(({ id, role, content }) => ({ id, role, content }));
+    sessionStorage.setItem(MESSAGES_KEY, JSON.stringify(slim));
+  } catch {
+    /* private mode / quota */
+  }
 }
 
 export default function XiaocooChat() {
@@ -39,9 +81,11 @@ export default function XiaocooChat() {
   const [input, setInput] = useState("");
   const [streaming, setStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [hydrated, setHydrated] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
+  const deviceIdRef = useRef<string>("anonymous");
 
   useEffect(() => {
     try {
@@ -50,10 +94,18 @@ export default function XiaocooChat() {
         setVisitorName(saved.slice(0, MAX_NAME_LEN));
         setNameDraft(saved.slice(0, MAX_NAME_LEN));
       }
+      setMessages(loadStoredMessages());
+      deviceIdRef.current = getOrCreateDeviceId();
     } catch {
       /* private mode */
     }
+    setHydrated(true);
   }, []);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    persistMessages(messages);
+  }, [messages, hydrated]);
 
   useEffect(() => {
     if (visitorName) return;
@@ -68,7 +120,7 @@ export default function XiaocooChat() {
     return () => abortRef.current?.abort();
   }, []);
 
-  if (!mounted) return null;
+  if (!mounted || !hydrated) return null;
 
   const commitName = (event: FormEvent) => {
     event.preventDefault();
@@ -110,6 +162,7 @@ export default function XiaocooChat() {
         signal: controller.signal,
         language,
         visitorName,
+        deviceId: deviceIdRef.current,
       });
 
       if (!response.ok) {
@@ -223,7 +276,7 @@ export default function XiaocooChat() {
           "flex flex-col min-h-[min(70vh,640px)] max-h-[min(78vh,720px)] overflow-hidden"
         )}
       >
-        <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-5 sm:py-6 space-y-4">
+        <div className="flex-1 overflow-y-auto px-3 sm:px-6 py-5 sm:py-6 space-y-4">
           {messages.length === 0 && (
             <div className="space-y-4">
               <p className="text-foreground/75 leading-relaxed text-[15px] sm:text-base">
@@ -232,7 +285,7 @@ export default function XiaocooChat() {
               <p className="text-xs uppercase tracking-[0.18em] text-foreground/40 font-bold">
                 {t.xiaocoo.emptyHint}
               </p>
-              <div className="flex flex-wrap gap-2">
+              <div className="grid grid-cols-1 sm:flex sm:flex-wrap gap-2">
                 {t.xiaocoo.suggestions.map((suggestion) => (
                   <button
                     key={suggestion}
@@ -240,10 +293,10 @@ export default function XiaocooChat() {
                     disabled={streaming}
                     onClick={() => void send(suggestion)}
                     className={cn(
-                      "text-left text-sm px-3.5 py-2 rounded-2xl",
+                      "text-left text-[13px] sm:text-sm px-3.5 py-2.5 sm:py-2 rounded-2xl",
                       "border border-indigo-500/20 bg-indigo-500/10 text-indigo-600 dark:text-indigo-300",
                       "hover:bg-indigo-500/15 hover:border-indigo-500/35 transition-colors",
-                      "disabled:opacity-50"
+                      "disabled:opacity-50 w-full sm:w-auto"
                     )}
                   >
                     {suggestion}
@@ -266,7 +319,7 @@ export default function XiaocooChat() {
             >
               <div
                 className={cn(
-                  "max-w-[92%] sm:max-w-[80%] rounded-2xl px-4 py-3 text-[15px] leading-relaxed whitespace-pre-wrap",
+                  "max-w-[92%] sm:max-w-[80%] rounded-2xl px-3.5 sm:px-4 py-3 text-[14px] sm:text-[15px] leading-relaxed whitespace-pre-wrap",
                   message.role === "user"
                     ? "bg-indigo-500/90 text-white rounded-br-md"
                     : "bg-white/50 dark:bg-white/10 border border-white/20 text-foreground rounded-bl-md"
@@ -331,7 +384,7 @@ export default function XiaocooChat() {
       </div>
 
       {error && (
-        <p className="text-sm text-rose-500/90 px-1" role="alert">
+        <p className="text-sm text-rose-500/90 px-1 whitespace-pre-wrap" role="alert">
           {error}
         </p>
       )}

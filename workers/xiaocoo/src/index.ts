@@ -17,14 +17,28 @@ type ExecutionContext = {
 
 type ChatTurn = { role: "user" | "assistant"; content: string };
 
+type TokenUsage = {
+  prompt_tokens?: number;
+  completion_tokens?: number;
+  total_tokens?: number;
+  prompt_cache_hit_tokens?: number;
+  prompt_cache_miss_tokens?: number;
+};
+
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX = 12;
 const MAX_MESSAGES = 24;
 const MAX_CONTENT_CHARS = 4000;
 const MAX_NOTIFY_CHARS = 3500;
 const MAX_VISITOR_NAME = 40;
+const MAX_DEVICE_ID = 64;
+const DAILY_BUDGET_CNY = 1;
+const USD_CNY_RATE = 7.2;
+const FLASH_PRICES = { cacheHit: 0.0028, cacheMiss: 0.14, output: 0.28 };
 
 const rateLog = new Map<string, number[]>();
+/** Fallback when Cache API is unavailable in an isolate. */
+const memoryQuota = new Map<string, number>();
 
 const DEFAULT_ORIGINS = [
   "http://localhost:3000",
@@ -103,6 +117,89 @@ function sanitizeVisitorName(input: unknown): string {
   return input.replace(/\s+/g, " ").trim().slice(0, MAX_VISITOR_NAME);
 }
 
+function sanitizeDeviceId(input: unknown): string {
+  if (typeof input !== "string") return "unknown";
+  const cleaned = input.replace(/[^a-zA-Z0-9_-]/g, "").slice(0, MAX_DEVICE_ID);
+  return cleaned || "unknown";
+}
+
+function utcDateKey(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function buildQuotaKey(visitorName: string, deviceId: string): string {
+  const name = visitorName.replace(/\s+/g, " ").trim().toLowerCase().slice(0, 40);
+  return `${utcDateKey()}:${name}:${deviceId}`;
+}
+
+function quotaExceededMessage(language: "zh" | "en"): string {
+  if (language === "en") {
+    return "Today's XiaoCoo chat quota for this device/name is used up (≈¥1/day). Please reach out directly: email liangshicheng303@126.com · WeChat llqsc1122.";
+  }
+  return "今天这台设备/该访客名的小coo 问答额度已用完（约 ¥1/天）。可通过其他渠道联系本人：邮箱 liangshicheng303@126.com · 微信 llqsc1122。";
+}
+
+function estimateCostCny(usage: TokenUsage | null | undefined): number {
+  if (!usage) return 0;
+  const hit = usage.prompt_cache_hit_tokens ?? 0;
+  const miss =
+    usage.prompt_cache_miss_tokens ??
+    Math.max(0, (usage.prompt_tokens ?? 0) - hit);
+  const out = usage.completion_tokens ?? 0;
+  const usd =
+    (hit / 1_000_000) * FLASH_PRICES.cacheHit +
+    (miss / 1_000_000) * FLASH_PRICES.cacheMiss +
+    (out / 1_000_000) * FLASH_PRICES.output;
+  return usd * USD_CNY_RATE;
+}
+
+function estimateCostCnyFromText(inputChars: number, outputChars: number): number {
+  const promptTokens = Math.ceil(inputChars / 2);
+  const completionTokens = Math.ceil(outputChars / 2);
+  return estimateCostCny({
+    prompt_tokens: promptTokens,
+    completion_tokens: completionTokens,
+    prompt_cache_miss_tokens: promptTokens,
+    prompt_cache_hit_tokens: 0,
+  });
+}
+
+function quotaCacheUrl(key: string): string {
+  return `https://xiaocoo-quota.internal/${encodeURIComponent(key)}`;
+}
+
+async function getQuotaCny(key: string): Promise<number> {
+  try {
+    const hit = await caches.default.match(quotaCacheUrl(key));
+    if (hit) {
+      const data = (await hit.json()) as { cny?: number };
+      if (typeof data.cny === "number") return data.cny;
+    }
+  } catch {
+    /* fall through */
+  }
+  return memoryQuota.get(key) ?? 0;
+}
+
+async function addQuotaCny(key: string, delta: number): Promise<number> {
+  const next = (await getQuotaCny(key)) + Math.max(0, delta);
+  memoryQuota.set(key, next);
+  try {
+    await caches.default.put(
+      quotaCacheUrl(key),
+      new Response(JSON.stringify({ cny: next }), {
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "max-age=172800",
+        },
+      })
+    );
+  } catch {
+    /* memory fallback only */
+  }
+  return next;
+}
+
 function hasNotifyChannel(env: Env): boolean {
   return Boolean(
     (env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID) || env.FEISHU_WEBHOOK_URL
@@ -168,11 +265,12 @@ async function sendNotify(env: Env, text: string): Promise<void> {
 
 function teeOpenAiSseStream(
   upstream: ReadableStream<Uint8Array>,
-  onComplete: (assistantText: string) => void | Promise<void>
+  onComplete: (assistantText: string, usage: TokenUsage | null) => void | Promise<void>
 ): ReadableStream<Uint8Array> {
   const decoder = new TextDecoder();
   let buffer = "";
   let assistant = "";
+  let usage: TokenUsage | null = null;
 
   return new ReadableStream<Uint8Array>({
     async start(controller) {
@@ -193,16 +291,18 @@ function teeOpenAiSseStream(
             try {
               const json = JSON.parse(data) as {
                 choices?: Array<{ delta?: { content?: string } }>;
+                usage?: TokenUsage | null;
               };
               const delta = json.choices?.[0]?.delta?.content;
               if (delta) assistant += delta;
+              if (json.usage) usage = json.usage;
             } catch {
               /* ignore */
             }
           }
         }
         controller.close();
-        await onComplete(assistant);
+        await onComplete(assistant, usage);
       } catch (err) {
         controller.error(err);
       }
@@ -242,13 +342,14 @@ export default {
       );
     }
 
-    let body: { messages?: unknown; language?: unknown; visitorName?: unknown };
+    let body: {
+      messages?: unknown;
+      language?: unknown;
+      visitorName?: unknown;
+      deviceId?: unknown;
+    };
     try {
-      body = (await request.json()) as {
-        messages?: unknown;
-        language?: unknown;
-        visitorName?: unknown;
-      };
+      body = (await request.json()) as typeof body;
     } catch {
       return Response.json({ error: "Invalid JSON body." }, { status: 400, headers });
     }
@@ -267,8 +368,20 @@ export default {
     }
 
     const language = body.language === "en" ? "en" : "zh";
+    const deviceId = sanitizeDeviceId(body.deviceId);
+    const quotaKey = buildQuotaKey(visitorName, deviceId);
+    if ((await getQuotaCny(quotaKey)) >= DAILY_BUDGET_CNY) {
+      return Response.json(
+        { error: quotaExceededMessage(language), code: "QUOTA_EXCEEDED" },
+        { status: 429, headers }
+      );
+    }
+
     const baseUrl = (env.DEEPSEEK_BASE_URL || "https://api.deepseek.com").replace(/\/$/, "");
-    const model = env.DEEPSEEK_MODEL || "deepseek-chat";
+    const model = env.DEEPSEEK_MODEL || "deepseek-v4-flash";
+    const systemPrompt = buildSystemPrompt(language);
+    const promptChars =
+      systemPrompt.length + history.reduce((n, m) => n + m.content.length, 0);
 
     const upstream = await fetch(`${baseUrl}/v1/chat/completions`, {
       method: "POST",
@@ -279,8 +392,9 @@ export default {
       body: JSON.stringify({
         model,
         stream: true,
+        stream_options: { include_usage: true },
         temperature: 0.7,
-        messages: [{ role: "system", content: buildSystemPrompt(language) }, ...history],
+        messages: [{ role: "system", content: systemPrompt }, ...history],
       }),
     });
 
@@ -295,9 +409,14 @@ export default {
     const userMessage = history[history.length - 1]?.content ?? "";
     const userAgent = request.headers.get("user-agent") ?? undefined;
 
-    const stream = hasNotifyChannel(env)
-      ? teeOpenAiSseStream(upstream.body, (assistantMessage) => {
-          const p = sendNotify(
+    const stream = teeOpenAiSseStream(upstream.body, (assistantMessage, usage) => {
+      const cost =
+        estimateCostCny(usage) ||
+        estimateCostCnyFromText(promptChars, assistantMessage.length);
+      const tasks: Promise<unknown>[] = [addQuotaCny(quotaKey, cost)];
+      if (hasNotifyChannel(env)) {
+        tasks.push(
+          sendNotify(
             env,
             formatNotifyText({
               userMessage,
@@ -305,11 +424,13 @@ export default {
               visitorName,
               userAgent,
             })
-          );
-          ctx.waitUntil(p);
-          return p;
-        })
-      : upstream.body;
+          )
+        );
+      }
+      const p = Promise.allSettled(tasks);
+      ctx.waitUntil(p);
+      return p;
+    });
 
     return new Response(stream, {
       status: 200,

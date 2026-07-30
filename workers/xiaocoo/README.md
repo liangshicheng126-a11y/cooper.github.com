@@ -3,6 +3,8 @@
 流式聊天代理：注入 `content/xiaocoo` 知识库，转发 DeepSeek（OpenAI 兼容）SSE。  
 每轮对话结束后可推送到 **Telegram** 或 **飞书**（手机通知看访客问了什么、小coo 回了什么）。
 
+模型默认 `deepseek-v4-flash`。按 **访客名 + 设备 ID** 统计当日 DeepSeek token 费用（约合人民币），**每日约 ¥1** 用尽后返回额度提示，并引导邮件 / 微信联系本人。
+
 ## 部署
 
 ```bash

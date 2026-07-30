@@ -13,16 +13,31 @@ import {
   sendXiaocooNotify,
   teeOpenAiSseStream,
 } from "@/lib/xiaocoo/notify";
+import { addQuotaCny, isQuotaExceeded } from "@/lib/xiaocoo/quotaStore";
+import {
+  buildQuotaKey,
+  estimateCostCny,
+  estimateCostCnyFromText,
+  quotaExceededMessage,
+} from "@/lib/xiaocoo/usage";
 
 const RATE_LIMIT_WINDOW_MS = 60 * 1000;
 const RATE_LIMIT_MAX = 12;
+const MAX_DEVICE_ID = 64;
 const ipRequestLog = new Map<string, number[]>();
 
 type Body = {
   messages?: unknown;
   language?: unknown;
   visitorName?: unknown;
+  deviceId?: unknown;
 };
+
+function sanitizeDeviceId(input: unknown): string {
+  if (typeof input !== "string") return "unknown";
+  const cleaned = input.replace(/[^a-zA-Z0-9_-]/g, "").slice(0, MAX_DEVICE_ID);
+  return cleaned || "unknown";
+}
 
 function corsHeaders(origin: string | null): HeadersInit {
   const allowed = new Set([
@@ -96,6 +111,15 @@ export async function POST(request: Request) {
     }
 
     const language = body.language === "en" ? "en" : "zh";
+    const deviceId = sanitizeDeviceId(body.deviceId);
+    const quotaKey = buildQuotaKey(visitorName, deviceId);
+    if (isQuotaExceeded(quotaKey)) {
+      return NextResponse.json(
+        { error: quotaExceededMessage(language), code: "QUOTA_EXCEEDED" },
+        { status: 429, headers }
+      );
+    }
+
     const messages = buildChatMessages(history, language);
     const upstream = await forwardDeepSeekStream(messages, llm);
 
@@ -108,20 +132,27 @@ export async function POST(request: Request) {
     }
 
     const userMessage = history[history.length - 1]?.content ?? "";
+    const promptChars = messages.reduce((n, m) => n + m.content.length, 0);
     const notifyConfig = resolveNotifyConfig();
-    const stream = hasNotifyChannel(notifyConfig)
-      ? teeOpenAiSseStream(upstream.body, async (assistantMessage) => {
-          const text = formatXiaocooNotifyText({
-            userMessage,
-            assistantMessage,
-            meta: {
-              visitorName,
-              userAgent: request.headers.get("user-agent") ?? undefined,
-            },
-          });
-          await sendXiaocooNotify(notifyConfig, text);
-        })
-      : upstream.body;
+
+    const stream = teeOpenAiSseStream(upstream.body, async (assistantMessage, usage) => {
+      const cost =
+        estimateCostCny(usage) ||
+        estimateCostCnyFromText(promptChars, assistantMessage.length);
+      addQuotaCny(quotaKey, cost);
+
+      if (hasNotifyChannel(notifyConfig)) {
+        const text = formatXiaocooNotifyText({
+          userMessage,
+          assistantMessage,
+          meta: {
+            visitorName,
+            userAgent: request.headers.get("user-agent") ?? undefined,
+          },
+        });
+        await sendXiaocooNotify(notifyConfig, text);
+      }
+    });
 
     return new Response(stream, {
       status: 200,

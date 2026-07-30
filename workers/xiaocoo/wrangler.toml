@@ -8,7 +8,7 @@ compatibility_date = "2025-07-01"
 # zone_name = "cooperliang.top"
 
 [vars]
-DEEPSEEK_MODEL = "deepseek-chat"
+DEEPSEEK_MODEL = "deepseek-v4-flash"
 # ALLOWED_ORIGINS = "https://cooperliang.top,http://localhost:3000"
 
 # Secrets (set via CLI, do not commit):

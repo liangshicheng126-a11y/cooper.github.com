@@ -336,8 +336,10 @@ export const translations = {
       suggestions: [
         "用一分钟介绍一下你自己",
         "你的核心技能和常用工具是什么？",
-        "最近做过哪些项目？",
-        "怎么联系你 / 求职合作"
+        "平时是怎么工作的",
+        "未来的规划",
+        "为什么从上家公司离职",
+        "目前在哪里"
       ],
       gateTitle: "开始对话前",
       gateHint: "先告诉小coo 你怎么称呼。",
@@ -684,8 +686,10 @@ export const translations = {
       suggestions: [
         "Introduce yourself in one minute",
         "What are your core skills and tools?",
-        "What projects have you worked on recently?",
-        "How can I contact you / collaborate?"
+        "How do you usually work?",
+        "What are your future plans?",
+        "Why did you leave your last company?",
+        "Where are you now?"
       ],
       gateTitle: "Before we chat",
       gateHint: "Tell XiaoCoo what to call you.",

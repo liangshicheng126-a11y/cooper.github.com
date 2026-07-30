@@ -70,7 +70,7 @@ export function resolveDeepSeekEnv(
   const model =
     env.DEEPSEEK_MODEL?.trim() ||
     env.XIAOCOO_LLM_MODEL?.trim() ||
-    "deepseek-chat";
+    "deepseek-v4-flash";
   return { apiKey, baseUrl, model };
 }
 
@@ -88,6 +88,7 @@ export async function forwardDeepSeekStream(
       model: llm.model,
       messages,
       stream: true,
+      stream_options: { include_usage: true },
       temperature: 0.7,
     }),
   });

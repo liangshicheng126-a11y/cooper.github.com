@@ -106,14 +106,23 @@ export async function sendXiaocooNotify(
   await Promise.allSettled(tasks);
 }
 
-/** Parse OpenAI SSE chunks and accumulate assistant text; pass-through bytes to the client. */
+export type StreamUsage = {
+  prompt_tokens?: number;
+  completion_tokens?: number;
+  total_tokens?: number;
+  prompt_cache_hit_tokens?: number;
+  prompt_cache_miss_tokens?: number;
+};
+
+/** Parse OpenAI SSE chunks and accumulate assistant text (+ optional usage); pass-through bytes to the client. */
 export function teeOpenAiSseStream(
   upstream: ReadableStream<Uint8Array>,
-  onComplete: (assistantText: string) => void | Promise<void>
+  onComplete: (assistantText: string, usage: StreamUsage | null) => void | Promise<void>
 ): ReadableStream<Uint8Array> {
   const decoder = new TextDecoder();
   let buffer = "";
   let assistant = "";
+  let usage: StreamUsage | null = null;
 
   return new ReadableStream<Uint8Array>({
     async start(controller) {
@@ -134,9 +143,11 @@ export function teeOpenAiSseStream(
             try {
               const json = JSON.parse(data) as {
                 choices?: Array<{ delta?: { content?: string } }>;
+                usage?: StreamUsage | null;
               };
               const delta = json.choices?.[0]?.delta?.content;
               if (delta) assistant += delta;
+              if (json.usage) usage = json.usage;
             } catch {
               /* ignore partial JSON */
             }
@@ -144,7 +155,7 @@ export function teeOpenAiSseStream(
         }
         controller.close();
         try {
-          await onComplete(assistant);
+          await onComplete(assistant, usage);
         } catch (err) {
           console.error("[xiaocoo-notify] onComplete failed", err);
         }
