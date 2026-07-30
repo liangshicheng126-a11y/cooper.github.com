@@ -69,7 +69,7 @@ const Sidebar = () => {
         initial="hidden"
         animate={introRevealReady ? "show" : "hidden"}
       >
-        <div className="glass rounded-2xl border-white/10 px-4 py-3 flex items-center justify-between">
+        <div className="rounded-2xl border border-slate-200/90 bg-white/[0.97] px-4 py-3 flex items-center justify-between shadow-[0_8px_24px_rgba(15,23,42,0.08)] backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/95">
           <Link href="/" className="flex items-center" onClick={() => setMobileOpen(false)}>
             <span className="text-lg font-bold bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent tracking-wider">
               COOPER.
@@ -78,7 +78,7 @@ const Sidebar = () => {
           <div className="flex items-center gap-2">
             <button
               type="button"
-              className="glass px-3 h-10 rounded-xl text-[11px] font-bold tracking-widest text-foreground/70 hover:text-indigo-500 hover:border-indigo-500/30 transition-all stable-ui-text"
+              className="rounded-xl border border-slate-200/80 bg-white/80 px-3 h-10 text-[11px] font-bold tracking-widest text-foreground/70 transition-all hover:border-indigo-500/30 hover:text-indigo-500 stable-ui-text dark:border-white/10 dark:bg-white/10"
               onClick={toggleLanguage}
               aria-label={language === "zh" ? "Switch to English" : "切换至中文"}
             >
@@ -86,7 +86,7 @@ const Sidebar = () => {
             </button>
             <button
               type="button"
-              className="glass w-10 h-10 rounded-xl flex items-center justify-center hover:border-indigo-500/30 transition-all active:scale-95"
+              className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200/80 bg-white/80 transition-all hover:border-indigo-500/30 active:scale-95 dark:border-white/10 dark:bg-white/10"
               onClick={() => setMobileOpen((v) => !v)}
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
             >

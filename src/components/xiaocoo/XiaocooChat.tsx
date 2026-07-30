@@ -401,7 +401,7 @@ export default function XiaocooChat() {
           <div ref={bottomRef} />
         </div>
 
-        <div className="border-t border-white/10 px-3 sm:px-4 pt-3 pb-1 bg-white/15 dark:bg-black/10">
+        <div className="border-t border-white/10 px-3 sm:px-4 pt-3 pb-1 bg-white/70 dark:bg-black/45">
           {messages.length > 0 && (
             <p className="text-xs uppercase tracking-[0.18em] text-foreground/40 font-bold mb-2 px-0.5">
               {t.xiaocoo.suggestionsHint}
@@ -416,8 +416,8 @@ export default function XiaocooChat() {
                 onClick={() => void send(suggestion)}
                 className={cn(
                   "text-left text-[13px] sm:text-sm px-3.5 py-2.5 sm:py-2 rounded-2xl",
-                  "border border-indigo-500/20 bg-indigo-500/10 text-indigo-600 dark:text-indigo-300",
-                  "hover:bg-indigo-500/15 hover:border-indigo-500/35 transition-colors",
+                  "border border-indigo-500/30 bg-white/85 text-indigo-700 dark:bg-white/10 dark:text-indigo-200",
+                  "hover:bg-white hover:border-indigo-500/45 dark:hover:bg-white/15 transition-colors",
                   "disabled:opacity-50 w-full sm:w-auto"
                 )}
               >
@@ -429,7 +429,7 @@ export default function XiaocooChat() {
 
         <form
           onSubmit={onSubmit}
-          className="border-t border-white/10 p-3 sm:p-4 flex items-end gap-2 sm:gap-3 bg-white/20 dark:bg-black/10"
+          className="border-t border-white/10 p-3 sm:p-4 flex items-end gap-2 sm:gap-3 bg-white/75 dark:bg-black/45"
         >
           <label className="flex-1 min-w-0">
             <span className="sr-only">{t.xiaocoo.placeholder}</span>
