@@ -333,6 +333,7 @@ export const translations = {
       thinking: "小coo 正在想…",
       error: "刚才没接上，稍后再试，或发邮件给本人：liangshicheng303@126.com",
       emptyHint: "先选一个问题，或直接输入。",
+      suggestionsHint: "快捷问题",
       suggestions: [
         "用一分钟介绍一下你自己",
         "你的核心技能和常用工具是什么？",
@@ -683,6 +684,7 @@ export const translations = {
       thinking: "XiaoCoo is thinking…",
       error: "Couldn't reach XiaoCoo. Try again later, or email liangshicheng303@126.com",
       emptyHint: "Pick a prompt or type your own question.",
+      suggestionsHint: "Quick prompts",
       suggestions: [
         "Introduce yourself in one minute",
         "What are your core skills and tools?",

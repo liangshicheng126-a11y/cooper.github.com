@@ -8,6 +8,7 @@ import { useTranslation } from "@/locales/LanguageProvider";
 import useMotionTier from "@/hooks/useMotionTier";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import { shouldUseGsap } from "@/lib/motion";
+import { findCannedReply } from "@/lib/xiaocoo/cannedReplies";
 import {
   getOrCreateDeviceId,
   readOpenAiSseStream,
@@ -134,12 +135,25 @@ export default function XiaocooChat() {
     }
   };
 
+  const appendCannedTurn = (userText: string, answer: string) => {
+    const userMsg: UiMessage = { id: uid(), role: "user", content: userText };
+    const assistantMsg: UiMessage = { id: uid(), role: "assistant", content: answer };
+    setMessages((prev) => [...prev, userMsg, assistantMsg]);
+  };
+
   const send = async (text: string) => {
     const content = text.trim();
     if (!content || streaming || !visitorName) return;
 
     setError(null);
     setInput("");
+
+    const canned = findCannedReply(content);
+    if (canned) {
+      appendCannedTurn(content, canned);
+      return;
+    }
+
     const userMsg: UiMessage = { id: uid(), role: "user", content };
     const assistantId = uid();
     setMessages((prev) => [
@@ -278,31 +292,13 @@ export default function XiaocooChat() {
       >
         <div className="flex-1 overflow-y-auto px-3 sm:px-6 py-5 sm:py-6 space-y-4">
           {messages.length === 0 && (
-            <div className="space-y-4">
+            <div className="space-y-2">
               <p className="text-foreground/75 leading-relaxed text-[15px] sm:text-base">
                 {t.xiaocoo.welcome}
               </p>
               <p className="text-xs uppercase tracking-[0.18em] text-foreground/40 font-bold">
                 {t.xiaocoo.emptyHint}
               </p>
-              <div className="grid grid-cols-1 sm:flex sm:flex-wrap gap-2">
-                {t.xiaocoo.suggestions.map((suggestion) => (
-                  <button
-                    key={suggestion}
-                    type="button"
-                    disabled={streaming}
-                    onClick={() => void send(suggestion)}
-                    className={cn(
-                      "text-left text-[13px] sm:text-sm px-3.5 py-2.5 sm:py-2 rounded-2xl",
-                      "border border-indigo-500/20 bg-indigo-500/10 text-indigo-600 dark:text-indigo-300",
-                      "hover:bg-indigo-500/15 hover:border-indigo-500/35 transition-colors",
-                      "disabled:opacity-50 w-full sm:w-auto"
-                    )}
-                  >
-                    {suggestion}
-                  </button>
-                ))}
-              </div>
             </div>
           )}
 
@@ -336,6 +332,32 @@ export default function XiaocooChat() {
             </motion.div>
           ))}
           <div ref={bottomRef} />
+        </div>
+
+        <div className="border-t border-white/10 px-3 sm:px-4 pt-3 pb-1 bg-white/15 dark:bg-black/10">
+          {messages.length > 0 && (
+            <p className="text-xs uppercase tracking-[0.18em] text-foreground/40 font-bold mb-2 px-0.5">
+              {t.xiaocoo.suggestionsHint}
+            </p>
+          )}
+          <div className="grid grid-cols-1 sm:flex sm:flex-wrap gap-2 max-h-[28vh] overflow-y-auto pb-2">
+            {t.xiaocoo.suggestions.map((suggestion) => (
+              <button
+                key={suggestion}
+                type="button"
+                disabled={streaming}
+                onClick={() => void send(suggestion)}
+                className={cn(
+                  "text-left text-[13px] sm:text-sm px-3.5 py-2.5 sm:py-2 rounded-2xl",
+                  "border border-indigo-500/20 bg-indigo-500/10 text-indigo-600 dark:text-indigo-300",
+                  "hover:bg-indigo-500/15 hover:border-indigo-500/35 transition-colors",
+                  "disabled:opacity-50 w-full sm:w-auto"
+                )}
+              >
+                {suggestion}
+              </button>
+            ))}
+          </div>
         </div>
 
         <form
