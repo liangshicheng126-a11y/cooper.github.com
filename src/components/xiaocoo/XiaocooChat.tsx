@@ -206,9 +206,6 @@ export default function XiaocooChat() {
             </button>
           </form>
         </div>
-        <p className="text-xs text-foreground/40 px-1 leading-relaxed max-w-lg">
-          {t.xiaocoo.privacyNote}
-        </p>
       </div>
     );
   }
@@ -338,10 +335,6 @@ export default function XiaocooChat() {
           {error}
         </p>
       )}
-
-      <p className="text-xs text-foreground/40 px-1 leading-relaxed">
-        {t.xiaocoo.privacyNote}
-      </p>
     </div>
   );
 }

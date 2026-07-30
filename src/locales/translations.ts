@@ -339,9 +339,8 @@ export const translations = {
         "最近做过哪些项目？",
         "怎么联系你 / 求职合作"
       ],
-      privacyNote: "对话内容会推送给 Cooper 本人，用于了解访客需求并改进回答。",
       gateTitle: "开始对话前",
-      gateHint: "先告诉小coo 你怎么称呼，方便 Cooper 知道是谁在聊。",
+      gateHint: "先告诉小coo 你怎么称呼。",
       gateNameLabel: "你的名称",
       gateNamePlaceholder: "例如：张三 / HR Lily",
       gateContinue: "开始聊天",
@@ -688,9 +687,8 @@ export const translations = {
         "What projects have you worked on recently?",
         "How can I contact you / collaborate?"
       ],
-      privacyNote: "Messages are forwarded to Cooper so he can see visitor questions and improve answers.",
       gateTitle: "Before we chat",
-      gateHint: "Tell XiaoCoo what to call you, so Cooper knows who he's talking with.",
+      gateHint: "Tell XiaoCoo what to call you.",
       gateNameLabel: "Your name",
       gateNamePlaceholder: "e.g. Alex / HR Lily",
       gateContinue: "Start chatting",
