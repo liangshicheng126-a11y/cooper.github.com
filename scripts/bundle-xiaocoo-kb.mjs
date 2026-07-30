@@ -9,7 +9,7 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
 const kbDir = path.join(root, "content", "xiaocoo");
-const order = ["system.md", "profile.md", "projects.md", "voice.md", "faq.md"];
+const order = ["system.md", "profile.md", "projects.md", "voice.md", "mindset.md", "faq.md"];
 
 const parts = order.map((file) => {
   const full = path.join(kbDir, file);
