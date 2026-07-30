@@ -8,7 +8,8 @@ import useMotionTier from "@/hooks/useMotionTier";
 import { 
   Home, 
   Briefcase, 
-  User, 
+  User,
+  MessageCircle,
   Mail, 
   Phone,
   MapPin,
@@ -52,6 +53,7 @@ const Sidebar = () => {
     { name: t.nav.home, href: "/", icon: Home },
     { name: t.nav.portfolio, href: "/portfolio", icon: Briefcase },
     { name: t.nav.about, href: "/about", icon: User },
+    { name: t.nav.xiaocoo, href: "/xiaocoo", icon: MessageCircle },
   ];
 
   const toggleLanguage = () => {

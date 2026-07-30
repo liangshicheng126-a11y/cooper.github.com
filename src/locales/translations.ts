@@ -4,6 +4,7 @@ export const translations = {
       home: "首页",
       portfolio: "作品集",
       about: "关于我",
+      xiaocoo: "小coo",
       contact: "联系方式"
     },
     hero: {
@@ -322,6 +323,22 @@ export const translations = {
         video: "视频剪辑",
         other: "其他"
       }
+    },
+    xiaocoo: {
+      title: "小coo",
+      subtitle: "和虚拟的 Cooper 聊聊——背景、项目、技能，或你想了解的任何事。",
+      welcome: "嗨，我是小coo。我可以介绍梁世城的经历、作品和技能树。你想从哪聊起？",
+      placeholder: "问问技能、项目或求职相关…",
+      send: "发送",
+      thinking: "小coo 正在想…",
+      error: "刚才没接上，稍后再试，或发邮件给本人：liangshicheng303@126.com",
+      emptyHint: "先选一个问题，或直接输入。",
+      suggestions: [
+        "用一分钟介绍一下你自己",
+        "你的核心技能和常用工具是什么？",
+        "最近做过哪些项目？",
+        "怎么联系你 / 求职合作"
+      ]
     }
   },
   en: {
@@ -329,6 +346,7 @@ export const translations = {
       home: "Home",
       portfolio: "Portfolio",
       about: "About",
+      xiaocoo: "XiaoCoo",
       contact: "Contact"
     },
     hero: {
@@ -647,6 +665,22 @@ export const translations = {
         video: "Video Editing",
         other: "Other"
       }
+    },
+    xiaocoo: {
+      title: "XiaoCoo",
+      subtitle: "Chat with a virtual Cooper — background, projects, skills, or whatever you want to know.",
+      welcome: "Hi, I'm XiaoCoo. I can walk you through Liang Shicheng's experience, work, and skills. Where should we start?",
+      placeholder: "Ask about skills, projects, or opportunities…",
+      send: "Send",
+      thinking: "XiaoCoo is thinking…",
+      error: "Couldn't reach XiaoCoo. Try again later, or email liangshicheng303@126.com",
+      emptyHint: "Pick a prompt or type your own question.",
+      suggestions: [
+        "Introduce yourself in one minute",
+        "What are your core skills and tools?",
+        "What projects have you worked on recently?",
+        "How can I contact you / collaborate?"
+      ]
     }
   }
 };

@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/optimize-gallery-images.mjs",
+    "prebuild": "node scripts/bundle-xiaocoo-kb.mjs && node scripts/optimize-gallery-images.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "bundle-xiaocoo-kb": "node scripts/bundle-xiaocoo-kb.mjs",
     "optimize-images": "node scripts/optimize-gallery-images.mjs",
     "export-figma": "node scripts/export-figma-design.mjs",
     "capture-p2-design": "node scripts/capture-p2-design.mjs",
