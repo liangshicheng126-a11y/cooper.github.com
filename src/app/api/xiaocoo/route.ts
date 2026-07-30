@@ -9,6 +9,7 @@ import {
   formatXiaocooNotifyText,
   hasNotifyChannel,
   resolveNotifyConfig,
+  sanitizeVisitorName,
   sendXiaocooNotify,
   teeOpenAiSseStream,
 } from "@/lib/xiaocoo/notify";
@@ -20,6 +21,7 @@ const ipRequestLog = new Map<string, number[]>();
 type Body = {
   messages?: unknown;
   language?: unknown;
+  visitorName?: unknown;
 };
 
 function corsHeaders(origin: string | null): HeadersInit {
@@ -85,6 +87,14 @@ export async function POST(request: Request) {
       );
     }
 
+    const visitorName = sanitizeVisitorName(body.visitorName);
+    if (!visitorName) {
+      return NextResponse.json(
+        { error: "visitorName is required." },
+        { status: 400, headers }
+      );
+    }
+
     const language = body.language === "en" ? "en" : "zh";
     const messages = buildChatMessages(history, language);
     const upstream = await forwardDeepSeekStream(messages, llm);
@@ -104,11 +114,7 @@ export async function POST(request: Request) {
           const text = formatXiaocooNotifyText({
             userMessage,
             assistantMessage,
-            meta: {
-              country: request.headers.get("x-vercel-ip-country") ?? undefined,
-              language,
-              userAgent: request.headers.get("user-agent") ?? undefined,
-            },
+            meta: { visitorName },
           });
           await sendXiaocooNotify(notifyConfig, text);
         })

@@ -20,6 +20,9 @@ type UiMessage = {
   content: string;
 };
 
+const VISITOR_NAME_KEY = "xiaocoo-visitor-name";
+const MAX_NAME_LEN = 40;
+
 function uid() {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
@@ -30,12 +33,32 @@ export default function XiaocooChat() {
   const reduced = usePrefersReducedMotion();
   const useMotion = shouldUseGsap(reduced) && tier !== "minimal";
 
+  const [visitorName, setVisitorName] = useState<string | null>(null);
+  const [nameDraft, setNameDraft] = useState("");
   const [messages, setMessages] = useState<UiMessage[]>([]);
   const [input, setInput] = useState("");
   const [streaming, setStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
+  const nameInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem(VISITOR_NAME_KEY)?.trim();
+      if (saved) {
+        setVisitorName(saved.slice(0, MAX_NAME_LEN));
+        setNameDraft(saved.slice(0, MAX_NAME_LEN));
+      }
+    } catch {
+      /* private mode */
+    }
+  }, []);
+
+  useEffect(() => {
+    if (visitorName) return;
+    nameInputRef.current?.focus();
+  }, [visitorName, mounted]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: useMotion ? "smooth" : "auto" });
@@ -47,9 +70,21 @@ export default function XiaocooChat() {
 
   if (!mounted) return null;
 
+  const commitName = (event: FormEvent) => {
+    event.preventDefault();
+    const name = nameDraft.replace(/\s+/g, " ").trim().slice(0, MAX_NAME_LEN);
+    if (!name) return;
+    setVisitorName(name);
+    try {
+      sessionStorage.setItem(VISITOR_NAME_KEY, name);
+    } catch {
+      /* ignore */
+    }
+  };
+
   const send = async (text: string) => {
     const content = text.trim();
-    if (!content || streaming) return;
+    if (!content || streaming || !visitorName) return;
 
     setError(null);
     setInput("");
@@ -74,6 +109,7 @@ export default function XiaocooChat() {
       const response = await streamXiaocooChat(history, {
         signal: controller.signal,
         language,
+        visitorName,
       });
 
       if (!response.ok) {
@@ -121,8 +157,69 @@ export default function XiaocooChat() {
     void send(input);
   };
 
+  if (!visitorName) {
+    return (
+      <div className="flex flex-col gap-6 w-full min-w-0 flex-1">
+        <div
+          className={cn(
+            "glass rounded-[1.75rem] sm:rounded-[2rem] border-white/15",
+            "p-6 sm:p-8 max-w-lg"
+          )}
+        >
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight mb-2">
+            {t.xiaocoo.gateTitle}
+          </h2>
+          <p className="text-foreground/60 leading-relaxed mb-6 text-[15px]">
+            {t.xiaocoo.gateHint}
+          </p>
+          <form onSubmit={commitName} className="space-y-4">
+            <label className="block space-y-2">
+              <span className="text-xs uppercase tracking-[0.18em] text-foreground/45 font-bold">
+                {t.xiaocoo.gateNameLabel}
+              </span>
+              <input
+                ref={nameInputRef}
+                type="text"
+                required
+                maxLength={MAX_NAME_LEN}
+                value={nameDraft}
+                onChange={(e) => setNameDraft(e.target.value)}
+                placeholder={t.xiaocoo.gateNamePlaceholder}
+                className={cn(
+                  "w-full rounded-2xl px-4 py-3 text-[15px]",
+                  "bg-white/60 dark:bg-white/5 border border-white/25",
+                  "outline-none focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20",
+                  "placeholder:text-foreground/35"
+                )}
+              />
+            </label>
+            <button
+              type="submit"
+              disabled={!nameDraft.trim()}
+              className={cn(
+                "w-full sm:w-auto px-6 h-12 rounded-2xl font-medium",
+                "bg-indigo-500 text-white hover:bg-indigo-600 transition-colors",
+                "disabled:opacity-40 disabled:pointer-events-none"
+              )}
+            >
+              {t.xiaocoo.gateContinue}
+            </button>
+          </form>
+        </div>
+        <p className="text-xs text-foreground/40 px-1 leading-relaxed max-w-lg">
+          {t.xiaocoo.privacyNote}
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-6 w-full min-w-0 flex-1">
+      <p className="text-sm text-foreground/50 px-1">
+        {t.xiaocoo.chattingAs}
+        <span className="ml-2 font-medium text-indigo-500">{visitorName}</span>
+      </p>
+
       <div
         className={cn(
           "glass rounded-[1.75rem] sm:rounded-[2rem] border-white/15",

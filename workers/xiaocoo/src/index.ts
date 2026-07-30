@@ -22,6 +22,7 @@ const RATE_LIMIT_MAX = 12;
 const MAX_MESSAGES = 24;
 const MAX_CONTENT_CHARS = 4000;
 const MAX_NOTIFY_CHARS = 3500;
+const MAX_VISITOR_NAME = 40;
 
 const rateLog = new Map<string, number[]>();
 
@@ -97,6 +98,11 @@ function checkRateLimit(ip: string): boolean {
   return true;
 }
 
+function sanitizeVisitorName(input: unknown): string {
+  if (typeof input !== "string") return "";
+  return input.replace(/\s+/g, " ").trim().slice(0, MAX_VISITOR_NAME);
+}
+
 function hasNotifyChannel(env: Env): boolean {
   return Boolean(
     (env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID) || env.FEISHU_WEBHOOK_URL
@@ -106,22 +112,17 @@ function hasNotifyChannel(env: Env): boolean {
 function formatNotifyText(input: {
   userMessage: string;
   assistantMessage: string;
-  country?: string;
-  language?: string;
-  userAgent?: string;
+  visitorName?: string;
 }): string {
-  const time = new Date().toISOString().replace("T", " ").slice(0, 19) + " UTC";
+  const name = input.visitorName?.trim() || "未留名访客";
   const body = [
     "小coo 新对话",
-    `时间: ${time}`,
-    `地区: ${input.country?.trim() || "unknown"}`,
-    `语言: ${input.language || "-"}`,
-    `UA: ${(input.userAgent ?? "").slice(0, 120) || "-"}`,
+    `访客: ${name}`,
     "",
-    "访客:",
+    "问:",
     input.userMessage.trim() || "(空)",
     "",
-    "小coo:",
+    "答:",
     input.assistantMessage.trim() || "(空回复)",
   ].join("\n");
 
@@ -238,9 +239,13 @@ export default {
       );
     }
 
-    let body: { messages?: unknown; language?: unknown };
+    let body: { messages?: unknown; language?: unknown; visitorName?: unknown };
     try {
-      body = (await request.json()) as { messages?: unknown; language?: unknown };
+      body = (await request.json()) as {
+        messages?: unknown;
+        language?: unknown;
+        visitorName?: unknown;
+      };
     } catch {
       return Response.json({ error: "Invalid JSON body." }, { status: 400, headers });
     }
@@ -251,6 +256,11 @@ export default {
         { error: "Expected a non-empty messages array ending with a user turn." },
         { status: 400, headers }
       );
+    }
+
+    const visitorName = sanitizeVisitorName(body.visitorName);
+    if (!visitorName) {
+      return Response.json({ error: "visitorName is required." }, { status: 400, headers });
     }
 
     const language = body.language === "en" ? "en" : "zh";
@@ -280,8 +290,6 @@ export default {
     }
 
     const userMessage = history[history.length - 1]?.content ?? "";
-    const country = request.headers.get("cf-ipcountry") ?? undefined;
-    const userAgent = request.headers.get("user-agent") ?? undefined;
 
     const stream = hasNotifyChannel(env)
       ? teeOpenAiSseStream(upstream.body, (assistantMessage) => {
@@ -290,9 +298,7 @@ export default {
             formatNotifyText({
               userMessage,
               assistantMessage,
-              country,
-              language,
-              userAgent,
+              visitorName,
             })
           );
           ctx.waitUntil(p);

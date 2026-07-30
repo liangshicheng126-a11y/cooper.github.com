@@ -15,7 +15,11 @@ export function getXiaocooApiUrl(): string {
 
 export async function streamXiaocooChat(
   messages: ChatMessage[],
-  options?: { signal?: AbortSignal; language?: "zh" | "en" }
+  options?: {
+    signal?: AbortSignal;
+    language?: "zh" | "en";
+    visitorName?: string;
+  }
 ): Promise<Response> {
   const url = getXiaocooApiUrl();
   return fetch(url, {
@@ -24,6 +28,7 @@ export async function streamXiaocooChat(
     body: JSON.stringify({
       messages: messages.filter((m) => m.role === "user" || m.role === "assistant"),
       language: options?.language ?? "zh",
+      visitorName: options?.visitorName?.trim() || undefined,
     }),
     signal: options?.signal,
   });

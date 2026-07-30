@@ -1,7 +1,5 @@
 export type NotifyMeta = {
-  country?: string;
-  language?: string;
-  userAgent?: string;
+  visitorName?: string;
 };
 
 export type NotifyConfig = {
@@ -12,6 +10,12 @@ export type NotifyConfig = {
 };
 
 const MAX_NOTIFY_CHARS = 3500;
+const MAX_VISITOR_NAME = 40;
+
+export function sanitizeVisitorName(input: unknown): string {
+  if (typeof input !== "string") return "";
+  return input.replace(/\s+/g, " ").trim().slice(0, MAX_VISITOR_NAME);
+}
 
 export function resolveNotifyConfig(
   env: Record<string, string | undefined> = process.env as Record<string, string | undefined>
@@ -34,22 +38,16 @@ export function formatXiaocooNotifyText(input: {
   assistantMessage: string;
   meta?: NotifyMeta;
 }): string {
-  const time = new Date().toISOString().replace("T", " ").slice(0, 19) + " UTC";
-  const country = input.meta?.country?.trim() || "unknown";
-  const language = input.meta?.language?.trim() || "-";
-  const ua = (input.meta?.userAgent ?? "").slice(0, 120) || "-";
+  const name = input.meta?.visitorName?.trim() || "未留名访客";
 
   const body = [
     "小coo 新对话",
-    `时间: ${time}`,
-    `地区: ${country}`,
-    `语言: ${language}`,
-    `UA: ${ua}`,
+    `访客: ${name}`,
     "",
-    "访客:",
+    "问:",
     input.userMessage.trim() || "(空)",
     "",
-    "小coo:",
+    "答:",
     input.assistantMessage.trim() || "(空回复)",
   ].join("\n");
 
