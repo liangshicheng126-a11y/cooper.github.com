@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState, type FormEvent } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from "react";
+import { motion, type Transition } from "framer-motion";
 import { Loader2, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/locales/LanguageProvider";
@@ -26,9 +26,32 @@ const VISITOR_NAME_KEY = "xiaocoo-visitor-name";
 const MESSAGES_KEY = "xiaocoo-chat-messages";
 const MAX_NAME_LEN = 40;
 const MAX_STORED_MESSAGES = 40;
+const CANNED_THINK_MS = 800;
+const CANNED_THINK_REDUCED_MS = 300;
+
+const BUBBLE_SPRING: Transition = {
+  type: "spring",
+  stiffness: 420,
+  damping: 28,
+};
 
 function uid() {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function sleep(ms: number, signal?: AbortSignal) {
+  return new Promise<void>((resolve, reject) => {
+    if (signal?.aborted) {
+      reject(new DOMException("Aborted", "AbortError"));
+      return;
+    }
+    const timer = window.setTimeout(() => resolve(), ms);
+    const onAbort = () => {
+      window.clearTimeout(timer);
+      reject(new DOMException("Aborted", "AbortError"));
+    };
+    signal?.addEventListener("abort", onAbort, { once: true });
+  });
 }
 
 function loadStoredMessages(): UiMessage[] {
@@ -70,6 +93,31 @@ function persistMessages(messages: UiMessage[]) {
   }
 }
 
+function bubbleMotion(role: "user" | "assistant", enabled: boolean) {
+  if (!enabled) {
+    return {
+      initial: false as const,
+      animate: { opacity: 1 },
+      transition: { duration: 0 },
+      style: undefined as CSSProperties | undefined,
+    };
+  }
+  const isUser = role === "user";
+  return {
+    initial: {
+      opacity: 0,
+      scale: 0.2,
+      x: isUser ? 24 : -24,
+      y: 16,
+    },
+    animate: { opacity: 1, scale: 1, x: 0, y: 0 },
+    transition: BUBBLE_SPRING,
+    style: {
+      transformOrigin: isUser ? "bottom right" : "bottom left",
+    } as CSSProperties,
+  };
+}
+
 export default function XiaocooChat() {
   const { t, language, mounted } = useTranslation();
   const tier = useMotionTier();
@@ -87,6 +135,8 @@ export default function XiaocooChat() {
   const abortRef = useRef<AbortController | null>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
   const deviceIdRef = useRef<string>("anonymous");
+  const useMotionRef = useRef(useMotion);
+  useMotionRef.current = useMotion;
 
   useEffect(() => {
     try {
@@ -135,24 +185,12 @@ export default function XiaocooChat() {
     }
   };
 
-  const appendCannedTurn = (userText: string, answer: string) => {
-    const userMsg: UiMessage = { id: uid(), role: "user", content: userText };
-    const assistantMsg: UiMessage = { id: uid(), role: "assistant", content: answer };
-    setMessages((prev) => [...prev, userMsg, assistantMsg]);
-  };
-
   const send = async (text: string) => {
     const content = text.trim();
     if (!content || streaming || !visitorName) return;
 
     setError(null);
     setInput("");
-
-    const canned = findCannedReply(content);
-    if (canned) {
-      appendCannedTurn(content, canned);
-      return;
-    }
 
     const userMsg: UiMessage = { id: uid(), role: "user", content };
     const assistantId = uid();
@@ -163,13 +201,35 @@ export default function XiaocooChat() {
     ]);
     setStreaming(true);
 
+    const controller = new AbortController();
+    abortRef.current = controller;
+
+    const canned = findCannedReply(content);
+    if (canned) {
+      try {
+        const delay = useMotionRef.current ? CANNED_THINK_MS : CANNED_THINK_REDUCED_MS;
+        await sleep(delay, controller.signal);
+        setMessages((prev) =>
+          prev.map((m) => (m.id === assistantId ? { ...m, content: canned } : m))
+        );
+      } catch (err) {
+        if ((err as Error).name === "AbortError") return;
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === assistantId ? { ...m, content: canned } : m
+          )
+        );
+      } finally {
+        setStreaming(false);
+        abortRef.current = null;
+      }
+      return;
+    }
+
     const history: ChatMessage[] = [...messages, userMsg].map((m) => ({
       role: m.role,
       content: m.content,
     }));
-
-    const controller = new AbortController();
-    abortRef.current = controller;
 
     try {
       const response = await streamXiaocooChat(history, {
@@ -302,35 +362,42 @@ export default function XiaocooChat() {
             </div>
           )}
 
-          {messages.map((message) => (
-            <motion.div
-              key={message.id}
-              initial={useMotion ? { opacity: 0, y: 8 } : false}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className={cn(
-                "flex",
-                message.role === "user" ? "justify-end" : "justify-start"
-              )}
-            >
-              <div
+          {messages.map((message) => {
+            const motionProps = bubbleMotion(message.role, useMotion);
+            const showThinking =
+              message.role === "assistant" && !message.content.trim() && streaming;
+            return (
+              <motion.div
+                key={message.id}
+                initial={motionProps.initial}
+                animate={motionProps.animate}
+                transition={motionProps.transition}
+                style={motionProps.style}
                 className={cn(
-                  "max-w-[92%] sm:max-w-[80%] rounded-2xl px-3.5 sm:px-4 py-3 text-[14px] sm:text-[15px] leading-relaxed whitespace-pre-wrap",
-                  message.role === "user"
-                    ? "bg-indigo-500/90 text-white rounded-br-md"
-                    : "bg-white/50 dark:bg-white/10 border border-white/20 text-foreground rounded-bl-md"
+                  "flex",
+                  message.role === "user" ? "justify-end" : "justify-start"
                 )}
               >
-                {message.content ||
-                  (streaming ? (
+                <div
+                  className={cn(
+                    "max-w-[92%] sm:max-w-[80%] rounded-2xl px-3.5 sm:px-4 py-3 text-[14px] sm:text-[15px] leading-relaxed whitespace-pre-wrap",
+                    message.role === "user"
+                      ? "bg-indigo-500/90 text-white rounded-br-md"
+                      : "bg-white/50 dark:bg-white/10 border border-white/20 text-foreground rounded-bl-md"
+                  )}
+                >
+                  {showThinking ? (
                     <span className="inline-flex items-center gap-2 text-foreground/50">
                       <Loader2 className="size-4 animate-spin" />
                       {t.xiaocoo.thinking}
                     </span>
-                  ) : null)}
-              </div>
-            </motion.div>
-          ))}
+                  ) : (
+                    message.content
+                  )}
+                </div>
+              </motion.div>
+            );
+          })}
           <div ref={bottomRef} />
         </div>
 
