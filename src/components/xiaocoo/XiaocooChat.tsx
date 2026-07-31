@@ -428,7 +428,7 @@ export default function XiaocooChat() {
           <div ref={bottomRef} />
         </div>
 
-        <div className="border-t border-indigo-500/15 px-3 sm:px-4 pt-3 pb-1 bg-indigo-500/[0.12] dark:bg-indigo-400/10">
+        <div className="border-t border-indigo-300/70 bg-indigo-50/90 px-3 pt-3 pb-1 dark:border-indigo-300/20 dark:bg-indigo-950/45 sm:px-4">
           {messages.length > 0 && (
             <p className="mb-2 px-0.5 text-xs font-bold uppercase tracking-[0.18em] text-indigo-700 dark:text-indigo-200">
               {t.xiaocoo.suggestionsHint}
@@ -442,10 +442,11 @@ export default function XiaocooChat() {
                 disabled={streaming}
                 onClick={() => void send(suggestion)}
                 className={cn(
-                  "text-left text-[13px] sm:text-sm px-3.5 py-2.5 sm:py-2 rounded-2xl",
-                  "border border-indigo-400/40 bg-indigo-500/20 text-indigo-800",
-                  "dark:border-indigo-400/30 dark:bg-indigo-400/15 dark:text-indigo-100",
-                  "hover:bg-indigo-500/30 hover:border-indigo-500/55 dark:hover:bg-indigo-400/25 transition-colors",
+                  "min-h-11 text-left text-[13px] sm:min-h-0 sm:text-sm px-3.5 py-2.5 sm:py-2 rounded-2xl",
+                  "border border-indigo-300/90 bg-indigo-100/95 text-indigo-950 shadow-sm",
+                  "dark:border-indigo-300/35 dark:bg-indigo-400/20 dark:text-indigo-50",
+                  "hover:border-indigo-400 hover:bg-indigo-200/90 dark:hover:bg-indigo-400/30 transition-colors",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50 focus-visible:ring-offset-2",
                   "disabled:opacity-50 w-full sm:w-auto"
                 )}
               >
@@ -457,7 +458,7 @@ export default function XiaocooChat() {
 
         <form
           onSubmit={onSubmit}
-          className="border-t border-indigo-500/15 p-3 sm:p-4 flex items-end gap-2 sm:gap-3 bg-indigo-500/[0.14] dark:bg-indigo-400/10"
+          className="flex items-end gap-2 border-t border-indigo-300/70 bg-white/90 p-3 dark:border-indigo-300/20 dark:bg-slate-950/85 sm:gap-3 sm:p-4"
         >
           <label className="flex-1 min-w-0">
             <span className="sr-only">{t.xiaocoo.placeholder}</span>
@@ -475,9 +476,10 @@ export default function XiaocooChat() {
               placeholder={t.xiaocoo.placeholder}
               className={cn(
                 "w-full resize-none rounded-2xl px-4 py-3 text-[15px]",
-                "bg-indigo-50/80 dark:bg-indigo-950/40 border border-indigo-400/30",
-                "outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/25",
-                "text-foreground placeholder:text-indigo-700/70 dark:placeholder:text-indigo-200/70 disabled:opacity-60"
+                "border border-indigo-300/90 bg-indigo-50 text-foreground shadow-sm",
+                "dark:border-indigo-300/35 dark:bg-indigo-950/55",
+                "outline-none focus:border-indigo-500/70 focus:ring-2 focus:ring-indigo-500/30",
+                "placeholder:text-foreground/70 dark:placeholder:text-indigo-100/75 disabled:opacity-60"
               )}
             />
           </label>
