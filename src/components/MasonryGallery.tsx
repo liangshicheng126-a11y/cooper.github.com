@@ -1,6 +1,7 @@
 "use client";
 
 import { balanceMasonryColumns, getMasonryColumnCount } from "@/lib/masonryBalance";
+import { masonryAspectRatio } from "@/lib/galleryImageUrl";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
 type ManifestEntry = { width: number; height: number };
@@ -17,7 +18,7 @@ function lookupAspectRatio(manifest: GalleryManifest | null, originalSrc: string
   if (!manifest || !originalSrc) return 3 / 4;
   const entry = manifest[originalSrc] ?? manifest[decodeURIComponent(originalSrc)];
   if (!entry?.width || !entry?.height) return 3 / 4;
-  return entry.width / entry.height;
+  return masonryAspectRatio(entry.width, entry.height);
 }
 
 type MasonryGalleryProps<T> = {

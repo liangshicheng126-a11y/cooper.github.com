@@ -21,6 +21,11 @@ const VARIANTS = [
   { dir: "_display", maxEdge: 1920, quality: 82 },
 ];
 
+/** Ultra-tall pages (e.g. e-commerce details) get a top crop for grid thumbs. */
+const TALL_HEIGHT_RATIO = 2.2;
+/** Thumb crop width/height — keeps brand/hero readable in masonry. */
+const TALL_THUMB_ASPECT = 3 / 4;
+
 async function collectImages(dirAbs, relParts = []) {
   let entries;
   try {
@@ -65,10 +70,48 @@ async function needsRegenerate(sourceAbs, targetAbs) {
   }
 }
 
-async function resizeToWebp(sourceAbs, targetAbs, maxEdge, quality) {
+async function resizeToWebp(sourceAbs, targetAbs, maxEdge, quality, { cropTopTall = false } = {}) {
   await fs.mkdir(path.dirname(targetAbs), { recursive: true });
-  await sharp(sourceAbs)
-    .rotate()
+  const baseMeta = await sharp(sourceAbs).rotate().metadata();
+  const width = baseMeta.width ?? 1;
+  const height = baseMeta.height ?? 1;
+  const isTall = height / width >= TALL_HEIGHT_RATIO;
+
+  let pipeline = sharp(sourceAbs).rotate();
+
+  if (cropTopTall && isTall) {
+    const cropHeight = Math.min(height, Math.round(width / TALL_THUMB_ASPECT));
+    pipeline = sharp(sourceAbs).rotate().extract({
+      left: 0,
+      top: 0,
+      width,
+      height: cropHeight,
+    });
+    await pipeline
+      .resize({
+        width: maxEdge,
+        height: maxEdge,
+        fit: "inside",
+        withoutEnlargement: true,
+      })
+      .webp({ quality, effort: 4 })
+      .toFile(targetAbs);
+    return;
+  }
+
+  // Tall e-commerce pages: constrain by width so lightbox stays readable.
+  if (isTall) {
+    await pipeline
+      .resize({
+        width: maxEdge,
+        withoutEnlargement: true,
+      })
+      .webp({ quality, effort: 4 })
+      .toFile(targetAbs);
+    return;
+  }
+
+  await pipeline
     .resize({
       width: maxEdge,
       height: maxEdge,
@@ -105,7 +148,9 @@ async function processGallery(galleryAbs, manifest) {
         skipped += 1;
         continue;
       }
-      await resizeToWebp(image.abs, targetAbs, variant.maxEdge, variant.quality);
+      await resizeToWebp(image.abs, targetAbs, variant.maxEdge, variant.quality, {
+        cropTopTall: variant.dir === "_thumb",
+      });
       generated += 1;
       console.log(`  ${variant.dir}: ${originalWeb}`);
     }
