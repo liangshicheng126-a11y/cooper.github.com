@@ -11,7 +11,7 @@ Next.js 15 + React 19 + Tailwind + GSAP ScrollTrigger + Framer Motion。部署�
 
 - 延续现有 **indigo 玻璃拟态**（sidebar、`ProjectCard`、渐变 blob），不要引入新设计系统或 landing-page 模板风。
 - UI 改动优先读现有组件与 `globals.css` token，再改代码。
-- 需要设计审查时用 **impeccable** 或 **ui-craft-audit**，不要加载已归档的 taste/landing/PPT 类 skill。
+- 设计审查 / 前端审美相关 skill：**design-taste-frontend（taste）**、**impeccable**、**ui-craft-audit** 三者同优先级；用户点名时用点名的那个。未点名且职责重叠或规则冲突时，先简短说明冲突点，再询问用哪一个，不要自行二选一。landing / PPT 等已归档 skill 仍勿加载，除非用户明确要求。
 
 ## 动效
 
