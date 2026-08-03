@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ArrowLeft, ChevronLeft, ChevronRight, X } from "lucide-react";
+import useMotionTier from "@/hooks/useMotionTier";
 
 type Props = {
   photos: string[];
@@ -21,9 +22,20 @@ const SWIPE_THRESHOLD_PX = 48;
 const MIN_SCALE = 1;
 const MAX_SCALE = 6;
 const WHEEL_ZOOM_SENSITIVITY = 0.0018;
+const HI_RES_SCALE = 1.35;
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
+}
+
+function preloadImage(src: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new window.Image();
+    img.decoding = "async";
+    img.onload = () => resolve(src);
+    img.onerror = () => reject(new Error(`Failed to load ${src}`));
+    img.src = src;
+  });
 }
 
 export default function GalleryLightbox({
@@ -37,6 +49,8 @@ export default function GalleryLightbox({
   altPrefix,
   galleryLabel,
 }: Props) {
+  const tier = useMotionTier();
+  const softMotion = tier !== "minimal";
   const touchStartX = useRef<number | null>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<{
@@ -47,13 +61,27 @@ export default function GalleryLightbox({
     originY: number;
     moved: boolean;
   } | null>(null);
+  const loadedCache = useRef(new Set<string>());
   const [mounted, setMounted] = useState(false);
-  const [activeSrc, setActiveSrc] = useState(photos[index] ?? "");
+  const [overlayVisible, setOverlayVisible] = useState(false);
   const [scale, setScale] = useState(1);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
 
+  const displaySrc = photos[index] ?? "";
+  const originalSrc = fallbackPhotos?.[index];
+  const [paintSrc, setPaintSrc] = useState(displaySrc);
+  const [imageReady, setImageReady] = useState(() =>
+    displaySrc ? loadedCache.current.has(displaySrc) : false,
+  );
+
   useEffect(() => setMounted(true), []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    const id = requestAnimationFrame(() => setOverlayVisible(true));
+    return () => cancelAnimationFrame(id);
+  }, [mounted]);
 
   useEffect(() => {
     setScale(1);
@@ -61,12 +89,110 @@ export default function GalleryLightbox({
     setDragging(false);
   }, [photos, index]);
 
+  // Swap only after the next display image is ready — never blank the stage.
   useEffect(() => {
-    const display = photos[index] ?? "";
-    const original = fallbackPhotos?.[index];
-    // Prefer full-resolution original once zoomed in for long-detail pages.
-    setActiveSrc(scale > 1.35 && original ? original : display);
-  }, [fallbackPhotos, index, photos, scale]);
+    const nextDisplay = photos[index] ?? "";
+    if (!nextDisplay) return;
+
+    if (loadedCache.current.has(nextDisplay)) {
+      setPaintSrc(nextDisplay);
+      setImageReady(true);
+      return;
+    }
+
+    // First open: paint the URL immediately; opacity fades in onLoad.
+    // Index change: keep previous paintSrc until preload finishes.
+    if (paintSrc === nextDisplay || !paintSrc) {
+      setPaintSrc(nextDisplay);
+    }
+
+    let cancelled = false;
+    preloadImage(nextDisplay)
+      .then((src) => {
+        if (cancelled) return;
+        loadedCache.current.add(src);
+        setPaintSrc(src);
+        setImageReady(true);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        // Let <img onError> try original fallback.
+        setPaintSrc(nextDisplay);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+    // paintSrc intentionally omitted — only react to gallery index / list changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [index, photos]);
+
+  // Prefetch current original + neighbors so zoom / swipe stay seamless.
+  useEffect(() => {
+    const candidates = [
+      displaySrc,
+      originalSrc,
+      photos.length > 1
+        ? photos[(index - 1 + photos.length) % photos.length]
+        : undefined,
+      photos.length > 1 ? photos[(index + 1) % photos.length] : undefined,
+      photos.length > 1
+        ? fallbackPhotos?.[(index - 1 + photos.length) % photos.length]
+        : undefined,
+      photos.length > 1
+        ? fallbackPhotos?.[(index + 1) % photos.length]
+        : undefined,
+    ].filter((src): src is string => Boolean(src));
+
+    candidates.forEach((src) => {
+      if (loadedCache.current.has(src)) return;
+      preloadImage(src)
+        .then((loaded) => loadedCache.current.add(loaded))
+        .catch(() => undefined);
+    });
+  }, [displaySrc, fallbackPhotos, index, originalSrc, photos]);
+
+  // Upgrade to full-resolution only after preload — never blank the stage mid-zoom.
+  useEffect(() => {
+    const wantHiRes =
+      scale > HI_RES_SCALE &&
+      Boolean(originalSrc) &&
+      originalSrc !== displaySrc &&
+      paintSrc !== originalSrc;
+
+    if (!wantHiRes || !originalSrc) return;
+
+    if (loadedCache.current.has(originalSrc)) {
+      setPaintSrc(originalSrc);
+      setImageReady(true);
+      return;
+    }
+
+    let cancelled = false;
+    preloadImage(originalSrc)
+      .then((src) => {
+        if (cancelled) return;
+        loadedCache.current.add(src);
+        setPaintSrc(src);
+        setImageReady(true);
+      })
+      .catch(() => undefined);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [displaySrc, originalSrc, paintSrc, scale]);
+
+  // Cached images can be complete before onLoad; reveal immediately.
+  useEffect(() => {
+    if (!paintSrc || imageReady) return;
+    const probe = new window.Image();
+    probe.src = paintSrc;
+    if (probe.complete && probe.naturalWidth > 0) {
+      loadedCache.current.add(paintSrc);
+      setImageReady(true);
+    }
+  }, [imageReady, paintSrc]);
 
   const goPrev = useCallback(() => {
     onIndexChange((index - 1 + photos.length) % photos.length);
@@ -134,6 +260,7 @@ export default function GalleryLightbox({
 
   const fallbackSrc = fallbackPhotos?.[index];
   const zoomed = scale > 1.01;
+  const fadeMs = softMotion ? 220 : 0;
 
   return createPortal(
     <div
@@ -141,6 +268,10 @@ export default function GalleryLightbox({
       role="dialog"
       aria-modal="true"
       aria-label={galleryLabel}
+      style={{
+        opacity: overlayVisible ? 1 : 0,
+        transition: softMotion ? `opacity ${fadeMs}ms ease-out` : undefined,
+      }}
       onClick={(event) => {
         if (event.target === event.currentTarget) onClose();
       }}
@@ -271,22 +402,31 @@ export default function GalleryLightbox({
         )}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          key={activeSrc}
-          src={activeSrc}
+          src={paintSrc}
           alt={`${altPrefix} ${index + 1}`}
           className="max-h-[calc(100dvh-5.5rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] max-w-[min(100%,calc(100vw-4.5rem))] h-auto w-auto select-none object-contain sm:max-w-[min(92vw,1200px)] sm:max-h-[calc(100dvh-6rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))]"
           style={{
             transform: `translate3d(${offset.x}px, ${offset.y}px, 0) scale(${scale})`,
             transformOrigin: "center center",
-            transition: dragging ? "none" : "transform 120ms ease-out",
-            willChange: "transform",
+            opacity: imageReady ? 1 : 0,
+            transition: dragging
+              ? "none"
+              : softMotion
+                ? `transform 160ms cubic-bezier(0.22, 1, 0.36, 1), opacity ${fadeMs}ms ease-out`
+                : "none",
+            willChange: "transform, opacity",
           }}
           draggable={false}
           decoding="async"
           fetchPriority="high"
+          onLoad={() => {
+            if (paintSrc) loadedCache.current.add(paintSrc);
+            setImageReady(true);
+          }}
           onError={() => {
-            if (fallbackSrc && activeSrc !== fallbackSrc) {
-              setActiveSrc(fallbackSrc);
+            if (fallbackSrc && paintSrc !== fallbackSrc) {
+              setPaintSrc(fallbackSrc);
+              setImageReady(loadedCache.current.has(fallbackSrc));
             }
           }}
         />
