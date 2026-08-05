@@ -1,0 +1,32 @@
+:root {
+  /* KAI brand tokens — v0.1 */
+  --kai-midnight: #07162d;
+  --kai-ink: #10213d;
+  --kai-indigo: #3956e8;
+  --kai-indigo-deep: #2339aa;
+  --kai-signal-cyan: #43c4f5;
+  --kai-mist: #e9edf4;
+  --kai-paper: #f7f8fa;
+  --kai-slate: #748198;
+  --kai-success: #23a987;
+  --kai-warning: #d99a26;
+  --kai-danger: #d75262;
+
+  --kai-font-sans: Inter, "Noto Sans SC", "Microsoft YaHei", Arial, sans-serif;
+  --kai-font-display: Inter, "Noto Sans SC", "Microsoft YaHei", Arial, sans-serif;
+  --kai-font-mono: "SFMono-Regular", Consolas, monospace;
+
+  --kai-space-1: 4px;
+  --kai-space-2: 8px;
+  --kai-space-3: 12px;
+  --kai-space-4: 16px;
+  --kai-space-6: 24px;
+  --kai-space-8: 32px;
+  --kai-space-12: 48px;
+  --kai-space-16: 64px;
+
+  --kai-radius-sm: 6px;
+  --kai-radius-md: 12px;
+  --kai-radius-lg: 20px;
+  --kai-border-subtle: 1px solid color-mix(in srgb, var(--kai-mist) 24%, transparent);
+}

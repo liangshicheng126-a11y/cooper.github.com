@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 240" role="img" aria-labelledby="title desc">
+  <title id="title">KAI Model Capacity Market</title>
+  <desc id="desc">KAI primary logo with a capacity-window symbol.</desc>
+  <rect width="960" height="240" rx="24" fill="#07162D"/>
+  <g transform="translate(44 48)">
+    <path d="M0 36h26l18 18h12M112 36H86L68 54H56M0 108h26l18-18h12M112 108H86L68 90H56" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="7"/>
+    <path d="M0 36h26l18 18h12M112 108H86L68 90H56" stroke="#E9EDF4"/>
+    <path d="M112 36H86L68 54H56" stroke="#3956E8"/>
+    <path d="M0 108h26l18-18h12" stroke="#43C4F5"/>
+    <rect x="54" y="42" width="16" height="60" rx="4" fill="#07162D" stroke="#E9EDF4" stroke-width="4"/>
+    <circle cx="0" cy="36" r="5" fill="#E9EDF4"/>
+    <circle cx="112" cy="36" r="5" fill="#3956E8"/>
+    <circle cx="0" cy="108" r="5" fill="#43C4F5"/>
+    <circle cx="112" cy="108" r="5" fill="#E9EDF4"/>
+  </g>
+  <g fill="#F7F8FA">
+    <text x="208" y="113" font-family="Inter, Arial, sans-serif" font-size="82" font-weight="600" letter-spacing="-4">KAI</text>
+    <text x="214" y="153" font-family="Inter, Arial, sans-serif" font-size="21" font-weight="500" letter-spacing="3">MODEL CAPACITY MARKET</text>
+  </g>
+  <path d="M208 177h530" stroke="#3956E8" stroke-width="2"/>
+  <text x="208" y="207" fill="#AEB9CC" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" letter-spacing="1">ENTERPRISE MODEL CAPACITY MARKET</text>
+</svg>

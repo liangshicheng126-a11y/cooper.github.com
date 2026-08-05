@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 1754" role="img" aria-labelledby="title desc">
+  <title id="title">KAI Model Capacity Market White Paper</title>
+  <desc id="desc">A cover template for the KAI model capacity market whitepaper.</desc>
+  <rect width="1240" height="1754" fill="#07162D"/>
+  <g opacity=".22" stroke="#7890BD" stroke-width="1">
+    <path d="M80 0v1754M160 0v1754M240 0v1754M320 0v1754M400 0v1754M480 0v1754M560 0v1754M640 0v1754M720 0v1754M800 0v1754M880 0v1754M960 0v1754M1040 0v1754M1120 0v1754"/>
+    <path d="M0 117h1240M0 234h1240M0 351h1240M0 468h1240M0 585h1240M0 702h1240M0 819h1240M0 936h1240M0 1053h1240M0 1170h1240M0 1287h1240M0 1404h1240M0 1521h1240M0 1638h1240"/>
+  </g>
+  <g transform="translate(90 110)">
+    <path d="M0 36h26l18 18h12M112 36H86L68 54H56M0 108h26l18-18h12M112 108H86L68 90H56" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="7"/>
+    <path d="M0 36h26l18 18h12M112 108H86L68 90H56" stroke="#E9EDF4"/>
+    <path d="M112 36H86L68 54H56" stroke="#3956E8"/>
+    <path d="M0 108h26l18-18h12" stroke="#43C4F5"/>
+    <rect x="54" y="42" width="16" height="60" rx="4" fill="#07162D" stroke="#E9EDF4" stroke-width="4"/>
+  </g>
+  <text x="252" y="200" fill="#F7F8FA" font-family="Inter, Arial, sans-serif" font-size="72" font-weight="600" letter-spacing="-3">KAI</text>
+  <text x="256" y="238" fill="#AEB9CC" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="600" letter-spacing="3">MODEL CAPACITY MARKET</text>
+  <g transform="translate(90 630)">
+    <text fill="#43C4F5" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="600" letter-spacing="4">WHITE PAPER / 2026</text>
+    <text y="126" fill="#F7F8FA" font-family="Inter, Arial, sans-serif" font-size="102" font-weight="700">KAI</text>
+    <text y="238" fill="#F7F8FA" font-family="Inter, Arial, sans-serif" font-size="62" font-weight="500">MODEL CAPACITY MARKET</text>
+    <text y="330" fill="#AEB9CC" font-family="Inter, Arial, sans-serif" font-size="28">A STANDARD FOR FUTURE MODEL SERVICE CAPACITY</text>
+    <text y="378" fill="#AEB9CC" font-family="Inter, Arial, sans-serif" font-size="28">COMPARABLE / DELIVERABLE / ACCOUNTABLE</text>
+  </g>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M90 1330h250l110-110h270l110 110h320" stroke="#E9EDF4" stroke-width="4"/>
+    <path d="M90 1410h160l110-110h210l110 110h480" stroke="#3956E8" stroke-width="4"/>
+    <path d="M90 1490h80l110-110h130l110 110h540" stroke="#43C4F5" stroke-width="4"/>
+  </g>
+  <g fill="#F7F8FA">
+    <circle cx="90" cy="1330" r="9"/><circle cx="450" cy="1220" r="9"/><circle cx="830" cy="1330" r="9"/>
+  </g>
+  <text x="90" y="1660" fill="#AEB9CC" font-family="Inter, Arial, sans-serif" font-size="20" letter-spacing="2">KAI MODEL CAPACITY MARKET</text>
+  <text x="1150" y="1660" fill="#AEB9CC" font-family="Inter, Arial, sans-serif" font-size="20" text-anchor="end">V2.0</text>
+</svg>
