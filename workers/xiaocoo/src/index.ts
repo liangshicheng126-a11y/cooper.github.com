@@ -1,4 +1,5 @@
 import { XIAOCOO_KNOWLEDGE } from "./knowledge";
+import { handleTaskBriefRequest } from "./taskBrief";
 
 export interface Env {
   DEEPSEEK_API_KEY: string;
@@ -8,6 +9,10 @@ export interface Env {
   TELEGRAM_BOT_TOKEN?: string;
   TELEGRAM_CHAT_ID?: string;
   FEISHU_WEBHOOK_URL?: string;
+  TASK_BRIEF_ACCESS_CODE?: string;
+  RESEND_API_KEY?: string;
+  TASK_BRIEF_TO_EMAIL?: string;
+  TASK_BRIEF_FROM_EMAIL?: string;
 }
 
 type ExecutionContext = {
@@ -318,6 +323,9 @@ export default {
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers });
     }
+
+    const taskBriefResponse = await handleTaskBriefRequest(request, env, ctx, headers);
+    if (taskBriefResponse) return taskBriefResponse;
 
     if (request.method !== "POST") {
       return Response.json({ error: "Method not allowed" }, { status: 405, headers });

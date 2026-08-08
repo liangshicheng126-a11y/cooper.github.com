@@ -26,7 +26,19 @@ npx wrangler deploy
 
 ```bash
 NEXT_PUBLIC_XIAOCOO_API_URL=https://xiaocoo-chat.<your-subdomain>.workers.dev
+NEXT_PUBLIC_TASK_BRIEF_API_URL=https://xiaocoo-chat.<your-subdomain>.workers.dev/task-brief
 ```
+
+## 任务布置问卷
+
+同一个 Worker 还提供 `POST /task-brief/verify` 与 `POST /task-brief`。上线前设置：
+
+```bash
+npx wrangler secret put TASK_BRIEF_ACCESS_CODE
+npx wrangler secret put RESEND_API_KEY
+```
+
+收件人与发件人默认写在 `wrangler.toml` 的 `TASK_BRIEF_TO_EMAIL`、`TASK_BRIEF_FROM_EMAIL`，可按 Resend 已验证域名调整。修改共享口令只需重新执行第一条命令，不需要重建网站。
 
 自定义域名示例：`api.cooperliang.top`（在 `wrangler.toml` 解开 routes 注释并配置 DNS）。
 

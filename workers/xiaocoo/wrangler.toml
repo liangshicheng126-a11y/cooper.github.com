@@ -9,6 +9,8 @@ compatibility_date = "2025-07-01"
 
 [vars]
 DEEPSEEK_MODEL = "deepseek-v4-flash"
+TASK_BRIEF_TO_EMAIL = "liangshicheng303@126.com"
+TASK_BRIEF_FROM_EMAIL = "Cooper Task Brief <onboarding@resend.dev>"
 # ALLOWED_ORIGINS = "https://cooperliang.top,http://localhost:3000"
 
 # Secrets (set via CLI, do not commit):
@@ -16,3 +18,5 @@ DEEPSEEK_MODEL = "deepseek-v4-flash"
 #   npx wrangler secret put TELEGRAM_BOT_TOKEN
 #   npx wrangler secret put TELEGRAM_CHAT_ID
 #   npx wrangler secret put FEISHU_WEBHOOK_URL
+#   npx wrangler secret put TASK_BRIEF_ACCESS_CODE
+#   npx wrangler secret put RESEND_API_KEY

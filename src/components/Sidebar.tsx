@@ -5,10 +5,11 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import TextCursorProximity from "@/components/ui/text-cursor-proximity";
 import useMotionTier from "@/hooks/useMotionTier";
-import { 
-  Home, 
-  Briefcase, 
+import {
+  Home,
+  Briefcase,
   User,
+  ClipboardList,
   MessageCircle,
   Mail, 
   Phone,
@@ -53,6 +54,7 @@ const Sidebar = () => {
     { name: t.nav.home, href: "/", icon: Home },
     { name: t.nav.portfolio, href: "/portfolio", icon: Briefcase },
     { name: t.nav.about, href: "/about", icon: User },
+    { name: t.nav.taskBrief, href: "/task-brief", icon: ClipboardList },
     { name: t.nav.xiaocoo, href: "/xiaocoo", icon: MessageCircle },
   ];
 

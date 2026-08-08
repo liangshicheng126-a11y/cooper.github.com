@@ -8,6 +8,27 @@
   100% { transform: scale(1.9); opacity: 0; }
 }
 
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+
+  #task-brief-print-area,
+  #task-brief-print-area * {
+    visibility: visible !important;
+  }
+
+  #task-brief-print-area {
+    position: absolute !important;
+    inset: 0 auto auto 0 !important;
+    width: 100% !important;
+    color: #111827 !important;
+    background: #ffffff !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+}
+
 .animate-ping-once {
   animation: ping-once 0.9s cubic-bezier(0, 0, 0.2, 1) forwards;
 }
