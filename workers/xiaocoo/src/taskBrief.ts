@@ -279,6 +279,7 @@ async function sendEmail(
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
         "Idempotency-Key": `task-brief/${input.clientRequestId}`,
+        "User-Agent": "cooper-task-brief/1.0",
       },
       body: JSON.stringify(payload),
     });
@@ -289,7 +290,20 @@ async function sendEmail(
   if (!response.ok) {
     const detail = await response.text().catch(() => "");
     console.error("[task-brief] Resend failed", response.status, detail.slice(0, 300));
-    throw new Error(`resend_${response.status}`);
+    const normalizedDetail = detail.toLowerCase();
+    const providerReason = response.status === 403 && (
+      normalizedDetail.includes("testing emails")
+      || normalizedDetail.includes("own email address")
+      || normalizedDetail.includes("verify a domain")
+    )
+      ? "recipient_restricted"
+      : response.status === 403 && (
+        normalizedDetail.includes("user-agent")
+        || normalizedDetail.includes("error 1010")
+      )
+        ? "user_agent_rejected"
+        : "provider_rejected";
+    throw new Error(`resend_${response.status}_${providerReason}`);
   }
 }
 
@@ -367,11 +381,20 @@ export async function handleTaskBriefRequest(
     return json({ ok: true, submissionId }, 200, headers);
   } catch (error) {
     const providerStatus = error instanceof Error
-      ? Number(error.message.match(/^resend_(\d{3})$/)?.[1]) || undefined
+      ? Number(error.message.match(/^resend_(\d{3})_/)?.[1]) || undefined
+      : undefined;
+    const providerReason = error instanceof Error
+      ? error.message.match(/^resend_\d{3}_(recipient_restricted|user_agent_rejected|provider_rejected)$/)?.[1]
       : undefined;
     const providerReachable = !(error instanceof Error && error.message === "resend_network");
     return json(
-      { error: "Email delivery failed.", code: "EMAIL_DELIVERY_FAILED", providerStatus, providerReachable },
+      {
+        error: "Email delivery failed.",
+        code: "EMAIL_DELIVERY_FAILED",
+        providerStatus,
+        providerReason,
+        providerReachable,
+      },
       502,
       headers
     );
