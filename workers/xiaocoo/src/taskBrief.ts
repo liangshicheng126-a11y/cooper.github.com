@@ -271,19 +271,25 @@ async function sendEmail(
   };
   if (requesterEmail) payload.reply_to = requesterEmail;
 
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-      "Idempotency-Key": `task-brief/${input.clientRequestId}`,
-    },
-    body: JSON.stringify(payload),
-  });
+  let response: Response;
+  try {
+    response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        "Idempotency-Key": `task-brief/${input.clientRequestId}`,
+      },
+      body: JSON.stringify(payload),
+    });
+  } catch (error) {
+    console.error("[task-brief] Resend request failed", error);
+    throw new Error("resend_network");
+  }
   if (!response.ok) {
     const detail = await response.text().catch(() => "");
     console.error("[task-brief] Resend failed", response.status, detail.slice(0, 300));
-    throw new Error("resend_failed");
+    throw new Error(`resend_${response.status}`);
   }
 }
 
@@ -359,7 +365,15 @@ export async function handleTaskBriefRequest(
   try {
     await sendEmail(env, { answers, mode, language, submissionId, clientRequestId });
     return json({ ok: true, submissionId }, 200, headers);
-  } catch {
-    return json({ error: "Email delivery failed.", code: "EMAIL_DELIVERY_FAILED" }, 502, headers);
+  } catch (error) {
+    const providerStatus = error instanceof Error
+      ? Number(error.message.match(/^resend_(\d{3})$/)?.[1]) || undefined
+      : undefined;
+    const providerReachable = !(error instanceof Error && error.message === "resend_network");
+    return json(
+      { error: "Email delivery failed.", code: "EMAIL_DELIVERY_FAILED", providerStatus, providerReachable },
+      502,
+      headers
+    );
   }
 }
