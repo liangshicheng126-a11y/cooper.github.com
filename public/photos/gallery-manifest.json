@@ -730,5 +730,57 @@
   "/photos/portfolio/p2/smart-glasses/profile.png": {
     "width": 430,
     "height": 1048
+  },
+  "/photos/posters/wott-mockups/dark-lifestyle-accordion-desk.jpg": {
+    "width": 2938,
+    "height": 1360
+  },
+  "/photos/posters/wott-mockups/dark-lifestyle-cover-stack.jpg": {
+    "width": 1865,
+    "height": 1485
+  },
+  "/photos/posters/wott-mockups/dark-lifestyle-fan-hero.jpg": {
+    "width": 2485,
+    "height": 1480
+  },
+  "/photos/posters/wott-mockups/dark-lifestyle-photo-mockup.png": {
+    "width": 1536,
+    "height": 1024
+  },
+  "/photos/posters/wott-mockups/lime-localplay-accordion-desk.jpg": {
+    "width": 2894,
+    "height": 1360
+  },
+  "/photos/posters/wott-mockups/lime-localplay-cover-stack.jpg": {
+    "width": 1810,
+    "height": 1485
+  },
+  "/photos/posters/wott-mockups/lime-localplay-fan-hero.jpg": {
+    "width": 2454,
+    "height": 1480
+  },
+  "/photos/posters/wott-mockups/lime-localplay-photo-mockup.png": {
+    "width": 1536,
+    "height": 1024
+  },
+  "/photos/posters/wott-mockups/orange-compute-accordion-desk.jpg": {
+    "width": 2904,
+    "height": 1360
+  },
+  "/photos/posters/wott-mockups/orange-compute-cover-stack.jpg": {
+    "width": 1784,
+    "height": 1485
+  },
+  "/photos/posters/wott-mockups/orange-compute-fan-hero.jpg": {
+    "width": 2438,
+    "height": 1480
+  },
+  "/photos/posters/wott-mockups/orange-compute-photo-mockup.png": {
+    "width": 1536,
+    "height": 1024
+  },
+  "/photos/posters/wott-mockups/overview-contact-sheet.jpg": {
+    "width": 3452,
+    "height": 2244
   }
 }
