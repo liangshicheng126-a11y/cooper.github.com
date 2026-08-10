@@ -56,6 +56,7 @@ const Sidebar = () => {
     { name: t.nav.about, href: "/about", icon: User },
     { name: t.nav.taskBrief, href: "/task-brief", icon: ClipboardList },
     { name: t.nav.xiaocoo, href: "/xiaocoo", icon: MessageCircle },
+    { name: t.nav.contactMe, href: "/contact", icon: Mail },
   ];
 
   const toggleLanguage = () => {

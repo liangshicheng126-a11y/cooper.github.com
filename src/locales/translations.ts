@@ -6,6 +6,7 @@ export const translations = {
       about: "关于我",
       taskBrief: "任务布置",
       xiaocoo: "小coo",
+      contactMe: "联系我",
       contact: "联系方式"
     },
     hero: {
@@ -406,6 +407,7 @@ export const translations = {
       about: "About",
       taskBrief: "Task Brief",
       xiaocoo: "XiaoCoo",
+      contactMe: "Contact Me",
       contact: "Contact"
     },
     hero: {
