@@ -54,6 +54,15 @@ body {
   margin-right: calc(100vw - 100%);
 }
 
+/* Desktop canvas scale (ViewportCanvas): lock composition width, uniform zoom */
+html[data-viewport-canvas="on"] {
+  overflow-x: hidden;
+}
+
+.viewport-canvas-root {
+  min-height: 100%;
+}
+
 /* Stable text widths for UI labels to prevent shifting during language toggle */
 .stable-ui-text {
   display: inline-flex;
