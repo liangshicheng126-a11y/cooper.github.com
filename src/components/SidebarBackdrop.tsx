@@ -4,8 +4,7 @@ import { cn } from "@/lib/utils";
 import useMotionTier from "@/hooks/useMotionTier";
 
 /**
- * Desktop sidebar: frosted glass with gradient mesh + soft color blobs.
- * Matches reference mockup (blur + pastel bleed), not SVG displacement.
+ * Desktop sidebar: Apple-style frosted glass — clear fill + blur so page shows through.
  */
 export default function SidebarBackdrop() {
   const tier = useMotionTier();

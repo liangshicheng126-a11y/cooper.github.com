@@ -199,7 +199,7 @@ html[data-viewport-canvas="on"] {
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-/* Desktop sidebar: frosted glass — gradient mesh + blobs + blur sheen */
+/* Desktop sidebar: Apple-style frosted glass — clear fill, page shows through */
 .sidebar-backdrop {
   isolation: isolate;
 }
@@ -208,29 +208,27 @@ html[data-viewport-canvas="on"] {
   position: absolute;
   inset: 0;
   background: linear-gradient(
-    168deg,
-    rgba(214, 217, 255, 0.72) 0%,
-    rgba(232, 212, 245, 0.48) 38%,
-    rgba(255, 241, 232, 0.58) 72%,
-    rgba(224, 252, 245, 0.42) 88%,
-    rgba(255, 255, 255, 0.35) 100%
+    165deg,
+    rgba(255, 255, 255, 0.52) 0%,
+    rgba(255, 255, 255, 0.34) 45%,
+    rgba(255, 255, 255, 0.22) 100%
   );
 }
 
 .dark .sidebar-backdrop__mesh {
   background: linear-gradient(
-    168deg,
-    rgba(67, 56, 202, 0.35) 0%,
-    rgba(91, 33, 182, 0.28) 40%,
-    rgba(30, 27, 75, 0.42) 100%
+    165deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(15, 23, 42, 0.28) 50%,
+    rgba(2, 6, 23, 0.36) 100%
   );
 }
 
 .sidebar-backdrop__blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(32px);
-  opacity: 0.5;
+  filter: blur(40px);
+  opacity: 0.14;
   will-change: transform;
 }
 
@@ -239,7 +237,7 @@ html[data-viewport-canvas="on"] {
   height: 9.5rem;
   top: 6%;
   left: -18%;
-  background: radial-gradient(circle at 40% 35%, #8b5cf6 0%, rgba(139, 92, 246, 0) 68%);
+  background: radial-gradient(circle at 40% 35%, #818cf8 0%, rgba(129, 140, 248, 0) 70%);
 }
 
 .sidebar-backdrop__blob--b {
@@ -247,7 +245,7 @@ html[data-viewport-canvas="on"] {
   height: 7.5rem;
   top: 42%;
   right: -22%;
-  background: radial-gradient(circle at 50% 50%, #7b86ff 0%, rgba(123, 134, 255, 0) 70%);
+  background: radial-gradient(circle at 50% 50%, #a78bfa 0%, rgba(167, 139, 250, 0) 70%);
 }
 
 .sidebar-backdrop__blob--c {
@@ -255,22 +253,34 @@ html[data-viewport-canvas="on"] {
   height: 8.5rem;
   bottom: 8%;
   left: 10%;
-  background: radial-gradient(circle at 45% 55%, #fb7185 0%, rgba(251, 113, 133, 0) 72%);
-  opacity: 0.38;
+  background: radial-gradient(circle at 45% 55%, #c4b5fd 0%, rgba(196, 181, 253, 0) 72%);
+  opacity: 0.1;
 }
 
 .sidebar-backdrop__sheen {
   position: absolute;
   inset: 0;
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.28) 0%,
+    rgba(255, 255, 255, 0.06) 100%
+  );
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.35);
 }
 
 .dark .sidebar-backdrop__sheen {
-  background: rgba(15, 23, 42, 0.2);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(15, 23, 42, 0.18) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.1);
 }
 
 .sidebar-backdrop--animated .sidebar-backdrop__blob--a {
@@ -307,12 +317,12 @@ html[data-viewport-canvas="on"] {
 }
 
 [data-motion-tier="minimal"] .sidebar-backdrop__blob {
-  opacity: 0.28;
+  opacity: 0.08;
 }
 
 [data-motion-tier="minimal"] .sidebar-backdrop__sheen {
-  backdrop-filter: blur(14px) saturate(150%);
-  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
 }
 
 @media (prefers-reduced-motion: reduce) {
