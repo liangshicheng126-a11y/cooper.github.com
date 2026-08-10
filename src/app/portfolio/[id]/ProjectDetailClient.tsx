@@ -231,13 +231,21 @@ export default function ProjectDetailClient({
             {years.map((year, yearIndex) => (
               <div key={year} className="space-y-6">
                 {yearIndex > 0 && (
-                  <div className="year-divider glass border-white/10 rounded-xl">
+                  <div className="year-divider">
                     <div className="year-divider-track">
-                      {Array.from({ length: 12 }).map((_, i) => (
-                        <span key={`${year}-${i}`} className="inline-flex items-center gap-4">
-                          <span>{year}</span>
-                          <span>{t.portfolio.projectDetail.yearDividerDot}</span>
-                        </span>
+                      {[0, 1].map((copy) => (
+                        <div
+                          key={`${year}-copy-${copy}`}
+                          className="year-divider-group"
+                          aria-hidden={copy === 1 ? true : undefined}
+                        >
+                          {Array.from({ length: 18 }).map((_, i) => (
+                            <span key={`${year}-${copy}-${i}`} className="year-divider-item">
+                              <span>{year}</span>
+                              <span>{t.portfolio.projectDetail.yearDividerDot}</span>
+                            </span>
+                          ))}
+                        </div>
                       ))}
                     </div>
                   </div>

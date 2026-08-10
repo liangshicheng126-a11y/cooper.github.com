@@ -30,9 +30,8 @@ export function getMotionTier(): MotionTier {
 }
 
 export default function useMotionTier(): MotionTier {
-  const [tier, setTier] = useState<MotionTier>(() =>
-    typeof window !== "undefined" ? computeTier() : "full",
-  );
+  // Keep SSR + first client paint identical; resolve real tier after mount.
+  const [tier, setTier] = useState<MotionTier>("full");
 
   useEffect(() => {
     const update = () => setTier(computeTier());
