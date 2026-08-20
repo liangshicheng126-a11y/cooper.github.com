@@ -1,4 +1,24 @@
 {
+  "/photos/posters/1000%C3%971444_AI%E7%9C%8B%E5%9B%BE.png": {
+    "width": 900,
+    "height": 1200
+  },
+  "/photos/posters/1050%E6%97%A5%E8%96%AA%EF%BD%9C01%20%E9%AB%98%E5%86%B2%E5%87%BB%402x.jpg": {
+    "width": 2400,
+    "height": 1800
+  },
+  "/photos/posters/1050%E6%97%A5%E8%96%AA%EF%BD%9C02%20%E6%9C%AA%E6%9D%A5%E5%AE%9E%E9%AA%8C%E5%AE%A4.jpg": {
+    "width": 2400,
+    "height": 1800
+  },
+  "/photos/posters/1050%E6%97%A5%E8%96%AA%EF%BD%9C03%20%E7%BC%96%E8%BE%91%E7%BD%91%E6%A0%BC%20(1).jpg": {
+    "width": 2400,
+    "height": 1800
+  },
+  "/photos/posters/1080%C3%971350_AI%E7%9C%8B%E5%9B%BE%20%E6%8B%B7%E8%B4%9D.jpg": {
+    "width": 1080,
+    "height": 1350
+  },
   "/photos/posters/12.png": {
     "width": 554,
     "height": 985
@@ -30,6 +50,34 @@
   "/photos/posters/3%20%E6%8B%B7%E8%B4%9D.jpg": {
     "width": 1792,
     "height": 2400
+  },
+  "/photos/posters/4x3%20Poster.png": {
+    "width": 1440,
+    "height": 1080
+  },
+  "/photos/posters/4x3.png": {
+    "width": 1600,
+    "height": 1200
+  },
+  "/photos/posters/4_3_AI%E7%9C%8B%E5%9B%BE.png": {
+    "width": 1600,
+    "height": 1200
+  },
+  "/photos/posters/550%E6%97%A5%E8%96%AA%EF%BD%9C01%20%E9%9D%92%E6%98%A5%E4%BF%A1%E5%8F%B7.jpg": {
+    "width": 2400,
+    "height": 1800
+  },
+  "/photos/posters/550%E6%97%A5%E8%96%AA%EF%BD%9C02%20%E6%9C%BA%E4%BC%9A%E7%AA%97%E5%8F%A3%20(1).jpg": {
+    "width": 2400,
+    "height": 1800
+  },
+  "/photos/posters/550%E6%97%A5%E8%96%AA%EF%BD%9C03%20%E6%9E%81%E7%AE%80%E4%BE%BF%E7%AD%BE.jpg": {
+    "width": 2400,
+    "height": 1800
+  },
+  "/photos/posters/ASCII%20Art%20Tutorial_AI%E7%9C%8B%E5%9B%BE.png": {
+    "width": 800,
+    "height": 1000
   },
   "/photos/posters/Based_on_this_floor_plan%2C_202606081711%20(1).jpeg": {
     "width": 1792,
@@ -63,6 +111,10 @@
     "width": 2400,
     "height": 1792
   },
+  "/photos/posters/Club%2020.06_AI%E7%9C%8B%E5%9B%BE.jpg": {
+    "width": 1080,
+    "height": 1350
+  },
   "/photos/posters/Create_a_3D_rendering_based_202606102045.jpeg": {
     "width": 1792,
     "height": 2400
@@ -79,6 +131,66 @@
     "width": 1536,
     "height": 2752
   },
+  "/photos/posters/Editorial_AI%E7%9C%8B%E5%9B%BE.png": {
+    "width": 1600,
+    "height": 1200
+  },
+  "/photos/posters/EmberLab%20%E5%90%8D%E7%89%8C%EF%BD%9C%E6%AD%A3%E5%8F%8D%E9%9D%A2%E5%B9%B3%E9%9D%A2%E7%A8%BF%20(1).png": {
+    "width": 1460,
+    "height": 1200
+  },
+  "/photos/posters/exec-3f38b6b2-71aa-4717-a418-dbdecb8dba9f.png": {
+    "width": 1536,
+    "height": 1024
+  },
+  "/photos/posters/exec-59554cac-dcd6-432d-a76d-667b6dc88e59.png": {
+    "width": 1536,
+    "height": 1024
+  },
+  "/photos/posters/exec-84047761-8bb7-45eb-b132-96ffb2b9a8e9.png": {
+    "width": 1536,
+    "height": 1024
+  },
+  "/photos/posters/exec-8f10e42f-f55a-43fe-a7d6-3be0b7b34aa7.png": {
+    "width": 1536,
+    "height": 1024
+  },
+  "/photos/posters/exec-8f84a9ee-12c2-43e5-aabd-a140e6dc3eb8.png": {
+    "width": 1600,
+    "height": 983
+  },
+  "/photos/posters/exec-98a86e03-0c75-44ab-a660-dd28674e2e15.png": {
+    "width": 1536,
+    "height": 1024
+  },
+  "/photos/posters/exec-9c56f45c-04e5-41c0-a7c7-65d962f39b10.png": {
+    "width": 1536,
+    "height": 1024
+  },
+  "/photos/posters/exec-9ec1039d-271e-4000-8c4e-42e22db3d838.png": {
+    "width": 1717,
+    "height": 916
+  },
+  "/photos/posters/exec-bf73f3c1-bf7f-4b97-b63c-690cd1f11815.png": {
+    "width": 1536,
+    "height": 1024
+  },
+  "/photos/posters/exec-c1dc8228-4250-44f1-ad00-caa5d0d7183f.png": {
+    "width": 1536,
+    "height": 1024
+  },
+  "/photos/posters/FINAL%EF%BD%9CChina%20Token%20Academy%EF%BD%9C1600%C3%971200.jpg": {
+    "width": 1600,
+    "height": 1200
+  },
+  "/photos/posters/FINAL%EF%BD%9CKAI%20Marketing%20Academy%EF%BD%9C1600%C3%971200.jpg": {
+    "width": 1600,
+    "height": 1200
+  },
+  "/photos/posters/Formaci%C3%B3%202016_AI%E7%9C%8B%E5%9B%BE.png": {
+    "width": 1200,
+    "height": 1600
+  },
   "/photos/posters/Group%203.png": {
     "width": 750,
     "height": 5712
@@ -86,6 +198,18 @@
   "/photos/posters/I%E2%80%99d_like_to_have_some_202606102146.jpeg": {
     "width": 1792,
     "height": 2400
+  },
+  "/photos/posters/KAI%20China%20Token%20Academy%20%E2%80%94%20August%202026%20Poster.png": {
+    "width": 1200,
+    "height": 900
+  },
+  "/photos/posters/KAI%20Job%20Fair%20%E2%80%94%20China%20Token%20Academy.png": {
+    "width": 1200,
+    "height": 900
+  },
+  "/photos/posters/KAI%20Join%20Us%20Poster%20%E2%80%94%20August%2011%202026.png": {
+    "width": 1440,
+    "height": 1080
   },
   "/photos/posters/Make_image_clearer_remove_QR_202608021234.jpeg": {
     "width": 1792,
@@ -143,6 +267,10 @@
     "width": 1792,
     "height": 2400
   },
+  "/photos/posters/WE%20DON'T%20DO%20BORING%20THINGS%20%E2%80%94%204_3%20Poster.png": {
+    "width": 1600,
+    "height": 1200
+  },
   "/photos/posters/zidonghua.png": {
     "width": 739,
     "height": 985
@@ -155,9 +283,25 @@
     "width": 554,
     "height": 985
   },
+  "/photos/posters/%E5%84%BF%E7%AB%A5%E5%AE%9E%E9%99%85%E4%BD%BF%E7%94%A8K%E5%BD%A2%E6%8A%B1%E6%9E%95_%E5%9C%BA%E6%99%AF%E5%9B%BE.png": {
+    "width": 1215,
+    "height": 1295
+  },
+  "/photos/posters/%E5%8F%AF%E7%BC%96%E8%BE%91%E6%BA%90%E6%96%87%E4%BB%B6_AI%E7%9C%8B%E5%9B%BE.png": {
+    "width": 900,
+    "height": 1200
+  },
+  "/photos/posters/%E5%90%8A%E7%89%8C%E5%8D%A1%E7%89%87%EF%BD%9C%E5%B9%B3%E9%9D%A2%E8%AE%BE%E8%AE%A1%E7%A8%BF.png": {
+    "width": 3000,
+    "height": 980
+  },
   "/photos/posters/%E6%81%90%E6%80%96%E7%94%B5%E5%BD%B1%E6%B5%B7%E6%8A%A5%20conv%201.jpg": {
     "width": 2482,
     "height": 3517
+  },
+  "/photos/posters/%E6%AD%A3%E9%9D%A2%EF%BD%9C540%C3%97900_AI%E7%9C%8B%E5%9B%BE.jpg": {
+    "width": 2400,
+    "height": 3840
   },
   "/photos/posters/%E6%B0%B4%E4%B9%A6%E6%B5%B7%E6%8A%A5.png": {
     "width": 739,
@@ -166,6 +310,10 @@
   "/photos/posters/%E6%B0%B4%E6%9E%9C%E6%B5%B7%E6%8A%A5%20conv%201.jpg": {
     "width": 2508,
     "height": 3552
+  },
+  "/photos/posters/%E8%83%8C%E9%9D%A2%EF%BD%9C540%C3%97900_AI%E7%9C%8B%E5%9B%BE.jpg": {
+    "width": 2400,
+    "height": 3840
   },
   "/photos/posters/%E9%A9%AC%E5%B9%B4%E9%99%90%E5%AE%9A%E8%8C%B6%E5%8F%B6%20conv%201.jpeg": {
     "width": 1408,
