@@ -211,20 +211,6 @@ export default function Home() {
           </motion.div>
         </section>
 
-        <motion.div
-          variants={heroSoft}
-          className="hero-scroll-cue hidden sm:flex text-foreground/45 text-xs uppercase tracking-[0.24em] font-semibold items-center gap-3"
-        >
-          <span>Scroll down</span>
-          <motion.span
-            aria-hidden
-            animate={{ y: [0, 6, 0], opacity: [0.4, 1, 0.4] }}
-            transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-            className="inline-block"
-          >
-            ↓
-          </motion.span>
-        </motion.div>
         </div>
 
         <div className="home-scroll-stack relative z-0 mt-4 sm:mt-8">

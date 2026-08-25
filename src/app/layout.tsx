@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Archivo, ZCOOL_QingKe_HuangYou } from "next/font/google";
+import { Archivo, Noto_Sans_SC } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/locales/LanguageProvider";
 import PageTransition from "@/components/PageTransition";
@@ -13,11 +13,13 @@ const archivo = Archivo({
   subsets: ["latin"],
   variable: "--font-archivo",
 });
-const zcoolDisplay = ZCOOL_QingKe_HuangYou({
-  weight: "400",
+const notoSansSC = Noto_Sans_SC({
+  weight: "variable",
   subsets: ["latin"],
-  variable: "--font-display-cjk",
+  variable: "--font-noto-sans-sc",
   display: "swap",
+  preload: false,
+  fallback: ["Microsoft YaHei", "Arial"],
 });
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ??
@@ -54,7 +56,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-      <body className={`${archivo.variable} ${zcoolDisplay.variable}`} suppressHydrationWarning>
+      <body className={`${archivo.variable} ${notoSansSC.variable}`} suppressHydrationWarning>
         <span
           hidden
           aria-hidden

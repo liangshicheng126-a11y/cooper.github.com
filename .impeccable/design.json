@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-25T15:10:00+08:00",
+  "generatedAt": "2026-08-25T15:45:00+08:00",
   "title": "Design System: Cooper Nocturnal Screening Room",
   "extensions": {
     "colorMeta": {
@@ -122,15 +122,15 @@
     "typographyMeta": {
       "display": {
         "displayName": "Projected Display",
-        "purpose": "Hero titles only; ZCOOL carries the Chinese poster character and Archivo is the fallback."
+        "purpose": "Hero titles only; Archivo shapes Latin and Noto Sans SC shapes Chinese at weight 700."
       },
       "title": {
         "displayName": "Chapter Title",
         "purpose": "Section and editorial chapter headings below the hero."
       },
       "body": {
-        "displayName": "Archivo Body",
-        "purpose": "Latin text, paragraphs, analysis, forms, and operational content."
+        "displayName": "Bilingual Sans Body",
+        "purpose": "Archivo for Latin and Noto Sans SC for Chinese across paragraphs, analysis, forms, and operational content."
       },
       "label": {
         "displayName": "Screening Label",
@@ -261,7 +261,7 @@
       "refersTo": "panel",
       "description": "Equal professional-services frame: three identical desktop columns with shared hairlines; all items stack on mobile.",
       "html": "<section class=\"ds-services\"><h2>PROFESSIONAL SERVICES</h2><div class=\"ds-services-grid\"><article><span>✦</span><div><h3>Brand Design</h3><p>Build a distinctive visual identity system.</p></div></article><article><span>▦</span><div><h3>UI / UX</h3><p>Shape clear, usable digital experiences.</p></div></article><article><span>▶</span><div><h3>Video</h3><p>Direct focused moving-image stories.</p></div></article></div></section>",
-      "css": ".ds-services{padding:2rem;border:1px solid rgba(255,255,255,.1);border-radius:16px;background:linear-gradient(145deg,rgba(20,20,24,.76),rgba(9,9,12,.54));color:#f4f4f5;box-shadow:inset 0 1px 0 rgba(255,255,255,.03);backdrop-filter:blur(16px) saturate(112%);font-family:var(--font-archivo,Arial,sans-serif)}.ds-services>h2{margin:0 0 1.5rem;font:400 1.5rem/1.33 var(--font-display-cjk,var(--font-archivo,Arial,sans-serif))}.ds-services-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:1fr;min-height:16rem;border-top:1px solid rgba(255,255,255,.12)}.ds-services article{display:grid;grid-template-columns:auto minmax(0,1fr);align-content:center;gap:0 1.25rem;padding:clamp(2rem,4vw,3.5rem);border-right:1px solid rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.12)}.ds-services article:last-child{border-right:0}.ds-services article>span{display:grid;grid-row:1/span 2;place-items:center;width:3.75rem;height:3.75rem;border:1px solid rgba(165,180,252,.2);border-radius:12px;background:rgba(129,140,248,.08);color:#a5b4fc}.ds-services h3{margin:0;font-size:1.1rem}.ds-services p{max-width:48ch;margin:.55rem 0 0;color:rgba(244,244,245,.68);font-size:.875rem;line-height:1.5}@media(max-width:900px){.ds-services-grid{grid-template-columns:1fr;grid-template-rows:none;min-height:0}.ds-services article{padding-inline:1.25rem;border-right:0}}"
+      "css": ".ds-services{padding:2rem;border:1px solid rgba(255,255,255,.1);border-radius:16px;background:linear-gradient(145deg,rgba(20,20,24,.76),rgba(9,9,12,.54));color:#f4f4f5;box-shadow:inset 0 1px 0 rgba(255,255,255,.03);backdrop-filter:blur(16px) saturate(112%);font-family:var(--font-archivo,Arial),var(--font-noto-sans-sc,'Microsoft YaHei'),sans-serif}.ds-services>h2{margin:0 0 1.5rem;font:700 1.5rem/1.333 var(--font-archivo,Arial),var(--font-noto-sans-sc,'Microsoft YaHei'),sans-serif}.ds-services-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:1fr;min-height:16rem;border-top:1px solid rgba(255,255,255,.12)}.ds-services article{display:grid;grid-template-columns:auto minmax(0,1fr);align-content:center;gap:0 1.25rem;padding:clamp(2rem,4vw,3.5rem);border-right:1px solid rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.12)}.ds-services article:last-child{border-right:0}.ds-services article>span{display:grid;grid-row:1/span 2;place-items:center;width:3.75rem;height:3.75rem;border:1px solid rgba(165,180,252,.2);border-radius:12px;background:rgba(129,140,248,.08);color:#a5b4fc}.ds-services h3{margin:0;font-size:1.1rem}.ds-services p{max-width:48ch;margin:.55rem 0 0;color:rgba(244,244,245,.68);font-size:.875rem;line-height:1.5}@media(max-width:900px){.ds-services-grid{grid-template-columns:1fr;grid-template-rows:none;min-height:0}.ds-services article{padding-inline:1.25rem;border-right:0}}"
     },
     {
       "name": "Portfolio Focus Rail",
@@ -293,7 +293,7 @@
       "refersTo": "panel",
       "description": "Open two-column detail-page chapter organized by hairlines instead of stacked cards.",
       "html": "<article class=\"ds-chapter\"><div class=\"ds-chapter-heading\"><span>&lt;/&gt;</span><h2>IMPLEMENTATION</h2></div><div class=\"ds-chapter-copy\"><p>Long-form analysis remains readable and visually subordinate to the work.</p><ul><li>Semantic structure</li><li>Responsive grid</li><li>Motion tiers</li><li>Keyboard access</li></ul></div></article>",
-      "css": ".ds-chapter{display:grid;grid-template-columns:minmax(12rem,.58fr) minmax(0,1.42fr);gap:clamp(2rem,6vw,6rem);padding:clamp(2rem,5vw,4.5rem) 0;border-top:1px solid rgba(255,255,255,.22);border-bottom:1px solid rgba(255,255,255,.12);color:#f4f4f5;font-family:var(--font-archivo,Arial,sans-serif)}.ds-chapter-heading{display:flex;align-items:flex-start;gap:1rem}.ds-chapter-heading span{display:grid;place-items:center;width:2.75rem;height:2.75rem;border:1px solid rgba(165,180,252,.24);border-radius:10px;background:rgba(129,140,248,.08);color:#a5b4fc}.ds-chapter h2{margin:.45rem 0 0;font:400 1.5rem/1.33 var(--font-display-cjk,var(--font-archivo,Arial,sans-serif))}.ds-chapter-copy{max-width:72ch}.ds-chapter-copy p{margin:0;color:rgba(244,244,245,.82);line-height:1.6}.ds-chapter ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:1.75rem 0 0;padding:0;border-top:1px solid rgba(255,255,255,.12);list-style:none}.ds-chapter li{padding:.9rem 1rem .9rem 0;border-bottom:1px solid rgba(255,255,255,.12)}.ds-chapter li:nth-child(even){padding-left:1rem;border-left:1px solid rgba(255,255,255,.12)}@media(max-width:900px){.ds-chapter{grid-template-columns:1fr;gap:1.5rem}}@media(max-width:640px){.ds-chapter ul{grid-template-columns:1fr}.ds-chapter li:nth-child(even){padding-left:0;border-left:0}}"
+      "css": ".ds-chapter{display:grid;grid-template-columns:minmax(12rem,.58fr) minmax(0,1.42fr);gap:clamp(2rem,6vw,6rem);padding:clamp(2rem,5vw,4.5rem) 0;border-top:1px solid rgba(255,255,255,.22);border-bottom:1px solid rgba(255,255,255,.12);color:#f4f4f5;font-family:var(--font-archivo,Arial),var(--font-noto-sans-sc,'Microsoft YaHei'),sans-serif}.ds-chapter-heading{display:flex;align-items:flex-start;gap:1rem}.ds-chapter-heading span{display:grid;place-items:center;width:2.75rem;height:2.75rem;border:1px solid rgba(165,180,252,.24);border-radius:10px;background:rgba(129,140,248,.08);color:#a5b4fc}.ds-chapter h2{margin:.45rem 0 0;font:700 1.5rem/1.333 var(--font-archivo,Arial),var(--font-noto-sans-sc,'Microsoft YaHei'),sans-serif}.ds-chapter-copy{max-width:72ch}.ds-chapter-copy p{margin:0;color:rgba(244,244,245,.82);line-height:1.6}.ds-chapter ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:1.75rem 0 0;padding:0;border-top:1px solid rgba(255,255,255,.12);list-style:none}.ds-chapter li{padding:.9rem 1rem .9rem 0;border-bottom:1px solid rgba(255,255,255,.12)}.ds-chapter li:nth-child(even){padding-left:1rem;border-left:1px solid rgba(255,255,255,.12)}@media(max-width:900px){.ds-chapter{grid-template-columns:1fr;gap:1.5rem}}@media(max-width:640px){.ds-chapter ul{grid-template-columns:1fr}.ds-chapter li:nth-child(even){padding-left:0;border-left:0}}"
     }
   ],
   "narrative": {
@@ -325,8 +325,8 @@
         "section": "colors"
       },
       {
-        "name": "The Two-Voice Rule",
-        "body": "ZCOOL speaks for display moments and Chinese headline character; Archivo carries everything operational. Do not add a third expressive family.",
+        "name": "The Script-Aware Sans Rule",
+        "body": "Archivo shapes Latin and Noto Sans SC shapes Chinese across every role. Do not introduce a third expressive family; hierarchy comes from weight and scale, not novelty glyph construction.",
         "section": "typography"
       },
       {

@@ -23,23 +23,23 @@ colors:
   floating-line-blue: "#2F4BC0"
 typography:
   display:
-    fontFamily: "var(--font-display-cjk), var(--font-archivo), sans-serif"
+    fontFamily: "var(--font-archivo), var(--font-noto-sans-sc), sans-serif"
     fontSize: "clamp(3.4rem, 8.2vw, 6rem)"
-    fontWeight: 400
+    fontWeight: 700
     lineHeight: 0.98
     letterSpacing: "-0.04em"
   title:
-    fontFamily: "var(--font-display-cjk), var(--font-archivo), sans-serif"
+    fontFamily: "var(--font-archivo), var(--font-noto-sans-sc), sans-serif"
     fontSize: "1.5rem"
-    fontWeight: 400
+    fontWeight: 700
     lineHeight: 1.333
   body:
-    fontFamily: "var(--font-archivo), sans-serif"
+    fontFamily: "var(--font-archivo), var(--font-noto-sans-sc), sans-serif"
     fontSize: "1rem"
     fontWeight: 400
     lineHeight: 1.5
   label:
-    fontFamily: "var(--font-archivo), sans-serif"
+    fontFamily: "var(--font-archivo), var(--font-noto-sans-sc), sans-serif"
     fontSize: "0.78rem"
     fontWeight: 600
     lineHeight: 1.25
@@ -162,21 +162,20 @@ The UI palette is near-monochrome and nocturnal. Indigo is a navigational and in
 
 ## Typography
 
-**Display Font:** ZCOOL QingKe HuangYou (with Archivo, sans-serif fallback)
+**Latin Font:** Archivo (with sans-serif fallback)
 
-**Body Font:** Archivo (with sans-serif fallback)
-**Label Font:** Archivo (with sans-serif fallback)
+**Chinese Font:** Noto Sans SC (with Microsoft YaHei and sans-serif fallback)
 
-**Character:** ZCOOL QingKe HuangYou (`--font-display-cjk`) gives display headings—especially Chinese headings—the authored, poster-like face seen in the shipping captures. Archivo (`--font-archivo`) carries Latin text, body copy, navigation, labels, form content, and utility information with calm technical clarity.
+**Character:** Archivo (`--font-archivo`) carries Latin text with calm technical clarity. Noto Sans SC (`--font-noto-sans-sc`) carries Chinese across display, chapter, body, label, and operational roles with high legibility and complete weight support. Hierarchy comes from scale, spacing, and real `400–800` weights rather than a decorative single-weight face.
 
 ### Hierarchy
 
-- **Display** (`typography.display`): hero titles only. On desktop the title is oversized, centered, tightly tracked, and nearly solid-set; on narrow mobile it scales with `clamp(3rem, 15.5vw, 4.65rem)` while preserving the same weight and line-height character.
-- **Title** (`typography.title`): section and chapter titles. Keep the display face at weight 400 even when legacy utility classes request bold.
+- **Display** (`typography.display`): hero titles only. On desktop the title is oversized, centered, tightly tracked, and set at weight `700`; on narrow mobile it scales with `clamp(3rem, 15.5vw, 4.65rem)` while preserving the same weight and line-height character.
+- **Title** (`typography.title`): section and chapter titles. Use weight `700` so Chinese and Latin titles share a clear, consistent emphasis.
 - **Body** (`typography.body`): paragraphs, project analysis, form copy, and descriptive content. Long-form analysis should stay near `72ch`; compact service descriptions stay near `48ch`.
 - **Label** (`typography.label`): navigation, counters, and small metadata. Use compact sizes, firm weight, and controlled tracking; uppercase is appropriate only for terse utility text.
 
-**The Two-Voice Rule.** ZCOOL speaks for display moments and Chinese headline character; Archivo carries everything operational. Do not add a third expressive family.
+**The Script-Aware Sans Rule.** Archivo shapes Latin and Noto Sans SC shapes Chinese across every role. Do not introduce a third expressive family; hierarchy comes from weight and scale, not novelty glyph construction.
 
 **The Oversized-Once Rule.** The largest scale belongs to the first-view title. Subsequent headings step down decisively so the page reads as chapters, not repeated hero cards.
 
@@ -184,7 +183,7 @@ The UI palette is near-monochrome and nocturnal. Indigo is a navigational and in
 
 The page shell is centered at a maximum width of `88rem` and isolated over a fixed backdrop. Main content begins below the floating chrome with `8.5rem` top padding on wider screens. The home hero offsets that shell padding and occupies exactly `100svh`, centering one title + description + two-CTA group on both axes before yielding to the content stack.
 
-The first viewport has a fixed composition: compact floating top bar over the page; an exactly centered group containing the oversized title, one supporting statement, and two actions; and a separate desktop-only scroll cue anchored at the bottom center. The cue is not part of the centering calculation and is hidden on mobile and short desktop viewports. Do not insert promotional modules, carousels, counters, or extra proof above the professional-services section.
+The first viewport has a fixed composition: compact floating top bar over the page and an exactly centered group containing the oversized title, one supporting statement, and two actions. Do not insert promotional modules, scroll prompts, carousels, counters, or extra proof above the professional-services section.
 
 Professional services use three equal desktop columns in one row. Every service receives the same dimensions, padding, icon treatment, and typographic weight; none is promoted above the others. At `900px` and below, the grid becomes a natural-height single column. Stats use three equal columns. Workflow rows divide number, title, and description into three editorial columns. P2 analysis uses a `0.58fr / 1.42fr` chapter grid with text constrained to readable measure. Hairlines, not card gutters, carry most of the information architecture.
 
@@ -194,7 +193,7 @@ Professional services use three equal desktop columns in one row. Every service 
 - At `1024px`, the full desktop navigation yields to the menu control and modal navigation panel.
 - At `900px` and below, professional services and analysis become natural-height single columns; the footer keeps its centered single-column close.
 - At `640px` and below, header insets contract to `0.75rem`, main padding becomes `7.5rem 0.85rem 1rem`, stats and footer contacts stack, workflow becomes a two-column number/content structure, and analysis point grids become single-column.
-- The mobile hero remains exactly `100svh`, uses full-width stacked actions, and omits the scroll cue. On desktop viewports no taller than `36rem`, the hero may become intrinsic-height and the cue is hidden to prevent collision.
+- The mobile hero remains exactly `100svh` and uses full-width stacked actions. On desktop viewports no taller than `36rem`, the hero may become intrinsic-height to prevent collision.
 - At `640px` and below, the FloatingLines layer drops from `0.58` to `0.44` opacity, reduces saturation/brightness, and caps renderer device pixel ratio at `1.25` instead of the wider-screen cap of `2`.
 
 ### Accessibility rules
@@ -228,7 +227,7 @@ The renderer caps device pixel ratio at `2` on wider screens and `1.25` at `640p
 - State transitions use `180–300ms` easing for color, fill, border, scale, and small icon movement.
 - Entrances use opacity, a short `8–20px` translation, and optional blur with the `cubic-bezier(0.16, 1, 0.3, 1)` finish. They should feel like light resolving, not objects flying in.
 - Hero actions may lift up to `4px`, scale only to `1.02`, and move the arrow `3px`. Active controls compress to `0.98`.
-- Continuous movement is limited to the approved FloatingLines field at `animationSpeed=1`, the desktop-only scroll cue, and purposeful full-motion enhancements. Do not add a second ambient animation layer.
+- Continuous movement is limited to the approved FloatingLines field at `animationSpeed=1` and purposeful full-motion enhancements. Do not add a second ambient animation layer.
 - Preserve the full / reduced / minimal motion tiers and `prefers-reduced-motion`. Reduced motion freezes FloatingLines at time zero, disables its parallax/listeners/loop, and removes nonessential smooth scrolling and entrance motion while leaving every word, route, control, and project visible.
 - The portfolio focus rail may transition its active track over `520ms` with the same resolve curve. It changes emphasis only: all four projects remain keyboard reachable, and reduced motion resolves the layout immediately.
 
@@ -339,8 +338,8 @@ This design system governs presentation only. The names **COOPER.**, **梁世城
 
 ### Maintenance checklist
 
-- [ ] The hero is exactly `100svh`; its title + description + two-CTA group is centered on both axes; the separate bottom scroll cue appears on desktop only.
-- [ ] Archivo remains the body/Latin face; ZCOOL QingKe HuangYou remains the display/Chinese face; no third expressive font has entered the system.
+- [ ] The hero is exactly `100svh`; its title + description + two-CTA group is centered on both axes; no separate scroll-prompt module competes with it.
+- [ ] Archivo remains the Latin face and Noto Sans SC remains the Chinese face across display, title, body, and label roles; no third expressive font has entered the system.
 - [ ] Graphite, cold white, zinc hairlines, obsidian, and restrained indigo remain the UI vocabulary; magenta/blue stays confined to the approved low-opacity FloatingLines field.
 - [ ] New content joins the centered `88rem` shell and responsive `900px` / `640px` collapse rules; navigation still switches at the `1024px` large breakpoint.
 - [ ] Professional services still use three equal desktop columns with no featured item; mobile still resolves to one natural-height column.

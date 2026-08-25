@@ -1103,7 +1103,7 @@ body {
   margin-right: 0;
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-archivo), sans-serif;
+  font-family: var(--font-archivo), var(--font-noto-sans-sc), "Microsoft YaHei", sans-serif;
   caret-color: var(--night-accent);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -1324,8 +1324,7 @@ select option {
 }
 
 :where(.site-main h1, .site-main h2, .site-footer__brand) {
-  font-family: var(--font-display-cjk), var(--font-archivo), sans-serif;
-  font-weight: 400 !important;
+  font-family: var(--font-archivo), var(--font-noto-sans-sc), "Microsoft YaHei", sans-serif;
 }
 
 .site-footer {
@@ -1433,13 +1432,6 @@ select option {
 
 .hero-actions {
   justify-content: center;
-}
-
-.hero-scroll-cue {
-  position: absolute;
-  bottom: clamp(2rem, 5svh, 4rem);
-  left: 50%;
-  transform: translateX(-50%);
 }
 
 .hero-section-responsive h1 {
@@ -1715,7 +1707,7 @@ select option {
   bottom: 1.35rem;
   max-height: calc(100% - 2.7rem);
   color: rgba(244, 244, 245, 0.82);
-  font-family: var(--font-display-cjk), var(--font-archivo), sans-serif;
+  font-family: var(--font-archivo), var(--font-noto-sans-sc), "Microsoft YaHei", sans-serif;
   font-size: 1.05rem;
   line-height: 1;
   letter-spacing: 0.02em;
@@ -2141,9 +2133,6 @@ select option {
     padding: 8rem 0 4rem !important;
   }
 
-  .hero-scroll-cue {
-    display: none !important;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
