@@ -63,7 +63,7 @@ export default function RootLayout({
 THESIS: Cooper's work appears as a nocturnal screening room, refusing the portfolio-template split sidebar and decorative blob scaffold.
 OWN-WORLD: Graphite black, cold white type, zinc hairlines, translucent obsidian surfaces, radial light beams, and restrained indigo signals.
 STORY: Visitors identify Cooper, understand his capabilities, inspect real work, and choose contact, task brief, or Xiaocoo without losing context.
-FIRST VIEWPORT: A compact floating top bar frames an oversized title, supporting statement, two actions, a recent-work status rail, and a layered night horizon.
+FIRST VIEWPORT: A compact floating top bar frames an exactly centered oversized title, supporting statement, two actions, and a restrained floating-line field.
 FORM: Nocturnal portfolio screening room, grounded direction 4, seed 94f35f2e.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
 -->`,

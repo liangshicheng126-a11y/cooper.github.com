@@ -7,7 +7,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { CustomEase } from "gsap/CustomEase";
 import { useTranslation } from "@/locales/LanguageProvider";
-import { ArrowRight, Briefcase, User, Mail, Sparkles, Zap, Figma, Palette, Video, PenTool, Layout, Image as ImageIcon, Scissors, Clapperboard, Film } from "lucide-react";
+import { ArrowRight, Briefcase, User, Mail, Sparkles, Figma, Palette, Video, PenTool, Layout, Image as ImageIcon, Scissors, Clapperboard, Film } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import BlurText from "@/components/BlurText";
@@ -15,7 +15,6 @@ import CountUp from "@/components/CountUp";
 import Magnet from "@/components/Magnet";
 import ToolCard from "@/components/ToolCard";
 import ProjectCard from "@/components/ProjectCard";
-import GsapParallaxLayer from "@/components/motion/GsapParallaxLayer";
 import GsapScrollBatch from "@/components/motion/GsapScrollBatch";
 import useMotionTier from "@/hooks/useMotionTier";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
@@ -127,11 +126,6 @@ export default function Home() {
     },
   };
 
-  const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
-  };
-
   const heroSoft = {
     hidden: { opacity: 0, y: 18 },
     show: { opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.2 } },
@@ -149,7 +143,7 @@ export default function Home() {
         className="flex flex-col flex-1"
       >
         {/* Hero Section */}
-        <GsapParallaxLayer className="hero-section-responsive relative z-[90] min-h-[clamp(16rem,36vh,28rem)] lg:min-h-[clamp(18rem,44vh,32rem)] flex flex-col justify-start pt-1 sm:pt-2 pb-12 sm:pb-20 lg:pb-28">
+        <div className="hero-section-responsive relative z-[90] flex flex-col">
         <section className="flex flex-col relative z-[90] overflow-x-clip">
           {/* Plain div — BlurText is the sole animation for hero title.
                heroMask's clip-path and BlurText's word-by-word conflict visually. */}
@@ -193,7 +187,7 @@ export default function Home() {
             />
           </div>
 
-          <motion.div variants={heroSoft} className="relative z-[80] overflow-visible flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-0 sm:space-x-6">
+          <motion.div variants={heroSoft} className="hero-actions relative z-[80] overflow-visible flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-0 sm:space-x-6">
             <Magnet padding={50} magnetStrength={4.5} wrapperClassName="hero-cta-magnet relative z-0">
               <Link
                 ref={portfolioBtnRef}
@@ -214,40 +208,24 @@ export default function Home() {
               </Link>
             </Magnet>
 
-            <motion.div
-              variants={heroSoft}
-              className="hidden sm:flex text-foreground/45 text-xs uppercase tracking-[0.24em] font-semibold items-center gap-3 sm:px-2"
-            >
-              <span>Scroll down</span>
-              <motion.span
-                aria-hidden
-                animate={{ y: [0, 6, 0], opacity: [0.4, 1, 0.4] }}
-                transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-                className="inline-block"
-              >
-                ↓
-              </motion.span>
-            </motion.div>
-            
-            <motion.div 
-              variants={item}
-              className="w-full sm:w-auto sm:ml-12 flex items-center space-x-4 sm:border-l border-white/10 sm:pl-12 py-2"
-            >
-              <div className="p-3 rounded-xl bg-indigo-500/10">
-                <Zap className="w-5 h-5 text-indigo-500 fill-indigo-500/20" />
-              </div>
-              <div>
-                <p className="mb-1 flex items-center gap-2 text-xs font-semibold text-indigo-400">
-                  <span className="h-1.5 w-1.5 rounded-full bg-indigo-400" aria-hidden />
-                  <span>{t.hero.status}</span>
-                </p>
-                <p className="text-xs font-bold text-foreground/40 uppercase tracking-widest mb-1">{t.hero.recentWork}</p>
-                <p className="text-sm font-medium text-foreground/80">{t.hero.latestProject}</p>
-              </div>
-            </motion.div>
           </motion.div>
         </section>
-        </GsapParallaxLayer>
+
+        <motion.div
+          variants={heroSoft}
+          className="hero-scroll-cue hidden sm:flex text-foreground/45 text-xs uppercase tracking-[0.24em] font-semibold items-center gap-3"
+        >
+          <span>Scroll down</span>
+          <motion.span
+            aria-hidden
+            animate={{ y: [0, 6, 0], opacity: [0.4, 1, 0.4] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+            className="inline-block"
+          >
+            ↓
+          </motion.span>
+        </motion.div>
+        </div>
 
         <div className="home-scroll-stack relative z-0 mt-4 sm:mt-8">
         {/* Services / Focus Section */}

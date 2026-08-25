@@ -8,14 +8,20 @@ const QUERY = "(prefers-reduced-motion: reduce)";
 export default function usePrefersReducedMotion(): boolean {
   const framerReduced = useReducedMotion();
   const [mediaReduced, setMediaReduced] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const mq = window.matchMedia(QUERY);
-    const update = () => setMediaReduced(mq.matches);
+    const update = () => {
+      setMediaReduced(mq.matches);
+      setMounted(true);
+    };
     update();
     mq.addEventListener("change", update);
     return () => mq.removeEventListener("change", update);
   }, []);
 
-  return Boolean(framerReduced) || mediaReduced;
+  // Keep the server and first client render identical, then honor the real
+  // preference immediately after mount. This avoids reduced-motion hydration drift.
+  return mounted && (Boolean(framerReduced) || mediaReduced);
 }

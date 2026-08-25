@@ -19,6 +19,8 @@ colors:
   indigo-soft: "#c7d2fe"
   indigo-action: "#4f46e5"
   indigo-action-hover: "#4338ca"
+  floating-line-magenta: "#E945F5"
+  floating-line-blue: "#2F4BC0"
 typography:
   display:
     fontFamily: "var(--font-display-cjk), var(--font-archivo), sans-serif"
@@ -102,11 +104,6 @@ components:
     typography: "{typography.body}"
     rounded: "{rounded.control}"
     padding: "0.75rem 1rem"
-  status-rail:
-    backgroundColor: "transparent"
-    textColor: "{colors.soft-cold-white}"
-    typography: "{typography.label}"
-    padding: "0.5rem 0 0.5rem 3rem"
 ---
 
 # Design System: Cooper Nocturnal Screening Room
@@ -115,17 +112,18 @@ components:
 
 **Creative North Star: "The Nocturnal Screening Room"**
 
-Cooper's work is presented as a private screening room after dark: graphite black holds the frame, cold white type behaves like projected light, zinc hairlines order the programme, translucent obsidian provides just enough material separation, and indigo appears only as a controlled signal. The interface is cinematic without becoming theatrical. Work, words, and actions remain legible before atmosphere.
+Cooper's work is presented as a private screening room after dark: graphite black holds the frame, cold white type behaves like projected light, zinc hairlines order the programme, translucent obsidian provides just enough material separation, and indigo appears only as a controlled UI signal. Behind that quiet chrome, a deliberately low-opacity magenta/blue FloatingLines field supplies the projected atmosphere. The interface is cinematic without becoming theatrical. Work, words, and actions remain legible before atmosphere.
 
-This world deliberately rejects the generic portfolio-template split sidebar and decorative blob scaffold. The site is a centered, full-width composition with compact floating chrome, oversized display typography, editorial chapters, and a layered night horizon. Its story is fixed: identify Cooper, understand his capabilities, inspect real work, then choose contact, Task Brief, or Xiaocoo without losing context.
+This world deliberately rejects the generic portfolio-template split sidebar and decorative blob scaffold. The site is a centered, full-width composition with compact floating chrome, oversized display typography, editorial chapters, and a full-screen animated line field disciplined by a dark vignette. Its story is fixed: identify Cooper, understand his capabilities, inspect real work, then choose contact, Task Brief, or Xiaocoo without losing context.
 
-Form direction 4, seed `94f35f2e`, is the shipped authority. The finish-review disposition is **SHIP — no remaining fixes**. The desktop, mobile, and P2 detail captures in `.impeccable/review/` are the visual baselines for maintenance.
+Form direction 4, seed `94f35f2e`, is the shipped authority. The finish-review disposition is **SHIP — no remaining fixes**. The approved implementation and this synchronized record supersede earlier capture details where the hero or backdrop differs.
 
 **Key Characteristics:**
 
 - Graphite-black canvas with cold white, zinc, and rare indigo signals.
 - Centered full-width screening-room composition, never a split portfolio sidebar.
-- Compact floating top bar over a layered, quiet night horizon.
+- Exactly centered `100svh` title, description, and two-action group beneath compact floating chrome.
+- Low-opacity React Bits FloatingLines atmosphere with a readability vignette and bounded GPU cost.
 - Display-led hierarchy paired with editorial hairlines and asymmetric chapter grids.
 - Translucent obsidian surfaces with restrained blur and shallow ambient depth.
 - Real project work and preserved bilingual content remain the evidence and the story.
@@ -134,13 +132,19 @@ Form direction 4, seed `94f35f2e`, is the shipped authority. The finish-review d
 
 ## Colors
 
-The palette is near-monochrome and nocturnal. Indigo is a navigational and interactive signal, not a decorative wash.
+The UI palette is near-monochrome and nocturnal. Indigo is a navigational and interactive signal; the magenta/blue field is a separate, user-directed environmental layer.
 
 ### Primary
 
-- **Indigo Signal** (`indigo-signal`): labels, small icons, bullets, status dots, and interaction cues that need attention without becoming a second visual field.
+- **Indigo Signal** (`indigo-signal`): labels, small icons, bullets, and interaction cues that need attention without becoming a second visual field.
 - **Indigo Core** (`indigo-core`): luminous point accents and restrained radial-light energy.
 - **Indigo Action** (`indigo-action`): solid action fills inherited by functional controls; its darker hover partner is `indigo-action-hover`.
+
+### Secondary
+
+- **Floating-Line Magenta** (`floating-line-magenta`): the first and final stop in the approved environmental line gradient.
+- **Floating-Line Blue** (`floating-line-blue`): the center stop in the approved environmental line gradient.
+- The exact backdrop sequence is `#E945F5 / #2F4BC0 / #E945F5`. These colors belong to the low-opacity WebGL field only; they are not additional UI accent families.
 
 ### Neutral
 
@@ -152,7 +156,7 @@ The palette is near-monochrome and nocturnal. Indigo is a navigational and inter
 - **Obsidian / Strong Obsidian** (`obsidian`, `obsidian-strong`): translucent content and overlay surfaces.
 - **Zinc Hairline** (`zinc-hairline`): the default one-pixel divider; reserve `zinc-hairline-strong` for chapter boundaries that need a firmer start.
 
-**The Restrained-Indigo Rule.** Indigo marks state, action, or structure. Do not turn it into large decorative gradients, broad card fills, or a competing background motif.
+**The Restrained-Indigo Rule.** Indigo in UI chrome marks state, action, or structure and remains restrained. The approved low-opacity `#E945F5 / #2F4BC0 / #E945F5` FloatingLines field is the explicit environmental exception; do not reuse its magenta/blue gradient in controls, cards, or content decoration.
 
 **The Cold-White Ladder Rule.** Use primary, soft, muted, and faint white levels to express hierarchy; do not introduce arbitrary gray families screen by screen.
 
@@ -170,7 +174,7 @@ The palette is near-monochrome and nocturnal. Indigo is a navigational and inter
 - **Display** (`typography.display`): hero titles only. On desktop the title is oversized, centered, tightly tracked, and nearly solid-set; on narrow mobile it scales with `clamp(3rem, 15.5vw, 4.65rem)` while preserving the same weight and line-height character.
 - **Title** (`typography.title`): section and chapter titles. Keep the display face at weight 400 even when legacy utility classes request bold.
 - **Body** (`typography.body`): paragraphs, project analysis, form copy, and descriptive content. Long-form analysis should stay near `72ch`; compact service descriptions stay near `48ch`.
-- **Label** (`typography.label`): navigation, statuses, counters, and small metadata. Use compact sizes, firm weight, and controlled tracking; uppercase is appropriate only for terse utility text.
+- **Label** (`typography.label`): navigation, counters, and small metadata. Use compact sizes, firm weight, and controlled tracking; uppercase is appropriate only for terse utility text.
 
 **The Two-Voice Rule.** ZCOOL speaks for display moments and Chinese headline character; Archivo carries everything operational. Do not add a third expressive family.
 
@@ -178,20 +182,20 @@ The palette is near-monochrome and nocturnal. Indigo is a navigational and inter
 
 ## Layout
 
-The page shell is centered at a maximum width of `88rem` and isolated over a fixed backdrop. Main content begins below the floating chrome with `8.5rem` top padding on wider screens. The home hero occupies a centered first-view stage between `34rem` and `52rem` high, then yields to a compact stack of real content sections.
+The page shell is centered at a maximum width of `88rem` and isolated over a fixed backdrop. Main content begins below the floating chrome with `8.5rem` top padding on wider screens. The home hero offsets that shell padding and occupies exactly `100svh`, centering one title + description + two-CTA group on both axes before yielding to the content stack.
 
-The first viewport has a fixed composition: compact floating top bar; oversized title; one supporting statement; two actions; the scroll cue where space permits; a recent-work status rail; and the layered night horizon. Preserve that order and visual dominance. Do not insert promotional modules, carousels, counters, or extra proof above it.
+The first viewport has a fixed composition: compact floating top bar over the page; an exactly centered group containing the oversized title, one supporting statement, and two actions; and a separate desktop-only scroll cue anchored at the bottom center. The cue is not part of the centering calculation and is hidden on mobile and short desktop viewports. Do not insert promotional modules, carousels, counters, or extra proof above the professional-services section.
 
-Home capabilities use an asymmetric `1.24fr / 0.76fr` grid. Stats use three equal columns. Workflow rows divide number, title, and description into three editorial columns. P2 analysis uses a `0.58fr / 1.42fr` chapter grid with text constrained to readable measure. Hairlines, not card gutters, carry most of the information architecture.
+Professional services use an asymmetric `1.24fr / 0.76fr` grid with two equal rows. The first service occupies the wider column and spans both rows; the second and third services occupy the narrower column one per row. At `900px` and below, the grid becomes a natural-height single column and the first item stops spanning. Stats use three equal columns. Workflow rows divide number, title, and description into three editorial columns. P2 analysis uses a `0.58fr / 1.42fr` chapter grid with text constrained to readable measure. Hairlines, not card gutters, carry most of the information architecture.
 
 ### Responsive rules
 
 - The supported viewport floor is `320px`.
 - At `1024px`, the full desktop navigation yields to the menu control and modal navigation panel.
-- At `900px` and below, service and analysis grids become one column; the footer also becomes one column.
+- At `900px` and below, professional services become a natural-height single column, analysis becomes one column, and the footer becomes one column.
 - At `640px` and below, header insets contract to `0.75rem`, main padding becomes `7.5rem 0.85rem 1rem`, stats and footer contacts stack, workflow becomes a two-column number/content structure, and analysis point grids become single-column.
-- The mobile hero drops the desktop minimum height and uses full-width stacked actions. The status rail follows the actions; the scroll cue is omitted.
-- Mobile background intensity is reduced: the horizon layer becomes wider, shorter, and less opaque, and beams fall to low opacity so text remains the priority.
+- The mobile hero remains exactly `100svh`, uses full-width stacked actions, and omits the scroll cue. On desktop viewports no taller than `36rem`, the hero may become intrinsic-height and the cue is hidden to prevent collision.
+- At `640px` and below, the FloatingLines layer drops from `0.58` to `0.44` opacity, reduces saturation/brightness, and caps renderer device pixel ratio at `1.25` instead of the wider-screen cap of `2`.
 
 ### Accessibility rules
 
@@ -205,9 +209,11 @@ Home capabilities use an asymmetric `1.24fr / 0.76fr` grid. Stats use three equa
 
 ## Elevation & Depth
 
-Depth is mostly tonal: graphite canvas, translucent obsidian, zinc boundaries, subtle internal highlights, and low-opacity radial light. Shadows are ambient and rare. They clarify floating chrome, primary action priority, overlays, and media cards; they do not make every section look lifted.
+Depth is mostly tonal: graphite canvas, translucent obsidian, zinc boundaries, subtle internal highlights, and a low-opacity field of flowing magenta/blue lines. Shadows are ambient and rare. They clarify floating chrome, primary action priority, overlays, and media cards; they do not make every section look lifted.
 
-The shipping night background is **entirely CSS-generated** by `NightBackdrop.tsx` and the `.night-backdrop*` rules in `src/app/globals.css`. Despite the legacy class name `.night-backdrop__image`, it references no raster, remote image, or generated bitmap. Its horizon, beams, falloff, and vignette are layered gradients and masks. Preserve this provenance unless a future brief explicitly authorizes a new asset strategy.
+The shipping night background is the React Bits FloatingLines effect adapted in `src/components/ui/FloatingLines.tsx` and mounted exactly once through `NightBackdrop`. It is a fixed, full-screen, pointer-inert WebGL canvas under all routes, with a CSS radial/vertical vignette above it to protect title and body readability. `NightBackdrop` loads the client component without SSR and supplies the exact contract: `linesGradient=["#E945F5", "#2F4BC0", "#E945F5"]`, `animationSpeed=1`, `interactive=false`, `bendRadius=5`, `bendStrength=-0.5`, `mouseDamping=0.05`, `parallax=true`, and `parallaxStrength=0.2`.
+
+The renderer caps device pixel ratio at `2` on wider screens and `1.25` at `640px` and below. The line layer renders at `0.58` opacity with restrained saturation/brightness on desktop and `0.44` opacity with further attenuation on mobile. Rendering is skipped while the page is hidden. Reduced motion disables parallax and time progression, renders one static frame, and does not schedule the animation loop. If WebGL construction fails, the container records a fallback state and the graphite canvas/vignette remain. Cleanup must cancel animation frames, disconnect resize observation, remove listeners, dispose geometry/material/renderer, force context loss, and remove the canvas.
 
 ### Shadow vocabulary
 
@@ -222,8 +228,8 @@ The shipping night background is **entirely CSS-generated** by `NightBackdrop.ts
 - State transitions use `180–300ms` easing for color, fill, border, scale, and small icon movement.
 - Entrances use opacity, a short `8–20px` translation, and optional blur with the `cubic-bezier(0.16, 1, 0.3, 1)` finish. They should feel like light resolving, not objects flying in.
 - Hero actions may lift up to `4px`, scale only to `1.02`, and move the arrow `3px`. Active controls compress to `0.98`.
-- Continuous movement is limited to tiny directional cues and full-motion enhancements. Do not animate the CSS night horizon merely to make it busier.
-- Preserve the full / reduced / minimal motion tiers and `prefers-reduced-motion`. Reduced modes remove parallax, looping decoration, smooth scrolling, and nonessential blur while leaving every word, route, control, and project visible.
+- Continuous movement is limited to the approved FloatingLines field at `animationSpeed=1`, the desktop-only scroll cue, and purposeful full-motion enhancements. Do not add a second ambient animation layer.
+- Preserve the full / reduced / minimal motion tiers and `prefers-reduced-motion`. Reduced motion freezes FloatingLines at time zero, disables its parallax/listeners/loop, and removes nonessential smooth scrolling and entrance motion while leaving every word, route, control, and project visible.
 
 **The Depth-Is-Atmosphere Rule.** Use blur, gradient falloff, and one-pixel highlights to suggest space; reserve large shadows for elements that truly float or overlay.
 
@@ -238,6 +244,13 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 **The Radius-Hierarchy Rule.** Controls stay tighter than panels; pills remain exceptional. Do not mix arbitrary `20–40px` rounded containers into new screening-room surfaces.
 
 ## Components
+
+### FloatingLines backdrop
+
+- **Mounting:** one `FloatingLines` instance lives inside the single global `NightBackdrop`; never mount it per page or section.
+- **Visual contract:** exact `#E945F5 / #2F4BC0 / #E945F5` line gradient, graphite base, screen-blended low opacity, and a full-screen readability vignette.
+- **Behavior:** `animationSpeed=1`, `interactive=false`, `bendRadius=5`, `bendStrength=-0.5`, `mouseDamping=0.05`, `parallax=true`, and `parallaxStrength=0.2`.
+- **Resilience:** preserve mobile DPR/opacity limits, page-hidden render pause, reduced-motion static frame, resize handling, WebGL fallback, and complete GPU/context cleanup.
 
 ### Floating site header
 
@@ -255,16 +268,16 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 - **State:** hover changes material value; full motion may add the bounded lift, scale, and arrow translation described above. Keyboard focus always remains visible.
 - **Responsive:** actions sit inline on wider screens and become full-width stacked controls on mobile.
 
-### Recent-work status rail
+### Professional services
 
-- **Character:** a small operational signal, not a promotional banner.
-- **Structure:** indigo icon tile, signal dot and status label, recent-work label, and the preserved latest-project string. On wider screens a hairline separates it from the actions; on mobile it follows the stacked actions without the divider.
-- **Rule:** keep copy compact and factual. Do not add badges, urgency, or fabricated availability language.
+- **Desktop structure:** `1.24fr / 0.76fr` columns and two equal rows; the first item spans both rows in the wider column, while the second and third items occupy one row each in the narrower column.
+- **Mobile structure:** one natural-height column with no row spanning at `900px` and below.
+- **Material:** a shared parent frame and zinc hairlines organize the services. Each item centers an indigo icon tile with its preserved title and description; do not nest three unrelated floating cards.
 
 ### Panels and editorial chapters
 
 - **Panels:** shared `16px` corners, zinc border, dark translucent gradient, shallow internal sheen, and restrained blur.
-- **Capability and stat modules:** use asymmetric or equal-column grids inside a common frame; rely on hairlines between entries.
+- **Capability and stat modules:** professional services follow the fixed spanning grid above; stats use equal columns inside a common frame. Rely on hairlines between entries.
 - **Workflow and P2 analysis:** prefer open rows with top/bottom rules over nested cards. Keep analysis prose near `72ch` and points in a two-column ruled list until the mobile breakpoint.
 - **Project media:** retain real imagery, existing aspect behavior, lightboxes, and category identity. The nocturnal system frames media; it does not replace or recolor it.
 
@@ -294,16 +307,16 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 
 - **Do** preserve the nocturnal screening-room thesis, centered stage, compact floating chrome, and chapter rhythm on every user-facing route.
 - **Do** let real work, process analysis, and existing project media provide the visual proof.
-- **Do** use cold-white hierarchy, zinc hairlines, translucent obsidian, radial beams, and restrained indigo consistently.
+- **Do** use cold-white hierarchy, zinc hairlines, translucent obsidian, restrained indigo UI signals, and the one approved low-opacity FloatingLines environment consistently.
 - **Do** keep bilingual parity, semantic structure, keyboard behavior, readable contrast, and all motion fallbacks.
 - **Do** update this file and `.impeccable/design.json` together whenever a shipped token or component pattern changes.
 
 ### Don't:
 
 - **Don't** restore the portfolio-template sidebar, decorative blob scaffold, or a dashboard-like card wall.
-- **Don't** introduce broad colorful gradients, extra accent families, heavy glow, gratuitous glass, or large shadows on ordinary sections.
+- **Don't** introduce broad colorful gradients into UI chrome, controls, cards, or content. The user-directed low-opacity `#E945F5 / #2F4BC0 / #E945F5` FloatingLines field is the sole environmental exception.
 - **Don't** promote every heading to hero scale or every group into a rounded container.
-- **Don't** replace the CSS night backdrop with a raster simply because the class name contains `image`.
+- **Don't** duplicate, remount, or layer competing effects over the global FloatingLines backdrop; do not reuse its magenta/blue gradient as UI accent color.
 - **Don't** alter copy, facts, navigation, media, forms, API flows, lightboxes, project data, translation behavior, or motion-accessibility behavior under the banner of design maintenance.
 
 ### Content-preservation boundary
@@ -312,17 +325,18 @@ This design system governs presentation only. The names **COOPER.**, **梁世城
 
 ### Maintenance checklist
 
-- [ ] The first viewport still contains the floating top bar, oversized title, supporting statement, two actions, recent-work status rail, and layered night horizon in that order.
+- [ ] The hero is exactly `100svh`; its title + description + two-CTA group is centered on both axes; the separate bottom scroll cue appears on desktop only.
 - [ ] Archivo remains the body/Latin face; ZCOOL QingKe HuangYou remains the display/Chinese face; no third expressive font has entered the system.
-- [ ] Graphite, cold white, zinc hairlines, obsidian, and restrained indigo remain the only global visual vocabulary.
+- [ ] Graphite, cold white, zinc hairlines, obsidian, and restrained indigo remain the UI vocabulary; magenta/blue stays confined to the approved low-opacity FloatingLines field.
 - [ ] New content joins the centered `88rem` shell and responsive `900px` / `640px` collapse rules; navigation still switches at the `1024px` large breakpoint.
-- [ ] Desktop, mobile, and P2 detail views remain visually consistent with `.impeccable/review/desktop.png`, `mobile.png`, and `p2-detail-desktop.png`.
+- [ ] Professional services still use `1.24fr / 0.76fr`, two equal desktop rows, and a two-row first item; mobile still resolves to one natural-height column.
 - [ ] Navigation, language switching, forms, APIs, lightboxes, project data, contact methods, Task Brief, and Xiaocoo still behave exactly as before the visual change.
 - [ ] Keyboard focus, semantic headings, contrast, mobile scroll locking, and full/reduced/minimal motion tiers are verified.
-- [ ] The shipping background remains CSS-generated, or any deliberately authorized replacement has explicit asset provenance.
+- [ ] `NightBackdrop` mounts exactly one FloatingLines instance with gradient `#E945F5 / #2F4BC0 / #E945F5`, speed `1`, interactivity off, bend `5 / -0.5`, damping `0.05`, and parallax `true / 0.2`.
+- [ ] Fixed full-screen WebGL, vignette readability, mobile DPR `1.25` and opacity `0.44`, page-hidden render pause, reduced-motion static frame, fallback state, and full cleanup remain intact.
 - [ ] `DESIGN.md` and `.impeccable/design.json` agree on tokens, components, motion, breakpoints, named rules, and guardrails.
 - [ ] A bounded desktop/mobile finish review is complete. The current recorded disposition is **SHIP — no remaining fixes**.
 
 ### Provenance
 
-This record was carbonized from `PRODUCT.md`, `src/app/globals.css`, `src/app/layout.tsx`, `src/components/SiteHeader.tsx`, `src/components/SiteFooter.tsx`, and the shipping review captures `.impeccable/review/desktop.png`, `mobile.png`, and `p2-detail-desktop.png`. The committed form is direction 4, seed `94f35f2e`. The review captures document rendered output; the night background itself is CSS-generated and has no shipping raster source.
+This record was carbonized from `PRODUCT.md`, `src/app/globals.css`, `src/app/layout.tsx`, `src/app/page.tsx`, `src/components/SiteHeader.tsx`, `src/components/SiteFooter.tsx`, `src/components/NightBackdrop.tsx`, and `src/components/ui/FloatingLines.tsx`. The committed form is direction 4, seed `94f35f2e`. The shipping background is an adapted React Bits WebGL implementation, not a raster; the fixed graphite canvas and CSS vignette are its readability and fallback layers.

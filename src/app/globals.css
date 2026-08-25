@@ -1175,64 +1175,32 @@ select option {
   z-index: -2;
   overflow: hidden;
   pointer-events: none;
-  background:
-    radial-gradient(circle at 50% -18%, rgba(129, 140, 248, 0.16), transparent 34%),
-    #050506;
+  background: #050506;
 }
 
-.night-backdrop__image {
+.night-backdrop__lines {
   position: absolute;
-  inset: -8% -12% auto;
-  height: min(66rem, 102vh);
-  opacity: 0.72;
-  background:
-    radial-gradient(ellipse at 50% 22%, rgba(129, 140, 248, 0.15) 0%, rgba(45, 45, 67, 0.055) 34%, transparent 66%),
-    radial-gradient(ellipse at 78% 12%, rgba(199, 210, 254, 0.07) 0%, transparent 42%),
-    radial-gradient(ellipse at 19% 28%, rgba(113, 113, 122, 0.08) 0%, transparent 46%),
-    linear-gradient(180deg, rgba(25, 25, 32, 0.8) 0%, rgba(7, 7, 10, 0.38) 56%, transparent 100%);
-  filter: saturate(0.72) contrast(1.08);
-  mask-image: linear-gradient(to bottom, black 0%, rgba(0, 0, 0, 0.92) 58%, transparent 100%);
+  inset: 0;
+  opacity: 0.58;
+  filter: saturate(0.9) brightness(0.88);
 }
 
-.night-backdrop__beam {
-  position: absolute;
-  top: -32rem;
-  left: -7rem;
-  height: 82rem;
-  transform: rotate(-44deg);
-  border-radius: 999px;
-  transform-origin: center;
+.floating-lines-container,
+.floating-lines-container canvas {
+  width: 100%;
+  height: 100%;
 }
 
-.night-backdrop__beam--wide {
-  width: 35rem;
-  opacity: 0.74;
-  background: radial-gradient(
-    68.54% 68.72% at 55.02% 31.46%,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(148, 163, 184, 0.025) 52%,
-    transparent 82%
-  );
-}
-
-.night-backdrop__beam--narrow {
-  left: 7rem;
-  width: 13rem;
-  opacity: 0.7;
-  background: radial-gradient(
-    50% 50% at 50% 50%,
-    rgba(255, 255, 255, 0.065) 0%,
-    rgba(148, 163, 184, 0.015) 76%,
-    transparent 100%
-  );
+.floating-lines-container canvas {
+  display: block;
 }
 
 .night-backdrop__vignette {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(120% 80% at 50% 4%, transparent 0%, rgba(5, 5, 6, 0.15) 52%, #050506 100%),
-    linear-gradient(to bottom, transparent 0%, rgba(5, 5, 6, 0.22) 38%, #050506 86%);
+    radial-gradient(ellipse at center, rgba(5, 5, 6, 0.08) 0%, rgba(5, 5, 6, 0.42) 64%, rgba(5, 5, 6, 0.84) 100%),
+    linear-gradient(to bottom, rgba(5, 5, 6, 0.22) 0%, rgba(5, 5, 6, 0.5) 56%, rgba(5, 5, 6, 0.78) 100%);
 }
 
 .site-header {
@@ -1445,16 +1413,29 @@ select option {
 }
 
 .hero-section-responsive {
-  min-height: clamp(34rem, calc(100svh - 8rem), 52rem) !important;
+  min-height: 100svh !important;
+  margin-top: -8.5rem;
   align-items: center;
   justify-content: center !important;
-  padding: clamp(2rem, 8vh, 6rem) 0 clamp(4rem, 10vh, 8rem) !important;
+  padding: clamp(6rem, 12svh, 8.5rem) 0 !important;
 }
 
 .hero-section-responsive > section {
+  width: 100%;
   align-items: center;
   text-align: center;
   overflow: visible;
+}
+
+.hero-actions {
+  justify-content: center;
+}
+
+.hero-scroll-cue {
+  position: absolute;
+  bottom: clamp(2rem, 5svh, 4rem);
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .hero-section-responsive h1 {
@@ -1489,28 +1470,30 @@ select option {
 .screening-services {
   display: grid;
   grid-template-columns: minmax(0, 1.24fr) minmax(0, 0.76fr);
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  min-height: clamp(24rem, 30vw, 30rem);
   border-top: 1px solid var(--night-line);
 }
 
 .screening-service-card {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  align-content: start;
+  align-content: center;
   column-gap: 1.25rem;
-  padding: 2rem 1.25rem;
+  padding: clamp(2rem, 4vw, 3.5rem);
   border-bottom: 1px solid var(--night-line);
 }
 
 .screening-service-card:first-child {
-  grid-row: span 2;
+  grid-row: 1 / span 2;
   align-content: center;
-  padding-right: clamp(2rem, 6vw, 5rem);
+  padding-inline: clamp(2rem, 6vw, 5rem);
   border-right: 1px solid var(--night-line);
 }
 
 .screening-service-card:nth-child(2),
 .screening-service-card:nth-child(3) {
-  padding-left: clamp(1.5rem, 4vw, 3rem);
+  padding-inline: clamp(2rem, 4vw, 3rem);
 }
 
 .screening-service-card__icon {
@@ -1727,15 +1710,20 @@ select option {
     grid-template-columns: 1fr;
   }
 
+  .screening-services {
+    grid-template-rows: none;
+    min-height: 0;
+  }
+
   .screening-service-card:first-child {
     grid-row: auto;
-    padding-right: 1.25rem;
+    padding-inline: 1.25rem;
     border-right: 0;
   }
 
   .screening-service-card:nth-child(2),
   .screening-service-card:nth-child(3) {
-    padding-left: 1.25rem;
+    padding-inline: 1.25rem;
   }
 }
 
@@ -1754,19 +1742,15 @@ select option {
     padding: 7.5rem 0.85rem 1rem;
   }
 
-  .night-backdrop__image {
-    inset-inline: -50%;
-    height: 70svh;
-    opacity: 0.24;
-  }
-
-  .night-backdrop__beam {
-    opacity: 0.4;
+  .night-backdrop__lines {
+    opacity: 0.44;
+    filter: saturate(0.82) brightness(0.78);
   }
 
   .hero-section-responsive {
-    min-height: auto !important;
-    padding-top: 1.25rem !important;
+    min-height: 100svh !important;
+    margin-top: -7.5rem;
+    padding: clamp(5.5rem, 12svh, 7rem) 0 !important;
   }
 
   .hero-section-responsive h1 {
@@ -1806,6 +1790,17 @@ select option {
   .screening-analysis__points li:nth-child(even) {
     padding-left: 0;
     border-left: 0;
+  }
+}
+
+@media (max-height: 36rem) and (min-width: 641px) {
+  .hero-section-responsive {
+    min-height: auto !important;
+    padding: 8rem 0 4rem !important;
+  }
+
+  .hero-scroll-cue {
+    display: none !important;
   }
 }
 

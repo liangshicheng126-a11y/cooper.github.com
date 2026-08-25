@@ -33,12 +33,14 @@
     "react-dom": "19.0.0",
     "resend": "^6.12.2",
     "tailwind-merge": "^2.5.5",
+    "three": "^0.180.0",
     "yaml": "^2.9.0"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/three": "^0.185.4",
     "autoprefixer": "^10",
     "playwright": "^1.60.0",
     "postcss": "^8",

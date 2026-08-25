@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-25T11:47:34+08:00",
+  "generatedAt": "2026-08-25T13:45:54+08:00",
   "title": "Design System: Cooper Nocturnal Screening Room",
   "extensions": {
     "colorMeta": {
@@ -105,6 +105,18 @@
         "displayName": "Deep Indigo Action",
         "canonical": "#4338ca",
         "tonalRamp": ["#151039", "#21175d", "#2b2081", "#362aa7", "#4338ca", "#6e64df", "#a39ced", "#e4e1fb"]
+      },
+      "floating-line-magenta": {
+        "role": "secondary",
+        "displayName": "Floating-Line Magenta",
+        "canonical": "#E945F5",
+        "tonalRamp": ["#351039", "#58155f", "#7f1b88", "#a923b5", "#d32ce0", "#E945F5", "#f27bfb", "#fbdcff"]
+      },
+      "floating-line-blue": {
+        "role": "secondary",
+        "displayName": "Floating-Line Blue",
+        "canonical": "#2F4BC0",
+        "tonalRamp": ["#0e1739", "#16235d", "#1e3082", "#273da7", "#2F4BC0", "#5f74d4", "#9caae9", "#e1e6fb"]
       }
     },
     "typographyMeta": {
@@ -122,14 +134,14 @@
       },
       "label": {
         "displayName": "Screening Label",
-        "purpose": "Navigation, status, counters, metadata, and terse utility text."
+        "purpose": "Navigation, counters, metadata, and terse utility text."
       }
     },
     "shadows": [
       {
         "name": "floating-chrome",
         "value": "0 18px 48px rgba(0, 0, 0, 0.34)",
-        "purpose": "Separates the fixed top bar from the CSS night horizon."
+        "purpose": "Separates the fixed top bar from the low-opacity FloatingLines field."
       },
       {
         "name": "primary-action",
@@ -182,6 +194,16 @@
         "name": "cta-lift",
         "value": "320ms cubic-bezier(0.2, 0.9, 0.25, 1)",
         "purpose": "Bounded hero-action lift of at most 4px and scale of at most 1.02."
+      },
+      {
+        "name": "floating-lines",
+        "value": "animationSpeed 1; interactive false; bendRadius 5; bendStrength -0.5; mouseDamping 0.05; parallax true; parallaxStrength 0.2",
+        "purpose": "The sole continuous environmental animation, using gradient #E945F5 / #2F4BC0 / #E945F5."
+      },
+      {
+        "name": "floating-lines-safety",
+        "value": "desktop DPR ≤2 and opacity 0.58; mobile DPR ≤1.25 and opacity 0.44; reduced motion iTime 0",
+        "purpose": "Bounds GPU cost and intensity, pauses page-hidden rendering, and provides a one-frame reduced-motion state with complete cleanup and WebGL fallback."
       }
     ],
     "breakpoints": [
@@ -229,20 +251,12 @@
       "css": ".ds-header{display:flex;align-items:center;justify-content:space-between;width:min(52rem,100%);min-height:3.75rem;padding:.5rem .6rem .5rem 1rem;border:1px solid rgba(255,255,255,.105);border-radius:14px;background:rgba(7,7,9,.7);color:#f4f4f5;box-shadow:0 18px 48px rgba(0,0,0,.34);backdrop-filter:blur(22px) saturate(135%);font-family:var(--font-archivo,Arial,sans-serif)}.ds-wordmark{display:flex;align-items:center;gap:.65rem;color:#fff;font-size:.88rem;font-weight:800;letter-spacing:.11em;text-decoration:none}.ds-wordmark i{width:.48rem;height:.48rem;border-radius:999px;background:#a5b4fc;box-shadow:0 6px 18px rgba(129,140,248,.38)}.ds-header nav{display:flex;gap:.15rem}.ds-header nav a{position:relative;padding:.7rem .78rem;border-radius:10px;color:rgba(244,244,245,.62);font-size:.78rem;font-weight:600;text-decoration:none;transition:color 220ms ease,background-color 220ms ease}.ds-header nav a:hover,.ds-header nav .ds-nav-active{color:#fff;background:rgba(255,255,255,.065)}.ds-nav-active:after{content:'';position:absolute;right:.72rem;bottom:.3rem;left:.72rem;height:1px;background:rgba(199,210,254,.75)}.ds-header button{min-width:3.25rem;height:2.25rem;border:1px solid rgba(255,255,255,.1);border-radius:8px;background:rgba(255,255,255,.035);color:#d4d4d8;font-size:.69rem;letter-spacing:.12em}.ds-header a:focus-visible,.ds-header button:focus-visible{outline:2px solid rgba(199,210,254,.95);outline-offset:3px}"
     },
     {
-      "name": "Recent Work Status Rail",
-      "kind": "custom",
-      "refersTo": "status-rail",
-      "description": "A factual first-view signal for availability and latest work.",
-      "html": "<div class=\"ds-status\"><div class=\"ds-status-icon\">↯</div><div><p class=\"ds-status-live\"><i></i>AVAILABLE FOR DESIGN</p><p class=\"ds-status-label\">RECENT WORK</p><p class=\"ds-status-title\">Latest project</p></div></div>",
-      "css": ".ds-status{display:flex;align-items:center;gap:1rem;padding:.5rem 0 .5rem 3rem;border-left:1px solid rgba(255,255,255,.1);color:rgba(244,244,245,.82);font-family:var(--font-archivo,Arial,sans-serif)}.ds-status-icon{display:grid;place-items:center;width:3rem;height:3rem;border-radius:12px;background:rgba(79,70,229,.1);color:#a5b4fc;font-size:1.35rem}.ds-status p{margin:0}.ds-status-live{display:flex;align-items:center;gap:.5rem;color:#a5b4fc;font-size:.75rem;font-weight:600}.ds-status-live i{width:.375rem;height:.375rem;border-radius:999px;background:#818cf8}.ds-status-label{margin-top:.25rem!important;color:rgba(244,244,245,.68);font-size:.7rem;font-weight:700;letter-spacing:.1em}.ds-status-title{margin-top:.25rem!important;font-size:.875rem;font-weight:500}@media(max-width:640px){.ds-status{padding-left:0;border-left:0}}"
-    },
-    {
-      "name": "Nocturnal Content Panel",
+      "name": "Professional Services Grid",
       "kind": "card",
       "refersTo": "panel",
-      "description": "Shared obsidian frame for grouped content; internal hairlines do the organizing.",
-      "html": "<section class=\"ds-panel\"><h2>CAPABILITIES</h2><div class=\"ds-panel-row\"><span>01</span><div><h3>Brand Design</h3><p>A focused description sits inside the chapter, not another nested card.</p></div></div><div class=\"ds-panel-row\"><span>02</span><div><h3>UI / UX</h3><p>Hairlines and spacing establish the reading order.</p></div></div></section>",
-      "css": ".ds-panel{padding:2rem;border:1px solid rgba(255,255,255,.1);border-radius:16px;background:linear-gradient(145deg,rgba(20,20,24,.76),rgba(9,9,12,.54));color:#f4f4f5;box-shadow:inset 0 1px 0 rgba(255,255,255,.03);backdrop-filter:blur(16px) saturate(112%);font-family:var(--font-archivo,Arial,sans-serif)}.ds-panel h2{margin:0 0 1.5rem;font:400 1.5rem/1.33 var(--font-display-cjk,var(--font-archivo,Arial,sans-serif))}.ds-panel-row{display:grid;grid-template-columns:3rem 1fr;gap:1rem;padding:1.25rem 0;border-top:1px solid rgba(255,255,255,.12)}.ds-panel-row>span{color:rgba(244,244,245,.25);font-size:.74rem;font-weight:700;letter-spacing:.22em}.ds-panel-row h3{margin:0;font-size:1rem}.ds-panel-row p{max-width:48ch;margin:.55rem 0 0;color:rgba(244,244,245,.68);font-size:.875rem;line-height:1.5}"
+      "description": "Asymmetric professional-services frame: the first item spans two equal desktop rows and all items stack on mobile.",
+      "html": "<section class=\"ds-services\"><h2>PROFESSIONAL SERVICES</h2><div class=\"ds-services-grid\"><article><span>✦</span><div><h3>Brand Design</h3><p>Build a distinctive visual identity system.</p></div></article><article><span>▦</span><div><h3>UI / UX</h3><p>Shape clear, usable digital experiences.</p></div></article><article><span>▶</span><div><h3>Video</h3><p>Direct focused moving-image stories.</p></div></article></div></section>",
+      "css": ".ds-services{padding:2rem;border:1px solid rgba(255,255,255,.1);border-radius:16px;background:linear-gradient(145deg,rgba(20,20,24,.76),rgba(9,9,12,.54));color:#f4f4f5;box-shadow:inset 0 1px 0 rgba(255,255,255,.03);backdrop-filter:blur(16px) saturate(112%);font-family:var(--font-archivo,Arial,sans-serif)}.ds-services>h2{margin:0 0 1.5rem;font:400 1.5rem/1.33 var(--font-display-cjk,var(--font-archivo,Arial,sans-serif))}.ds-services-grid{display:grid;grid-template-columns:minmax(0,1.24fr) minmax(0,.76fr);grid-template-rows:repeat(2,minmax(0,1fr));min-height:24rem;border-top:1px solid rgba(255,255,255,.12)}.ds-services article{display:grid;grid-template-columns:auto minmax(0,1fr);align-content:center;gap:0 1.25rem;padding:clamp(2rem,4vw,3.5rem);border-bottom:1px solid rgba(255,255,255,.12)}.ds-services article:first-child{grid-row:1/span 2;padding-inline:clamp(2rem,6vw,5rem);border-right:1px solid rgba(255,255,255,.12)}.ds-services article>span{display:grid;grid-row:1/span 2;place-items:center;width:3.75rem;height:3.75rem;border:1px solid rgba(165,180,252,.2);border-radius:12px;background:rgba(129,140,248,.08);color:#a5b4fc}.ds-services h3{margin:0;font-size:1.1rem}.ds-services p{max-width:48ch;margin:.55rem 0 0;color:rgba(244,244,245,.68);font-size:.875rem;line-height:1.5}@media(max-width:900px){.ds-services-grid{grid-template-columns:1fr;grid-template-rows:none;min-height:0}.ds-services article:first-child{grid-row:auto;padding-inline:1.25rem;border-right:0}.ds-services article{padding-inline:1.25rem}}"
     },
     {
       "name": "Nocturnal Text Field",
@@ -263,11 +277,12 @@
   ],
   "narrative": {
     "northStar": "The Nocturnal Screening Room",
-    "overview": "Cooper's work is presented as a private screening room after dark: graphite black holds the frame, cold white type behaves like projected light, zinc hairlines order the programme, translucent obsidian provides just enough material separation, and indigo appears only as a controlled signal. The interface is cinematic without becoming theatrical. Work, words, and actions remain legible before atmosphere.\n\nThis world deliberately rejects the generic portfolio-template split sidebar and decorative blob scaffold. The site is a centered, full-width composition with compact floating chrome, oversized display typography, editorial chapters, and a layered night horizon. Its story is fixed: identify Cooper, understand his capabilities, inspect real work, then choose contact, Task Brief, or Xiaocoo without losing context.\n\nForm direction 4, seed 94f35f2e, is the shipped authority. The finish-review disposition is SHIP — no remaining fixes. The desktop, mobile, and P2 detail captures in .impeccable/review/ are the visual baselines for maintenance.",
+    "overview": "Cooper's work is presented as a private screening room after dark: graphite black holds the frame, cold white type behaves like projected light, zinc hairlines order the programme, translucent obsidian provides just enough material separation, and indigo appears only as a controlled UI signal. Behind that quiet chrome, a deliberately low-opacity magenta/blue FloatingLines field supplies the projected atmosphere. The interface is cinematic without becoming theatrical. Work, words, and actions remain legible before atmosphere.\n\nThis world deliberately rejects the generic portfolio-template split sidebar and decorative blob scaffold. The site is a centered, full-width composition with compact floating chrome, oversized display typography, editorial chapters, and a full-screen animated line field disciplined by a dark vignette. Its story is fixed: identify Cooper, understand his capabilities, inspect real work, then choose contact, Task Brief, or Xiaocoo without losing context.\n\nForm direction 4, seed 94f35f2e, is the shipped authority. The finish-review disposition is SHIP — no remaining fixes. The approved implementation and this synchronized record supersede earlier capture details where the hero or backdrop differs.",
     "keyCharacteristics": [
       "Graphite-black canvas with cold white, zinc, and rare indigo signals.",
       "Centered full-width screening-room composition, never a split portfolio sidebar.",
-      "Compact floating top bar over a layered, quiet night horizon.",
+      "Exactly centered 100svh title, description, and two-action group beneath compact floating chrome.",
+      "Low-opacity React Bits FloatingLines atmosphere with a readability vignette and bounded GPU cost.",
       "Display-led hierarchy paired with editorial hairlines and asymmetric chapter grids.",
       "Translucent obsidian surfaces with restrained blur and shallow ambient depth.",
       "Real project work and preserved bilingual content remain the evidence and the story."
@@ -280,7 +295,7 @@
       },
       {
         "name": "The Restrained-Indigo Rule",
-        "body": "Indigo marks state, action, or structure. Do not turn it into large decorative gradients, broad card fills, or a competing background motif.",
+        "body": "Indigo in UI chrome marks state, action, or structure and remains restrained. The approved low-opacity #E945F5 / #2F4BC0 / #E945F5 FloatingLines field is the explicit environmental exception; do not reuse its magenta/blue gradient in controls, cards, or content decoration.",
         "section": "colors"
       },
       {
@@ -322,15 +337,15 @@
     "dos": [
       "Do preserve the nocturnal screening-room thesis, centered stage, compact floating chrome, and chapter rhythm on every user-facing route.",
       "Do let real work, process analysis, and existing project media provide the visual proof.",
-      "Do use cold-white hierarchy, zinc hairlines, translucent obsidian, radial beams, and restrained indigo consistently.",
+      "Do use cold-white hierarchy, zinc hairlines, translucent obsidian, restrained indigo UI signals, and the one approved low-opacity FloatingLines environment consistently.",
       "Do keep bilingual parity, semantic structure, keyboard behavior, readable contrast, and all motion fallbacks.",
       "Do update this file and .impeccable/design.json together whenever a shipped token or component pattern changes."
     ],
     "donts": [
       "Don't restore the portfolio-template sidebar, decorative blob scaffold, or a dashboard-like card wall.",
-      "Don't introduce broad colorful gradients, extra accent families, heavy glow, gratuitous glass, or large shadows on ordinary sections.",
+      "Don't introduce broad colorful gradients into UI chrome, controls, cards, or content. The user-directed low-opacity #E945F5 / #2F4BC0 / #E945F5 FloatingLines field is the sole environmental exception.",
       "Don't promote every heading to hero scale or every group into a rounded container.",
-      "Don't replace the CSS night backdrop with a raster simply because the class name contains image.",
+      "Don't duplicate, remount, or layer competing effects over the global FloatingLines backdrop; do not reuse its magenta/blue gradient as UI accent color.",
       "Don't alter copy, facts, navigation, media, forms, API flows, lightboxes, project data, translation behavior, or motion-accessibility behavior under the banner of design maintenance."
     ]
   }
