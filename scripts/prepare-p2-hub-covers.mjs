@@ -16,7 +16,7 @@ const COVER_SIZE = { width: 1600, height: 900 };
 async function makeCover(
   sourceRel,
   destName,
-  { topRatio = 0, heightRatio = 0.52, trimThreshold } = {},
+  { topRatio = 0, heightRatio = 0.52, trimThreshold, position = "centre" } = {},
 ) {
   const sourceAbs = path.join(P2_DIR, sourceRel);
   let pipeline = sharp(sourceAbs);
@@ -33,7 +33,7 @@ async function makeCover(
   const destAbs = path.join(COVERS_DIR, destName);
   await pipeline
     .extract({ left: 0, top, width: meta.width, height: extractHeight })
-    .resize(COVER_SIZE.width, COVER_SIZE.height, { fit: "cover", position: "centre" })
+    .resize(COVER_SIZE.width, COVER_SIZE.height, { fit: "cover", position })
     .png({ compressionLevel: 9 })
     .toFile(destAbs);
 
@@ -46,10 +46,11 @@ async function main() {
 
   console.log("Generating P2 hub cover images…");
 
-  // Home page: services, stats, tools, workflow — matches hub card preview
-  await makeCover("home.png", "personal-website.png", {
-    topRatio: 0.31,
-    heightRatio: 0.38,
+  // Current nocturnal homepage hero — matches the shipped personal-site direction.
+  await makeCover("home-hero.png", "personal-website.png", {
+    topRatio: 0,
+    heightRatio: 1,
+    position: "north",
   });
 
   // Dashboard grid: todo + stock widgets (below flight card)

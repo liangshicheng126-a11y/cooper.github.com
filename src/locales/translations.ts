@@ -134,7 +134,7 @@ export const translations = {
           backToP2: "返回动态交互系统",
           personalWebsite: {
             title: "个人网站设计",
-            desc: "cooperliang.top 全站视觉与交互体系，涵盖首页、作品集、关于我与组件规范。",
+            desc: "cooperliang.top 的夜间放映室式个人网站，以统一的深色视觉、双语内容和可访问动效串联作品、经历与合作入口。",
             category: "Web 设计",
           },
           smartGlasses: {
@@ -147,12 +147,12 @@ export const translations = {
           pages: {
             title: "核心页面",
             caption:
-              "首页以玻璃拟态侧栏、渐变 blob 背景与 BlurText 标题建立品牌第一印象；作品集页以品类 accent 色卡片网格索引多媒介作品；关于页融入极限运动叙事与工具能力展示；项目详情页承载深度案例与元信息结构。",
+              "案例收录当前首页、作品集、关于我与联系页面。紧凑浮动导航和 88rem 中央舞台贯穿所有路由；首页以 100svh 居中首屏建立第一印象，作品集用四轨焦点画廊组织品牌、UI/UX、摄影与视频。",
           },
           components: {
-            title: "按钮与组件",
+            title: "交互与系统",
             caption:
-              "设计稿展示全站可复用组件：导航与 CTA、Lucide 图标集、工具与兴趣标签、渐变 CTA 按钮、CountUp 统计卡与服务流程卡片，统一 indigo 玻璃拟态与大圆角规范。",
+              "展示专业服务、作品集焦点轨道、任务布置与小coo 等真实交互界面。按钮、输入框、图标、焦点状态和暗色面板共享同一套冷白、锌线、黑曜石与克制靛蓝规范，并在触控与低动效环境下完整降级。",
           },
         },
         p2SmartGlassesGroups: {
@@ -252,46 +252,46 @@ export const translations = {
           sectionTitle: "网站设计分析",
           strategy: {
             title: "战略与定位",
-            body: "cooperliang.top 是我作为独立设计师与视觉开发者的个人网站。以「为需求而创造」为核心主张，将品牌视觉、UI/UX、摄影与视频剪辑四类能力整合在同一叙事框架中，让访客能在浏览中建立完整的专业认知。",
-            body2: "我选择静态站点架构与 GitHub Pages 部署，在保证访问速度与稳定性的同时，把维护成本压到最低，把精力留给内容迭代与视觉打磨。支持中英双语切换，让网页可以同时服务本土合作方与海外潜在客户。",
+            body: "cooperliang.top 是我作为独立设计师与视觉开发者的个人网站。以「为需求而创造」为核心主张，把品牌视觉、UI/UX、摄影和视频剪辑组织成一条从认识能力、浏览作品到发起合作的清晰路径。",
+            body2: "站点同时承载关于我、任务布置、小coo 与联系入口，并保持中英双语一致。静态导出与 GitHub Pages 部署让每次内容更新都能复现，网站本身也成为设计、开发与持续运营能力的真实案例。",
             points: [
-              "个人品牌一站式展示：能力、作品、叙事、联系入口同屏可达",
-              "价值主张清晰：美学与功能并重，强调可落地的创意输出",
-              "多媒介作品矩阵：平面、界面、影像、剪辑形成互补证据链",
-              "轻量发布策略：设计—开发—部署闭环，便于持续更新"
+              "一站式个人品牌：能力、作品、经历与联系入口连续可达",
+              "真实作品优先：以项目媒体和过程分析建立专业证据",
+              "双语内容一致：中文与英文共享同一信息结构",
+              "设计—开发—部署闭环：便于持续迭代与公开验证"
             ]
           },
           visual: {
             title: "视觉语言与美学表现",
-            body: "整体视觉使用玻璃拟态语言：半透明面板、柔和描边与动态渐变色背景共同构成「流动中的秩序感」。侧栏导航与内容卡片共享同一套圆角与层级规则，统一全站的设计系统，防止零散页面拼接。",
-            body2: "排版以 Inter 为主，标题采用紧凑字距与大字号对比；强调信息则通过 fuchsia→indigo→cyan 渐变文字与 accent 色卡片区分作品品类。背景三层 blob（indigo / cyan / rose）在滚动中缓慢位移，为界面注入呼吸感而不干扰阅读。",
+            body: "当前视觉以「夜间放映室」为核心：石墨黑画布、冷白文字、锌色分隔线与半透明黑曜石面板构成安静的观看环境，靛蓝只用于导航、焦点和操作信号。",
+            body2: "紧凑的浮动顶部导航覆盖所有路由，内容收束在 88rem 中央舞台。Archivo 与 Noto Sans SC 建立清晰的中英文字阶；全站唯一的洋红—蓝色 FloatingLines 背景经过暗角压低，不与真实作品争夺注意力。",
             points: [
-              "玻璃拟态组件：glass 面板 + 低对比 border-white/10",
-              "渐变 blob 背景：ScrollBlobs 三层结构营造空间深度",
-              "大圆角容器：28–40px 统一曲率，柔和且现代",
-              "品类 accent 色：各作品卡片用独特色相建立视觉索引"
+              "夜间放映室：石墨黑、冷白、锌线与黑曜石层级",
+              "脚本感知排版：Archivo + Noto Sans SC",
+              "中央舞台布局：88rem 页面壳与紧凑浮动导航",
+              "克制环境动效：FloatingLines 仅作为低透明背景"
             ]
           },
           technical: {
             title: "技术实现与可访问性",
-            body: "站点基于 Next.js 15 与 React 19 构建，输出为静态页面以适配 GitHub Pages。动效层采用 GSAP ScrollTrigger 处理滚动入场与图集 stagger，导航与布局过渡交由 Framer Motion 管理，支持移动端手机平板和电脑端使用，在表现力与载体之间取得平衡。",
-            body2: "网页使用了 useMotionTier 三档动效策略（full / reduced / minimal），并尊重 prefers-reduced-motion，确保低动效偏好用户仍能获得完整信息。图片采用视口懒加载，布局在 sm / lg / xl 断点间平滑重排。后续可优化项包括：站点 metadata 个性化与 html lang 随语言切换。",
+            body: "站点基于 Next.js 15 与 React 19 构建，静态导出后由 GitHub Pages 发布。Framer Motion 与 GSAP 负责页面过渡、滚动揭示和画廊节奏；Three.js 驱动的 FloatingLines 被封装为全站唯一的固定背景层。",
+            body2: "NightBackdrop 在移动端限制像素比和透明度，页面隐藏时暂停渲染，并提供 WebGL 失败回退与完整资源清理。useMotionTier 与 prefers-reduced-motion 保证低动效用户仍能访问全部内容；语义标题、键盘焦点、灯箱和整块作品链接共同构成可访问性基线。",
             points: [
-              "静态导出 + CI 自动部署，发布流程可复现",
-              "动效分档：重动效、轻动效、极简静态三模式",
-              "组件化图库：灯箱预览、懒加载与响应式网格",
-              "可访问性基线：语义标题、键盘可操作灯箱、对比度可控"
+              "静态导出 + CI 自动部署：发布流程可复现",
+              "单例 WebGL 背景：DPR 限制、暂停、回退与清理完整",
+              "动效分档：full / reduced / minimal 三种运行策略",
+              "可访问性基线：语义结构、键盘操作、可见焦点与双语韧性"
             ]
           },
           emotional: {
             title: "情感化设计与品牌共鸣",
-            body: "首页通过 BlurText 标题揭示、CountUp 数据动效与 Magnet 按钮磁吸，在首屏建立「精致且有趣」的第一印象。滚动驱动的 blob 视差与页面过渡则让浏览过程像一次连续的体验旅程，而非冷冰冰的作品列表。",
-            body2: "关于页融入极限运动与自然探索，把「设计师」还原为有温度、有故事的创作者。工具卡 GsapGlassHover 在 full 档位提供轻微 tilt 与光斑反馈，在 reduced/minimal 档自动降级为静态样式，保证表达力不牺牲可读性。",
+            body: "首页只保留居中的「为需求而创造」、一句说明与两项行动，让访客先感受清晰而克制的品牌态度。流动线条像投影光束掠过暗场，但真实作品始终是画面的主角。",
+            body2: "作品集焦点轨道通过展开与收束建立浏览节奏；关于页延续自然探索与极限体验的个人叙事；任务布置和小coo 则把观看转化为可继续的沟通。所有表达性动效都会在 reduced / minimal 档位安静退场。",
             points: [
-              "首屏微交互：吸引注意但不遮挡核心信息",
-              "叙事型关于页：专业能力与个人气质双线并行",
-              "滚动节奏：区块 stagger 入场引导阅读顺序",
-              "克制原则：动效为信息 hierarchy 服务，而非炫技"
+              "首屏聚焦：一句主张、一个说明、两项行动",
+              "作品即投影：环境氛围服务真实项目，不替代项目",
+              "人物叙事：专业能力与探索者气质并行",
+              "动效克制：为阅读层级服务，并尊重低动效偏好"
             ]
           }
         }
@@ -535,7 +535,7 @@ export const translations = {
           backToP2: "Back to Dynamic Interaction System",
           personalWebsite: {
             title: "Personal Website Design",
-            desc: "The cooperliang.top visual and interaction system—home, portfolio, about, and component specs.",
+            desc: "The cooperliang.top portfolio staged as a nocturnal screening room, connecting work, story, and collaboration through bilingual content and accessible motion.",
             category: "Web Design",
           },
           smartGlasses: {
@@ -548,12 +548,12 @@ export const translations = {
           pages: {
             title: "Core Pages",
             caption:
-              "The home page establishes brand presence with a glassmorphism sidebar, gradient blobs, and BlurText hero; the portfolio grid indexes multi-medium work by category accent; the about page weaves extreme-sports narrative with tool cards; the project detail page carries in-depth case studies and metadata.",
+              "The current home, portfolio, about, and contact pages share one compact floating header and an 88rem centered stage. A centered 100svh hero establishes the first impression, while the four-track portfolio focus rail organizes brand, UI/UX, photography, and video work.",
           },
           components: {
-            title: "Buttons & Components",
+            title: "Interaction & System",
             caption:
-              "Design artboards for the reusable system: nav and CTAs, Lucide icons, tool and hobby tags, gradient buttons, CountUp stat cards, and service-flow cards—unified indigo glassmorphism and large-radius language.",
+              "Real interfaces for professional services, the portfolio focus rail, Task Brief, and Xiaocoo. Buttons, fields, icons, focus states, and dark panels share one cold-white, zinc, obsidian, and restrained-indigo vocabulary, with complete touch and reduced-motion fallbacks.",
           },
         },
         p2SmartGlassesGroups: {
@@ -653,46 +653,46 @@ export const translations = {
           sectionTitle: "Website Design Analysis",
           strategy: {
             title: "Strategy & Purpose",
-            body: "cooperliang.top is my personal brand home as an independent designer and visual developer. Built around the promise \"Where Aesthetics Meet Function,\" it unifies brand identity, UI/UX, photography, and video editing into one narrative so visitors can form a complete picture of my practice in a single session.",
-            body2: "I chose a static site architecture deployed on GitHub Pages for speed, stability, and low maintenance—freeing time for content and visual iteration. Bilingual zh/en switching serves both local collaborators and international prospects.",
+            body: "cooperliang.top is my personal site as an independent designer and visual developer. Built around the promise \"Design for real needs,\" it turns brand work, UI/UX, photography, and video editing into a clear path from understanding my capabilities to reviewing work and starting a conversation.",
+            body2: "The site also carries About, Task Brief, Xiaocoo, and Contact flows with bilingual parity. Static export and GitHub Pages make every release reproducible, so the website itself becomes evidence of design, development, and continuous operation.",
             points: [
-              "One-stop personal brand: skills, work, story, and contact in one flow",
-              "Clear value proposition: creativity that ships, not just concepts",
-              "Multi-medium portfolio matrix: graphic, UI, photo, and video as proof",
-              "Lightweight release loop: design → build → deploy for continuous updates"
+              "One-stop personal brand: capability, work, story, and contact in one path",
+              "Real work first: project media and process analysis provide the proof",
+              "Bilingual parity: Chinese and English share one information structure",
+              "Design → build → deploy loop: ready for continuous public iteration"
             ]
           },
           visual: {
             title: "Visual System & Aesthetics",
-            body: "The visual language follows an indigo glassmorphism system: translucent panels, soft borders, and pastel gradient blobs create a sense of flow within structure. Sidebar navigation and content cards share the same corner radius and layering rules, making the site feel like an extensible design system rather than disconnected pages.",
-            body2: "Typography centers on Inter with tight tracking on headlines; emphasis uses fuchsia→indigo→cyan gradient text and per-category accent colors on project cards. Three background blobs (indigo / cyan / rose) drift on scroll, adding depth without hurting readability.",
+            body: "The current visual world is a nocturnal screening room: graphite black, cold-white type, zinc hairlines, and translucent obsidian panels create a quiet viewing environment. Indigo is reserved for navigation, focus, and action signals.",
+            body2: "A compact floating header spans every route inside an 88rem centered stage. Archivo and Noto Sans SC create a clear bilingual hierarchy; the single magenta-blue FloatingLines field sits behind a dark vignette so atmosphere never competes with real work.",
             points: [
-              "Glass components: frosted panels + low-contrast border-white/10",
-              "Gradient blob backdrop: ScrollBlobs three-layer depth",
-              "Large-radius containers: 28–40px consistent curvature",
-              "Category accent colors: unique hues per work type for quick scanning"
+              "Nocturnal screening room: graphite, cold white, zinc, and obsidian",
+              "Script-aware typography: Archivo + Noto Sans SC",
+              "Centered stage: 88rem shell with compact floating navigation",
+              "Restrained atmosphere: FloatingLines remains a low-opacity backdrop"
             ]
           },
           technical: {
             title: "Technical Execution & Accessibility",
-            body: "The site is built with Next.js 15 and React 19, exported as static pages for GitHub Pages. GSAP ScrollTrigger handles scroll reveals and gallery staggers; Framer Motion covers navigation and layout transitions, balancing expressiveness and bundle size.",
-            body2: "A useMotionTier system (full / reduced / minimal) respects prefers-reduced-motion so low-motion users still get full content. Images lazy-load in view; layouts reflow across sm / lg / xl breakpoints. Future improvements: personalized site metadata and html lang synced to locale.",
+            body: "The site runs on Next.js 15 and React 19, exported statically to GitHub Pages. Framer Motion and GSAP handle route transitions, scroll reveals, and gallery rhythm; a Three.js FloatingLines renderer is isolated as the single fixed site backdrop.",
+            body2: "NightBackdrop caps pixel ratio and opacity on mobile, pauses while hidden, and includes WebGL fallback plus complete cleanup. useMotionTier and prefers-reduced-motion keep every word and route available with less motion; semantic headings, visible focus, keyboard lightboxes, and whole-surface project links form the accessibility baseline.",
             points: [
-              "Static export + CI deploy for reproducible releases",
-              "Motion tiers: full, reduced, and minimal static modes",
-              "Componentized galleries: lightbox, lazy load, responsive grids",
-              "Accessibility baseline: semantic headings, keyboard lightbox, readable contrast"
+              "Static export + CI deployment: reproducible releases",
+              "Single WebGL backdrop: DPR caps, pause, fallback, and cleanup",
+              "Motion tiers: full, reduced, and minimal runtime strategies",
+              "Accessibility baseline: semantics, keyboard use, focus, and bilingual resilience"
             ]
           },
           emotional: {
             title: "Emotional Design & Delight",
-            body: "The homepage uses BlurText title reveals, CountUp stats, and Magnet button hover to set a polished yet playful first impression. Scroll-driven blob parallax and page transitions turn browsing into a continuous journey—not a cold project list.",
-            body2: "The about page weaves in personal narrative from extreme sports and nature exploration, paired with a philosophy quote block, presenting the designer as a human storyteller. GsapGlassHover on tool cards adds subtle tilt and spotlight in full tier, degrading gracefully in reduced/minimal modes.",
+            body: "The homepage keeps only a centered promise, one supporting line, and two actions. Flowing lines pass like projected light across a dark room, but the real portfolio remains the subject rather than the decoration.",
+            body2: "The portfolio focus rail creates rhythm through expansion and compression; About carries the nature-and-exploration narrative; Task Brief and Xiaocoo turn viewing into an actionable conversation. Expressive motion steps aside quietly in reduced and minimal modes.",
             points: [
-              "Hero micro-interactions: attention-grabbing without blocking content",
-              "Narrative about page: craft and personality in parallel",
-              "Scroll rhythm: staggered section reveals guide reading order",
-              "Restraint principle: motion serves hierarchy, not spectacle"
+              "Focused hero: one promise, one statement, two actions",
+              "Work is the projection: atmosphere frames rather than replaces it",
+              "Human narrative: professional craft and explorer character in parallel",
+              "Motion restraint: hierarchy first, with reduced-motion respect"
             ]
           }
         }

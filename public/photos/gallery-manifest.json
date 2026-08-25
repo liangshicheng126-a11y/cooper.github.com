@@ -679,9 +679,17 @@
     "width": 4284,
     "height": 5712
   },
+  "/photos/portfolio/p2/about-page.png": {
+    "width": 2880,
+    "height": 1800
+  },
   "/photos/portfolio/p2/about.png": {
     "width": 1487,
     "height": 2156
+  },
+  "/photos/portfolio/p2/contact-page.png": {
+    "width": 2880,
+    "height": 1800
   },
   "/photos/portfolio/p2/covers/personal-website.png": {
     "width": 1600,
@@ -719,9 +727,25 @@
     "width": 1024,
     "height": 387
   },
+  "/photos/portfolio/p2/home-hero.png": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/home-services.png": {
+    "width": 2880,
+    "height": 1800
+  },
   "/photos/portfolio/p2/home.png": {
     "width": 1920,
     "height": 2581
+  },
+  "/photos/portfolio/p2/p2-detail.png": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/portfolio-grid.png": {
+    "width": 2880,
+    "height": 1800
   },
   "/photos/portfolio/p2/portfolio.png": {
     "width": 1920,
@@ -790,5 +814,13 @@
   "/photos/portfolio/p2/smart-glasses/profile.png": {
     "width": 430,
     "height": 1048
+  },
+  "/photos/portfolio/p2/task-brief-page.png": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/xiaocoo-page.png": {
+    "width": 2880,
+    "height": 1800
   }
 }

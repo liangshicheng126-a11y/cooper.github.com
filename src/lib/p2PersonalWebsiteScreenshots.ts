@@ -13,18 +13,15 @@ const SCREENSHOTS_DIR = path.join(process.cwd(), "public", "photos", "portfolio"
 const GROUP_FILES: Array<{ groupId: PersonalWebsiteGroupId; files: readonly string[] }> = [
   {
     groupId: "pages",
-    files: ["home.png", "portfolio.png", "about.png", "project-detail.png"],
+    files: ["home-hero.png", "portfolio-grid.png", "about-page.png", "contact-page.png"],
   },
   {
     groupId: "components",
     files: [
-      "design-components-nav.png",
-      "design-icons.png",
-      "design-components-tags.png",
-      "design-modules-buttons.png",
-      "design-modules-process.png",
-      "design-modules-stats.png",
-      "design-modules-stats-card.png",
+      "home-services.png",
+      "p2-detail.png",
+      "task-brief-page.png",
+      "xiaocoo-page.png",
     ],
   },
 ];

@@ -17,6 +17,8 @@ const CAPTURES = [
   { file: "p2-detail.png", path: "/portfolio/p2", waitMs: 2500 },
   { file: "about-page.png", path: "/about", waitMs: 2500 },
   { file: "contact-page.png", path: "/contact", waitMs: 2500 },
+  { file: "task-brief-page.png", path: "/task-brief", waitMs: 2500 },
+  { file: "xiaocoo-page.png", path: "/xiaocoo", waitMs: 2500 },
 ];
 
 fs.mkdirSync(OUT, { recursive: true });
@@ -25,7 +27,7 @@ const browser = await chromium.launch();
 const context = await browser.newContext({
   viewport: { width: 1440, height: 900 },
   deviceScaleFactor: 2,
-  colorScheme: "light",
+  colorScheme: "dark",
 });
 
 const page = await context.newPage();
