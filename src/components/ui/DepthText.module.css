@@ -1,0 +1,80 @@
+.root {
+  display: inline-block;
+  max-width: 100%;
+  perspective: var(--depth-text-perspective);
+  perspective-origin: 50% 48%;
+  isolation: isolate;
+}
+
+.wrap {
+  display: block;
+  width: 100%;
+}
+
+.stage {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  max-width: 100%;
+  transform: rotateX(-2deg) rotateY(2.6deg);
+  transform-style: preserve-3d;
+  transform-origin: 50% 50%;
+}
+
+.layer,
+.face {
+  grid-area: 1 / 1;
+  display: inline-block;
+  max-width: 100%;
+  color: var(--depth-text-face-color);
+  font-size: var(--depth-text-font-size);
+  font-weight: var(--depth-text-font-weight);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  user-select: none;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  font-kerning: normal;
+  text-rendering: geometricPrecision;
+}
+
+.wrap .stage,
+.wrap .layer,
+.wrap .face {
+  width: 100%;
+}
+
+.wrap .layer,
+.wrap .face {
+  white-space: normal;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  filter: saturate(0.88) brightness(0.84);
+  pointer-events: none;
+}
+
+.face {
+  position: relative;
+  z-index: 1;
+  text-shadow: var(--depth-text-shadow);
+  transform: translateZ(0.6px);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .root {
+    cursor: default;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage {
+    will-change: auto !important;
+  }
+}

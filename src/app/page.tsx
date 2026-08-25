@@ -1,8 +1,7 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 import { motion } from "framer-motion";
-import TextCursorProximity from "@/components/ui/text-cursor-proximity";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { CustomEase } from "gsap/CustomEase";
@@ -11,6 +10,7 @@ import { ArrowRight, Briefcase, User, Mail, Sparkles, Figma, Palette, Video, Pen
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import BlurText from "@/components/BlurText";
+import DepthText from "@/components/ui/DepthText";
 import CountUp from "@/components/CountUp";
 import Magnet from "@/components/Magnet";
 import ToolCard from "@/components/ToolCard";
@@ -31,13 +31,7 @@ export default function Home() {
   const pageContainerRef = useRef<HTMLDivElement>(null);
   const portfolioBtnRef = useRef<HTMLAnchorElement>(null);
   const aboutBtnRef = useRef<HTMLAnchorElement>(null);
-  const { t, mounted, language } = useTranslation();
-  const [heroTitleReady, setHeroTitleReady] = useState(false);
-  const useHeroProximity = tier === "full" && heroTitleReady;
-
-  useEffect(() => {
-    setHeroTitleReady(false);
-  }, [language]);
+  const { t, mounted } = useTranslation();
 
   useGSAP(() => {
     if (!useGsap || tier === "minimal") return;
@@ -145,33 +139,25 @@ export default function Home() {
         {/* Hero Section */}
         <div className="hero-section-responsive relative z-[90] flex flex-col">
         <section className="flex flex-col relative z-[90] overflow-x-clip">
-          {/* Plain div — BlurText is the sole animation for hero title.
-               heroMask's clip-path and BlurText's word-by-word conflict visually. */}
-          <div className="overflow-hidden mb-6 sm:mb-8">
+          <div className="hero-depth-title mb-6 sm:mb-8">
             <h1 className="hero-title-responsive text-4xl sm:text-6xl lg:text-8xl font-bold tracking-tight max-w-5xl leading-[1.1]">
-              {useHeroProximity ? (
-                <TextCursorProximity
-                  label={t.hero.title}
-                  className="will-change-transform"
-                  styles={{
-                    transform: { from: "scale(1)", to: "scale(1.15)" },
-                    color: { from: "#f4f4f5", to: "#a5b4fc" },
-                  }}
-                  falloff="gaussian"
-                  radius={100}
-                  containerRef={pageContainerRef}
-                />
-              ) : (
-                <BlurText
-                  text={t.hero.title}
-                  delay={80}
-                  direction="bottom"
-                  animateBy="words"
-                  stepDuration={0.4}
-                  className="inline-flex flex-wrap"
-                  onAnimationComplete={() => setHeroTitleReady(true)}
-                />
-              )}
+              <DepthText
+                text={t.hero.title}
+                layers={28}
+                depth={1.55}
+                faceColor="#f4f4f5"
+                depthColor="#4338ca"
+                tilt={6}
+                pointerTracking={tier === "full"}
+                smoothing={0.12}
+                perspective={1120}
+                autoOrbit={tier === "full"}
+                orbitSpeed={0.12}
+                fontSize="clamp(2.75rem, 8.2vw, 6rem)"
+                fontWeight={800}
+                shadow
+                wrap
+              />
             </h1>
           </div>
 

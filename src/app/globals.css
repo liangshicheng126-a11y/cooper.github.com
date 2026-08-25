@@ -1345,6 +1345,12 @@ select option {
   letter-spacing: -0.035em;
 }
 
+.site-footer__brand-effect {
+  width: min(26rem, 78vw);
+  height: clamp(4.25rem, 8vw, 6rem);
+  margin-inline: auto;
+}
+
 .site-footer__note {
   margin-top: 0.65rem;
   color: var(--night-muted);
@@ -1445,6 +1451,16 @@ select option {
 
 .hero-section-responsive h1 + * {
   margin-inline: auto;
+}
+
+.hero-depth-title {
+  width: 100%;
+  padding: 1.25rem clamp(0.75rem, 3vw, 2rem);
+  overflow: visible;
+}
+
+.hero-depth-title h1 {
+  overflow: visible;
 }
 
 .hero-section-responsive .hero-cta-magnet:first-child a {

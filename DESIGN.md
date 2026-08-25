@@ -24,7 +24,7 @@ colors:
 typography:
   display:
     fontFamily: "var(--font-archivo), var(--font-noto-sans-sc), sans-serif"
-    fontSize: "clamp(3.4rem, 8.2vw, 6rem)"
+    fontSize: "clamp(2.75rem, 8.2vw, 6rem)"
     fontWeight: 700
     lineHeight: 0.98
     letterSpacing: "-0.04em"
@@ -123,6 +123,7 @@ Form direction 4, seed `94f35f2e`, is the shipped authority. The finish-review d
 - Graphite-black canvas with cold white, zinc, and rare indigo signals.
 - Centered full-width screening-room composition, never a split portfolio sidebar.
 - Exactly centered `100svh` title, description, and two-action group beneath compact floating chrome.
+- Pointer-responsive DepthText gives the home statement restrained dimensional weight; the footer closes with one compact MetallicPaint wordmark.
 - Low-opacity React Bits FloatingLines atmosphere with a readability vignette and bounded GPU cost.
 - Display-led hierarchy paired with editorial hairlines and asymmetric chapter grids.
 - Translucent obsidian surfaces with restrained blur and shallow ambient depth.
@@ -170,7 +171,7 @@ The UI palette is near-monochrome and nocturnal. Indigo is a navigational and in
 
 ### Hierarchy
 
-- **Display** (`typography.display`): hero titles only. On desktop the title is oversized, centered, tightly tracked, and set at weight `700`; on narrow mobile it scales with `clamp(3rem, 15.5vw, 4.65rem)` while preserving the same weight and line-height character.
+- **Display** (`typography.display`): hero titles only. The DepthText face uses `clamp(2.75rem, 8.2vw, 6rem)`, remains centered and tightly tracked, and allows balanced wrapping so longer English copy stays inside the mobile stage.
 - **Title** (`typography.title`): section and chapter titles. Use weight `700` so Chinese and Latin titles share a clear, consistent emphasis.
 - **Body** (`typography.body`): paragraphs, project analysis, form copy, and descriptive content. Long-form analysis should stay near `72ch`; compact service descriptions stay near `48ch`.
 - **Label** (`typography.label`): navigation, counters, and small metadata. Use compact sizes, firm weight, and controlled tracking; uppercase is appropriate only for terse utility text.
@@ -227,7 +228,7 @@ The renderer caps device pixel ratio at `2` on wider screens and `1.25` at `640p
 - State transitions use `180–300ms` easing for color, fill, border, scale, and small icon movement.
 - Entrances use opacity, a short `8–20px` translation, and optional blur with the `cubic-bezier(0.16, 1, 0.3, 1)` finish. They should feel like light resolving, not objects flying in.
 - Hero actions may lift up to `4px`, scale only to `1.02`, and move the arrow `3px`. Active controls compress to `0.98`.
-- Continuous movement is limited to the approved FloatingLines field at `animationSpeed=1` and purposeful full-motion enhancements. Do not add a second ambient animation layer.
+- Continuous movement is limited to the approved FloatingLines field, the home title's slow pointer/orbit response, and the footer wordmark's localized metallic flow. DepthText and MetallicPaint pause outside the viewport or while the page is hidden; neither becomes another full-screen ambient layer.
 - Preserve the full / reduced / minimal motion tiers and `prefers-reduced-motion`. Reduced motion freezes FloatingLines at time zero, disables its parallax/listeners/loop, and removes nonessential smooth scrolling and entrance motion while leaving every word, route, control, and project visible.
 - The portfolio focus rail may transition its active track over `520ms` with the same resolve curve. It changes emphasis only: all four projects remain keyboard reachable, and reduced motion resolves the layout immediately.
 
@@ -251,6 +252,20 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 - **Visual contract:** exact `#E945F5 / #2F4BC0 / #E945F5` line gradient, graphite base, screen-blended low opacity, and a full-screen readability vignette.
 - **Behavior:** `animationSpeed=1`, `interactive=false`, `bendRadius=5`, `bendStrength=-0.5`, `mouseDamping=0.05`, `parallax=true`, and `parallaxStrength=0.2`.
 - **Resilience:** preserve mobile DPR/opacity limits, page-hidden render pause, reduced-motion static frame, resize handling, WebGL fallback, and complete GPU/context cleanup.
+
+### DepthText home statement
+
+- **Role:** replaces the former proximity/blur title treatment as the single authored interaction in the first viewport while preserving the exact translated heading.
+- **Material:** 28 restrained cold-white-to-deep-indigo layers, shallow `1.55px` depth, six-degree maximum tilt, and a slow `0.12` orbit within the existing `6rem` display ceiling.
+- **Behavior:** pointer tracking is available only on fine-pointer full-motion devices. Intersection and page-visibility state pause its animation loop; reduced and minimal tiers hold an intentional static perspective.
+- **Accessibility:** only the front face is exposed to assistive technology; extrusion copies are decorative and hidden.
+
+### MetallicPaint footer signature
+
+- **Role:** the existing `COOPER.` wordmark becomes a small liquid-metal closing signature without changing footer copy or contact structure.
+- **Material:** a padded black wordmark mask drives a cold-white, black, and indigo-signal WebGL2 treatment within a fixed bounded footer region.
+- **Behavior:** render resolution follows the element size with DPR capped at `1.5` on desktop and `1` on mobile. Animation runs only while the footer is near the viewport and the page is visible.
+- **Resilience:** reduced motion renders a static time-zero frame; image, shader, or WebGL failure leaves the original accessible cold-white wordmark visible. Cleanup releases textures, buffers, shaders, programs, animation frames, observers, and the context.
 
 ### Floating site header
 
@@ -312,7 +327,7 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 ### Footer
 
 - **Structure:** a centered single-column close: brand and note lead, followed by a centered two-column contact grid. At `640px`, contact methods stack into one column.
-- **Tone:** quiet and factual. Hover may brighten actionable contact links; non-action contact facts remain visually stable.
+- **Tone:** quiet and factual. The localized MetallicPaint wordmark is the sole expressive close; hover may brighten actionable contact links while non-action contact facts remain visually stable.
 
 ## Do's and Don'ts
 
@@ -329,7 +344,7 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 - **Don't** restore the portfolio-template sidebar, decorative blob scaffold, or a dashboard-like card wall.
 - **Don't** introduce broad colorful gradients into UI chrome, controls, cards, or content. The user-directed low-opacity `#E945F5 / #2F4BC0 / #E945F5` FloatingLines field is the sole environmental exception.
 - **Don't** promote every heading to hero scale or every group into a rounded container.
-- **Don't** duplicate, remount, or layer competing effects over the global FloatingLines backdrop; do not reuse its magenta/blue gradient as UI accent color.
+- **Don't** duplicate, remount, or layer competing full-screen effects over the global FloatingLines backdrop. DepthText and MetallicPaint remain bounded to the title and footer wordmark, and the backdrop's magenta/blue gradient is not reused as general UI color.
 - **Don't** alter copy, facts, navigation, media, forms, API flows, lightboxes, project data, translation behavior, or motion-accessibility behavior under the banner of design maintenance.
 
 ### Content-preservation boundary
@@ -339,6 +354,7 @@ This design system governs presentation only. The names **COOPER.**, **梁世城
 ### Maintenance checklist
 
 - [ ] The hero is exactly `100svh`; its title + description + two-CTA group is centered on both axes; no separate scroll-prompt module competes with it.
+- [ ] The home title uses one DepthText instance with its translated copy intact; reduced/minimal tiers are static and the loop pauses offscreen or page-hidden.
 - [ ] Archivo remains the Latin face and Noto Sans SC remains the Chinese face across display, title, body, and label roles; no third expressive font has entered the system.
 - [ ] Graphite, cold white, zinc hairlines, obsidian, and restrained indigo remain the UI vocabulary; magenta/blue stays confined to the approved low-opacity FloatingLines field.
 - [ ] New content joins the centered `88rem` shell and responsive `900px` / `640px` collapse rules; navigation still switches at the `1024px` large breakpoint.
@@ -350,9 +366,10 @@ This design system governs presentation only. The names **COOPER.**, **梁世城
 - [ ] Keyboard focus, semantic headings, contrast, mobile scroll locking, and full/reduced/minimal motion tiers are verified.
 - [ ] `NightBackdrop` mounts exactly one FloatingLines instance with gradient `#E945F5 / #2F4BC0 / #E945F5`, speed `1`, interactivity off, bend `5 / -0.5`, damping `0.05`, and parallax `true / 0.2`.
 - [ ] Fixed full-screen WebGL, vignette readability, mobile DPR `1.25` and opacity `0.44`, page-hidden render pause, reduced-motion static frame, fallback state, and full cleanup remain intact.
+- [ ] The footer MetallicPaint region remains bounded, pauses offscreen/page-hidden, caps DPR at `1.5 / 1`, renders a static reduced-motion frame, and preserves the readable `COOPER.` fallback.
 - [ ] `DESIGN.md` and `.impeccable/design.json` agree on tokens, components, motion, breakpoints, named rules, and guardrails.
 - [ ] A bounded desktop/mobile finish review is complete. The current recorded disposition is **SHIP — no remaining fixes**.
 
 ### Provenance
 
-This record was carbonized from `PRODUCT.md`, `src/app/globals.css`, `src/app/layout.tsx`, `src/app/page.tsx`, `src/app/portfolio/page.tsx`, `src/app/task-brief/page.tsx`, `src/app/xiaocoo/page.tsx`, `src/components/SiteHeader.tsx`, `src/components/SiteFooter.tsx`, `src/components/NightBackdrop.tsx`, `src/components/ui/FloatingLines.tsx`, `src/components/ui/expanding-cards.tsx`, `src/components/task-brief/TaskBriefWizard.tsx`, and `src/components/xiaocoo/XiaocooChat.tsx`. The committed form is direction 4, seed `94f35f2e`. The shipping background is an adapted React Bits WebGL implementation, not a raster; the fixed graphite canvas and CSS vignette are its readability and fallback layers.
+This record was carbonized from `PRODUCT.md`, `src/app/globals.css`, `src/app/layout.tsx`, `src/app/page.tsx`, `src/app/portfolio/page.tsx`, `src/app/task-brief/page.tsx`, `src/app/xiaocoo/page.tsx`, `src/components/SiteHeader.tsx`, `src/components/SiteFooter.tsx`, `src/components/NightBackdrop.tsx`, `src/components/ui/FloatingLines.tsx`, `src/components/ui/DepthText.tsx`, `src/components/ui/MetallicPaint.tsx`, `src/components/ui/expanding-cards.tsx`, `src/components/task-brief/TaskBriefWizard.tsx`, and `src/components/xiaocoo/XiaocooChat.tsx`. The committed form is direction 4, seed `94f35f2e`. The shipping background, hero title, and footer signature are adapted React Bits effects with bounded animation, reduced-motion states, and explicit fallbacks.

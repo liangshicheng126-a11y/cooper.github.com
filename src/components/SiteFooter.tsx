@@ -3,6 +3,7 @@
 import { Mail, MapPin, Phone } from "lucide-react";
 
 import WeChatIcon from "@/components/icons/WeChatIcon";
+import MetallicPaint from "@/components/ui/MetallicPaint";
 import { useTranslation } from "@/locales/LanguageProvider";
 
 export default function SiteFooter() {
@@ -11,7 +12,28 @@ export default function SiteFooter() {
   return (
     <footer className="site-footer">
       <div>
-        <p className="site-footer__brand">COOPER.</p>
+        <MetallicPaint
+          imageSrc="/cooper-wordmark-mask.svg"
+          fallbackText="COOPER."
+          className="site-footer__brand site-footer__brand-effect"
+          seed={42}
+          scale={3.5}
+          patternSharpness={1}
+          noiseScale={0.45}
+          speed={0.18}
+          liquid={0.48}
+          brightness={1.65}
+          contrast={0.72}
+          refraction={0.012}
+          blur={0.012}
+          chromaticSpread={1.5}
+          fresnel={1}
+          angle={0}
+          waveAmplitude={0.7}
+          distortion={0.58}
+          contour={0.2}
+          tintColor="#a5b4fc"
+        />
         <p className="site-footer__note">{t.hero.subtitle}</p>
       </div>
       <div className="site-footer__contacts">
