@@ -10,7 +10,6 @@ import { useTranslation } from "@/locales/LanguageProvider";
 import { ArrowRight, Briefcase, User, Mail, Sparkles, Zap, Figma, Palette, Video, PenTool, Layout, Image as ImageIcon, Scissors, Clapperboard, Film } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import ScrollDirectionSection from "@/components/ScrollDirectionSection";
 import BlurText from "@/components/BlurText";
 import CountUp from "@/components/CountUp";
 import Magnet from "@/components/Magnet";
@@ -18,7 +17,6 @@ import ToolCard from "@/components/ToolCard";
 import ProjectCard from "@/components/ProjectCard";
 import GsapParallaxLayer from "@/components/motion/GsapParallaxLayer";
 import GsapScrollBatch from "@/components/motion/GsapScrollBatch";
-import HomeScrollStack from "@/components/motion/HomeScrollStack";
 import useMotionTier from "@/hooks/useMotionTier";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import { useIntroRevealReady } from "@/components/motion/IntroPlaybackContext";
@@ -153,17 +151,6 @@ export default function Home() {
         {/* Hero Section */}
         <GsapParallaxLayer className="hero-section-responsive relative z-[90] min-h-[clamp(16rem,36vh,28rem)] lg:min-h-[clamp(18rem,44vh,32rem)] flex flex-col justify-start pt-1 sm:pt-2 pb-12 sm:pb-20 lg:pb-28">
         <section className="flex flex-col relative z-[90] overflow-x-clip">
-          <motion.div 
-            variants={heroSoft}
-            className="mb-8 inline-flex items-center space-x-3 px-4 py-1.5 rounded-full glass border-white/10 text-indigo-500 text-sm font-medium w-fit max-w-full"
-          >
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-            </span>
-            <span className="whitespace-normal break-words leading-snug">{t.hero.status}</span>
-          </motion.div>
-
           {/* Plain div — BlurText is the sole animation for hero title.
                heroMask's clip-path and BlurText's word-by-word conflict visually. */}
           <div className="overflow-hidden mb-6 sm:mb-8">
@@ -174,7 +161,7 @@ export default function Home() {
                   className="will-change-transform"
                   styles={{
                     transform: { from: "scale(1)", to: "scale(1.15)" },
-                    color: { from: "#171717", to: "#6366f1" },
+                    color: { from: "#f4f4f5", to: "#a5b4fc" },
                   }}
                   falloff="gaussian"
                   radius={100}
@@ -250,6 +237,10 @@ export default function Home() {
                 <Zap className="w-5 h-5 text-indigo-500 fill-indigo-500/20" />
               </div>
               <div>
+                <p className="mb-1 flex items-center gap-2 text-xs font-semibold text-indigo-400">
+                  <span className="h-1.5 w-1.5 rounded-full bg-indigo-400" aria-hidden />
+                  <span>{t.hero.status}</span>
+                </p>
                 <p className="text-xs font-bold text-foreground/40 uppercase tracking-widest mb-1">{t.hero.recentWork}</p>
                 <p className="text-sm font-medium text-foreground/80">{t.hero.latestProject}</p>
               </div>
@@ -258,9 +249,9 @@ export default function Home() {
         </section>
         </GsapParallaxLayer>
 
-        <HomeScrollStack className="relative z-0 mt-4 sm:mt-8">
+        <div className="home-scroll-stack relative z-0 mt-4 sm:mt-8">
         {/* Services / Focus Section */}
-        <ScrollDirectionSection
+        <section
           id="services-block"
           className="section-block rounded-[40px] p-6 sm:p-8 lg:p-10"
         >
@@ -269,34 +260,34 @@ export default function Home() {
             <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+          <div className="screening-services">
             {t.hero.services.map((service: any, i: number) => {
               const icons = [Palette, Layout, Video];
               const Icon = icons[i] || Sparkles;
               
               return (
-                <div key={i} className="glass-panel p-8 rounded-[40px] hover:border-indigo-500/25 transition-all group flex flex-col items-center text-center">
-                  <div className="w-16 h-16 rounded-2xl bg-indigo-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <article key={i} className="screening-service-card group">
+                  <div className="screening-service-card__icon">
                     <Icon className="w-8 h-8 text-indigo-500" />
                   </div>
                   <h3 className="text-2xl font-bold mb-4">{service.title}</h3>
                   <p className="text-foreground/50 leading-relaxed text-sm">{service.desc}</p>
-                </div>
+                </article>
               );
             })}
           </div>
-        </ScrollDirectionSection>
+        </section>
 
         {/* Stats Section */}
-        <ScrollDirectionSection className="section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+        <section className="section-block screening-stats-section rounded-[40px] p-6 sm:p-8 lg:p-10">
+          <div className="screening-stats">
           {[
             { icon: Briefcase, label: t.contact.projectsCompleted, countTo: 50, suffix: "+" },
             { icon: User, label: t.contact.happyClients, countTo: 30, suffix: "+" },
             { icon: Mail, label: t.contact.activeSupport, countTo: null, value: "24/7" },
           ].map((stat, i) => (
-            <div key={i} className="glass-panel p-8 rounded-[40px] group hover:border-indigo-500/30 transition-all flex flex-col items-center text-center">
-              <div className="p-4 rounded-3xl bg-white/5 mb-6 group-hover:bg-indigo-500/10 transition-colors">
+            <article key={i} className="screening-stat group">
+              <div className="screening-stat__icon">
                 <stat.icon className="w-8 h-8 text-indigo-500" />
               </div>
               <h3 className="text-5xl font-bold mb-3 tabular-nums">
@@ -313,13 +304,13 @@ export default function Home() {
                 )}
               </h3>
               <p className="text-foreground/40 font-bold uppercase tracking-widest text-xs">{stat.label}</p>
-            </div>
+            </article>
           ))}
           </div>
-        </ScrollDirectionSection>
+        </section>
 
         {/* Tools / Skills Section */}
-        <ScrollDirectionSection id="featured-block" className="section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
+        <section id="featured-block" className="section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-6">
             <h2 className="text-2xl font-bold">{t.hero.tools.title}</h2>
             <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />
@@ -339,30 +330,30 @@ export default function Home() {
               </div>
             ))}
           </GsapScrollBatch>
-        </ScrollDirectionSection>
+        </section>
 
         {/* Workflow Section */}
-        <ScrollDirectionSection className="section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
+        <section className="section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-12">
             <h2 className="text-2xl font-bold">{t.hero.workflow.title}</h2>
             <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />
             <span className="text-foreground/40 text-sm sm:text-right">{t.hero.workflow.subtitle}</span>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="screening-workflow">
             {t.hero.workflow.steps.map((wf: any, i: number) => (
-              <div key={i} className="glass-panel p-8 rounded-[40px] hover:border-indigo-500/20 transition-all relative group">
-                <div className="absolute top-6 right-6 text-6xl font-bold text-indigo-500/10 group-hover:text-indigo-500/20 transition-colors">
+              <article key={i} className="screening-workflow__step group">
+                <div className="screening-workflow__number">
                   0{i + 1}
                 </div>
-                <h3 className="text-xl font-bold mb-4">{wf.title}</h3>
+                <h3 className="text-xl font-bold">{wf.title}</h3>
                 <p className="text-foreground/50 text-sm leading-relaxed">{wf.desc}</p>
-              </div>
+              </article>
             ))}
           </div>
-        </ScrollDirectionSection>
+        </section>
 
         {/* Featured Work Preview Section */}
-        <ScrollDirectionSection className="section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
+        <section className="section-block rounded-[40px] p-6 sm:p-8 lg:p-10">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-8">
             <div className="flex items-center space-x-4 min-w-0">
               <h2 className="text-2xl font-bold">{t.hero.featuredTitle}</h2>
@@ -407,8 +398,8 @@ export default function Home() {
               />
             ))}
           </GsapScrollBatch>
-        </ScrollDirectionSection>
-        </HomeScrollStack>
+        </section>
+        </div>
       </motion.div>
     </div>
   );

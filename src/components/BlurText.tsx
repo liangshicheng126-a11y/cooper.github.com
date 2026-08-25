@@ -78,15 +78,15 @@ export default function BlurText({
         : { filter: "blur(6px)", opacity: 0, y: 28 };
     }
     return direction === "top"
-      ? { opacity: 0, y: -28 }
-      : { opacity: 0, y: 28 };
+      ? { filter: "blur(0px)", opacity: 0, y: -28 }
+      : { filter: "blur(0px)", opacity: 0, y: 28 };
   }, [direction, useBlur]);
 
   const defaultTo = useMemo(() => {
     if (useBlur) {
       return [{ filter: "blur(0px)", opacity: 1, y: 0 }];
     }
-    return [{ opacity: 1, y: 0 }];
+    return [{ filter: "blur(0px)", opacity: 1, y: 0 }];
   }, [useBlur]);
 
   const stepCount = defaultTo.length + 1;
@@ -100,6 +100,8 @@ export default function BlurText({
       {elements.map((segment, index) => {
         const animateKeyframes = buildKeyframes(defaultFrom, defaultTo);
         const isLast = index === elements.length - 1;
+        const shouldWrapLongSegment =
+          animateBy === "words" && segment.length > 12 && !segment.includes(" ");
 
         return (
           <motion.span
@@ -119,7 +121,12 @@ export default function BlurText({
             onAnimationComplete={
               isLast && onAnimationComplete ? onAnimationComplete : undefined
             }
-            style={{ display: "inline-block", whiteSpace: "pre" }}
+            style={{
+              display: "inline-block",
+              maxWidth: "100%",
+              whiteSpace: shouldWrapLongSegment ? "normal" : "pre",
+              overflowWrap: shouldWrapLongSegment ? "anywhere" : "normal",
+            }}
           >
             {segment === " " ? "\u00A0" : segment}
             {animateBy === "words" && !isLast ? "\u00A0" : ""}

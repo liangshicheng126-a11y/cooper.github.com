@@ -1,0 +1,337 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-25T11:47:34+08:00",
+  "title": "Design System: Cooper Nocturnal Screening Room",
+  "extensions": {
+    "colorMeta": {
+      "graphite-black": {
+        "role": "neutral",
+        "displayName": "Graphite Black",
+        "canonical": "#050506",
+        "tonalRamp": ["#050506", "#111114", "#25252a", "#414149", "#64646d", "#8d8d96", "#bebec5", "#f1f1f3"]
+      },
+      "deep-ink": {
+        "role": "neutral",
+        "displayName": "Deep Ink",
+        "canonical": "#09090b",
+        "tonalRamp": ["#09090b", "#161619", "#29292e", "#45454c", "#686870", "#919198", "#c0c0c6", "#f2f2f4"]
+      },
+      "cold-white": {
+        "role": "neutral",
+        "displayName": "Cold White",
+        "canonical": "#f4f4f5",
+        "tonalRamp": ["#151517", "#29292d", "#434348", "#626268", "#85858b", "#aaaab0", "#d0d0d4", "#f4f4f5"]
+      },
+      "pure-white": {
+        "role": "neutral",
+        "displayName": "Pure White",
+        "canonical": "#ffffff",
+        "tonalRamp": ["#171717", "#2b2b2b", "#474747", "#666666", "#898989", "#b0b0b0", "#d7d7d7", "#ffffff"]
+      },
+      "muted-cold-white": {
+        "role": "neutral",
+        "displayName": "Muted Cold White",
+        "canonical": "rgba(244, 244, 245, 0.68)",
+        "tonalRamp": ["rgba(244,244,245,0.14)", "rgba(244,244,245,0.22)", "rgba(244,244,245,0.32)", "rgba(244,244,245,0.44)", "rgba(244,244,245,0.56)", "rgba(244,244,245,0.68)", "rgba(244,244,245,0.82)", "rgba(244,244,245,0.95)"]
+      },
+      "soft-cold-white": {
+        "role": "neutral",
+        "displayName": "Soft Cold White",
+        "canonical": "rgba(244, 244, 245, 0.82)",
+        "tonalRamp": ["rgba(244,244,245,0.14)", "rgba(244,244,245,0.24)", "rgba(244,244,245,0.36)", "rgba(244,244,245,0.50)", "rgba(244,244,245,0.64)", "rgba(244,244,245,0.76)", "rgba(244,244,245,0.88)", "rgba(244,244,245,0.98)"]
+      },
+      "floating-obsidian": {
+        "role": "neutral",
+        "displayName": "Floating Obsidian",
+        "canonical": "rgba(7, 7, 9, 0.70)",
+        "tonalRamp": ["rgba(7,7,9,0.40)", "rgba(7,7,9,0.50)", "rgba(7,7,9,0.60)", "rgba(7,7,9,0.70)", "rgba(18,18,22,0.76)", "rgba(38,38,44,0.80)", "rgba(72,72,82,0.84)", "rgba(118,118,130,0.88)"]
+      },
+      "obsidian": {
+        "role": "neutral",
+        "displayName": "Translucent Obsidian",
+        "canonical": "rgba(12, 12, 15, 0.72)",
+        "tonalRamp": ["rgba(6,6,8,0.44)", "rgba(12,12,15,0.56)", "rgba(20,20,24,0.64)", "rgba(32,32,38,0.72)", "rgba(52,52,60,0.76)", "rgba(78,78,88,0.80)", "rgba(110,110,120,0.84)", "rgba(150,150,160,0.88)"]
+      },
+      "obsidian-strong": {
+        "role": "neutral",
+        "displayName": "Strong Obsidian",
+        "canonical": "rgba(15, 15, 19, 0.90)",
+        "tonalRamp": ["rgba(5,5,7,0.72)", "rgba(11,11,14,0.80)", "rgba(20,20,25,0.86)", "rgba(34,34,41,0.90)", "rgba(55,55,64,0.92)", "rgba(82,82,93,0.94)", "rgba(116,116,128,0.96)", "rgba(158,158,168,0.98)"]
+      },
+      "field-obsidian": {
+        "role": "neutral",
+        "displayName": "Field Obsidian",
+        "canonical": "rgba(255, 255, 255, 0.045)",
+        "tonalRamp": ["rgba(255,255,255,0.025)", "rgba(255,255,255,0.045)", "rgba(255,255,255,0.065)", "rgba(255,255,255,0.09)", "rgba(255,255,255,0.13)", "rgba(255,255,255,0.18)", "rgba(255,255,255,0.24)", "rgba(255,255,255,0.32)"]
+      },
+      "zinc-hairline": {
+        "role": "neutral",
+        "displayName": "Zinc Hairline",
+        "canonical": "rgba(255, 255, 255, 0.12)",
+        "tonalRamp": ["rgba(255,255,255,0.04)", "rgba(255,255,255,0.07)", "rgba(255,255,255,0.10)", "rgba(255,255,255,0.12)", "rgba(255,255,255,0.16)", "rgba(255,255,255,0.22)", "rgba(255,255,255,0.30)", "rgba(255,255,255,0.42)"]
+      },
+      "zinc-hairline-strong": {
+        "role": "neutral",
+        "displayName": "Strong Zinc Hairline",
+        "canonical": "rgba(255, 255, 255, 0.22)",
+        "tonalRamp": ["rgba(255,255,255,0.06)", "rgba(255,255,255,0.10)", "rgba(255,255,255,0.15)", "rgba(255,255,255,0.22)", "rgba(255,255,255,0.30)", "rgba(255,255,255,0.40)", "rgba(255,255,255,0.54)", "rgba(255,255,255,0.70)"]
+      },
+      "indigo-signal": {
+        "role": "primary",
+        "displayName": "Indigo Signal",
+        "canonical": "#a5b4fc",
+        "tonalRamp": ["#161a3d", "#242a63", "#343c8c", "#4a55b7", "#6573d8", "#818cf8", "#a5b4fc", "#e5e9ff"]
+      },
+      "indigo-core": {
+        "role": "primary",
+        "displayName": "Indigo Core",
+        "canonical": "#818cf8",
+        "tonalRamp": ["#14183a", "#20265d", "#2e3684", "#414bae", "#5865d4", "#818cf8", "#aeb6ff", "#e7e9ff"]
+      },
+      "indigo-soft": {
+        "role": "primary",
+        "displayName": "Indigo Soft",
+        "canonical": "#c7d2fe",
+        "tonalRamp": ["#171b3d", "#272e63", "#3b458c", "#5663b6", "#7888db", "#9facf5", "#c7d2fe", "#eef1ff"]
+      },
+      "indigo-action": {
+        "role": "primary",
+        "displayName": "Indigo Action",
+        "canonical": "#4f46e5",
+        "tonalRamp": ["#17133f", "#241d66", "#30288e", "#3d35b8", "#4f46e5", "#7870f0", "#a9a4f7", "#e7e5ff"]
+      },
+      "indigo-action-hover": {
+        "role": "primary",
+        "displayName": "Deep Indigo Action",
+        "canonical": "#4338ca",
+        "tonalRamp": ["#151039", "#21175d", "#2b2081", "#362aa7", "#4338ca", "#6e64df", "#a39ced", "#e4e1fb"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Projected Display",
+        "purpose": "Hero titles only; ZCOOL carries the Chinese poster character and Archivo is the fallback."
+      },
+      "title": {
+        "displayName": "Chapter Title",
+        "purpose": "Section and editorial chapter headings below the hero."
+      },
+      "body": {
+        "displayName": "Archivo Body",
+        "purpose": "Latin text, paragraphs, analysis, forms, and operational content."
+      },
+      "label": {
+        "displayName": "Screening Label",
+        "purpose": "Navigation, status, counters, metadata, and terse utility text."
+      }
+    },
+    "shadows": [
+      {
+        "name": "floating-chrome",
+        "value": "0 18px 48px rgba(0, 0, 0, 0.34)",
+        "purpose": "Separates the fixed top bar from the CSS night horizon."
+      },
+      {
+        "name": "primary-action",
+        "value": "0 12px 34px rgba(0, 0, 0, 0.30)",
+        "purpose": "Gives the cold-white hero action one quiet lift."
+      },
+      {
+        "name": "overlay",
+        "value": "0 24px 70px rgba(0, 0, 0, 0.56)",
+        "purpose": "Reserved for the mobile navigation panel."
+      },
+      {
+        "name": "project-media",
+        "value": "0 18px 52px rgba(0, 0, 0, 0.25)",
+        "purpose": "Frames project imagery without lifting ordinary editorial rows."
+      },
+      {
+        "name": "surface-sheen",
+        "value": "inset 0 1px 0 rgba(255, 255, 255, 0.035)",
+        "purpose": "One-line material cue for glass, panels, and fields."
+      }
+    ],
+    "motion": [
+      {
+        "name": "state-fast",
+        "value": "180ms ease",
+        "purpose": "Mobile navigation and contact hover states."
+      },
+      {
+        "name": "state-standard",
+        "value": "220ms ease",
+        "purpose": "Desktop navigation color and background transitions."
+      },
+      {
+        "name": "control-standard",
+        "value": "300ms ease",
+        "purpose": "Button color, fill, border, shadow, transform, and active-scale transitions."
+      },
+      {
+        "name": "resolve",
+        "value": "550ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Compact blur-slide entrance used by navigation."
+      },
+      {
+        "name": "hero-soft",
+        "value": "800–900ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Opacity and short vertical resolve for first-view content."
+      },
+      {
+        "name": "cta-lift",
+        "value": "320ms cubic-bezier(0.2, 0.9, 0.25, 1)",
+        "purpose": "Bounded hero-action lift of at most 4px and scale of at most 1.02."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "viewport-floor",
+        "value": "320px"
+      },
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "editorial-collapse",
+        "value": "900px"
+      },
+      {
+        "name": "lg-navigation",
+        "value": "1024px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Hero Action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one high-contrast invitation in the first viewport.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\"><span>VIEW WORK</span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></a>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:.75rem;padding:1rem 2rem;border:0;border-radius:16px;background:#f4f4f5;color:#09090b;font:700 1rem/1.25 var(--font-archivo,Arial,sans-serif);text-decoration:none;box-shadow:0 12px 34px rgba(0,0,0,.3);transition:background-color 300ms ease,transform 300ms ease}.ds-btn-primary svg{width:1.25rem;height:1.25rem;fill:none;stroke:currentColor;stroke-width:1.8;transition:transform 280ms ease}.ds-btn-primary:hover{background:#d4d4d8;transform:translateY(-4px) scale(1.02)}.ds-btn-primary:hover svg{transform:translateX(3px)}.ds-btn-primary:active{transform:scale(.98)}.ds-btn-primary:focus-visible{outline:2px solid rgba(199,210,254,.95);outline-offset:3px}"
+    },
+    {
+      "name": "Secondary Hero Action",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Quiet alternative action with obsidian material and a zinc boundary.",
+      "html": "<a class=\"ds-btn-secondary\" href=\"#\">ABOUT</a>",
+      "css": ".ds-btn-secondary{display:inline-flex;align-items:center;justify-content:center;padding:1rem 2rem;border:1px solid rgba(255,255,255,.14);border-radius:16px;background:rgba(255,255,255,.04);color:#f4f4f5;font:700 1rem/1.25 var(--font-archivo,Arial,sans-serif);text-decoration:none;backdrop-filter:blur(18px) saturate(118%);transition:background-color 300ms ease,border-color 300ms ease,transform 300ms ease}.ds-btn-secondary:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.28);transform:translateY(-4px) scale(1.02)}.ds-btn-secondary:active{transform:scale(.98)}.ds-btn-secondary:focus-visible{outline:2px solid rgba(199,210,254,.95);outline-offset:3px}"
+    },
+    {
+      "name": "Floating Site Header",
+      "kind": "nav",
+      "refersTo": "floating-header",
+      "description": "Compact centered chrome with wordmark, active route, and language control.",
+      "html": "<header class=\"ds-header\"><a class=\"ds-wordmark\" href=\"#\"><i></i>COOPER.</a><nav><a class=\"ds-nav-active\" href=\"#\">HOME</a><a href=\"#\">WORK</a><a href=\"#\">ABOUT</a></nav><button>EN</button></header>",
+      "css": ".ds-header{display:flex;align-items:center;justify-content:space-between;width:min(52rem,100%);min-height:3.75rem;padding:.5rem .6rem .5rem 1rem;border:1px solid rgba(255,255,255,.105);border-radius:14px;background:rgba(7,7,9,.7);color:#f4f4f5;box-shadow:0 18px 48px rgba(0,0,0,.34);backdrop-filter:blur(22px) saturate(135%);font-family:var(--font-archivo,Arial,sans-serif)}.ds-wordmark{display:flex;align-items:center;gap:.65rem;color:#fff;font-size:.88rem;font-weight:800;letter-spacing:.11em;text-decoration:none}.ds-wordmark i{width:.48rem;height:.48rem;border-radius:999px;background:#a5b4fc;box-shadow:0 6px 18px rgba(129,140,248,.38)}.ds-header nav{display:flex;gap:.15rem}.ds-header nav a{position:relative;padding:.7rem .78rem;border-radius:10px;color:rgba(244,244,245,.62);font-size:.78rem;font-weight:600;text-decoration:none;transition:color 220ms ease,background-color 220ms ease}.ds-header nav a:hover,.ds-header nav .ds-nav-active{color:#fff;background:rgba(255,255,255,.065)}.ds-nav-active:after{content:'';position:absolute;right:.72rem;bottom:.3rem;left:.72rem;height:1px;background:rgba(199,210,254,.75)}.ds-header button{min-width:3.25rem;height:2.25rem;border:1px solid rgba(255,255,255,.1);border-radius:8px;background:rgba(255,255,255,.035);color:#d4d4d8;font-size:.69rem;letter-spacing:.12em}.ds-header a:focus-visible,.ds-header button:focus-visible{outline:2px solid rgba(199,210,254,.95);outline-offset:3px}"
+    },
+    {
+      "name": "Recent Work Status Rail",
+      "kind": "custom",
+      "refersTo": "status-rail",
+      "description": "A factual first-view signal for availability and latest work.",
+      "html": "<div class=\"ds-status\"><div class=\"ds-status-icon\">↯</div><div><p class=\"ds-status-live\"><i></i>AVAILABLE FOR DESIGN</p><p class=\"ds-status-label\">RECENT WORK</p><p class=\"ds-status-title\">Latest project</p></div></div>",
+      "css": ".ds-status{display:flex;align-items:center;gap:1rem;padding:.5rem 0 .5rem 3rem;border-left:1px solid rgba(255,255,255,.1);color:rgba(244,244,245,.82);font-family:var(--font-archivo,Arial,sans-serif)}.ds-status-icon{display:grid;place-items:center;width:3rem;height:3rem;border-radius:12px;background:rgba(79,70,229,.1);color:#a5b4fc;font-size:1.35rem}.ds-status p{margin:0}.ds-status-live{display:flex;align-items:center;gap:.5rem;color:#a5b4fc;font-size:.75rem;font-weight:600}.ds-status-live i{width:.375rem;height:.375rem;border-radius:999px;background:#818cf8}.ds-status-label{margin-top:.25rem!important;color:rgba(244,244,245,.68);font-size:.7rem;font-weight:700;letter-spacing:.1em}.ds-status-title{margin-top:.25rem!important;font-size:.875rem;font-weight:500}@media(max-width:640px){.ds-status{padding-left:0;border-left:0}}"
+    },
+    {
+      "name": "Nocturnal Content Panel",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "Shared obsidian frame for grouped content; internal hairlines do the organizing.",
+      "html": "<section class=\"ds-panel\"><h2>CAPABILITIES</h2><div class=\"ds-panel-row\"><span>01</span><div><h3>Brand Design</h3><p>A focused description sits inside the chapter, not another nested card.</p></div></div><div class=\"ds-panel-row\"><span>02</span><div><h3>UI / UX</h3><p>Hairlines and spacing establish the reading order.</p></div></div></section>",
+      "css": ".ds-panel{padding:2rem;border:1px solid rgba(255,255,255,.1);border-radius:16px;background:linear-gradient(145deg,rgba(20,20,24,.76),rgba(9,9,12,.54));color:#f4f4f5;box-shadow:inset 0 1px 0 rgba(255,255,255,.03);backdrop-filter:blur(16px) saturate(112%);font-family:var(--font-archivo,Arial,sans-serif)}.ds-panel h2{margin:0 0 1.5rem;font:400 1.5rem/1.33 var(--font-display-cjk,var(--font-archivo,Arial,sans-serif))}.ds-panel-row{display:grid;grid-template-columns:3rem 1fr;gap:1rem;padding:1.25rem 0;border-top:1px solid rgba(255,255,255,.12)}.ds-panel-row>span{color:rgba(244,244,245,.25);font-size:.74rem;font-weight:700;letter-spacing:.22em}.ds-panel-row h3{margin:0;font-size:1rem}.ds-panel-row p{max-width:48ch;margin:.55rem 0 0;color:rgba(244,244,245,.68);font-size:.875rem;line-height:1.5}"
+    },
+    {
+      "name": "Nocturnal Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Low-alpha operational field with explicit keyboard focus.",
+      "html": "<label class=\"ds-field\"><span>PROJECT NAME</span><input type=\"text\" placeholder=\"Enter project name\"></label>",
+      "css": ".ds-field{display:grid;gap:.5rem;color:#f4f4f5;font:600 .78rem/1.25 var(--font-archivo,Arial,sans-serif);letter-spacing:.08em}.ds-field input{min-height:3rem;padding:.75rem 1rem;border:1px solid rgba(255,255,255,.13);border-radius:12px;background:rgba(255,255,255,.045);color:#f4f4f5;box-shadow:inset 0 1px 0 rgba(255,255,255,.035);font:400 1rem/1.5 var(--font-archivo,Arial,sans-serif);letter-spacing:0}.ds-field input::placeholder{color:rgba(244,244,245,.52)}.ds-field input:focus-visible{outline:2px solid rgba(199,210,254,.95);outline-offset:3px}"
+    },
+    {
+      "name": "Editorial Analysis Chapter",
+      "kind": "custom",
+      "refersTo": "panel",
+      "description": "Open two-column detail-page chapter organized by hairlines instead of stacked cards.",
+      "html": "<article class=\"ds-chapter\"><div class=\"ds-chapter-heading\"><span>&lt;/&gt;</span><h2>IMPLEMENTATION</h2></div><div class=\"ds-chapter-copy\"><p>Long-form analysis remains readable and visually subordinate to the work.</p><ul><li>Semantic structure</li><li>Responsive grid</li><li>Motion tiers</li><li>Keyboard access</li></ul></div></article>",
+      "css": ".ds-chapter{display:grid;grid-template-columns:minmax(12rem,.58fr) minmax(0,1.42fr);gap:clamp(2rem,6vw,6rem);padding:clamp(2rem,5vw,4.5rem) 0;border-top:1px solid rgba(255,255,255,.22);border-bottom:1px solid rgba(255,255,255,.12);color:#f4f4f5;font-family:var(--font-archivo,Arial,sans-serif)}.ds-chapter-heading{display:flex;align-items:flex-start;gap:1rem}.ds-chapter-heading span{display:grid;place-items:center;width:2.75rem;height:2.75rem;border:1px solid rgba(165,180,252,.24);border-radius:10px;background:rgba(129,140,248,.08);color:#a5b4fc}.ds-chapter h2{margin:.45rem 0 0;font:400 1.5rem/1.33 var(--font-display-cjk,var(--font-archivo,Arial,sans-serif))}.ds-chapter-copy{max-width:72ch}.ds-chapter-copy p{margin:0;color:rgba(244,244,245,.82);line-height:1.6}.ds-chapter ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:1.75rem 0 0;padding:0;border-top:1px solid rgba(255,255,255,.12);list-style:none}.ds-chapter li{padding:.9rem 1rem .9rem 0;border-bottom:1px solid rgba(255,255,255,.12)}.ds-chapter li:nth-child(even){padding-left:1rem;border-left:1px solid rgba(255,255,255,.12)}@media(max-width:900px){.ds-chapter{grid-template-columns:1fr;gap:1.5rem}}@media(max-width:640px){.ds-chapter ul{grid-template-columns:1fr}.ds-chapter li:nth-child(even){padding-left:0;border-left:0}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Nocturnal Screening Room",
+    "overview": "Cooper's work is presented as a private screening room after dark: graphite black holds the frame, cold white type behaves like projected light, zinc hairlines order the programme, translucent obsidian provides just enough material separation, and indigo appears only as a controlled signal. The interface is cinematic without becoming theatrical. Work, words, and actions remain legible before atmosphere.\n\nThis world deliberately rejects the generic portfolio-template split sidebar and decorative blob scaffold. The site is a centered, full-width composition with compact floating chrome, oversized display typography, editorial chapters, and a layered night horizon. Its story is fixed: identify Cooper, understand his capabilities, inspect real work, then choose contact, Task Brief, or Xiaocoo without losing context.\n\nForm direction 4, seed 94f35f2e, is the shipped authority. The finish-review disposition is SHIP — no remaining fixes. The desktop, mobile, and P2 detail captures in .impeccable/review/ are the visual baselines for maintenance.",
+    "keyCharacteristics": [
+      "Graphite-black canvas with cold white, zinc, and rare indigo signals.",
+      "Centered full-width screening-room composition, never a split portfolio sidebar.",
+      "Compact floating top bar over a layered, quiet night horizon.",
+      "Display-led hierarchy paired with editorial hairlines and asymmetric chapter grids.",
+      "Translucent obsidian surfaces with restrained blur and shallow ambient depth.",
+      "Real project work and preserved bilingual content remain the evidence and the story."
+    ],
+    "rules": [
+      {
+        "name": "The Work-Is-The-Projection Rule",
+        "body": "Atmosphere frames the work; it never competes with, recolors, or substitutes for actual project media.",
+        "section": "overview"
+      },
+      {
+        "name": "The Restrained-Indigo Rule",
+        "body": "Indigo marks state, action, or structure. Do not turn it into large decorative gradients, broad card fills, or a competing background motif.",
+        "section": "colors"
+      },
+      {
+        "name": "The Cold-White Ladder Rule",
+        "body": "Use primary, soft, muted, and faint white levels to express hierarchy; do not introduce arbitrary gray families screen by screen.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two-Voice Rule",
+        "body": "ZCOOL speaks for display moments and Chinese headline character; Archivo carries everything operational. Do not add a third expressive family.",
+        "section": "typography"
+      },
+      {
+        "name": "The Oversized-Once Rule",
+        "body": "The largest scale belongs to the first-view title. Subsequent headings step down decisively so the page reads as chapters, not repeated hero cards.",
+        "section": "typography"
+      },
+      {
+        "name": "The Centered-Stage Rule",
+        "body": "New surfaces join the 88rem centered shell and chapter rhythm. They do not introduce a permanent sidebar, detached canvas, or unrelated dashboard grid.",
+        "section": "layout"
+      },
+      {
+        "name": "The Depth-Is-Atmosphere Rule",
+        "body": "Use blur, gradient falloff, and one-pixel highlights to suggest space; reserve large shadows for elements that truly float or overlay.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Hairline-Before-Card Rule",
+        "body": "When grouping related information, first try spacing and a zinc divider. Add a filled container only when the content needs a distinct material layer.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Radius-Hierarchy Rule",
+        "body": "Controls stay tighter than panels; pills remain exceptional. Do not mix arbitrary 20–40px rounded containers into new screening-room surfaces.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "Do preserve the nocturnal screening-room thesis, centered stage, compact floating chrome, and chapter rhythm on every user-facing route.",
+      "Do let real work, process analysis, and existing project media provide the visual proof.",
+      "Do use cold-white hierarchy, zinc hairlines, translucent obsidian, radial beams, and restrained indigo consistently.",
+      "Do keep bilingual parity, semantic structure, keyboard behavior, readable contrast, and all motion fallbacks.",
+      "Do update this file and .impeccable/design.json together whenever a shipped token or component pattern changes."
+    ],
+    "donts": [
+      "Don't restore the portfolio-template sidebar, decorative blob scaffold, or a dashboard-like card wall.",
+      "Don't introduce broad colorful gradients, extra accent families, heavy glow, gratuitous glass, or large shadows on ordinary sections.",
+      "Don't promote every heading to hero scale or every group into a rounded container.",
+      "Don't replace the CSS night backdrop with a raster simply because the class name contains image.",
+      "Don't alter copy, facts, navigation, media, forms, API flows, lightboxes, project data, translation behavior, or motion-accessibility behavior under the banner of design maintenance."
+    ]
+  }
+}

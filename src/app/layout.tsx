@@ -1,28 +1,24 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Archivo, ZCOOL_QingKe_HuangYou } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/locales/LanguageProvider";
-import Sidebar from "@/components/Sidebar";
-import LanguageToggle from "@/components/LanguageToggle";
 import PageTransition from "@/components/PageTransition";
-import ScrollBlobs from "@/components/ScrollBlobs";
 import GsapProvider from "@/components/motion/GsapProvider";
 import MotionTierProvider from "@/components/motion/MotionTierProvider";
-import { IntroPlaybackProvider } from "@/components/motion/IntroPlaybackContext";
-import BlobSplashIntro from "@/components/motion/BlobSplashIntro";
-import ViewportCanvas from "@/components/ViewportCanvas";
-import {
-  getBlobIntroEarlyGateScript,
-  getPagesBasePath,
-} from "@/lib/blobIntro";
+import NightBackdrop from "@/components/NightBackdrop";
+import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
 
-const inter = Inter({ subsets: ["latin"] });
-const introEnabled = process.env.NEXT_PUBLIC_INTRO_ENABLED !== "false";
-const pagesBasePath = getPagesBasePath();
-const introEarlyGateScript = getBlobIntroEarlyGateScript(
-  pagesBasePath,
-  introEnabled
-);
+const archivo = Archivo({
+  subsets: ["latin"],
+  variable: "--font-archivo",
+});
+const zcoolDisplay = ZCOOL_QingKe_HuangYou({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-display-cjk",
+  display: "swap",
+});
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ??
   (process.env.GITHUB_REPOSITORY_OWNER
@@ -57,32 +53,34 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={inter.className} suppressHydrationWarning>
-        <script
-          dangerouslySetInnerHTML={{ __html: introEarlyGateScript }}
+    <html lang="en" className="dark" suppressHydrationWarning>
+      <body className={`${archivo.variable} ${zcoolDisplay.variable}`} suppressHydrationWarning>
+        <span
+          hidden
+          aria-hidden
+          dangerouslySetInnerHTML={{
+            __html: `<!--
+THESIS: Cooper's work appears as a nocturnal screening room, refusing the portfolio-template split sidebar and decorative blob scaffold.
+OWN-WORLD: Graphite black, cold white type, zinc hairlines, translucent obsidian surfaces, radial light beams, and restrained indigo signals.
+STORY: Visitors identify Cooper, understand his capabilities, inspect real work, and choose contact, task brief, or Xiaocoo without losing context.
+FIRST VIEWPORT: A compact floating top bar frames an oversized title, supporting statement, two actions, a recent-work status rail, and a layered night horizon.
+FORM: Nocturnal portfolio screening room, grounded direction 4, seed 94f35f2e.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+-->`,
+          }}
         />
         <LanguageProvider>
           <MotionTierProvider>
-          <IntroPlaybackProvider>
-          <GsapProvider>
-            <ViewportCanvas>
-              <ScrollBlobs />
-              <BlobSplashIntro />
-
-              {/* Layout Structure — desktop locked to design width via ViewportCanvas */}
-              <div className="layout-chrome flex min-h-screen min-w-0 overflow-x-clip">
-                <Sidebar />
-                <LanguageToggle />
-                <main className="flex flex-col flex-1 min-h-[100dvh] min-w-0 overflow-x-clip ml-0 xl:ml-80 px-4 sm:px-8 lg:px-10 xl:px-12 pb-8 sm:pb-10 xl:pb-12 pt-24 xl:pt-12 relative z-10">
-                  <PageTransition>
-                    {children}
-                  </PageTransition>
+            <GsapProvider>
+              <div className="site-shell">
+                <NightBackdrop />
+                <SiteHeader />
+                <main className="site-main">
+                  <PageTransition>{children}</PageTransition>
+                  <SiteFooter />
                 </main>
               </div>
-            </ViewportCanvas>
-          </GsapProvider>
-          </IntroPlaybackProvider>
+            </GsapProvider>
           </MotionTierProvider>
         </LanguageProvider>
       </body>
