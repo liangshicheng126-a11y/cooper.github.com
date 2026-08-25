@@ -76,10 +76,9 @@ function modeHasDraft(answers: TaskBriefAnswers) {
 
 function fieldClass(hasError = false) {
   return cn(
-    "w-full rounded-2xl border bg-white/55 px-4 text-[15px] text-foreground outline-none backdrop-blur-sm transition",
-    "placeholder:text-foreground/35 hover:border-indigo-300/60 focus:border-indigo-400 focus:ring-4 focus:ring-indigo-500/10",
-    "dark:bg-slate-950/35",
-    hasError ? "border-rose-400" : "border-white/35 dark:border-white/15"
+    "task-brief-field w-full rounded-xl border px-4 text-[15px] text-foreground outline-none transition",
+    "placeholder:text-foreground/40 hover:border-indigo-300/45 focus:border-indigo-400 focus:ring-4 focus:ring-indigo-500/10",
+    hasError ? "border-rose-400" : "border-white/15"
   );
 }
 
@@ -100,7 +99,7 @@ function TaskBriefSummary({
   return (
     <article
       id="task-brief-print-area"
-      className="rounded-[28px] border border-white/30 bg-white/55 p-5 shadow-[0_16px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl sm:p-8 dark:bg-slate-950/30 dark:border-white/10"
+      className="task-brief-panel p-5 sm:p-8"
     >
       <div className="mb-7 flex flex-col gap-3 border-b border-foreground/10 pb-6 sm:flex-row sm:items-start sm:justify-between">
         <div>
@@ -111,7 +110,7 @@ function TaskBriefSummary({
           </p>
         </div>
         {submissionId && (
-          <div className="rounded-xl border border-indigo-200/70 bg-indigo-50/70 px-3 py-2 text-xs font-semibold text-indigo-700 dark:border-indigo-400/20 dark:bg-indigo-500/10 dark:text-indigo-300">
+          <div className="rounded-xl border border-indigo-300/20 bg-indigo-400/10 px-3 py-2 text-xs font-semibold text-indigo-200">
             {copy.submissionId}：{submissionId}
           </div>
         )}
@@ -136,7 +135,7 @@ function TaskBriefSummary({
                   <div
                     key={field.key}
                     className={cn(
-                      "rounded-xl border border-foreground/8 bg-white/35 px-4 py-3 dark:bg-white/[0.03]",
+                      "task-brief-subpanel rounded-xl border px-4 py-3",
                       value.length > 100 && "sm:col-span-2"
                     )}
                   >
@@ -354,8 +353,8 @@ export default function TaskBriefWizard() {
 
   if (phase === "gate") {
     return (
-      <section className="mx-auto w-full max-w-2xl rounded-[36px] border border-white/30 bg-white/45 p-6 shadow-[0_24px_80px_rgba(15,23,42,0.10)] backdrop-blur-2xl sm:p-10 dark:bg-slate-950/25 dark:border-white/10">
-        <div className="mb-8 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-500 text-white shadow-lg shadow-indigo-500/20">
+      <section className="task-brief-panel task-brief-gate mx-auto w-full max-w-2xl p-6 sm:p-10">
+        <div className="task-brief-icon mb-8 flex h-14 w-14 items-center justify-center rounded-xl text-indigo-200">
           <LockKeyhole className="h-6 w-6" />
         </div>
         <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">{copy.gateTitle}</h2>
@@ -378,7 +377,7 @@ export default function TaskBriefWizard() {
           <button
             type="submit"
             disabled={!accessCode.trim() || verifying}
-            className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-indigo-500 px-6 font-bold text-white shadow-lg shadow-indigo-500/20 transition hover:bg-indigo-600 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+            className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-white px-6 font-bold text-slate-950 shadow-[0_12px_34px_rgba(0,0,0,0.30)] transition hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
           >
             {verifying ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
             {verifying ? copy.verifying : copy.verify}
@@ -405,7 +404,7 @@ export default function TaskBriefWizard() {
               key={option.value}
               type="button"
               onClick={() => chooseMode(option.value)}
-              className="group relative overflow-hidden rounded-[30px] border border-white/35 bg-white/50 p-7 text-left shadow-[0_18px_70px_rgba(15,23,42,0.08)] backdrop-blur-xl transition hover:-translate-y-1 hover:border-indigo-300/70 hover:shadow-[0_24px_80px_rgba(79,70,229,0.13)] dark:bg-slate-950/25 dark:border-white/10"
+              className="task-brief-option group relative overflow-hidden p-7 text-left transition"
             >
               <div className="absolute -right-8 -top-10 text-[150px] font-black leading-none text-indigo-500/[0.05]">{option.badge}</div>
               <div className="relative">
@@ -439,11 +438,11 @@ export default function TaskBriefWizard() {
             <p className="mt-2 max-w-2xl text-foreground/60">{success ? copy.successHint : copy.reviewHint}</p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <button type="button" onClick={copySummary} className="inline-flex h-10 items-center gap-2 rounded-xl border border-foreground/10 bg-white/50 px-4 text-sm font-semibold transition hover:border-indigo-300 hover:text-indigo-500 dark:bg-white/5">
+            <button type="button" onClick={copySummary} className="task-brief-secondary-action inline-flex h-10 items-center gap-2 rounded-xl px-4 text-sm font-semibold transition">
               {copied ? <Check className="h-4 w-4" /> : <Clipboard className="h-4 w-4" />}
               {copied ? copy.copied : copy.copy}
             </button>
-            <button type="button" onClick={() => window.print()} className="inline-flex h-10 items-center gap-2 rounded-xl border border-foreground/10 bg-white/50 px-4 text-sm font-semibold transition hover:border-indigo-300 hover:text-indigo-500 dark:bg-white/5">
+            <button type="button" onClick={() => window.print()} className="task-brief-secondary-action inline-flex h-10 items-center gap-2 rounded-xl px-4 text-sm font-semibold transition">
               <Printer className="h-4 w-4" /> {copy.print}
             </button>
           </div>
@@ -452,7 +451,7 @@ export default function TaskBriefWizard() {
         <TaskBriefSummary answers={answers} mode={mode} steps={steps} submissionId={success ? submissionId : undefined} />
 
         {!success ? (
-          <div className="no-print mt-6 rounded-[24px] border border-white/30 bg-white/40 p-5 backdrop-blur-xl dark:bg-slate-950/25 dark:border-white/10">
+          <div className="task-brief-panel no-print mt-6 p-5">
             <input type="text" tabIndex={-1} autoComplete="off" aria-hidden className="hidden" value={company} onChange={(event) => setCompany(event.target.value)} />
             <label className="flex cursor-pointer items-start gap-3 text-sm leading-relaxed text-foreground/70">
               <input type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} className="mt-1 h-4 w-4 accent-indigo-500" />
@@ -460,10 +459,10 @@ export default function TaskBriefWizard() {
             </label>
             {submitError && <p className="mt-4 text-sm font-medium text-rose-500" role="alert">{submitError}</p>}
             <div className="mt-5 flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
-              <button type="button" onClick={() => setPhase("form")} className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl border border-foreground/10 bg-white/50 px-5 font-semibold transition hover:border-indigo-300 hover:text-indigo-500 dark:bg-white/5">
+              <button type="button" onClick={() => setPhase("form")} className="task-brief-secondary-action inline-flex h-12 items-center justify-center gap-2 rounded-xl px-5 font-semibold transition">
                 <ChevronLeft className="h-4 w-4" /> {copy.edit}
               </button>
-              <button type="button" onClick={sendTask} disabled={!consent || submitting} className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-indigo-500 px-6 font-bold text-white shadow-lg shadow-indigo-500/20 transition hover:bg-indigo-600 disabled:cursor-not-allowed disabled:opacity-50">
+              <button type="button" onClick={sendTask} disabled={!consent || submitting} className="task-brief-primary-action inline-flex h-12 items-center justify-center gap-2 rounded-xl px-6 font-bold transition disabled:cursor-not-allowed disabled:opacity-50">
                 {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                 {submitting ? copy.submitting : copy.submit}
               </button>
@@ -471,7 +470,7 @@ export default function TaskBriefWizard() {
           </div>
         ) : (
           <div className="no-print mt-6 flex justify-center">
-            <button type="button" onClick={resetTask} className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-indigo-500 px-6 font-bold text-white shadow-lg shadow-indigo-500/20 transition hover:bg-indigo-600">
+            <button type="button" onClick={resetTask} className="task-brief-primary-action inline-flex h-12 items-center justify-center gap-2 rounded-xl px-6 font-bold transition">
               <RotateCcw className="h-4 w-4" /> {copy.newTask}
             </button>
           </div>
@@ -491,10 +490,10 @@ export default function TaskBriefWizard() {
         </span>
       </div>
       <div className="mb-7 h-1.5 overflow-hidden rounded-full bg-foreground/8">
-        <div className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-[width] duration-500" style={{ width: `${progress}%` }} />
+        <div className="h-full rounded-full bg-indigo-400 transition-[width] duration-500" style={{ width: `${progress}%` }} />
       </div>
 
-      <div className="rounded-[34px] border border-white/30 bg-white/45 p-6 shadow-[0_24px_80px_rgba(15,23,42,0.09)] backdrop-blur-2xl sm:p-9 dark:bg-slate-950/25 dark:border-white/10">
+      <div className="task-brief-panel p-6 sm:p-9">
         <div className="mb-8">
           <span className="inline-flex h-9 min-w-9 items-center justify-center rounded-full bg-indigo-500 px-3 text-sm font-bold text-white">{step + 1}</span>
           <h2 className="mt-5 text-2xl font-bold tracking-tight sm:text-3xl">{currentStep.title}</h2>
@@ -549,10 +548,10 @@ export default function TaskBriefWizard() {
         {stepError && <p className="mt-6 rounded-xl border border-rose-200/70 bg-rose-50/70 px-4 py-3 text-sm font-medium text-rose-600 dark:border-rose-400/20 dark:bg-rose-500/10 dark:text-rose-300" role="alert">{stepError}</p>}
 
         <div className="mt-8 flex flex-col-reverse gap-3 border-t border-foreground/8 pt-6 sm:flex-row sm:justify-between">
-          <button type="button" disabled={step === 0} onClick={() => { setStep((value) => Math.max(0, value - 1)); setStepError(""); }} className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-foreground/10 bg-white/45 px-5 font-semibold transition hover:border-indigo-300 hover:text-indigo-500 disabled:cursor-not-allowed disabled:opacity-35 dark:bg-white/5">
+          <button type="button" disabled={step === 0} onClick={() => { setStep((value) => Math.max(0, value - 1)); setStepError(""); }} className="task-brief-secondary-action inline-flex h-11 items-center justify-center gap-2 rounded-xl px-5 font-semibold transition disabled:cursor-not-allowed disabled:opacity-35">
             <ChevronLeft className="h-4 w-4" /> {copy.back}
           </button>
-          <button type="button" onClick={nextStep} className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-indigo-500 px-6 font-bold text-white shadow-lg shadow-indigo-500/20 transition hover:bg-indigo-600">
+          <button type="button" onClick={nextStep} className="task-brief-primary-action inline-flex h-11 items-center justify-center gap-2 rounded-xl px-6 font-bold transition">
             {step === steps.length - 1 ? copy.review : copy.next}
             <ChevronRight className="h-4 w-4" />
           </button>

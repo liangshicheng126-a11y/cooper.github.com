@@ -41,10 +41,9 @@ function pickMobileSuggestions(all: string[]) {
   );
 }
 
-const BUBBLE_SPRING: Transition = {
-  type: "spring",
-  stiffness: 420,
-  damping: 28,
+const BUBBLE_TRANSITION: Transition = {
+  duration: 0.28,
+  ease: [0.16, 1, 0.3, 1],
 };
 
 function uid() {
@@ -118,12 +117,12 @@ function bubbleMotion(role: "user" | "assistant", enabled: boolean) {
   return {
     initial: {
       opacity: 0,
-      scale: 0.2,
-      x: isUser ? 24 : -24,
-      y: 16,
+      scale: 0.98,
+      x: isUser ? 8 : -8,
+      y: 8,
     },
     animate: { opacity: 1, scale: 1, x: 0, y: 0 },
-    transition: BUBBLE_SPRING,
+    transition: BUBBLE_TRANSITION,
     style: {
       transformOrigin: isUser ? "bottom right" : "bottom left",
     } as CSSProperties,
@@ -145,6 +144,7 @@ export default function XiaocooChat() {
   const [hydrated, setHydrated] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const transcriptRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
   const deviceIdRef = useRef<string>("anonymous");
@@ -185,7 +185,12 @@ export default function XiaocooChat() {
   }, [visitorName, mounted]);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: useMotion ? "smooth" : "auto" });
+    const transcript = transcriptRef.current;
+    if (!transcript) return;
+    transcript.scrollTo({
+      top: transcript.scrollHeight,
+      behavior: useMotion ? "smooth" : "auto",
+    });
   }, [messages, streaming, useMotion]);
 
   useEffect(() => {
@@ -314,7 +319,7 @@ export default function XiaocooChat() {
       <div className="flex flex-col gap-6 w-full min-w-0 flex-1">
         <div
           className={cn(
-            "glass rounded-[1.75rem] sm:rounded-[2rem] border-white/15",
+            "xiaocoo-gate",
             "p-6 sm:p-8 max-w-lg"
           )}
         >
@@ -338,8 +343,8 @@ export default function XiaocooChat() {
                 onChange={(e) => setNameDraft(e.target.value)}
                 placeholder={t.xiaocoo.gateNamePlaceholder}
                 className={cn(
-                  "w-full rounded-2xl px-4 py-3 text-[15px]",
-                  "bg-white/60 dark:bg-white/5 border border-white/25",
+                  "xiaocoo-field w-full rounded-xl px-4 py-3 text-[15px]",
+                  "border",
                   "outline-none focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20",
                   "placeholder:text-foreground/60"
                 )}
@@ -349,8 +354,8 @@ export default function XiaocooChat() {
               type="submit"
               disabled={!nameDraft.trim()}
               className={cn(
-                "w-full sm:w-auto px-6 h-12 rounded-2xl font-medium",
-                "bg-indigo-500 text-white hover:bg-indigo-600 transition-colors",
+                "w-full sm:w-auto px-6 h-12 rounded-xl font-medium",
+                "bg-white text-slate-950 hover:bg-zinc-200 transition-colors",
                 "disabled:opacity-40 disabled:pointer-events-none"
               )}
             >
@@ -364,7 +369,7 @@ export default function XiaocooChat() {
 
   return (
     <div className="flex flex-col gap-6 w-full min-w-0 flex-1">
-      <p className="px-1 text-sm font-medium text-foreground/75">
+      <p className="xiaocoo-identity px-1 text-sm font-medium text-foreground/75">
         {t.xiaocoo.chattingAs}
         <span className="ml-2 font-semibold text-indigo-700 dark:text-indigo-300">
           {visitorName}
@@ -373,11 +378,11 @@ export default function XiaocooChat() {
 
       <div
         className={cn(
-          "glass rounded-[1.75rem] sm:rounded-[2rem] border-white/30 bg-white/70 dark:border-white/10 dark:bg-slate-950/70",
+          "xiaocoo-chat",
           "flex flex-col min-h-[min(70vh,640px)] max-h-[min(78vh,720px)] overflow-hidden"
         )}
       >
-        <div className="flex-1 overflow-y-auto px-3 sm:px-6 py-5 sm:py-6 space-y-4">
+        <div ref={transcriptRef} className="xiaocoo-chat__transcript flex-1 overflow-y-auto px-4 sm:px-7 py-5 sm:py-7 space-y-4">
           {messages.length === 0 && (
             <div className="space-y-2">
               <p className="text-[15px] font-medium leading-relaxed text-foreground/90 sm:text-base">
@@ -407,10 +412,10 @@ export default function XiaocooChat() {
               >
                 <div
                   className={cn(
-                    "max-w-[92%] sm:max-w-[80%] rounded-2xl px-3.5 sm:px-4 py-3 text-[14px] sm:text-[15px] leading-relaxed whitespace-pre-wrap",
+                    "max-w-[92%] sm:max-w-[78%] rounded-2xl px-3.5 sm:px-4 py-3 text-[14px] sm:text-[15px] leading-relaxed whitespace-pre-wrap",
                     message.role === "user"
-                      ? "bg-indigo-500/90 text-white rounded-br-md"
-                      : "rounded-bl-md border border-indigo-500/15 bg-white/85 text-foreground dark:border-white/10 dark:bg-slate-900/85"
+                      ? "xiaocoo-message xiaocoo-message--user text-white rounded-br-md"
+                      : "xiaocoo-message xiaocoo-message--assistant rounded-bl-md border text-foreground"
                   )}
                 >
                   {showThinking ? (
@@ -428,7 +433,7 @@ export default function XiaocooChat() {
           <div ref={bottomRef} />
         </div>
 
-        <div className="border-t border-indigo-300/70 bg-indigo-50/90 px-3 pt-3 pb-1 dark:border-indigo-300/20 dark:bg-indigo-950/45 sm:px-4">
+        <div className="xiaocoo-suggestions px-3 pt-3 pb-1 sm:px-5">
           {messages.length > 0 && (
             <p className="mb-2 px-0.5 text-xs font-bold uppercase tracking-[0.18em] text-indigo-700 dark:text-indigo-200">
               {t.xiaocoo.suggestionsHint}
@@ -442,10 +447,8 @@ export default function XiaocooChat() {
                 disabled={streaming}
                 onClick={() => void send(suggestion)}
                 className={cn(
-                  "min-h-11 text-left text-[13px] sm:min-h-0 sm:text-sm px-3.5 py-2.5 sm:py-2 rounded-2xl",
-                  "border border-indigo-300/90 bg-indigo-100/95 text-indigo-950 shadow-sm",
-                  "dark:border-indigo-300/35 dark:bg-indigo-400/20 dark:text-indigo-50",
-                  "hover:border-indigo-400 hover:bg-indigo-200/90 dark:hover:bg-indigo-400/30 transition-colors",
+                  "xiaocoo-suggestion min-h-11 text-left text-[13px] sm:min-h-0 sm:text-sm px-3.5 py-2.5 sm:py-2 rounded-xl",
+                  "border text-foreground transition-colors",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50 focus-visible:ring-offset-2",
                   "disabled:opacity-50 w-full sm:w-auto"
                 )}
@@ -458,7 +461,7 @@ export default function XiaocooChat() {
 
         <form
           onSubmit={onSubmit}
-          className="flex items-end gap-2 border-t border-indigo-300/70 bg-white/90 p-3 dark:border-indigo-300/20 dark:bg-slate-950/85 sm:gap-3 sm:p-4"
+          className="xiaocoo-composer flex items-end gap-2 border-t p-3 sm:gap-3 sm:p-4"
         >
           <label className="flex-1 min-w-0">
             <span className="sr-only">{t.xiaocoo.placeholder}</span>
@@ -475,9 +478,8 @@ export default function XiaocooChat() {
               }}
               placeholder={t.xiaocoo.placeholder}
               className={cn(
-                "w-full resize-none rounded-2xl px-4 py-3 text-[15px]",
-                "border border-indigo-300/90 bg-indigo-50 text-foreground shadow-sm",
-                "dark:border-indigo-300/35 dark:bg-indigo-950/55",
+                "xiaocoo-field w-full resize-none rounded-xl px-4 py-3 text-[15px]",
+                "border text-foreground",
                 "outline-none focus:border-indigo-500/70 focus:ring-2 focus:ring-indigo-500/30",
                 "placeholder:text-foreground/70 dark:placeholder:text-indigo-100/75 disabled:opacity-60"
               )}
@@ -487,8 +489,8 @@ export default function XiaocooChat() {
             type="submit"
             disabled={streaming || !input.trim()}
             className={cn(
-              "shrink-0 h-12 w-12 rounded-2xl inline-flex items-center justify-center",
-              "bg-indigo-500 text-white hover:bg-indigo-600 transition-colors",
+              "xiaocoo-send shrink-0 h-12 w-12 rounded-xl inline-flex items-center justify-center",
+              "text-white transition-colors",
               "disabled:opacity-40 disabled:pointer-events-none"
             )}
             aria-label={t.xiaocoo.send}

@@ -2,11 +2,10 @@
 
 import { motion } from "framer-motion";
 import { useTranslation } from "@/locales/LanguageProvider";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Camera, Clapperboard, Layout, Palette } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import ProjectCard from "@/components/ProjectCard";
-import GsapScrollBatch from "@/components/motion/GsapScrollBatch";
+import { ExpandingCards, type CardItem } from "@/components/ui/expanding-cards";
 import useMotionTier from "@/hooks/useMotionTier";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import { heroMaskVariants, shouldUseGsap } from "@/lib/motion";
@@ -19,34 +18,42 @@ export default function Portfolio() {
 
   if (!mounted) return null;
 
-  const projects = [
+  const projects: CardItem[] = [
     {
       id: "p1",
       title: t.portfolio.projects.p1.title,
-      category: t.portfolio.categories.graphic,
-      image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1200&q=80",
-      accent: "#6366f1",
+      description: t.portfolio.categories.graphic,
+      imgSrc: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1200&q=80",
+      icon: <Palette className="h-5 w-5" />,
+      linkHref: "/portfolio/p1/",
+      linkLabel: t.portfolio.viewProject,
     },
     {
       id: "p2",
       title: t.portfolio.projects.p2.title,
-      category: t.portfolio.categories.uiux,
-      image: "https://images.unsplash.com/photo-1545235617-9465d2a55698?w=1200&q=80",
-      accent: "#a855f7",
+      description: t.portfolio.categories.uiux,
+      imgSrc: "https://images.unsplash.com/photo-1545235617-9465d2a55698?w=1200&q=80",
+      icon: <Layout className="h-5 w-5" />,
+      linkHref: "/portfolio/p2/",
+      linkLabel: t.portfolio.viewProject,
     },
     {
       id: "p3",
       title: t.portfolio.projects.p3.title,
-      category: t.portfolio.categories.photography,
-      image: "https://images.unsplash.com/photo-1493863641943-9b68992a8d07?w=1200&q=80",
-      accent: "#3b82f6",
+      description: t.portfolio.categories.photography,
+      imgSrc: "https://images.unsplash.com/photo-1493863641943-9b68992a8d07?w=1200&q=80",
+      icon: <Camera className="h-5 w-5" />,
+      linkHref: "/portfolio/p3/",
+      linkLabel: t.portfolio.viewProject,
     },
     {
       id: "p4",
       title: t.portfolio.projects.p4.title,
-      category: t.portfolio.categories.video,
-      image: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=1200&q=80",
-      accent: "#2dd4bf",
+      description: t.portfolio.categories.video,
+      imgSrc: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=1200&q=80",
+      icon: <Clapperboard className="h-5 w-5" />,
+      linkHref: "/portfolio/p4/",
+      linkLabel: t.portfolio.viewProject,
     },
   ];
 
@@ -84,24 +91,7 @@ export default function Portfolio() {
           </motion.p>
         </header>
 
-        <GsapScrollBatch
-          entrance="portfolio"
-          playOnMount
-          className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 xl:gap-10"
-        >
-          {projects.map((project, i) => (
-            <ProjectCard
-              key={project.id}
-              id={project.id}
-              title={project.title}
-              category={project.category}
-              image={project.image}
-              viewProject={t.portfolio.viewProject}
-              accent={project.accent}
-              batchIndex={i}
-            />
-          ))}
-        </GsapScrollBatch>
+        <ExpandingCards items={projects} defaultActiveIndex={0} aria-label={t.portfolio.title} />
 
         {/* CTA Section */}
         <motion.section

@@ -186,13 +186,13 @@ The page shell is centered at a maximum width of `88rem` and isolated over a fix
 
 The first viewport has a fixed composition: compact floating top bar over the page; an exactly centered group containing the oversized title, one supporting statement, and two actions; and a separate desktop-only scroll cue anchored at the bottom center. The cue is not part of the centering calculation and is hidden on mobile and short desktop viewports. Do not insert promotional modules, carousels, counters, or extra proof above the professional-services section.
 
-Professional services use an asymmetric `1.24fr / 0.76fr` grid with two equal rows. The first service occupies the wider column and spans both rows; the second and third services occupy the narrower column one per row. At `900px` and below, the grid becomes a natural-height single column and the first item stops spanning. Stats use three equal columns. Workflow rows divide number, title, and description into three editorial columns. P2 analysis uses a `0.58fr / 1.42fr` chapter grid with text constrained to readable measure. Hairlines, not card gutters, carry most of the information architecture.
+Professional services use three equal desktop columns in one row. Every service receives the same dimensions, padding, icon treatment, and typographic weight; none is promoted above the others. At `900px` and below, the grid becomes a natural-height single column. Stats use three equal columns. Workflow rows divide number, title, and description into three editorial columns. P2 analysis uses a `0.58fr / 1.42fr` chapter grid with text constrained to readable measure. Hairlines, not card gutters, carry most of the information architecture.
 
 ### Responsive rules
 
 - The supported viewport floor is `320px`.
 - At `1024px`, the full desktop navigation yields to the menu control and modal navigation panel.
-- At `900px` and below, professional services become a natural-height single column, analysis becomes one column, and the footer becomes one column.
+- At `900px` and below, professional services and analysis become natural-height single columns; the footer keeps its centered single-column close.
 - At `640px` and below, header insets contract to `0.75rem`, main padding becomes `7.5rem 0.85rem 1rem`, stats and footer contacts stack, workflow becomes a two-column number/content structure, and analysis point grids become single-column.
 - The mobile hero remains exactly `100svh`, uses full-width stacked actions, and omits the scroll cue. On desktop viewports no taller than `36rem`, the hero may become intrinsic-height and the cue is hidden to prevent collision.
 - At `640px` and below, the FloatingLines layer drops from `0.58` to `0.44` opacity, reduces saturation/brightness, and caps renderer device pixel ratio at `1.25` instead of the wider-screen cap of `2`.
@@ -230,6 +230,7 @@ The renderer caps device pixel ratio at `2` on wider screens and `1.25` at `640p
 - Hero actions may lift up to `4px`, scale only to `1.02`, and move the arrow `3px`. Active controls compress to `0.98`.
 - Continuous movement is limited to the approved FloatingLines field at `animationSpeed=1`, the desktop-only scroll cue, and purposeful full-motion enhancements. Do not add a second ambient animation layer.
 - Preserve the full / reduced / minimal motion tiers and `prefers-reduced-motion`. Reduced motion freezes FloatingLines at time zero, disables its parallax/listeners/loop, and removes nonessential smooth scrolling and entrance motion while leaving every word, route, control, and project visible.
+- The portfolio focus rail may transition its active track over `520ms` with the same resolve curve. It changes emphasis only: all four projects remain keyboard reachable, and reduced motion resolves the layout immediately.
 
 **The Depth-Is-Atmosphere Rule.** Use blur, gradient falloff, and one-pixel highlights to suggest space; reserve large shadows for elements that truly float or overlay.
 
@@ -270,14 +271,27 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 
 ### Professional services
 
-- **Desktop structure:** `1.24fr / 0.76fr` columns and two equal rows; the first item spans both rows in the wider column, while the second and third items occupy one row each in the narrower column.
-- **Mobile structure:** one natural-height column with no row spanning at `900px` and below.
+- **Desktop structure:** three equal columns in one row; every item has identical padding, minimum height, icon treatment, and information hierarchy.
+- **Mobile structure:** one natural-height column at `900px` and below.
 - **Material:** a shared parent frame and zinc hairlines organize the services. Each item centers an indigo icon tile with its preserved title and description; do not nest three unrelated floating cards.
+
+### Portfolio focus rail
+
+- **Structure:** the four preserved projects share one `16px` obsidian frame. Desktop uses a `5fr / 1fr / 1fr / 1fr` active track; mobile rotates the same relationship into vertical rows.
+- **State:** hover, focus, click, Arrow keys, Home, and End may change the active project. Only the active project exposes its description, category, and explicit project link; collapsed rails keep an unambiguous title.
+- **Media:** use each project's real image as the full panel field with a dark readability wash. Do not replace, recolor, or fabricate media.
+- **Motion:** grid-track and content emphasis may resolve over `520ms` with the approved curve; `prefers-reduced-motion` makes the transition effectively immediate.
+
+### Nocturnal operate surfaces
+
+- **Xiaocoo:** keep one stable sequence—intro, transcript, suggestion rail, composer—inside the same obsidian and indigo vocabulary as the rest of the site. New messages may use a small opacity and `8px` resolve, never a springy card entrance.
+- **Task Brief:** preserve the intro, verification gate, form steps, validation, and submission behavior on dark architectural panels. Language switching belongs exclusively to the global top navigation.
+- **Operational consistency:** inputs, buttons, pending states, errors, focus rings, and mobile behavior reuse the shared field and control rules instead of introducing a second light interface.
 
 ### Panels and editorial chapters
 
 - **Panels:** shared `16px` corners, zinc border, dark translucent gradient, shallow internal sheen, and restrained blur.
-- **Capability and stat modules:** professional services follow the fixed spanning grid above; stats use equal columns inside a common frame. Rely on hairlines between entries.
+- **Capability and stat modules:** professional services and stats use equal columns inside a common frame. Rely on hairlines between entries.
 - **Workflow and P2 analysis:** prefer open rows with top/bottom rules over nested cards. Keep analysis prose near `72ch` and points in a two-column ruled list until the mobile breakpoint.
 - **Project media:** retain real imagery, existing aspect behavior, lightboxes, and category identity. The nocturnal system frames media; it does not replace or recolor it.
 
@@ -298,7 +312,7 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 
 ### Footer
 
-- **Structure:** hairline-led two-column close with brand/note on the left and real contact methods on the right; collapse to one column at `900px`, then stack contacts at `640px`.
+- **Structure:** a centered single-column close: brand and note lead, followed by a centered two-column contact grid. At `640px`, contact methods stack into one column.
 - **Tone:** quiet and factual. Hover may brighten actionable contact links; non-action contact facts remain visually stable.
 
 ## Do's and Don'ts
@@ -329,7 +343,10 @@ This design system governs presentation only. The names **COOPER.**, **梁世城
 - [ ] Archivo remains the body/Latin face; ZCOOL QingKe HuangYou remains the display/Chinese face; no third expressive font has entered the system.
 - [ ] Graphite, cold white, zinc hairlines, obsidian, and restrained indigo remain the UI vocabulary; magenta/blue stays confined to the approved low-opacity FloatingLines field.
 - [ ] New content joins the centered `88rem` shell and responsive `900px` / `640px` collapse rules; navigation still switches at the `1024px` large breakpoint.
-- [ ] Professional services still use `1.24fr / 0.76fr`, two equal desktop rows, and a two-row first item; mobile still resolves to one natural-height column.
+- [ ] Professional services still use three equal desktop columns with no featured item; mobile still resolves to one natural-height column.
+- [ ] The portfolio focus rail keeps four real projects, one active state, keyboard navigation, explicit project links, mobile vertical behavior, and a reduced-motion fallback.
+- [ ] Xiaocoo still follows transcript → suggestions → composer, Task Brief exposes only the global language control, and both preserve their existing behavior and APIs.
+- [ ] The footer remains centered, with its contact grid centered on desktop and stacked at `640px`.
 - [ ] Navigation, language switching, forms, APIs, lightboxes, project data, contact methods, Task Brief, and Xiaocoo still behave exactly as before the visual change.
 - [ ] Keyboard focus, semantic headings, contrast, mobile scroll locking, and full/reduced/minimal motion tiers are verified.
 - [ ] `NightBackdrop` mounts exactly one FloatingLines instance with gradient `#E945F5 / #2F4BC0 / #E945F5`, speed `1`, interactivity off, bend `5 / -0.5`, damping `0.05`, and parallax `true / 0.2`.
@@ -339,4 +356,4 @@ This design system governs presentation only. The names **COOPER.**, **梁世城
 
 ### Provenance
 
-This record was carbonized from `PRODUCT.md`, `src/app/globals.css`, `src/app/layout.tsx`, `src/app/page.tsx`, `src/components/SiteHeader.tsx`, `src/components/SiteFooter.tsx`, `src/components/NightBackdrop.tsx`, and `src/components/ui/FloatingLines.tsx`. The committed form is direction 4, seed `94f35f2e`. The shipping background is an adapted React Bits WebGL implementation, not a raster; the fixed graphite canvas and CSS vignette are its readability and fallback layers.
+This record was carbonized from `PRODUCT.md`, `src/app/globals.css`, `src/app/layout.tsx`, `src/app/page.tsx`, `src/app/portfolio/page.tsx`, `src/app/task-brief/page.tsx`, `src/app/xiaocoo/page.tsx`, `src/components/SiteHeader.tsx`, `src/components/SiteFooter.tsx`, `src/components/NightBackdrop.tsx`, `src/components/ui/FloatingLines.tsx`, `src/components/ui/expanding-cards.tsx`, `src/components/task-brief/TaskBriefWizard.tsx`, and `src/components/xiaocoo/XiaocooChat.tsx`. The committed form is direction 4, seed `94f35f2e`. The shipping background is an adapted React Bits WebGL implementation, not a raster; the fixed graphite canvas and CSS vignette are its readability and fallback layers.

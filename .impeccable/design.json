@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-25T13:45:54+08:00",
+  "generatedAt": "2026-08-25T15:10:00+08:00",
   "title": "Design System: Cooper Nocturnal Screening Room",
   "extensions": {
     "colorMeta": {
@@ -196,6 +196,11 @@
         "purpose": "Bounded hero-action lift of at most 4px and scale of at most 1.02."
       },
       {
+        "name": "focus-rail-resolve",
+        "value": "520ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Changes emphasis across the four portfolio tracks; reduced motion resolves immediately."
+      },
+      {
         "name": "floating-lines",
         "value": "animationSpeed 1; interactive false; bendRadius 5; bendStrength -0.5; mouseDamping 0.05; parallax true; parallaxStrength 0.2",
         "purpose": "The sole continuous environmental animation, using gradient #E945F5 / #2F4BC0 / #E945F5."
@@ -254,9 +259,25 @@
       "name": "Professional Services Grid",
       "kind": "card",
       "refersTo": "panel",
-      "description": "Asymmetric professional-services frame: the first item spans two equal desktop rows and all items stack on mobile.",
+      "description": "Equal professional-services frame: three identical desktop columns with shared hairlines; all items stack on mobile.",
       "html": "<section class=\"ds-services\"><h2>PROFESSIONAL SERVICES</h2><div class=\"ds-services-grid\"><article><span>✦</span><div><h3>Brand Design</h3><p>Build a distinctive visual identity system.</p></div></article><article><span>▦</span><div><h3>UI / UX</h3><p>Shape clear, usable digital experiences.</p></div></article><article><span>▶</span><div><h3>Video</h3><p>Direct focused moving-image stories.</p></div></article></div></section>",
-      "css": ".ds-services{padding:2rem;border:1px solid rgba(255,255,255,.1);border-radius:16px;background:linear-gradient(145deg,rgba(20,20,24,.76),rgba(9,9,12,.54));color:#f4f4f5;box-shadow:inset 0 1px 0 rgba(255,255,255,.03);backdrop-filter:blur(16px) saturate(112%);font-family:var(--font-archivo,Arial,sans-serif)}.ds-services>h2{margin:0 0 1.5rem;font:400 1.5rem/1.33 var(--font-display-cjk,var(--font-archivo,Arial,sans-serif))}.ds-services-grid{display:grid;grid-template-columns:minmax(0,1.24fr) minmax(0,.76fr);grid-template-rows:repeat(2,minmax(0,1fr));min-height:24rem;border-top:1px solid rgba(255,255,255,.12)}.ds-services article{display:grid;grid-template-columns:auto minmax(0,1fr);align-content:center;gap:0 1.25rem;padding:clamp(2rem,4vw,3.5rem);border-bottom:1px solid rgba(255,255,255,.12)}.ds-services article:first-child{grid-row:1/span 2;padding-inline:clamp(2rem,6vw,5rem);border-right:1px solid rgba(255,255,255,.12)}.ds-services article>span{display:grid;grid-row:1/span 2;place-items:center;width:3.75rem;height:3.75rem;border:1px solid rgba(165,180,252,.2);border-radius:12px;background:rgba(129,140,248,.08);color:#a5b4fc}.ds-services h3{margin:0;font-size:1.1rem}.ds-services p{max-width:48ch;margin:.55rem 0 0;color:rgba(244,244,245,.68);font-size:.875rem;line-height:1.5}@media(max-width:900px){.ds-services-grid{grid-template-columns:1fr;grid-template-rows:none;min-height:0}.ds-services article:first-child{grid-row:auto;padding-inline:1.25rem;border-right:0}.ds-services article{padding-inline:1.25rem}}"
+      "css": ".ds-services{padding:2rem;border:1px solid rgba(255,255,255,.1);border-radius:16px;background:linear-gradient(145deg,rgba(20,20,24,.76),rgba(9,9,12,.54));color:#f4f4f5;box-shadow:inset 0 1px 0 rgba(255,255,255,.03);backdrop-filter:blur(16px) saturate(112%);font-family:var(--font-archivo,Arial,sans-serif)}.ds-services>h2{margin:0 0 1.5rem;font:400 1.5rem/1.33 var(--font-display-cjk,var(--font-archivo,Arial,sans-serif))}.ds-services-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:1fr;min-height:16rem;border-top:1px solid rgba(255,255,255,.12)}.ds-services article{display:grid;grid-template-columns:auto minmax(0,1fr);align-content:center;gap:0 1.25rem;padding:clamp(2rem,4vw,3.5rem);border-right:1px solid rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.12)}.ds-services article:last-child{border-right:0}.ds-services article>span{display:grid;grid-row:1/span 2;place-items:center;width:3.75rem;height:3.75rem;border:1px solid rgba(165,180,252,.2);border-radius:12px;background:rgba(129,140,248,.08);color:#a5b4fc}.ds-services h3{margin:0;font-size:1.1rem}.ds-services p{max-width:48ch;margin:.55rem 0 0;color:rgba(244,244,245,.68);font-size:.875rem;line-height:1.5}@media(max-width:900px){.ds-services-grid{grid-template-columns:1fr;grid-template-rows:none;min-height:0}.ds-services article{padding-inline:1.25rem;border-right:0}}"
+    },
+    {
+      "name": "Portfolio Focus Rail",
+      "kind": "custom",
+      "refersTo": "panel",
+      "description": "Four real projects share one active focus rail with desktop horizontal and mobile vertical expansion.",
+      "html": "<div class=\"ds-focus-rail\"><a class=\"is-active\" href=\"#\"><img alt=\"\"><span>Project One</span></a><button>Project Two</button><button>Project Three</button><button>Project Four</button></div>",
+      "css": ".ds-focus-rail{display:grid;grid-template-columns:minmax(0,5fr) repeat(3,minmax(0,1fr));min-height:34rem;overflow:hidden;border:1px solid rgba(255,255,255,.1);border-radius:16px;background:rgba(7,7,9,.72);transition:grid-template-columns 520ms cubic-bezier(.16,1,.3,1)}.ds-focus-rail>*{position:relative;min-width:0;border-right:1px solid rgba(255,255,255,.12);color:#f4f4f5}.ds-focus-rail>*:last-child{border-right:0}.ds-focus-rail img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.ds-focus-rail span{position:absolute;right:1.25rem;bottom:1.25rem;left:1.25rem;font-weight:700}@media(max-width:900px){.ds-focus-rail{grid-template-columns:1fr;grid-template-rows:minmax(20rem,5fr) repeat(3,minmax(4.25rem,1fr));min-height:34rem;transition:grid-template-rows 520ms cubic-bezier(.16,1,.3,1)}.ds-focus-rail>*{border-right:0;border-bottom:1px solid rgba(255,255,255,.12)}}@media(prefers-reduced-motion:reduce){.ds-focus-rail{transition-duration:.01ms}}"
+    },
+    {
+      "name": "Nocturnal Operate Surface",
+      "kind": "custom",
+      "refersTo": "panel",
+      "description": "Shared dark working surface for Xiaocoo transcript/composer and Task Brief verification/form steps.",
+      "html": "<section class=\"ds-operate\"><header><span>OPERATE</span><h2>Clear working state</h2></header><div class=\"ds-operate-body\"><p>Preserved task content and behavior.</p><label>MESSAGE<input placeholder=\"Type here\"></label><button>CONTINUE</button></div></section>",
+      "css": ".ds-operate{overflow:hidden;border:1px solid rgba(255,255,255,.1);border-radius:16px;background:linear-gradient(145deg,rgba(18,18,22,.9),rgba(7,7,9,.78));color:#f4f4f5;box-shadow:inset 0 1px 0 rgba(255,255,255,.035);font-family:var(--font-archivo,Arial,sans-serif)}.ds-operate header,.ds-operate-body{padding:clamp(1.25rem,3vw,2rem)}.ds-operate header{border-bottom:1px solid rgba(255,255,255,.1)}.ds-operate header span{color:#a5b4fc;font-size:.72rem;font-weight:700;letter-spacing:.16em}.ds-operate h2{margin:.45rem 0 0}.ds-operate-body{display:grid;gap:1rem}.ds-operate label{display:grid;gap:.5rem;font-size:.75rem;font-weight:700;letter-spacing:.08em}.ds-operate input{min-height:3rem;padding:.75rem 1rem;border:1px solid rgba(255,255,255,.13);border-radius:12px;background:rgba(255,255,255,.045);color:#f4f4f5}.ds-operate button{justify-self:start;min-height:2.75rem;padding:.65rem 1rem;border:1px solid rgba(165,180,252,.25);border-radius:12px;background:rgba(129,140,248,.16);color:#f4f4f5;font-weight:700}.ds-operate input:focus-visible,.ds-operate button:focus-visible{outline:2px solid rgba(199,210,254,.95);outline-offset:3px}"
     },
     {
       "name": "Nocturnal Text Field",
@@ -283,7 +304,7 @@
       "Centered full-width screening-room composition, never a split portfolio sidebar.",
       "Exactly centered 100svh title, description, and two-action group beneath compact floating chrome.",
       "Low-opacity React Bits FloatingLines atmosphere with a readability vignette and bounded GPU cost.",
-      "Display-led hierarchy paired with editorial hairlines and asymmetric chapter grids.",
+      "Display-led hierarchy paired with editorial hairlines, equal capability cadence, and a stateful project focus rail.",
       "Translucent obsidian surfaces with restrained blur and shallow ambient depth.",
       "Real project work and preserved bilingual content remain the evidence and the story."
     ],
