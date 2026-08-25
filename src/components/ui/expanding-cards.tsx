@@ -44,12 +44,12 @@ export const ExpandingCards = React.forwardRef<HTMLUListElement, ExpandingCardsP
         : { gridTemplateColumns: "1fr", gridTemplateRows: tracks };
     }, [activeIndex, isDesktop, items]);
 
-    const moveFocus = (event: React.KeyboardEvent<HTMLLIElement>, nextIndex: number) => {
+    const moveFocus = (event: React.KeyboardEvent<HTMLAnchorElement>, nextIndex: number) => {
       event.preventDefault();
       const normalized = (nextIndex + items.length) % items.length;
       setActiveIndex(normalized);
-      const cards = event.currentTarget.parentElement?.querySelectorAll<HTMLElement>(
-        "[data-expanding-card]"
+      const cards = event.currentTarget.closest("ul")?.querySelectorAll<HTMLElement>(
+        "[data-expanding-card-link]"
       );
       cards?.[normalized]?.focus();
     };
@@ -69,52 +69,60 @@ export const ExpandingCards = React.forwardRef<HTMLUListElement, ExpandingCardsP
               className="portfolio-expanding-card"
               data-active={active}
               data-expanding-card
-              tabIndex={0}
-              aria-label={item.title}
               onMouseEnter={() => isDesktop && setActiveIndex(index)}
-              onFocus={() => setActiveIndex(index)}
-              onClick={() => setActiveIndex(index)}
-              onKeyDown={(event) => {
-                if (event.key === "ArrowRight" || event.key === "ArrowDown") {
-                  moveFocus(event, index + 1);
-                }
-                if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
-                  moveFocus(event, index - 1);
-                }
-                if (event.key === "Home") moveFocus(event, 0);
-                if (event.key === "End") moveFocus(event, items.length - 1);
-              }}
             >
-              <img
-                src={item.imgSrc}
-                alt=""
-                loading={index === defaultActiveIndex ? "eager" : "lazy"}
-                decoding="async"
-                className="portfolio-expanding-card__image"
-              />
-              <div className="portfolio-expanding-card__shade" aria-hidden />
+              <Link
+                href={item.linkHref}
+                className="portfolio-expanding-card__surface"
+                data-expanding-card-link
+                aria-label={`${item.linkLabel}: ${item.title}`}
+                onFocus={(event) => {
+                  if (isDesktop !== false || event.currentTarget.matches(":focus-visible")) {
+                    setActiveIndex(index);
+                  }
+                }}
+                onClick={(event) => {
+                  if (isDesktop !== true && !active) {
+                    event.preventDefault();
+                    setActiveIndex(index);
+                  }
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+                    moveFocus(event, index + 1);
+                  }
+                  if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+                    moveFocus(event, index - 1);
+                  }
+                  if (event.key === "Home") moveFocus(event, 0);
+                  if (event.key === "End") moveFocus(event, items.length - 1);
+                }}
+              >
+                <img
+                  src={item.imgSrc}
+                  alt=""
+                  loading={index === defaultActiveIndex ? "eager" : "lazy"}
+                  decoding="async"
+                  className="portfolio-expanding-card__image"
+                />
+                <div className="portfolio-expanding-card__shade" aria-hidden />
 
-              <p className="portfolio-expanding-card__rail-title" aria-hidden={active}>
-                {item.title}
-              </p>
+                <p className="portfolio-expanding-card__rail-title" aria-hidden={active}>
+                  {item.title}
+                </p>
 
-              <article className="portfolio-expanding-card__content">
-                <div className="portfolio-expanding-card__icon" aria-hidden>
-                  {item.icon}
-                </div>
-                <p className="portfolio-expanding-card__category">{item.description}</p>
-                <h2>{item.title}</h2>
-                <Link
-                  href={item.linkHref}
-                  className="portfolio-expanding-card__link"
-                  tabIndex={active ? 0 : -1}
-                  aria-hidden={!active}
-                  onClick={(event) => event.stopPropagation()}
-                >
-                  <span>{item.linkLabel}</span>
-                  <ArrowUpRight className="h-4 w-4" />
-                </Link>
-              </article>
+                <article className="portfolio-expanding-card__content" aria-hidden={!active}>
+                  <div className="portfolio-expanding-card__icon" aria-hidden>
+                    {item.icon}
+                  </div>
+                  <p className="portfolio-expanding-card__category">{item.description}</p>
+                  <h2>{item.title}</h2>
+                  <span className="portfolio-expanding-card__link" aria-hidden>
+                    <span>{item.linkLabel}</span>
+                    <ArrowUpRight className="h-4 w-4" />
+                  </span>
+                </article>
+              </Link>
             </li>
           );
         })}

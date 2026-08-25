@@ -277,7 +277,7 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 ### Portfolio focus rail
 
 - **Structure:** the four preserved projects share one `16px` obsidian frame. Desktop uses a `5fr / 1fr / 1fr / 1fr` active track; mobile rotates the same relationship into vertical rows.
-- **State:** hover, focus, click, Arrow keys, Home, and End may change the active project. Only the active project exposes its description, category, and explicit project link; collapsed rails keep an unambiguous title.
+- **State:** hover, focus, click, Arrow keys, Home, and End may change the active project. The entire active project surface is a semantic link, while the visible project action remains its explicit affordance; collapsed rails keep an unambiguous title. On touch layouts, the first tap expands a collapsed project and the next tap follows its link.
 - **Media:** use each project's real image as the full panel field with a dark readability wash. Do not replace, recolor, or fabricate media.
 - **Motion:** grid-track and content emphasis may resolve over `520ms` with the approved curve; `prefers-reduced-motion` makes the transition effectively immediate.
 
@@ -343,7 +343,7 @@ This design system governs presentation only. The names **COOPER.**, **梁世城
 - [ ] Graphite, cold white, zinc hairlines, obsidian, and restrained indigo remain the UI vocabulary; magenta/blue stays confined to the approved low-opacity FloatingLines field.
 - [ ] New content joins the centered `88rem` shell and responsive `900px` / `640px` collapse rules; navigation still switches at the `1024px` large breakpoint.
 - [ ] Professional services still use three equal desktop columns with no featured item; mobile still resolves to one natural-height column.
-- [ ] The portfolio focus rail keeps four real projects, one active state, keyboard navigation, explicit project links, mobile vertical behavior, and a reduced-motion fallback.
+- [ ] The portfolio focus rail keeps four real projects, one active state, whole-surface project links, keyboard navigation, mobile first-tap expansion, vertical behavior, and a reduced-motion fallback.
 - [ ] Xiaocoo still follows transcript → suggestions → composer, Task Brief exposes only the global language control, and both preserve their existing behavior and APIs.
 - [ ] The footer remains centered, with its contact grid centered on desktop and stacked at `640px`.
 - [ ] Navigation, language switching, forms, APIs, lightboxes, project data, contact methods, Task Brief, and Xiaocoo still behave exactly as before the visual change.

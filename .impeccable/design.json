@@ -267,8 +267,8 @@
       "name": "Portfolio Focus Rail",
       "kind": "custom",
       "refersTo": "panel",
-      "description": "Four real projects share one active focus rail with desktop horizontal and mobile vertical expansion.",
-      "html": "<div class=\"ds-focus-rail\"><a class=\"is-active\" href=\"#\"><img alt=\"\"><span>Project One</span></a><button>Project Two</button><button>Project Three</button><button>Project Four</button></div>",
+      "description": "Four real projects share one active focus rail with desktop horizontal and mobile vertical expansion; each active project surface is a semantic link, while touch layouts preserve first-tap expansion.",
+      "html": "<div class=\"ds-focus-rail\"><a class=\"is-active\" href=\"#\"><img alt=\"\"><span>Project One</span></a><a href=\"#\">Project Two</a><a href=\"#\">Project Three</a><a href=\"#\">Project Four</a></div>",
       "css": ".ds-focus-rail{display:grid;grid-template-columns:minmax(0,5fr) repeat(3,minmax(0,1fr));min-height:34rem;overflow:hidden;border:1px solid rgba(255,255,255,.1);border-radius:16px;background:rgba(7,7,9,.72);transition:grid-template-columns 520ms cubic-bezier(.16,1,.3,1)}.ds-focus-rail>*{position:relative;min-width:0;border-right:1px solid rgba(255,255,255,.12);color:#f4f4f5}.ds-focus-rail>*:last-child{border-right:0}.ds-focus-rail img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.ds-focus-rail span{position:absolute;right:1.25rem;bottom:1.25rem;left:1.25rem;font-weight:700}@media(max-width:900px){.ds-focus-rail{grid-template-columns:1fr;grid-template-rows:minmax(20rem,5fr) repeat(3,minmax(4.25rem,1fr));min-height:34rem;transition:grid-template-rows 520ms cubic-bezier(.16,1,.3,1)}.ds-focus-rail>*{border-right:0;border-bottom:1px solid rgba(255,255,255,.12)}}@media(prefers-reduced-motion:reduce){.ds-focus-rail{transition-duration:.01ms}}"
     },
     {
