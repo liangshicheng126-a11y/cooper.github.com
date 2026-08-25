@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import {
   Briefcase,
   ClipboardList,
@@ -21,6 +21,7 @@ import { isNavActive } from "@/lib/nav";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { AnimatedGroup } from "@/components/ui/animated-group";
+import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 
 const navIconClassName = "h-4 w-4 shrink-0";
 
@@ -28,6 +29,7 @@ export default function SiteHeader() {
   const pathname = usePathname() ?? "/";
   const { language, setLanguage, t, mounted } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const reduced = usePrefersReducedMotion();
 
   const navItems = [
     { name: t.nav.home, href: "/", icon: Home },
@@ -85,21 +87,37 @@ export default function SiteHeader() {
             },
           }}
         >
-          <nav className="site-nav flex" aria-label="Primary navigation">
-            {navItems.map((item) => {
-              const active = isNavActive(pathname, item.href);
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn("site-nav__link", active && "is-active")}
-                  aria-current={active ? "page" : undefined}
-                >
-                  {item.name}
-                </Link>
-              );
-            })}
-          </nav>
+          <LayoutGroup id="site-primary-navigation">
+            <nav className="site-nav flex" aria-label="Primary navigation">
+              {navItems.map((item) => {
+                const active = isNavActive(pathname, item.href);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={cn("site-nav__link", active && "is-active")}
+                    aria-current={active ? "page" : undefined}
+                  >
+                    {active && (
+                      <motion.span
+                        layoutId="site-nav-active-route"
+                        className="site-nav__active-surface"
+                        transition={
+                          reduced
+                            ? { duration: 0 }
+                            : { type: "spring", stiffness: 420, damping: 38, mass: 0.72 }
+                        }
+                        aria-hidden
+                      >
+                        <span className="site-nav__active-underline" />
+                      </motion.span>
+                    )}
+                    <span className="site-nav__label">{item.name}</span>
+                  </Link>
+                );
+              })}
+            </nav>
+          </LayoutGroup>
         </AnimatedGroup>
 
         <div className="flex items-center gap-2">

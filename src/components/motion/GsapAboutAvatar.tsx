@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import useMotionTier from "@/hooks/useMotionTier";
@@ -8,9 +8,9 @@ import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import { shouldUseGsap } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import GsapGlassHover from "@/components/motion/GsapGlassHover";
+import Stack from "@/components/ui/Stack";
 
 const ACCENT = "#6366f1";
-const IMAGE_SRC = "/experience-badge.png";
 
 type GsapAboutAvatarProps = {
   experienceLabel: string;
@@ -33,6 +33,21 @@ export default function GsapAboutAvatar({
   const tier = useMotionTier();
   const reduced = usePrefersReducedMotion();
   const gsapActive = shouldUseGsap(reduced);
+  const cards = useMemo(
+    () => [
+      <img
+        key="snow-journey"
+        src="/photos/about-stack/snow-journey.webp"
+        alt="Cooper in a snowy mountain landscape"
+      />,
+      <img
+        key="ice-climb"
+        src="/photos/about-stack/ice-climb.webp"
+        alt="Ice climbing outdoors"
+      />,
+    ],
+    [],
+  );
 
   const pauseIdle = () => {
     idleTweenRef.current?.pause();
@@ -115,12 +130,12 @@ export default function GsapAboutAvatar({
   );
 
   return (
-    <div ref={wrapperRef} className="w-full h-full aspect-square">
+    <div ref={wrapperRef} className="w-full h-full aspect-[4/5] max-h-[36rem]">
       <GsapGlassHover
         accent={ACCENT}
         variant="avatar"
         className={cn(
-          "h-full w-full rounded-[40px] glass p-4 border-white/10 overflow-visible",
+          "h-full w-full rounded-2xl glass p-3 sm:p-4 border-white/10 overflow-visible",
           className
         )}
         onHoverChange={(hovered) => {
@@ -131,19 +146,26 @@ export default function GsapAboutAvatar({
       >
         <div
           ref={frameRef}
-          className="relative h-full w-full overflow-hidden rounded-[30px]"
+          className="relative h-full w-full p-3 sm:p-4"
         >
           <div
             ref={imageRef}
             data-gsh-image
-            className="absolute inset-0 bg-cover bg-center will-change-transform"
-            style={{ backgroundImage: `url(${IMAGE_SRC})` }}
-            aria-hidden
-          />
+            className="relative h-full w-full will-change-transform"
+          >
+            <Stack
+              cards={cards}
+              randomRotation
+              sensitivity={110}
+              sendToBackOnClick
+              pauseOnHover
+              ariaLabel="Drag, click, or press Enter to browse Cooper's photo stack"
+            />
+          </div>
           <div
             ref={overlayRef}
             data-gsh-overlay
-            className="absolute inset-0 bg-indigo-500/10 mix-blend-overlay pointer-events-none"
+            className="absolute inset-3 sm:inset-4 rounded-2xl bg-indigo-500/[0.06] mix-blend-overlay pointer-events-none"
             aria-hidden
           />
         </div>
@@ -151,7 +173,7 @@ export default function GsapAboutAvatar({
         <div
           ref={badgeRef}
           data-gsh-badge
-          className="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 z-30 w-28 h-28 sm:w-32 sm:h-32 rounded-full shadow-2xl border border-white/30 overflow-hidden text-center flex flex-col items-center justify-center will-change-transform"
+          className="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 z-30 w-28 h-28 sm:w-32 sm:h-32 rounded-full shadow-2xl border border-white/30 overflow-hidden text-center flex flex-col items-center justify-center will-change-transform pointer-events-none"
           style={{
             background:
               "radial-gradient(circle at 30% 30%, rgba(99,102,241,0.95), rgba(79,70,229,0.9) 45%, rgba(67,56,202,0.95))",

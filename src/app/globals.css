@@ -1255,22 +1255,42 @@ select option {
   color: rgba(244, 244, 245, 0.62);
   font-size: 0.78rem;
   font-weight: 600;
-  transition: color 220ms ease, background-color 220ms ease;
+  isolation: isolate;
+  transition: color 220ms ease;
 }
 
 .site-nav__link:hover,
 .site-nav__link.is-active {
   color: #fff;
-  background: rgba(255, 255, 255, 0.065);
 }
 
-.site-nav__link.is-active::after {
+.site-nav__link:hover:not(.is-active) {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.site-nav__label {
+  position: relative;
+  z-index: 2;
+}
+
+.site-nav__active-surface {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: inherit;
+  background: rgba(255, 255, 255, 0.065);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045);
+  pointer-events: none;
+}
+
+.site-nav__active-underline {
   position: absolute;
   right: 0.72rem;
   bottom: 0.3rem;
   left: 0.72rem;
   height: 1px;
-  content: "";
   background: rgba(199, 210, 254, 0.75);
 }
 

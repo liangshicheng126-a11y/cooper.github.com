@@ -29,7 +29,7 @@ The site joins finished visual work, process analysis, personal outdoor and arti
 
 ## Capabilities and Constraints
 
-- Preserve all existing factual content, navigation destinations, media, bilingual translations, forms, API behavior, lightboxes, project data, and accessibility-oriented motion fallbacks.
+- Preserve all existing factual content, navigation destinations, media, bilingual translations, forms, API behavior, lightboxes, project data, and the explicit operating-system reduced-motion fallback. Full motion remains the default across viewport sizes and input types.
 - The current stack is Next.js 15, React 19, TypeScript, Tailwind CSS, Framer Motion, GSAP, and Lucide icons.
 - The site supports static export and GitHub Pages-oriented deployment where possible; server-backed contact and assistant routes remain existing product behavior.
 - This redesign covers every user-facing route and shared site chrome.
@@ -54,9 +54,9 @@ The site joins finished visual work, process analysis, personal outdoor and arti
 1. Let the work lead: visual projects and real project detail remain the strongest proof.
 2. Preserve clarity across media: graphic design, UI/UX, photography, and video should stay easy to distinguish and explore.
 3. Make collaboration actionable: contact, task brief, and Xiaocoo flows must remain easy to find and use.
-4. Treat bilingual parity and reduced-motion support as core behavior, not optional polish.
+4. Treat bilingual parity, full-motion defaults, and explicit reduced-motion support as core behavior, not optional polish.
 5. Keep the site personal: professional capability and Cooper's exploratory character should remain visible together.
 
 ## Accessibility & Inclusion
 
-Preserve semantic headings, keyboard-operable navigation and lightboxes, responsive layouts, readable contrast, `prefers-reduced-motion` support, and the existing full/reduced/minimal motion tiers.
+Preserve semantic headings, keyboard-operable navigation and lightboxes, responsive layouts, readable contrast, and `prefers-reduced-motion` support. Do not infer reduced motion from screen size, touch input, or reduced-data signals.

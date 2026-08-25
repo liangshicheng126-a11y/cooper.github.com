@@ -11,6 +11,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import BlurText from "@/components/BlurText";
 import DepthText from "@/components/ui/DepthText";
+import FlowingMenu from "@/components/ui/FlowingMenu";
 import CountUp from "@/components/CountUp";
 import Magnet from "@/components/Magnet";
 import ToolCard from "@/components/ToolCard";
@@ -289,17 +290,21 @@ export default function Home() {
             <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />
             <span className="text-foreground/40 text-sm sm:text-right">{t.hero.workflow.subtitle}</span>
           </div>
-          <div className="screening-workflow">
-            {t.hero.workflow.steps.map((wf: any, i: number) => (
-              <article key={i} className="screening-workflow__step group">
-                <div className="screening-workflow__number">
-                  0{i + 1}
-                </div>
-                <h3 className="text-xl font-bold">{wf.title}</h3>
-                <p className="text-foreground/50 text-sm leading-relaxed">{wf.desc}</p>
-              </article>
-            ))}
-          </div>
+          <FlowingMenu
+            speed={19}
+            ariaLabel={t.hero.workflow.title}
+            items={t.hero.workflow.steps.map((wf: any, i: number) => ({
+              number: `0${i + 1}`,
+              text: wf.title,
+              description: wf.desc,
+              image: [
+                "/photos/workflow/discovery.webp",
+                "/photos/workflow/exploration.webp",
+                "/photos/workflow/execution.webp",
+                "/photos/workflow/delivery.webp",
+              ][i],
+            }))}
+          />
         </section>
 
         {/* Featured Work Preview Section */}

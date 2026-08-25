@@ -228,8 +228,8 @@ The renderer caps device pixel ratio at `2` on wider screens and `1.25` at `640p
 - State transitions use `180–300ms` easing for color, fill, border, scale, and small icon movement.
 - Entrances use opacity, a short `8–20px` translation, and optional blur with the `cubic-bezier(0.16, 1, 0.3, 1)` finish. They should feel like light resolving, not objects flying in.
 - Hero actions may lift up to `4px`, scale only to `1.02`, and move the arrow `3px`. Active controls compress to `0.98`.
-- Continuous movement is limited to the approved FloatingLines field, the home title's slow pointer/orbit response, and the footer wordmark's localized metallic flow. DepthText and MetallicPaint pause outside the viewport or while the page is hidden; neither becomes another full-screen ambient layer.
-- Preserve the full / reduced / minimal motion tiers and `prefers-reduced-motion`. Reduced motion freezes FloatingLines at time zero, disables its parallax/listeners/loop, and removes nonessential smooth scrolling and entrance motion while leaving every word, route, control, and project visible.
+- Continuous movement is limited to the approved FloatingLines field, the home title's slow pointer/orbit response, the footer wordmark's localized metallic flow, and the currently active home workflow marquee. Every continuous region pauses outside the viewport or while the page is hidden; none becomes another full-screen ambient layer.
+- Full motion is the default on every viewport and input type. Do not downgrade motion merely because a device is narrow, touch-first, or reports reduced data. The explicit operating-system `prefers-reduced-motion` request remains authoritative: it freezes ambient loops and replaces nonessential spatial movement with immediate or gentle state feedback while leaving every word, route, control, and project visible.
 - The portfolio focus rail may transition its active track over `520ms` with the same resolve curve. It changes emphasis only: all four projects remain keyboard reachable, and reduced motion resolves the layout immediately.
 
 **The Depth-Is-Atmosphere Rule.** Use blur, gradient falloff, and one-pixel highlights to suggest space; reserve large shadows for elements that truly float or overlay.
@@ -272,7 +272,7 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 - **Character:** compact screening-room chrome that remains present without becoming a sidebar.
 - **Shape and material:** centered `88rem` maximum, `3.75rem` minimum height, `14px` radius, one-pixel translucent border, floating-obsidian fill, `22px` blur, and the Floating Chrome shadow.
 - **Wordmark:** cold white, heavy Archivo, tracked lettering, preceded by one indigo signal dot.
-- **Navigation:** small rounded links; default labels are muted, hover and active states become white over a restrained translucent fill. The active route also receives a one-pixel indigo-white underline.
+- **Navigation:** small rounded links; default labels are muted, hover and active states become white. One shared translucent active surface and its one-pixel indigo-white underline travel between route positions with a tightly damped spring, preserving spatial continuity across navigation. Explicit reduced motion resolves the shared surface immediately.
 - **Mobile:** preserve the language control, menu toggle, body scroll lock, backdrop close target, `aria-expanded`, `aria-controls`, modal semantics, and current-route state.
 
 ### Hero actions
@@ -296,6 +296,20 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 - **Media:** use each project's real image as the full panel field with a dark readability wash. Do not replace, recolor, or fabricate media.
 - **Motion:** grid-track and content emphasis may resolve over `520ms` with the approved curve; `prefers-reduced-motion` makes the transition effectively immediate.
 
+### About photo stack
+
+- **Role:** the existing About avatar region becomes a tactile personal gallery without changing biography copy or the experience badge.
+- **Media:** use only Cooper's supplied or already-published personal imagery. Prepare consistent `4:5` WebP crops with the person or activity kept inside the central reading area; exclude captions, screenshots, and visible text from the crop.
+- **Behavior:** the top image can be dragged beyond a bounded threshold, clicked, or advanced with Enter/Space to move it behind the stack. Lower cards retain restrained rotation and depth so the available gallery is obvious.
+- **Resilience:** the experience badge remains above the cards and does not intercept input. Explicit reduced motion disables free dragging and uses immediate click/keyboard advancement.
+
+### Flowing workflow menu
+
+- **Role:** the four preserved home workflow steps remain an ordered editorial sequence, but the active row resolves into a continuous image-and-text strip that makes each stage tangible.
+- **Media:** each stage uses one dedicated, text-free nocturnal studio photograph with a central subject and edge-safe `3:2` crop. The four images share graphite, cold-white, and restrained indigo lighting.
+- **Behavior:** pointer hover and keyboard focus reveal a row from the closest vertical edge; touch layouts keep one row active and allow tap-to-switch. Only the active, visible row's marquee runs.
+- **Resilience:** `prefers-reduced-motion` keeps the selected row visible but freezes the horizontal loop. Static row text remains the semantic source, so the entire sequence is readable without GSAP.
+
 ### Nocturnal operate surfaces
 
 - **Xiaocoo:** keep one stable sequence—intro, transcript, suggestion rail, composer—inside the same obsidian and indigo vocabulary as the rest of the site. New messages may use a small opacity and `8px` resolve, never a springy card entrance.
@@ -306,7 +320,7 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 
 - **Panels:** shared `16px` corners, zinc border, dark translucent gradient, shallow internal sheen, and restrained blur.
 - **Capability and stat modules:** professional services and stats use equal columns inside a common frame. Rely on hairlines between entries.
-- **Workflow and P2 analysis:** prefer open rows with top/bottom rules over nested cards. Keep analysis prose near `72ch` and points in a two-column ruled list until the mobile breakpoint.
+- **Workflow and P2 analysis:** the home workflow uses the single Flowing workflow frame and four ruled rows; P2 analysis keeps open top/bottom-ruled chapters. Keep analysis prose near `72ch` and points in a two-column ruled list until the mobile breakpoint.
 - **Project media:** retain real imagery, existing aspect behavior, lightboxes, and category identity. The nocturnal system frames media; it does not replace or recolor it.
 
 ### Inputs and fields
@@ -363,7 +377,10 @@ This design system governs presentation only. The names **COOPER.**, **梁世城
 - [ ] Xiaocoo still follows transcript → suggestions → composer, Task Brief exposes only the global language control, and both preserve their existing behavior and APIs.
 - [ ] The footer remains centered, with its contact grid centered on desktop and stacked at `640px`.
 - [ ] Navigation, language switching, forms, APIs, lightboxes, project data, contact methods, Task Brief, and Xiaocoo still behave exactly as before the visual change.
-- [ ] Keyboard focus, semantic headings, contrast, mobile scroll locking, and full/reduced/minimal motion tiers are verified.
+- [ ] The desktop navigation owns exactly one shared active surface that moves between routes; reduced motion resolves it immediately.
+- [ ] The About photo stack advances by drag, click, Enter, and Space; supplied images use text-free `4:5` crops and the experience badge stays non-blocking.
+- [ ] The home workflow keeps all four translated steps, uses one generated image per stage, reveals on pointer/focus/tap, and runs only the active visible marquee.
+- [ ] Keyboard focus, semantic headings, contrast, mobile scroll locking, full-motion defaults, and the explicit reduced-motion path are verified.
 - [ ] `NightBackdrop` mounts exactly one FloatingLines instance with gradient `#E945F5 / #2F4BC0 / #E945F5`, speed `1`, interactivity off, bend `5 / -0.5`, damping `0.05`, and parallax `true / 0.2`.
 - [ ] Fixed full-screen WebGL, vignette readability, mobile DPR `1.25` and opacity `0.44`, page-hidden render pause, reduced-motion static frame, fallback state, and full cleanup remain intact.
 - [ ] The footer MetallicPaint region remains bounded, pauses offscreen/page-hidden, caps DPR at `1.5 / 1`, renders a static reduced-motion frame, and preserves the readable `COOPER.` fallback.
@@ -372,4 +389,4 @@ This design system governs presentation only. The names **COOPER.**, **梁世城
 
 ### Provenance
 
-This record was carbonized from `PRODUCT.md`, `src/app/globals.css`, `src/app/layout.tsx`, `src/app/page.tsx`, `src/app/portfolio/page.tsx`, `src/app/task-brief/page.tsx`, `src/app/xiaocoo/page.tsx`, `src/components/SiteHeader.tsx`, `src/components/SiteFooter.tsx`, `src/components/NightBackdrop.tsx`, `src/components/ui/FloatingLines.tsx`, `src/components/ui/DepthText.tsx`, `src/components/ui/MetallicPaint.tsx`, `src/components/ui/expanding-cards.tsx`, `src/components/task-brief/TaskBriefWizard.tsx`, and `src/components/xiaocoo/XiaocooChat.tsx`. The committed form is direction 4, seed `94f35f2e`. The shipping background, hero title, and footer signature are adapted React Bits effects with bounded animation, reduced-motion states, and explicit fallbacks.
+This record was carbonized from `PRODUCT.md`, `src/app/globals.css`, `src/app/layout.tsx`, `src/app/page.tsx`, `src/app/about/page.tsx`, `src/app/portfolio/page.tsx`, `src/app/task-brief/page.tsx`, `src/app/xiaocoo/page.tsx`, `src/components/SiteHeader.tsx`, `src/components/SiteFooter.tsx`, `src/components/NightBackdrop.tsx`, `src/components/ui/FloatingLines.tsx`, `src/components/ui/DepthText.tsx`, `src/components/ui/MetallicPaint.tsx`, `src/components/ui/Stack.tsx`, `src/components/ui/FlowingMenu.tsx`, `src/components/ui/expanding-cards.tsx`, `src/components/task-brief/TaskBriefWizard.tsx`, and `src/components/xiaocoo/XiaocooChat.tsx`. The committed form is direction 4, seed `94f35f2e`. The shipping background, hero title, footer signature, About stack, and home workflow are adapted React Bits effects with bounded animation, reduced-motion states, and explicit fallbacks.

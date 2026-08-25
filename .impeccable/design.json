@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-25T15:45:00+08:00",
+  "generatedAt": "2026-08-25T17:30:00+08:00",
   "title": "Design System: Cooper Nocturnal Screening Room",
   "extensions": {
     "colorMeta": {
@@ -176,6 +176,11 @@
         "purpose": "Desktop navigation color and background transitions."
       },
       {
+        "name": "nav-route-continuity",
+        "value": "spring stiffness 420; damping 38; mass 0.72",
+        "purpose": "One shared active-route surface travels between desktop navigation positions; explicit reduced motion resolves immediately."
+      },
+      {
         "name": "control-standard",
         "value": "300ms ease",
         "purpose": "Button color, fill, border, shadow, transform, and active-scale transitions."
@@ -209,6 +214,16 @@
         "name": "focus-rail-resolve",
         "value": "520ms cubic-bezier(0.16, 1, 0.3, 1)",
         "purpose": "Changes emphasis across the four portfolio tracks; reduced motion resolves immediately."
+      },
+      {
+        "name": "about-photo-stack",
+        "value": "drag threshold 110px; spring 260 / 24; 4:5 crops",
+        "purpose": "Drag, click, and keyboard advancement through supplied personal photos; explicit reduced motion uses immediate click/keyboard switching."
+      },
+      {
+        "name": "workflow-flow",
+        "value": "560ms edge reveal; 19s linear active-row loop",
+        "purpose": "The focused, hovered, or tapped workflow stage reveals one repeating image-and-text marquee; only the active visible row runs."
       },
       {
         "name": "floating-lines",
@@ -277,9 +292,25 @@
       "name": "Floating Site Header",
       "kind": "nav",
       "refersTo": "floating-header",
-      "description": "Compact centered chrome with wordmark, active route, and language control.",
+      "description": "Compact centered chrome with wordmark, language control, and one shared active-route surface that travels between link positions.",
       "html": "<header class=\"ds-header\"><a class=\"ds-wordmark\" href=\"#\"><i></i>COOPER.</a><nav><a class=\"ds-nav-active\" href=\"#\">HOME</a><a href=\"#\">WORK</a><a href=\"#\">ABOUT</a></nav><button>EN</button></header>",
       "css": ".ds-header{display:flex;align-items:center;justify-content:space-between;width:min(52rem,100%);min-height:3.75rem;padding:.5rem .6rem .5rem 1rem;border:1px solid rgba(255,255,255,.105);border-radius:14px;background:rgba(7,7,9,.7);color:#f4f4f5;box-shadow:0 18px 48px rgba(0,0,0,.34);backdrop-filter:blur(22px) saturate(135%);font-family:var(--font-archivo,Arial,sans-serif)}.ds-wordmark{display:flex;align-items:center;gap:.65rem;color:#fff;font-size:.88rem;font-weight:800;letter-spacing:.11em;text-decoration:none}.ds-wordmark i{width:.48rem;height:.48rem;border-radius:999px;background:#a5b4fc;box-shadow:0 6px 18px rgba(129,140,248,.38)}.ds-header nav{display:flex;gap:.15rem}.ds-header nav a{position:relative;padding:.7rem .78rem;border-radius:10px;color:rgba(244,244,245,.62);font-size:.78rem;font-weight:600;text-decoration:none;transition:color 220ms ease,background-color 220ms ease}.ds-header nav a:hover,.ds-header nav .ds-nav-active{color:#fff;background:rgba(255,255,255,.065)}.ds-nav-active:after{content:'';position:absolute;right:.72rem;bottom:.3rem;left:.72rem;height:1px;background:rgba(199,210,254,.75)}.ds-header button{min-width:3.25rem;height:2.25rem;border:1px solid rgba(255,255,255,.1);border-radius:8px;background:rgba(255,255,255,.035);color:#d4d4d8;font-size:.69rem;letter-spacing:.12em}.ds-header a:focus-visible,.ds-header button:focus-visible{outline:2px solid rgba(199,210,254,.95);outline-offset:3px}"
+    },
+    {
+      "name": "About Photo Stack",
+      "kind": "custom",
+      "refersTo": "panel",
+      "description": "A 4:5 personal-image stack in the About avatar region; drag, click, Enter, or Space moves the top card behind the stack while the experience badge remains above it.",
+      "html": "<div class=\"ds-photo-stack\" role=\"button\" tabindex=\"0\" aria-label=\"Browse personal photos\"><figure><img alt=\"Personal outdoor photograph\"></figure><figure><img alt=\"Personal outdoor photograph\"></figure></div>",
+      "css": ".ds-photo-stack{position:relative;width:100%;aspect-ratio:4/5;perspective:900px}.ds-photo-stack figure{position:absolute;inset:0;overflow:hidden;margin:0;border:1px solid rgba(255,255,255,.16);border-radius:16px;background:#09090b;box-shadow:0 22px 58px rgba(0,0,0,.42);transform-origin:88% 88%}.ds-photo-stack figure:first-child{transform:rotate(3deg) scale(.952)}.ds-photo-stack img{width:100%;height:100%;object-fit:cover}.ds-photo-stack:focus-visible{outline:2px solid rgba(199,210,254,.95);outline-offset:7px}"
+    },
+    {
+      "name": "Flowing Workflow Menu",
+      "kind": "custom",
+      "refersTo": "panel",
+      "description": "Four preserved workflow rows; the hovered, focused, or tapped row reveals a repeating text-and-image marquee, with only that visible row looping.",
+      "html": "<div class=\"ds-flow-menu\" role=\"list\"><button><small>01</small><strong>Discovery</strong><span>Understand the project and direction.</span></button><button><small>02</small><strong>Explore</strong><span>Shape the visual language.</span></button><button><small>03</small><strong>Execute</strong><span>Refine every detail.</span></button><button><small>04</small><strong>Deliver</strong><span>Prepare the final system.</span></button></div>",
+      "css": ".ds-flow-menu{overflow:hidden;border-block:1px solid rgba(255,255,255,.12);background:rgba(5,5,6,.28)}.ds-flow-menu button{display:grid;width:100%;min-height:7.75rem;grid-template-columns:minmax(4.5rem,.28fr) minmax(9rem,.72fr) minmax(0,1.45fr);gap:clamp(1rem,3vw,3rem);align-items:center;padding:1.35rem 0;border:0;border-top:1px solid rgba(255,255,255,.12);background:transparent;color:#f4f4f5;text-align:left}.ds-flow-menu button:first-child{border-top:0}.ds-flow-menu small{color:rgba(244,244,245,.32);font-weight:700;letter-spacing:.22em}.ds-flow-menu strong{font-size:1.4rem}.ds-flow-menu span{color:rgba(244,244,245,.64)}.ds-flow-menu button:focus-visible{outline:2px solid rgba(199,210,254,.95);outline-offset:-4px}"
     },
     {
       "name": "Professional Services Grid",
@@ -330,6 +361,7 @@
       "Centered full-width screening-room composition, never a split portfolio sidebar.",
       "Exactly centered 100svh title, description, and two-action group beneath compact floating chrome.",
       "Pointer-responsive DepthText gives the home statement restrained dimensional weight; the footer closes with one compact MetallicPaint wordmark.",
+      "A shared navigation surface preserves route continuity; the About photo stack and home workflow turn personal imagery and process into bounded tactile interactions.",
       "Low-opacity React Bits FloatingLines atmosphere with a readability vignette and bounded GPU cost.",
       "Display-led hierarchy paired with editorial hairlines, equal capability cadence, and a stateful project focus rail.",
       "Translucent obsidian surfaces with restrained blur and shallow ambient depth.",
