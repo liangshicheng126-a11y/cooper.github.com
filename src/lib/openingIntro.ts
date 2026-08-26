@@ -2,17 +2,17 @@
 
 import type { MotionTier } from "@/hooks/useMotionTier";
 
-export const OPENING_INTRO_STORAGE_KEY = "cooper-opening-sequence-v2";
+export const OPENING_INTRO_STORAGE_KEY = "cooper-opening-sequence-v3";
 
 export const INTRO_TIMING = {
   signalDuration: 0.36,
-  lineDuration: 0.72,
-  glyphDuration: 0.66,
+  lineDuration: 1.12,
+  glyphDuration: 0.62,
   glyphStagger: 0.05,
-  holdDuration: 0.24,
-  releaseDuration: 0.72,
-  revealDuration: 0.45,
-  failsafeMs: 4600,
+  holdDuration: 0.18,
+  releaseDuration: 0.34,
+  revealDuration: 0.52,
+  failsafeMs: 6200,
 } as const;
 
 export type OpeningIntroMode = "hold" | "handoff" | "idle";

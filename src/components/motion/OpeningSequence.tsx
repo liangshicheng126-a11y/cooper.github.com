@@ -67,9 +67,23 @@ export default function OpeningSequence() {
       const wordmark = root.querySelector<HTMLElement>("[data-opening-wordmark]");
       const skip = root.querySelector<HTMLElement>("[data-opening-skip]");
       const glyphs = Array.from(root.querySelectorAll<HTMLElement>("[data-opening-glyph]"));
+      const backgroundLines = document.querySelector<HTMLElement>(".night-backdrop__lines");
+      const backgroundLineOpacity = window.matchMedia("(max-width: 640px)").matches
+        ? 0.44
+        : 0.58;
 
       gsap.set(root, { autoAlpha: 1 });
-      gsap.set([topShutter, bottomShutter], { yPercent: 0, force3D: true });
+      gsap.set([topShutter, bottomShutter], {
+        clipPath: "inset(0 0% 0 0%)",
+        force3D: true,
+      });
+      if (backgroundLines) {
+        gsap.set(backgroundLines, {
+          clipPath: "inset(0 100% 0 0%)",
+          autoAlpha: 0,
+          willChange: "clip-path, opacity",
+        });
+      }
 
       const timeline = gsap.timeline({
         defaults: { ease: "power4.out" },
@@ -78,30 +92,11 @@ export default function OpeningSequence() {
       timelineRef.current = timeline;
 
       timeline
-        .addLabel("signal", 0)
-        .to(
-          signal,
-          {
-            autoAlpha: 1,
-            scale: 1,
-            duration: INTRO_TIMING.signalDuration,
-          },
-          "signal"
-        )
-        .to(
-          aperture,
-          {
-            scaleX: 1,
-            autoAlpha: 1,
-            duration: INTRO_TIMING.lineDuration,
-            ease: "expo.out",
-          },
-          "signal+=0.04"
-        )
+        .addLabel("brand", 0)
         .to(
           wordmark,
           { autoAlpha: 1, duration: 0.12, ease: "power2.out" },
-          "signal+=0.12"
+          "brand"
         )
         .to(
           glyphs,
@@ -112,60 +107,83 @@ export default function OpeningSequence() {
             duration: INTRO_TIMING.glyphDuration,
             stagger: INTRO_TIMING.glyphStagger,
           },
-          "signal+=0.14"
+          "brand+=0.08"
         )
-        .to(skip, { autoAlpha: 1, duration: 0.24, ease: "power2.out" }, "signal+=0.48")
-        .addLabel("hold", `>+=${INTRO_TIMING.holdDuration}`)
+        .to(skip, { autoAlpha: 1, duration: 0.24, ease: "power2.out" }, "brand+=0.38")
+        .addLabel("lines", `+=${INTRO_TIMING.holdDuration}`)
+        .set(root, { backgroundColor: "rgba(5, 5, 6, 0)" }, "lines")
+        .to(
+          signal,
+          {
+            autoAlpha: 1,
+            scale: 1,
+            duration: INTRO_TIMING.signalDuration,
+          },
+          "lines"
+        )
         .to(
           aperture,
-          { scaleX: 0.78, autoAlpha: 0.52, duration: 0.28, ease: "power2.inOut" },
-          "hold"
+          {
+            scaleX: 1,
+            autoAlpha: 1,
+            duration: INTRO_TIMING.lineDuration,
+            ease: "power2.inOut",
+          },
+          "lines"
         )
-        .addLabel("release", ">+=0.06")
+        .to(
+          [topShutter, bottomShutter],
+          {
+            clipPath: "inset(0 0% 0 100%)",
+            duration: INTRO_TIMING.lineDuration,
+            ease: "power2.inOut",
+            force3D: true,
+          },
+          "lines"
+        );
+
+      if (backgroundLines) {
+        timeline.to(
+          backgroundLines,
+          {
+            clipPath: "inset(0 0% 0 0%)",
+            autoAlpha: backgroundLineOpacity,
+            duration: INTRO_TIMING.lineDuration,
+            ease: "power2.inOut",
+          },
+          "lines"
+        );
+      }
+
+      timeline
+        .addLabel("details", ">+=0.14")
         .call(
           () => {
             setIntroMode("handoff");
             document.documentElement.removeAttribute("data-intro-needed");
           },
           undefined,
-          "release"
+          "details"
         )
         .to(
-          wordmark,
-          { autoAlpha: 0, y: -12, filter: "blur(8px)", duration: 0.3, ease: "power2.in" },
-          "release"
-        )
-        .to(skip, { autoAlpha: 0, duration: 0.18, ease: "power2.in" }, "release")
-        .to(
-          aperture,
-          { scaleX: 1.34, autoAlpha: 0, duration: 0.42, ease: "power3.in" },
-          "release"
-        )
-        .to(
-          topShutter,
+          [wordmark, aperture, signal, skip],
           {
-            yPercent: -100,
+            autoAlpha: 0,
+            y: -8,
+            filter: "blur(7px)",
             duration: INTRO_TIMING.releaseDuration,
-            ease: "power4.inOut",
-            force3D: true,
+            ease: "power2.in",
           },
-          "release+=0.08"
+          "details"
         )
-        .to(
-          bottomShutter,
-          {
-            yPercent: 100,
-            duration: INTRO_TIMING.releaseDuration,
-            ease: "power4.inOut",
-            force3D: true,
-          },
-          "<"
-        )
-        .to(root, { autoAlpha: 0, duration: 0.12, ease: "none" }, ">-=0.1");
+        .to(root, { autoAlpha: 0, duration: 0.14, ease: "none" }, ">-=0.08");
 
       return () => {
         timeline.kill();
         timelineRef.current = null;
+        if (backgroundLines) {
+          backgroundLines.style.willChange = "";
+        }
       };
     },
     {

@@ -21,6 +21,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { AnimatedGroup } from "@/components/ui/animated-group";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
+import { useIntroRevealReady } from "@/components/motion/IntroPlaybackContext";
 
 const navIconClassName = "h-4 w-4 shrink-0";
 
@@ -29,6 +30,7 @@ export default function SiteHeader() {
   const { language, setLanguage, t, mounted } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
   const reduced = usePrefersReducedMotion();
+  const introRevealReady = useIntroRevealReady();
 
   const navItems = [
     { name: t.nav.home, href: "/", icon: Home },
@@ -56,7 +58,20 @@ export default function SiteHeader() {
   };
 
   return (
-    <header className="site-header">
+    <motion.header
+      className="site-header"
+      initial={false}
+      animate={
+        introRevealReady
+          ? { opacity: 1, y: 0, filter: "blur(0px)" }
+          : { opacity: 0, y: -12, filter: "blur(8px)" }
+      }
+      transition={
+        reduced
+          ? { duration: 0 }
+          : { duration: 0.52, ease: [0.16, 1, 0.3, 1] }
+      }
+    >
       <div className="site-header__inner">
         <Link href="/" className="site-wordmark" aria-label="COOPER. home">
           <span className="site-wordmark__dot" aria-hidden />
@@ -201,6 +216,6 @@ export default function SiteHeader() {
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </motion.header>
   );
 }

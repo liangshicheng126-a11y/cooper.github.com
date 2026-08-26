@@ -685,7 +685,7 @@ html[data-viewport-canvas="on"] {
 }
 
 /* First-visit screening-room opening sequence. */
-@keyframes opening-shell-failsafe {
+@keyframes opening-details-failsafe {
   from {
     visibility: hidden;
   }
@@ -695,9 +695,28 @@ html[data-viewport-canvas="on"] {
   }
 }
 
-html[data-intro-needed] .site-shell {
+@keyframes opening-lines-failsafe {
+  from {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+  }
+
+  to {
+    opacity: var(--night-lines-opacity, 0.58);
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+html[data-intro-needed] .site-header,
+html[data-intro-needed] .site-main {
   visibility: hidden;
-  animation: opening-shell-failsafe 0s 5s forwards;
+  animation: opening-details-failsafe 0s 7s forwards;
+}
+
+html[data-intro-needed] .night-backdrop__lines {
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
+  animation: opening-lines-failsafe 0s 7s forwards;
 }
 
 .opening-sequence {
@@ -718,7 +737,7 @@ html[data-intro-needed] .site-shell {
   left: 0;
   height: 50.5%;
   background: #050506;
-  will-change: transform;
+  will-change: clip-path;
 }
 
 .opening-sequence__shutter::after {
@@ -786,7 +805,7 @@ html[data-intro-needed] .site-shell {
   opacity: 0;
   visibility: hidden;
   transform: scaleX(0);
-  transform-origin: center;
+  transform-origin: left center;
 }
 
 .opening-sequence__wordmark {
@@ -862,8 +881,14 @@ html[data-intro-needed] .site-shell {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html[data-intro-needed] .site-shell {
+  html[data-intro-needed] .site-header,
+  html[data-intro-needed] .site-main {
     visibility: visible !important;
+  }
+
+  html[data-intro-needed] .night-backdrop__lines {
+    opacity: var(--night-lines-opacity, 0.58) !important;
+    clip-path: none !important;
   }
 
   .opening-sequence {
@@ -1351,9 +1376,10 @@ select option {
 }
 
 .night-backdrop__lines {
+  --night-lines-opacity: 0.58;
   position: absolute;
   inset: 0;
-  opacity: 0.58;
+  opacity: var(--night-lines-opacity);
   filter: saturate(0.9) brightness(0.88);
 }
 
@@ -2430,7 +2456,8 @@ select option {
   }
 
   .night-backdrop__lines {
-    opacity: 0.44;
+    --night-lines-opacity: 0.44;
+    opacity: var(--night-lines-opacity);
     filter: saturate(0.82) brightness(0.78);
   }
 
