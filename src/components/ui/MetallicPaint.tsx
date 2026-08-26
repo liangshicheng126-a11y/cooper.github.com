@@ -327,6 +327,7 @@ export default function MetallicPaint({
   const [ready, setReady] = useState(false);
   const [textureReady, setTextureReady] = useState(false);
   const [failed, setFailed] = useState(false);
+  const paintVisible = textureReady && !failed;
 
   const resizeCanvas = useCallback(() => {
     const canvas = canvasRef.current;
@@ -659,14 +660,18 @@ export default function MetallicPaint({
       role="img"
       aria-label={fallbackText}
       data-metallic-fallback={failed ? "true" : undefined}
+      data-metallic-ready={paintVisible ? "true" : undefined}
       style={style}
     >
       <canvas
         ref={canvasRef}
         aria-hidden="true"
-        className={`${styles.canvas} ${textureReady && !failed ? styles.canvasReady : ""}`.trim()}
+        className={`${styles.canvas} ${paintVisible ? styles.canvasReady : ""}`.trim()}
       />
-      <span aria-hidden="true" className={styles.fallback}>
+      <span
+        aria-hidden="true"
+        className={`${styles.fallback} ${paintVisible ? styles.fallbackHidden : ""}`.trim()}
+      >
         {fallbackText}
       </span>
     </div>

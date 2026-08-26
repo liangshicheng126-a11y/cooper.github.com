@@ -266,6 +266,7 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 - **Material:** a padded black wordmark mask drives a cold-white, black, and indigo-signal WebGL2 treatment within a fixed bounded footer region.
 - **Behavior:** render resolution follows the element size with DPR capped at `1.5` on desktop and `1` on mobile. Animation runs only while the footer is near the viewport and the page is visible.
 - **Resilience:** reduced motion renders a static time-zero frame; image, shader, or WebGL failure leaves the original accessible cold-white wordmark visible. Cleanup releases textures, buffers, shaders, programs, animation frames, observers, and the context.
+- **Fallback handoff:** the readable wordmark is visible only while the WebGL mask is loading or after a render failure. Once the paint texture is ready, hide the fallback completely so translucent metallic regions never reveal a duplicate white base layer.
 
 ### Floating site header
 
@@ -287,7 +288,7 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 
 - **Desktop structure:** three equal columns in one row; every item has identical padding, minimum height, icon treatment, and information hierarchy.
 - **Mobile structure:** one natural-height column at `900px` and below.
-- **Material:** a shared parent frame and zinc hairlines organize the services. Each item centers an indigo icon tile with its preserved title and description; do not nest three unrelated floating cards.
+- **Material:** a shared parent frame and zinc hairlines organize the services. Each item uses a subject-matched, full-bleed nocturnal photograph beneath the same graphite readability wash, then centers an indigo icon tile with its preserved title and description; do not nest three unrelated floating cards. Images stay text-free, use the graphite/cold-white/indigo palette, and crop responsively without creating bright fields behind copy.
 
 ### Portfolio focus rail
 

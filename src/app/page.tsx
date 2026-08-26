@@ -7,6 +7,7 @@ import gsap from "gsap";
 import { CustomEase } from "gsap/CustomEase";
 import { useTranslation } from "@/locales/LanguageProvider";
 import { ArrowRight, Briefcase, User, Mail, Sparkles, Figma, Palette, Video, PenTool, Layout, Image as ImageIcon, Scissors, Clapperboard, Film } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import BlurText from "@/components/BlurText";
@@ -23,6 +24,12 @@ import { useIntroRevealReady } from "@/components/motion/IntroPlaybackContext";
 import { shouldUseGsap } from "@/lib/motion";
 
 gsap.registerPlugin(CustomEase);
+
+const serviceMedia = [
+  "/photos/services/brand-design.webp",
+  "/photos/services/ui-ux-design.webp",
+  "/photos/services/video-production.webp",
+];
 
 export default function Home() {
   const tier = useMotionTier();
@@ -218,6 +225,14 @@ export default function Home() {
               
               return (
                 <article key={i} className="screening-service-card group">
+                  <span className="screening-service-card__media" aria-hidden="true">
+                    <Image
+                      src={serviceMedia[i] ?? serviceMedia[0]}
+                      alt=""
+                      fill
+                      sizes="(max-width: 900px) calc(100vw - 3rem), 30vw"
+                    />
+                  </span>
                   <div className="screening-service-card__icon">
                     <Icon className="w-8 h-8 text-indigo-500" />
                   </div>
