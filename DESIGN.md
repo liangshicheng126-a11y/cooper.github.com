@@ -300,7 +300,7 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 ### About photo stack
 
 - **Role:** the existing About avatar region becomes a tactile personal gallery without changing biography copy or the experience badge.
-- **Media:** use only Cooper's supplied or already-published personal imagery. Prepare consistent `4:5` WebP crops with the person or activity kept inside the central reading area; exclude captions, screenshots, and visible text from the crop.
+- **Media:** use only Cooper's supplied or already-published personal imagery. The current six-card gallery combines the two incumbent photographs with four user-supplied additions. Prepare consistent `4:5`, `1200 × 1500` WebP crops with the person or activity kept inside the central reading area; exclude captions and screenshots from the crop.
 - **Behavior:** the top image can be dragged beyond a bounded threshold, clicked, or advanced with Enter/Space to move it behind the stack. Lower cards retain restrained rotation and depth so the available gallery is obvious.
 - **Resilience:** the experience badge remains above the cards and does not intercept input. Explicit reduced motion disables free dragging and uses immediate click/keyboard advancement.
 

@@ -45,6 +45,26 @@ export default function GsapAboutAvatar({
         src="/photos/about-stack/ice-climb.webp"
         alt="Ice climbing outdoors"
       />,
+      <img
+        key="studio-portrait"
+        src="/photos/about-stack/studio-portrait.webp"
+        alt="Cooper in a formal studio portrait"
+      />,
+      <img
+        key="ice-climb-action"
+        src="/photos/about-stack/ice-climb-action.webp"
+        alt="Cooper ice climbing with two ice axes"
+      />,
+      <img
+        key="mountain-shell"
+        src="/photos/about-stack/mountain-shell.webp"
+        alt="Cooper facing a mountain ridge in outdoor gear"
+      />,
+      <img
+        key="meadow-rest"
+        src="/photos/about-stack/meadow-rest.webp"
+        alt="Cooper resting in a mountain meadow"
+      />,
     ],
     [],
   );
