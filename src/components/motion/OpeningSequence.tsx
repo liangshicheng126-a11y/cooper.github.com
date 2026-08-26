@@ -160,7 +160,6 @@ export default function OpeningSequence() {
         .call(
           () => {
             setIntroMode("handoff");
-            document.documentElement.removeAttribute("data-intro-needed");
           },
           undefined,
           "details"
