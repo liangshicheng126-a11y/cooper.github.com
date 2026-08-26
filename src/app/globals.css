@@ -685,12 +685,19 @@ html[data-viewport-canvas="on"] {
 }
 
 /* First-visit screening-room opening sequence. */
-html[data-intro-needed] .site-shell {
-  visibility: hidden;
+@keyframes opening-shell-failsafe {
+  from {
+    visibility: hidden;
+  }
+
+  to {
+    visibility: visible;
+  }
 }
 
-html[data-intro-active] {
-  overflow: hidden;
+html[data-intro-needed] .site-shell {
+  visibility: hidden;
+  animation: opening-shell-failsafe 0s 5s forwards;
 }
 
 .opening-sequence {

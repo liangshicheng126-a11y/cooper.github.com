@@ -40,6 +40,8 @@ export default function OpeningSequence() {
   useEffect(() => {
     if (!shouldPlayIntro || introComplete) return;
 
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") skipIntro();
     };
@@ -47,6 +49,7 @@ export default function OpeningSequence() {
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
+      document.body.style.overflow = previousOverflow;
       window.clearTimeout(failsafe);
       window.removeEventListener("keydown", handleKeyDown);
     };
