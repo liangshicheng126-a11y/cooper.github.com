@@ -21,7 +21,7 @@ import SidebarNavLinks from "./SidebarNavLinks";
 import SidebarBackdrop from "./SidebarBackdrop";
 import { useTranslation } from "@/locales/LanguageProvider";
 import { useIntroRevealReady } from "@/components/motion/IntroPlaybackContext";
-import { INTRO_TIMING } from "@/lib/blobIntro";
+import { INTRO_TIMING } from "@/lib/openingIntro";
 
 const Sidebar = () => {
   const { language, setLanguage, t, mounted } = useTranslation();

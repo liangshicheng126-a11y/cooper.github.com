@@ -123,6 +123,7 @@ Form direction 4, seed `94f35f2e`, is the shipped authority. The finish-review d
 - Graphite-black canvas with cold white, zinc, and rare indigo signals.
 - Centered full-width screening-room composition, never a split portfolio sidebar.
 - Exactly centered `100svh` title, description, and two-action group beneath compact floating chrome.
+- A session-gated screening-room opening resolves the COOPER. wordmark, then retracts two graphite shutters to reveal the existing first viewport.
 - Pointer-responsive DepthText gives the home statement restrained dimensional weight; the footer closes with one compact MetallicPaint wordmark.
 - Low-opacity React Bits FloatingLines atmosphere with a readability vignette and bounded GPU cost.
 - Display-led hierarchy paired with editorial hairlines and asymmetric chapter grids.
@@ -227,6 +228,7 @@ The renderer caps device pixel ratio at `2` on wider screens and `1.25` at `640p
 
 - State transitions use `180–300ms` easing for color, fill, border, scale, and small icon movement.
 - Entrances use opacity, a short `8–20px` translation, and optional blur with the `cubic-bezier(0.16, 1, 0.3, 1)` finish. They should feel like light resolving, not objects flying in.
+- The homepage opening is one authored `~2.2s` focal sequence: COOPER. resolves over a single indigo-white aperture line, then paired graphite shutters reveal the existing page from the center. It plays once per browser session, accepts Esc or the visible skip control, never plays on non-home routes, and is bypassed entirely for `prefers-reduced-motion`. `NEXT_PUBLIC_INTRO_ENABLED=false` disables it without removing code; `?intro=1` forces a QA replay.
 - Hero actions may lift up to `4px`, scale only to `1.02`, and move the arrow `3px`. Active controls compress to `0.98`.
 - Continuous movement is limited to the approved FloatingLines field, the home title's slow pointer/orbit response, the footer wordmark's localized metallic flow, and the currently active home workflow marquee. Every continuous region pauses outside the viewport or while the page is hidden; none becomes another full-screen ambient layer.
 - Full motion is the default on every viewport and input type. Do not downgrade motion merely because a device is narrow, touch-first, or reports reduced data. The explicit operating-system `prefers-reduced-motion` request remains authoritative: it freezes ambient loops and replaces nonessential spatial movement with immediate or gentle state feedback while leaving every word, route, control, and project visible.
@@ -360,7 +362,7 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 - **Don't** restore the portfolio-template sidebar, decorative blob scaffold, or a dashboard-like card wall.
 - **Don't** introduce broad colorful gradients into UI chrome, controls, cards, or content. The user-directed low-opacity `#E945F5 / #2F4BC0 / #E945F5` FloatingLines field is the sole environmental exception.
 - **Don't** promote every heading to hero scale or every group into a rounded container.
-- **Don't** duplicate, remount, or layer competing full-screen effects over the global FloatingLines backdrop. DepthText and MetallicPaint remain bounded to the title and footer wordmark, and the backdrop's magenta/blue gradient is not reused as general UI color.
+- **Don't** duplicate or add persistent full-screen effects over the global FloatingLines backdrop. The temporary first-visit shutter sequence is the sole bounded interruption; DepthText and MetallicPaint remain confined to the title and footer wordmark, and the backdrop's magenta/blue gradient is not reused as general UI color.
 - **Don't** alter copy, facts, navigation, media, forms, API flows, lightboxes, project data, translation behavior, or motion-accessibility behavior under the banner of design maintenance.
 
 ### Content-preservation boundary
@@ -370,6 +372,7 @@ This design system governs presentation only. The names **COOPER.**, **梁世城
 ### Maintenance checklist
 
 - [ ] The hero is exactly `100svh`; its title + description + two-CTA group is centered on both axes; no separate scroll-prompt module competes with it.
+- [ ] The first homepage visit plays one skippable screening-room opening, later visits in the same session do not replay it, `?intro=1` forces QA playback, and reduced motion plus `NEXT_PUBLIC_INTRO_ENABLED=false` bypass it without hiding content.
 - [ ] The home title uses one DepthText instance with its translated copy intact; reduced/minimal tiers are static and the loop pauses offscreen or page-hidden.
 - [ ] Archivo remains the Latin face and Noto Sans SC remains the Chinese face across display, title, body, and label roles; no third expressive font has entered the system.
 - [ ] Graphite, cold white, zinc hairlines, obsidian, and restrained indigo remain the UI vocabulary; magenta/blue stays confined to the approved low-opacity FloatingLines field.
@@ -391,4 +394,4 @@ This design system governs presentation only. The names **COOPER.**, **梁世城
 
 ### Provenance
 
-This record was carbonized from `PRODUCT.md`, `src/app/globals.css`, `src/app/layout.tsx`, `src/app/page.tsx`, `src/app/about/page.tsx`, `src/app/portfolio/page.tsx`, `src/app/xiaocoo/page.tsx`, `src/components/SiteHeader.tsx`, `src/components/SiteFooter.tsx`, `src/components/NightBackdrop.tsx`, `src/components/ui/FloatingLines.tsx`, `src/components/ui/DepthText.tsx`, `src/components/ui/MetallicPaint.tsx`, `src/components/ui/Stack.tsx`, `src/components/ui/FlowingMenu.tsx`, `src/components/ui/expanding-cards.tsx`, and `src/components/xiaocoo/XiaocooChat.tsx`. The committed form is direction 4, seed `94f35f2e`. The shipping background, hero title, footer signature, About stack, and home workflow are adapted React Bits effects with bounded animation, reduced-motion states, and explicit fallbacks.
+This record was carbonized from `PRODUCT.md`, `src/app/globals.css`, `src/app/layout.tsx`, `src/app/page.tsx`, `src/app/about/page.tsx`, `src/app/portfolio/page.tsx`, `src/app/xiaocoo/page.tsx`, `src/components/SiteHeader.tsx`, `src/components/SiteFooter.tsx`, `src/components/NightBackdrop.tsx`, `src/components/motion/OpeningSequence.tsx`, `src/lib/openingIntro.ts`, `src/components/ui/FloatingLines.tsx`, `src/components/ui/DepthText.tsx`, `src/components/ui/MetallicPaint.tsx`, `src/components/ui/Stack.tsx`, `src/components/ui/FlowingMenu.tsx`, `src/components/ui/expanding-cards.tsx`, and `src/components/xiaocoo/XiaocooChat.tsx`. The committed form is direction 4, seed `94f35f2e`. The shipping background, hero title, footer signature, About stack, and home workflow are adapted React Bits effects with bounded animation, reduced-motion states, and explicit fallbacks.

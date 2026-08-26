@@ -12,20 +12,20 @@ import { usePathname } from "next/navigation";
 import useMotionTier from "@/hooks/useMotionTier";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import {
-  type BlobIntroMode,
+  type OpeningIntroMode,
   readIntroNeededFromDom,
-  shouldPlayBlobIntro,
-} from "@/lib/blobIntro";
+  shouldPlayOpeningIntro,
+} from "@/lib/openingIntro";
 import { INTRO_ENABLED } from "@/lib/motion";
 
 type IntroPlaybackContextValue = {
   introActive: boolean;
   introComplete: boolean;
   shouldPlayIntro: boolean;
-  introMode: BlobIntroMode;
+  introMode: OpeningIntroMode;
   setIntroActive: (active: boolean) => void;
   setIntroComplete: (complete: boolean) => void;
-  setIntroMode: (mode: BlobIntroMode) => void;
+  setIntroMode: (mode: OpeningIntroMode) => void;
 };
 
 const IntroPlaybackContext = createContext<IntroPlaybackContextValue | null>(
@@ -37,24 +37,27 @@ export function IntroPlaybackProvider({ children }: { children: ReactNode }) {
   const tier = useMotionTier();
   const reduced = usePrefersReducedMotion();
 
-  const [shouldPlayIntro, setShouldPlayIntro] = useState(readIntroNeededFromDom);
-  const [introActive, setIntroActive] = useState(readIntroNeededFromDom);
-  const [introComplete, setIntroComplete] = useState(
-    () => !readIntroNeededFromDom()
-  );
-  const [introMode, setIntroMode] = useState<BlobIntroMode>(() =>
-    readIntroNeededFromDom() ? "hold" : "idle"
-  );
+  const [shouldPlayIntro, setShouldPlayIntro] = useState(false);
+  const [introActive, setIntroActive] = useState(false);
+  const [introComplete, setIntroComplete] = useState(true);
+  const [introMode, setIntroMode] = useState<OpeningIntroMode>("idle");
 
   useEffect(() => {
-    const next = shouldPlayBlobIntro({
-      pathname,
-      tier,
-      reducedMotion: reduced,
-      introEnabled: INTRO_ENABLED,
-    });
+    const next =
+      readIntroNeededFromDom() &&
+      shouldPlayOpeningIntro({
+        pathname,
+        tier,
+        reducedMotion: reduced,
+        introEnabled: INTRO_ENABLED,
+      });
     setShouldPlayIntro(next);
-    if (!next) {
+    if (next) {
+      setIntroActive(true);
+      setIntroComplete(false);
+      setIntroMode("hold");
+      document.documentElement.setAttribute("data-intro-active", "");
+    } else {
       setIntroActive(false);
       setIntroComplete(true);
       setIntroMode("idle");

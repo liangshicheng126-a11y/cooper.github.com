@@ -8,6 +8,13 @@ import MotionTierProvider from "@/components/motion/MotionTierProvider";
 import NightBackdrop from "@/components/NightBackdrop";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import OpeningSequence from "@/components/motion/OpeningSequence";
+import { IntroPlaybackProvider } from "@/components/motion/IntroPlaybackContext";
+import {
+  getOpeningIntroEarlyGateScript,
+  getPagesBasePath,
+} from "@/lib/openingIntro";
+import { INTRO_ENABLED } from "@/lib/motion";
 
 const archivo = Archivo({
   subsets: ["latin"],
@@ -26,6 +33,10 @@ const siteUrl =
   (process.env.GITHUB_REPOSITORY_OWNER
     ? `https://${process.env.GITHUB_REPOSITORY_OWNER}.github.io`
     : "http://localhost:3000");
+const openingGateScript = getOpeningIntroEarlyGateScript(
+  getPagesBasePath(),
+  INTRO_ENABLED
+);
 
 export const viewport = {
   width: "device-width",
@@ -56,6 +67,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
+      <head>
+        <script
+          id="cooper-opening-gate"
+          dangerouslySetInnerHTML={{ __html: openingGateScript }}
+        />
+      </head>
       <body className={`${archivo.variable} ${notoSansSC.variable}`} suppressHydrationWarning>
         <span
           hidden
@@ -73,16 +90,19 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         />
         <LanguageProvider>
           <MotionTierProvider>
-            <GsapProvider>
-              <div className="site-shell">
-                <NightBackdrop />
-                <SiteHeader />
-                <main className="site-main">
-                  <PageTransition>{children}</PageTransition>
-                  <SiteFooter />
-                </main>
-              </div>
-            </GsapProvider>
+            <IntroPlaybackProvider>
+              <GsapProvider>
+                <OpeningSequence />
+                <div className="site-shell">
+                  <NightBackdrop />
+                  <SiteHeader />
+                  <main className="site-main">
+                    <PageTransition>{children}</PageTransition>
+                    <SiteFooter />
+                  </main>
+                </div>
+              </GsapProvider>
+            </IntroPlaybackProvider>
           </MotionTierProvider>
         </LanguageProvider>
       </body>

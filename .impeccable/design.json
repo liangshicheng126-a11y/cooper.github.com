@@ -297,6 +297,14 @@
       "css": ".ds-header{display:flex;align-items:center;justify-content:space-between;width:min(52rem,100%);min-height:3.75rem;padding:.5rem .6rem .5rem 1rem;border:1px solid rgba(255,255,255,.105);border-radius:14px;background:rgba(7,7,9,.7);color:#f4f4f5;box-shadow:0 18px 48px rgba(0,0,0,.34);backdrop-filter:blur(22px) saturate(135%);font-family:var(--font-archivo,Arial,sans-serif)}.ds-wordmark{display:flex;align-items:center;gap:.65rem;color:#fff;font-size:.88rem;font-weight:800;letter-spacing:.11em;text-decoration:none}.ds-wordmark i{width:.48rem;height:.48rem;border-radius:999px;background:#a5b4fc;box-shadow:0 6px 18px rgba(129,140,248,.38)}.ds-header nav{display:flex;gap:.15rem}.ds-header nav a{position:relative;padding:.7rem .78rem;border-radius:10px;color:rgba(244,244,245,.62);font-size:.78rem;font-weight:600;text-decoration:none;transition:color 220ms ease,background-color 220ms ease}.ds-header nav a:hover,.ds-header nav .ds-nav-active{color:#fff;background:rgba(255,255,255,.065)}.ds-nav-active:after{content:'';position:absolute;right:.72rem;bottom:.3rem;left:.72rem;height:1px;background:rgba(199,210,254,.75)}.ds-header button{min-width:3.25rem;height:2.25rem;border:1px solid rgba(255,255,255,.1);border-radius:8px;background:rgba(255,255,255,.035);color:#d4d4d8;font-size:.69rem;letter-spacing:.12em}.ds-header a:focus-visible,.ds-header button:focus-visible{outline:2px solid rgba(199,210,254,.95);outline-offset:3px}"
     },
     {
+      "name": "Screening Room Opening",
+      "kind": "custom",
+      "refersTo": "panel",
+      "description": "A session-gated homepage opening: the cold-white COOPER. wordmark resolves across one indigo-white aperture line before paired graphite shutters retract from the center. Esc and the visible skip control complete it immediately; reduced motion and the runtime flag bypass it.",
+      "html": "<div class=\"ds-opening\"><div class=\"ds-opening-shutter ds-opening-top\"></div><div class=\"ds-opening-shutter ds-opening-bottom\"></div><span>COOPER.</span><button>跳过 / SKIP</button></div>",
+      "css": ".ds-opening{position:relative;display:grid;overflow:hidden;place-items:center;min-height:24rem;background:#050506;color:#f4f4f5;font-family:var(--font-archivo,Arial,sans-serif)}.ds-opening-shutter{position:absolute;right:0;left:0;height:50%;background:#050506}.ds-opening-top{top:0}.ds-opening-bottom{bottom:0}.ds-opening>span{position:relative;z-index:2;padding:.3em .46em;background:#050506;font-size:clamp(2.75rem,8.2vw,6rem);font-weight:800;line-height:.9;letter-spacing:-.035em}.ds-opening:after{position:absolute;right:8%;left:8%;height:1px;background:rgba(199,210,254,.72);box-shadow:0 0 24px rgba(129,140,248,.34);content:''}.ds-opening button{position:absolute;right:1rem;bottom:1rem;z-index:2;min-height:2.75rem;padding:.65rem .82rem;border:1px solid rgba(255,255,255,.13);border-radius:10px;background:rgba(255,255,255,.035);color:rgba(244,244,245,.72);font-size:.78rem;font-weight:600;letter-spacing:.11em}.ds-opening button:focus-visible{outline:2px solid #c7d2fe;outline-offset:3px}"
+    },
+    {
       "name": "About Photo Stack",
       "kind": "custom",
       "refersTo": "panel",
@@ -360,6 +368,7 @@
       "Graphite-black canvas with cold white, zinc, and rare indigo signals.",
       "Centered full-width screening-room composition, never a split portfolio sidebar.",
       "Exactly centered 100svh title, description, and two-action group beneath compact floating chrome.",
+      "A session-gated screening-room opening resolves the COOPER. wordmark, then retracts two graphite shutters to reveal the existing first viewport.",
       "Pointer-responsive DepthText gives the home statement restrained dimensional weight; the footer closes with one compact MetallicPaint wordmark.",
       "A shared navigation surface preserves route continuity; the About photo stack and home workflow turn personal imagery and process into bounded tactile interactions.",
       "Low-opacity React Bits FloatingLines atmosphere with a readability vignette and bounded GPU cost.",

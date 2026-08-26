@@ -57,32 +57,13 @@ git push origin main
 
 ---
 
-## Blob Splash Intro 回滚
+## 夜间放映式开场回滚
 
-基线标签：`pre-blob-splash-intro`（三球开局动画合并前的 `main` 快照）  
-功能分支：`feat/blob-splash-intro`  
-运行时开关：`NEXT_PUBLIC_INTRO_ENABLED`（`true` 启用首页开局动画，`false` 关闭且保留代码）
+远端基线分支：`backup/cooper-before-opening-animation-20260826-1449`
+基线提交：`036cf74d17d785493fa355af5620e4572f927aff`
+运行时开关：`NEXT_PUBLIC_INTRO_ENABLED`（`true` 启用开场，`false` 关闭且保留代码）
 
-与 `pre-motion-refresh-20260529` 的关系：后者覆盖更早的 GSAP 动效 v2；`pre-blob-splash-intro` 仅回退本次开局动画，不影响其他动效。
-
-### 路径 A：改动尚未合并到 main
-
-```powershell
-cd X:\A\1
-git checkout main
-git branch -D feat/blob-splash-intro
-```
-
-### 路径 B：已合并到 main，撤销一次合并
-
-```powershell
-cd X:\A\1
-git log --oneline -5   # 找到 merge commit SHA
-git revert -m 1 <merge_commit_sha>
-git push origin main
-```
-
-### 路径 C：不 revert，仅关闭开局动画
+### 路径 A：不改代码，立即关闭开场
 
 在 `.env.local` 或 CI build env 中设置：
 
@@ -90,13 +71,32 @@ git push origin main
 NEXT_PUBLIC_INTRO_ENABLED=false
 ```
 
-然后 `npm run build` 并 push（或改 `deploy-pages.yml` 的 build env）。站点跳过三球开局，其余动效不变。
+然后 `npm run build` 并重新部署。站点会直接显示首页，其余 GSAP、FloatingLines、DepthText 与页面切换动效保持不变。
 
-### 路径 D：回到合并前快照
+### 路径 B：撤销开场提交
 
 ```powershell
 cd X:\A\1
-git fetch origin --tags
-git checkout -b hotfix/restore-blob-intro pre-blob-splash-intro
-# 验证后合并到 main（需你确认）
+git log --oneline -5   # 找到“Add the screening room opening”提交
+git revert <opening_commit_sha>
+git push origin main
 ```
+
+GitHub Pages 会自动重新部署撤回后的版本。
+
+### 路径 C：从远端快照创建恢复分支
+
+```powershell
+cd X:\A\1
+git fetch origin
+git checkout -b hotfix/restore-before-opening origin/backup/cooper-before-opening-animation-20260826-1449
+npm run build
+# 验证后再合并到 main；不要直接强推覆盖其他人的后续改动
+```
+
+### 验收与强制重播
+
+- 正常访问：每个浏览器会话仅在第一次进入首页时播放。
+- 强制重播：在首页地址后添加 `?intro=1`。
+- 键盘跳过：按 `Esc`；也可以点击右下角“跳过 / SKIP”。
+- 系统开启“减少动态效果”时，开场不会挂载，页面内容直接可见。
