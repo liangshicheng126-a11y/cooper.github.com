@@ -101,3 +101,34 @@ npm run build
 - 强制重播：在首页地址后添加 `?intro=1`。
 - 键盘跳过：按 `Esc`；也可以点击右下角“跳过 / SKIP”。
 - 系统开启“减少动态效果”时，开场不会挂载，页面内容直接可见。
+
+---
+
+## 左向右分幕开场回滚（2026-08-26）
+
+本轮把开场顺序更新为“COOPER. → FloatingLines 从左向右铺开 → 页面详情”。
+
+远端基线分支：`backup/cooper-before-left-to-right-opening-20260826-1649`
+基线提交：`4c2bf3d16301961be7b47e13270f0332eb472e1d`
+功能提交：`5cb350ae922b8927b9fce540e2a78730528ca691`
+
+### 仅撤销本轮分幕顺序
+
+```powershell
+cd X:\A\1
+git revert --no-edit 5cb350ae922b8927b9fce540e2a78730528ca691
+git push origin main
+```
+
+这会恢复到上一版“COOPER. 后直接揭开首页”的开场，其他网站内容不变。
+
+### 从本轮基线建立恢复分支
+
+```powershell
+cd X:\A\1
+git fetch origin
+git checkout -b hotfix/restore-before-left-to-right-opening origin/backup/cooper-before-left-to-right-opening-20260826-1649
+npm run build
+```
+
+若只想临时关闭所有开场，继续使用构建变量 `NEXT_PUBLIC_INTRO_ENABLED=false`。
