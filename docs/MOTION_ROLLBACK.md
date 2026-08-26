@@ -111,11 +111,13 @@ npm run build
 远端基线分支：`backup/cooper-before-left-to-right-opening-20260826-1649`
 基线提交：`4c2bf3d16301961be7b47e13270f0332eb472e1d`
 功能提交：`5cb350ae922b8927b9fce540e2a78730528ca691`
+退场顺序修正：`8a09bfb6a69c228f85f4d1ec1ab23cded743645c`
 
 ### 仅撤销本轮分幕顺序
 
 ```powershell
 cd X:\A\1
+git revert --no-edit 8a09bfb6a69c228f85f4d1ec1ab23cded743645c
 git revert --no-edit 5cb350ae922b8927b9fce540e2a78730528ca691
 git push origin main
 ```
