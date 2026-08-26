@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import {
   Briefcase,
-  ClipboardList,
   Home,
   Mail,
   Menu,
@@ -35,7 +34,6 @@ export default function SiteHeader() {
     { name: t.nav.home, href: "/", icon: Home },
     { name: t.nav.portfolio, href: "/portfolio", icon: Briefcase },
     { name: t.nav.about, href: "/about", icon: User },
-    { name: t.nav.taskBrief, href: "/task-brief", icon: ClipboardList },
     { name: t.nav.xiaocoo, href: "/xiaocoo", icon: MessageCircle },
     { name: t.nav.contactMe, href: "/contact", icon: Mail },
   ];

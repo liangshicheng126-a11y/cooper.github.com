@@ -114,7 +114,7 @@ components:
 
 Cooper's work is presented as a private screening room after dark: graphite black holds the frame, cold white type behaves like projected light, zinc hairlines order the programme, translucent obsidian provides just enough material separation, and indigo appears only as a controlled UI signal. Behind that quiet chrome, a deliberately low-opacity magenta/blue FloatingLines field supplies the projected atmosphere. The interface is cinematic without becoming theatrical. Work, words, and actions remain legible before atmosphere.
 
-This world deliberately rejects the generic portfolio-template split sidebar and decorative blob scaffold. The site is a centered, full-width composition with compact floating chrome, oversized display typography, editorial chapters, and a full-screen animated line field disciplined by a dark vignette. Its story is fixed: identify Cooper, understand his capabilities, inspect real work, then choose contact, Task Brief, or Xiaocoo without losing context.
+This world deliberately rejects the generic portfolio-template split sidebar and decorative blob scaffold. The site is a centered, full-width composition with compact floating chrome, oversized display typography, editorial chapters, and a full-screen animated line field disciplined by a dark vignette. Its story is fixed: identify Cooper, understand his capabilities, inspect real work, then choose direct contact or Xiaocoo without losing context.
 
 Form direction 4, seed `94f35f2e`, is the shipped authority. The finish-review disposition is **SHIP — no remaining fixes**. The approved implementation and this synchronized record supersede earlier capture details where the hero or backdrop differs.
 
@@ -314,7 +314,7 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 ### Nocturnal operate surfaces
 
 - **Xiaocoo:** keep one stable sequence—intro, transcript, suggestion rail, composer—inside the same obsidian and indigo vocabulary as the rest of the site. New messages may use a small opacity and `8px` resolve, never a springy card entrance.
-- **Task Brief:** the route retains its translated intro, while the embedded company verification/form module is intentionally no longer mounted. Language switching belongs exclusively to the global top navigation.
+- **Public navigation:** the former Task Brief route and its navigation entry are intentionally absent. Language switching belongs exclusively to the global top navigation.
 - **Operational consistency:** inputs, buttons, pending states, errors, focus rings, and mobile behavior reuse the shared field and control rules instead of introducing a second light interface.
 
 ### Panels and editorial chapters
@@ -365,7 +365,7 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 
 ### Content-preservation boundary
 
-This design system governs presentation only. The names **COOPER.**, **梁世城 Cooper**, and **小coo**; all Chinese and English copy; navigation destinations; contact details; project descriptions and media; gallery manifests; Task Brief fields and submission; Contact submission; Xiaocoo behavior; static-export constraints; API behavior; and accessibility affordances are immutable unless a separate product/content brief explicitly changes them. Do not fabricate testimonials, client logos, pricing, awards, metrics, or commercial claims.
+This design system governs presentation only. The names **COOPER.**, **梁世城 Cooper**, and **小coo**; all Chinese and English copy; current navigation destinations; contact details; project descriptions and media; gallery manifests; Contact submission; Xiaocoo behavior; static-export constraints; API behavior; and accessibility affordances are immutable unless a separate product/content brief explicitly changes them. Do not fabricate testimonials, client logos, pricing, awards, metrics, or commercial claims.
 
 ### Maintenance checklist
 
@@ -376,9 +376,9 @@ This design system governs presentation only. The names **COOPER.**, **梁世城
 - [ ] New content joins the centered `88rem` shell and responsive `900px` / `640px` collapse rules; navigation still switches at the `1024px` large breakpoint.
 - [ ] Professional services still use three equal desktop columns with no featured item; mobile still resolves to one natural-height column.
 - [ ] The portfolio focus rail keeps four real projects, one active state, whole-surface project links, keyboard navigation, mobile first-tap expansion, vertical behavior, and a reduced-motion fallback.
-- [ ] Xiaocoo still follows transcript → suggestions → composer, while Task Brief keeps its translated intro without mounting the removed company verification/form module.
+- [ ] Xiaocoo still follows transcript → suggestions → composer, and the removed Task Brief destination has not returned to the public navigation or route build.
 - [ ] The footer remains centered, with four copyable contact methods on one desktop row and a contained horizontal rail at `640px`.
-- [ ] Navigation, language switching, forms, APIs, lightboxes, project data, contact methods, Task Brief, and Xiaocoo still behave exactly as before the visual change.
+- [ ] Navigation, language switching, forms, APIs, lightboxes, project data, contact methods, and Xiaocoo still behave exactly as before the visual change.
 - [ ] The desktop navigation owns exactly one shared active surface that moves between routes; reduced motion resolves it immediately.
 - [ ] The five-image About photo stack advances by drag, click, Enter, and Space; supplied images use text-free `4:5` crops and the experience badge stays non-blocking.
 - [ ] The home workflow keeps all four translated steps, uses one generated image per stage, reveals on pointer/focus/tap, and runs only the active visible marquee.
@@ -391,4 +391,4 @@ This design system governs presentation only. The names **COOPER.**, **梁世城
 
 ### Provenance
 
-This record was carbonized from `PRODUCT.md`, `src/app/globals.css`, `src/app/layout.tsx`, `src/app/page.tsx`, `src/app/about/page.tsx`, `src/app/portfolio/page.tsx`, `src/app/task-brief/page.tsx`, `src/app/xiaocoo/page.tsx`, `src/components/SiteHeader.tsx`, `src/components/SiteFooter.tsx`, `src/components/NightBackdrop.tsx`, `src/components/ui/FloatingLines.tsx`, `src/components/ui/DepthText.tsx`, `src/components/ui/MetallicPaint.tsx`, `src/components/ui/Stack.tsx`, `src/components/ui/FlowingMenu.tsx`, `src/components/ui/expanding-cards.tsx`, `src/components/task-brief/TaskBriefWizard.tsx`, and `src/components/xiaocoo/XiaocooChat.tsx`. The committed form is direction 4, seed `94f35f2e`. The shipping background, hero title, footer signature, About stack, and home workflow are adapted React Bits effects with bounded animation, reduced-motion states, and explicit fallbacks.
+This record was carbonized from `PRODUCT.md`, `src/app/globals.css`, `src/app/layout.tsx`, `src/app/page.tsx`, `src/app/about/page.tsx`, `src/app/portfolio/page.tsx`, `src/app/xiaocoo/page.tsx`, `src/components/SiteHeader.tsx`, `src/components/SiteFooter.tsx`, `src/components/NightBackdrop.tsx`, `src/components/ui/FloatingLines.tsx`, `src/components/ui/DepthText.tsx`, `src/components/ui/MetallicPaint.tsx`, `src/components/ui/Stack.tsx`, `src/components/ui/FlowingMenu.tsx`, `src/components/ui/expanding-cards.tsx`, and `src/components/xiaocoo/XiaocooChat.tsx`. The committed form is direction 4, seed `94f35f2e`. The shipping background, hero title, footer signature, About stack, and home workflow are adapted React Bits effects with bounded animation, reduced-motion states, and explicit fallbacks.
