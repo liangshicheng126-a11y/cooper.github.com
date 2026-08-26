@@ -77,8 +77,9 @@ NEXT_PUBLIC_INTRO_ENABLED=false
 
 ```powershell
 cd X:\A\1
-git log --oneline -5   # 找到“Add the screening room opening”提交
-git revert <opening_commit_sha>
+# 先撤销容错加固，再撤销开场主体；顺序不可颠倒
+git revert --no-edit 6eae6b73b23c93d347a448d2197ea8b1f7125419
+git revert --no-edit 4150c2770a7da2052594a194045eada4ae478ebf
 git push origin main
 ```
 
