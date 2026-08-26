@@ -815,7 +815,7 @@ html[data-intro-needed] .night-backdrop__lines {
   align-items: baseline;
   justify-content: center;
   padding: 0.3em 0.46em;
-  background: #050506;
+  background: transparent;
   font-family: var(--font-archivo), sans-serif;
   font-size: clamp(2.75rem, 8.2vw, 6rem);
   font-weight: 800;
@@ -835,36 +835,6 @@ html[data-intro-needed] .night-backdrop__lines {
   will-change: transform, opacity, filter;
 }
 
-.opening-sequence__skip {
-  position: fixed;
-  right: 1.25rem;
-  bottom: 1.25rem;
-  z-index: 3;
-  min-height: 2.75rem;
-  padding: 0.65rem 0.82rem;
-  border: 1px solid rgba(255, 255, 255, 0.13);
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.035);
-  color: rgba(244, 244, 245, 0.72);
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.11em;
-  opacity: 0;
-  visibility: hidden;
-  transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease;
-}
-
-.opening-sequence__skip:hover {
-  border-color: rgba(165, 180, 252, 0.32);
-  background: rgba(255, 255, 255, 0.065);
-  color: #f4f4f5;
-}
-
-.opening-sequence__skip:focus-visible {
-  outline: 2px solid #c7d2fe;
-  outline-offset: 3px;
-}
-
 @media (max-width: 640px) {
   .opening-sequence__stage {
     width: calc(100vw - 2.5rem);
@@ -872,11 +842,6 @@ html[data-intro-needed] .night-backdrop__lines {
 
   .opening-sequence__signal {
     left: -0.15rem;
-  }
-
-  .opening-sequence__skip {
-    right: 0.85rem;
-    bottom: max(0.85rem, env(safe-area-inset-bottom));
   }
 }
 

@@ -65,7 +65,6 @@ export default function OpeningSequence() {
       const signal = root.querySelector<HTMLElement>("[data-opening-signal]");
       const aperture = root.querySelector<HTMLElement>("[data-opening-aperture]");
       const wordmark = root.querySelector<HTMLElement>("[data-opening-wordmark]");
-      const skip = root.querySelector<HTMLElement>("[data-opening-skip]");
       const glyphs = Array.from(root.querySelectorAll<HTMLElement>("[data-opening-glyph]"));
       const backgroundLines = document.querySelector<HTMLElement>(".night-backdrop__lines");
       const backgroundLineOpacity = window.matchMedia("(max-width: 640px)").matches
@@ -109,7 +108,6 @@ export default function OpeningSequence() {
           },
           "brand+=0.08"
         )
-        .to(skip, { autoAlpha: 1, duration: 0.24, ease: "power2.out" }, "brand+=0.38")
         .addLabel("lines", `+=${INTRO_TIMING.holdDuration}`)
         .set(root, { backgroundColor: "rgba(5, 5, 6, 0)" }, "lines")
         .to(
@@ -165,7 +163,7 @@ export default function OpeningSequence() {
           "details"
         )
         .to(
-          [wordmark, aperture, signal, skip],
+          [wordmark, aperture, signal],
           {
             autoAlpha: 0,
             y: -8,
@@ -224,15 +222,6 @@ export default function OpeningSequence() {
         </span>
       </div>
 
-      <button
-        type="button"
-        className="opening-sequence__skip"
-        data-opening-skip
-        onClick={skipIntro}
-        aria-label="跳过网站开场动画"
-      >
-        跳过 <span aria-hidden>/ SKIP</span>
-      </button>
     </div>
   );
 }
