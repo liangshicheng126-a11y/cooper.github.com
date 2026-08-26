@@ -9,11 +9,11 @@ web
 ## Users
 
 - Primary audience (inferred from the existing bilingual copy and portfolio structure): prospective clients, collaborators, recruiters, and design peers evaluating Cooper's work, capabilities, and working style.
-- Company visitors can also submit a structured design task brief, while general visitors can contact Cooper or speak with the Xiaocoo assistant.
+- The Task Brief route retains its translated introduction without an embedded company verification or submission module; visitors can contact Cooper directly or speak with the Xiaocoo assistant.
 
 ## Product Purpose
 
-cooperliang.top is Cooper Liang's bilingual personal portfolio and working contact surface. It presents a coherent picture of his brand design, UI/UX, photography, and video work, then gives visitors direct paths to inspect projects, learn about him, submit a task brief, use Xiaocoo, or make contact.
+cooperliang.top is Cooper Liang's bilingual personal portfolio and working contact surface. It presents a coherent picture of his brand design, UI/UX, photography, and video work, then gives visitors direct paths to inspect projects, learn about him, understand his task-brief approach, use Xiaocoo, or make contact.
 
 ## Positioning
 
@@ -24,7 +24,7 @@ The site joins finished visual work, process analysis, personal outdoor and arti
 - Visitors browse a public responsive website on desktop and mobile.
 - Content is available in Chinese and English.
 - Portfolio routes include a project index, detailed graphic/photography/video cases, and nested P2 interface-design subprojects.
-- Task Brief and Contact routes submit structured information through existing API flows.
+- The Contact route submits structured information through its existing API flow. The Task Brief route now presents only its translated introduction; its former verification/form module is intentionally not mounted.
 - Xiaocoo answers questions about Cooper's background, work, projects, and skills.
 
 ## Capabilities and Constraints
@@ -53,7 +53,7 @@ The site joins finished visual work, process analysis, personal outdoor and arti
 
 1. Let the work lead: visual projects and real project detail remain the strongest proof.
 2. Preserve clarity across media: graphic design, UI/UX, photography, and video should stay easy to distinguish and explore.
-3. Make collaboration actionable: contact, task brief, and Xiaocoo flows must remain easy to find and use.
+3. Make collaboration actionable: direct contact and Xiaocoo flows must remain easy to find and use, while the Task Brief route clearly communicates its purpose without the removed company module.
 4. Treat bilingual parity, full-motion defaults, and explicit reduced-motion support as core behavior, not optional polish.
 5. Keep the site personal: professional capability and Cooper's exploratory character should remain visible together.
 

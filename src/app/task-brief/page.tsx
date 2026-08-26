@@ -1,6 +1,5 @@
 "use client";
 
-import TaskBriefWizard from "@/components/task-brief/TaskBriefWizard";
 import GsapScrollReveal from "@/components/motion/GsapScrollReveal";
 import { useTranslation } from "@/locales/LanguageProvider";
 import { cn } from "@/lib/utils";
@@ -19,7 +18,6 @@ export default function TaskBriefPage() {
           <p className="max-w-3xl text-lg leading-relaxed text-foreground/70 sm:text-xl">{t.taskBrief.subtitle}</p>
         </header>
       </GsapScrollReveal>
-      <TaskBriefWizard />
     </div>
   );
 }

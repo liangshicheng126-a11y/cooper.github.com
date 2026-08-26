@@ -193,7 +193,7 @@ Professional services use three equal desktop columns in one row. Every service 
 - The supported viewport floor is `320px`.
 - At `1024px`, the full desktop navigation yields to the menu control and modal navigation panel.
 - At `900px` and below, professional services and analysis become natural-height single columns; the footer keeps its centered single-column close.
-- At `640px` and below, header insets contract to `0.75rem`, main padding becomes `7.5rem 0.85rem 1rem`, stats and footer contacts stack, workflow becomes a two-column number/content structure, and analysis point grids become single-column.
+- At `640px` and below, header insets contract to `0.75rem`, main padding becomes `7.5rem 0.85rem 1rem`, the footer contact row becomes horizontally scrollable without overflowing the page, workflow becomes a two-column number/content structure, and analysis point grids become single-column.
 - The mobile hero remains exactly `100svh` and uses full-width stacked actions. On desktop viewports no taller than `36rem`, the hero may become intrinsic-height to prevent collision.
 - At `640px` and below, the FloatingLines layer drops from `0.58` to `0.44` opacity, reduces saturation/brightness, and caps renderer device pixel ratio at `1.25` instead of the wider-screen cap of `2`.
 
@@ -300,7 +300,7 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 ### About photo stack
 
 - **Role:** the existing About avatar region becomes a tactile personal gallery without changing biography copy or the experience badge.
-- **Media:** use only Cooper's supplied or already-published personal imagery. The current six-card gallery combines the two incumbent photographs with four user-supplied additions. Prepare consistent `4:5`, `1200 × 1500` WebP crops with the person or activity kept inside the central reading area; exclude captions and screenshots from the crop.
+- **Media:** use only Cooper's supplied or already-published personal imagery. The current five-card gallery contains the remaining outdoor and activity photographs after the formal studio portrait was removed at the user's direction. Prepare consistent `4:5`, `1200 × 1500` WebP crops with the person or activity kept inside the central reading area; exclude captions and screenshots from the crop.
 - **Behavior:** the top image can be dragged beyond a bounded threshold, clicked, or advanced with Enter/Space to move it behind the stack. Lower cards retain restrained rotation and depth so the available gallery is obvious.
 - **Resilience:** the experience badge remains above the cards and does not intercept input. Explicit reduced motion disables free dragging and uses immediate click/keyboard advancement.
 
@@ -314,7 +314,7 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 ### Nocturnal operate surfaces
 
 - **Xiaocoo:** keep one stable sequence—intro, transcript, suggestion rail, composer—inside the same obsidian and indigo vocabulary as the rest of the site. New messages may use a small opacity and `8px` resolve, never a springy card entrance.
-- **Task Brief:** preserve the intro, verification gate, form steps, validation, and submission behavior on dark architectural panels. Language switching belongs exclusively to the global top navigation.
+- **Task Brief:** the route retains its translated intro, while the embedded company verification/form module is intentionally no longer mounted. Language switching belongs exclusively to the global top navigation.
 - **Operational consistency:** inputs, buttons, pending states, errors, focus rings, and mobile behavior reuse the shared field and control rules instead of introducing a second light interface.
 
 ### Panels and editorial chapters
@@ -341,7 +341,8 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 
 ### Footer
 
-- **Structure:** a centered single-column close: brand and note lead, followed by a centered two-column contact grid. At `640px`, contact methods stack into one column.
+- **Structure:** a centered single-column close: brand and note lead, followed by one centered horizontal row containing email, phone, WeChat, and location. Every contact is a keyboard-operable copy action; at `640px`, the row scrolls horizontally inside its own bounds instead of overflowing the page.
+- **Feedback:** successful copy displays a small localized fixed toast for `1.8s`; failure states are honest, keyboard focus remains visible, and reduced motion removes the entrance animation.
 - **Tone:** quiet and factual. The localized MetallicPaint wordmark is the sole expressive close; hover may brighten actionable contact links while non-action contact facts remain visually stable.
 
 ## Do's and Don'ts
@@ -375,11 +376,11 @@ This design system governs presentation only. The names **COOPER.**, **梁世城
 - [ ] New content joins the centered `88rem` shell and responsive `900px` / `640px` collapse rules; navigation still switches at the `1024px` large breakpoint.
 - [ ] Professional services still use three equal desktop columns with no featured item; mobile still resolves to one natural-height column.
 - [ ] The portfolio focus rail keeps four real projects, one active state, whole-surface project links, keyboard navigation, mobile first-tap expansion, vertical behavior, and a reduced-motion fallback.
-- [ ] Xiaocoo still follows transcript → suggestions → composer, Task Brief exposes only the global language control, and both preserve their existing behavior and APIs.
-- [ ] The footer remains centered, with its contact grid centered on desktop and stacked at `640px`.
+- [ ] Xiaocoo still follows transcript → suggestions → composer, while Task Brief keeps its translated intro without mounting the removed company verification/form module.
+- [ ] The footer remains centered, with four copyable contact methods on one desktop row and a contained horizontal rail at `640px`.
 - [ ] Navigation, language switching, forms, APIs, lightboxes, project data, contact methods, Task Brief, and Xiaocoo still behave exactly as before the visual change.
 - [ ] The desktop navigation owns exactly one shared active surface that moves between routes; reduced motion resolves it immediately.
-- [ ] The About photo stack advances by drag, click, Enter, and Space; supplied images use text-free `4:5` crops and the experience badge stays non-blocking.
+- [ ] The five-image About photo stack advances by drag, click, Enter, and Space; supplied images use text-free `4:5` crops and the experience badge stays non-blocking.
 - [ ] The home workflow keeps all four translated steps, uses one generated image per stage, reveals on pointer/focus/tap, and runs only the active visible marquee.
 - [ ] Keyboard focus, semantic headings, contrast, mobile scroll locking, full-motion defaults, and the explicit reduced-motion path are verified.
 - [ ] `NightBackdrop` mounts exactly one FloatingLines instance with gradient `#E945F5 / #2F4BC0 / #E945F5`, speed `1`, interactivity off, bend `5 / -0.5`, damping `0.05`, and parallax `true / 0.2`.
