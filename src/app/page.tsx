@@ -31,6 +31,8 @@ const serviceMedia = [
   "/photos/services/video-production.webp",
 ];
 
+const servicePortfolioTargets = ["p1", "p2", "p3"] as const;
+
 export default function Home() {
   const tier = useMotionTier();
   const reduced = usePrefersReducedMotion();
@@ -222,9 +224,16 @@ export default function Home() {
             {t.hero.services.map((service: any, i: number) => {
               const icons = [Palette, Layout, Video];
               const Icon = icons[i] || Sparkles;
+              const projectId = servicePortfolioTargets[i] ?? servicePortfolioTargets[0];
+              const project = t.portfolio.projects[projectId];
               
               return (
-                <article key={i} className="screening-service-card group">
+                <Link
+                  key={projectId}
+                  href={`/portfolio#portfolio-project-${projectId}`}
+                  className="screening-service-card group"
+                  aria-label={`${service.title}: ${project.title}`}
+                >
                   <span className="screening-service-card__media" aria-hidden="true">
                     <Image
                       src={serviceMedia[i] ?? serviceMedia[0]}
@@ -238,7 +247,7 @@ export default function Home() {
                   </div>
                   <h3 className="text-2xl font-bold mb-4">{service.title}</h3>
                   <p className="text-foreground/50 leading-relaxed text-sm">{service.desc}</p>
-                </article>
+                </Link>
               );
             })}
           </div>

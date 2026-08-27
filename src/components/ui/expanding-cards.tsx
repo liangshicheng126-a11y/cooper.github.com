@@ -27,6 +27,36 @@ export const ExpandingCards = React.forwardRef<HTMLUListElement, ExpandingCardsP
     const [isDesktop, setIsDesktop] = React.useState<boolean | null>(null);
 
     React.useEffect(() => {
+      let scrollFrame = 0;
+
+      const syncProjectFromHash = () => {
+        const targetId = decodeURIComponent(window.location.hash.slice(1));
+        const targetIndex = items.findIndex(
+          (item) => `portfolio-project-${item.id}` === targetId
+        );
+        if (targetIndex < 0) return;
+
+        setActiveIndex(targetIndex);
+        window.cancelAnimationFrame(scrollFrame);
+        scrollFrame = window.requestAnimationFrame(() => {
+          document.getElementById(targetId)?.scrollIntoView({
+            block: "center",
+            behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+              ? "auto"
+              : "smooth",
+          });
+        });
+      };
+
+      syncProjectFromHash();
+      window.addEventListener("hashchange", syncProjectFromHash);
+      return () => {
+        window.cancelAnimationFrame(scrollFrame);
+        window.removeEventListener("hashchange", syncProjectFromHash);
+      };
+    }, [items]);
+
+    React.useEffect(() => {
       const media = window.matchMedia("(min-width: 768px)");
       const sync = () => setIsDesktop(media.matches);
       sync();
@@ -66,6 +96,7 @@ export const ExpandingCards = React.forwardRef<HTMLUListElement, ExpandingCardsP
           return (
             <li
               key={item.id}
+              id={`portfolio-project-${item.id}`}
               className="portfolio-expanding-card"
               data-active={active}
               data-expanding-card

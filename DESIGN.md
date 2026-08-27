@@ -292,11 +292,13 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 - **Desktop structure:** three equal columns in one row; every item has identical padding, minimum height, icon treatment, and information hierarchy.
 - **Mobile structure:** one natural-height column at `900px` and below.
 - **Material:** a shared parent frame and zinc hairlines organize the services. Each item uses a subject-matched, full-bleed nocturnal photograph beneath the same graphite readability wash, then centers an indigo icon tile with its preserved title and description; do not nest three unrelated floating cards. Images stay text-free, use the graphite/cold-white/indigo palette, and crop responsively without creating bright fields behind copy.
+- **Behavior:** each complete service surface is a semantic link to its matching project in the portfolio focus rail. Brand Design targets `p1`, UI/UX targets `p2`, and Video/Photography targets the user-specified `p3`; arrival activates that rail and centers it in the viewport without bypassing keyboard focus or reduced-motion preferences.
 
 ### Portfolio focus rail
 
 - **Structure:** the four preserved projects share one `16px` obsidian frame. Desktop uses a `5fr / 1fr / 1fr / 1fr` active track; mobile rotates the same relationship into vertical rows.
 - **State:** hover, focus, click, Arrow keys, Home, and End may change the active project. The entire active project surface is a semantic link, while the visible project action remains its explicit affordance; collapsed rails keep an unambiguous title. On touch layouts, the first tap expands a collapsed project and the next tap follows its link.
+- **Deep links:** stable `portfolio-project-p1` through `portfolio-project-p4` anchors may open the portfolio route, activate the matching rail, and center it beneath the floating header. Hash-driven positioning uses immediate movement when reduced motion is requested.
 - **Media:** use each project's real image as the full panel field with a dark readability wash. Do not replace, recolor, or fabricate media.
 - **Motion:** grid-track and content emphasis may resolve over `520ms` with the approved curve; `prefers-reduced-motion` makes the transition effectively immediate.
 

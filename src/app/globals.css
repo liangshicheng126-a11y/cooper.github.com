@@ -1755,6 +1755,9 @@ select option {
   border-right: 1px solid var(--night-line);
   border-bottom: 1px solid var(--night-line);
   background: #070709;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .screening-service-card::after {
@@ -1794,7 +1797,8 @@ select option {
   object-position: 70% center;
 }
 
-.screening-service-card:hover .screening-service-card__media img {
+.screening-service-card:hover .screening-service-card__media img,
+.screening-service-card:focus-visible .screening-service-card__media img {
   filter: saturate(0.86) contrast(1.06) brightness(0.91);
   transform: scale(1.045);
 }
@@ -1982,6 +1986,7 @@ select option {
   position: relative;
   min-width: 0;
   min-height: 0;
+  scroll-margin-block: 7rem;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 16px;
