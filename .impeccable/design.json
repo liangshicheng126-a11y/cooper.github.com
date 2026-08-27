@@ -320,6 +320,14 @@
       "css": ".ds-photo-stack{position:relative;width:100%;aspect-ratio:4/5;perspective:900px}.ds-photo-stack figure{position:absolute;inset:0;overflow:hidden;margin:0;border:1px solid rgba(255,255,255,.16);border-radius:16px;background:#09090b;box-shadow:0 22px 58px rgba(0,0,0,.42);transform-origin:88% 88%}.ds-photo-stack figure:first-child{transform:rotate(3deg) scale(.952)}.ds-photo-stack img{width:100%;height:100%;object-fit:cover}.ds-photo-stack:focus-visible{outline:2px solid rgba(199,210,254,.95);outline-offset:7px}"
     },
     {
+      "name": "About Capability and Interest Tile",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "One of nine bilingual About tiles with a dedicated, page-exclusive nocturnal image placed beneath a stable graphite reading wash; capability and interest copy stays unchanged and remains the primary layer.",
+      "html": "<article class=\"ds-about-tile\"><img alt=\"\"><div aria-hidden=\"true\"></div><p>Capability or interest</p></article>",
+      "css": ".ds-about-tile{position:relative;isolation:isolate;overflow:hidden;min-height:8rem;padding:2rem 3rem;border:1px solid rgba(255,255,255,.115);border-radius:16px;background:rgba(7,7,9,.74);color:#f4f4f5}.ds-about-tile>img{position:absolute;z-index:-2;inset:0;width:100%;height:100%;object-fit:cover;object-position:center right;filter:saturate(.72) contrast(1.05) brightness(.72)}.ds-about-tile>div{position:absolute;z-index:-1;inset:0;background:linear-gradient(90deg,rgba(5,5,7,.96),rgba(5,5,7,.88) 46%,rgba(5,5,7,.56)),linear-gradient(180deg,rgba(5,5,7,.06),rgba(5,5,7,.48))}.ds-about-tile>p{position:relative;z-index:1}"
+    },
+    {
       "name": "Flowing Workflow Menu",
       "kind": "custom",
       "refersTo": "panel",

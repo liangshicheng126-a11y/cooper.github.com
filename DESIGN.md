@@ -309,6 +309,13 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 - **Behavior:** the top image can be dragged beyond a bounded threshold, clicked, or advanced with Enter/Space to move it behind the stack. Lower cards retain restrained rotation and depth so the available gallery is obvious.
 - **Resilience:** the experience badge remains above the cards and does not intercept input. Explicit reduced motion disables free dragging and uses immediate click/keyboard advancement.
 
+### About capability and interest tiles
+
+- **Role:** the five professional capabilities and four personal interests keep their existing bilingual labels and two-column cadence, while each tile gains one dedicated environmental image that makes the subject legible at a glance.
+- **Media:** use nine page-exclusive, text-free nocturnal images: brand-system materials, interface prototyping, motion editing, photographic storytelling, team coordination, alpine exploration, court sports, piano/photography, and Go strategy. These assets live only under `/photos/about-modules/` and must not be reused on the home, portfolio, contact, or Xiaocoo routes.
+- **Readability:** position visual detail toward the right edge beneath the same left-to-right graphite wash. White text, secondary copy, indigo/purple signal dots, and the existing hover spotlight remain above that wash at all breakpoints.
+- **Behavior:** preserve the current GSAP tile response; only the image may receive the bounded image-scale/parallax treatment. The background is decorative, has an empty alternative, and never replaces the visible label.
+
 ### Flowing workflow menu
 
 - **Role:** the four preserved home workflow steps remain an ordered editorial sequence, but the active row resolves into a continuous image-and-text strip that makes each stage tangible.

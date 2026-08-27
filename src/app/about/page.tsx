@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useTranslation } from "@/locales/LanguageProvider";
 import { Zap, ArrowRight, Coffee } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import GsapScrollReveal from "@/components/motion/GsapScrollReveal";
@@ -14,7 +15,22 @@ import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import { heroMaskVariants, shouldUseGsap } from "@/lib/motion";
 
 const aboutGlassTile =
-  "px-8 py-7 sm:px-12 sm:py-10 rounded-[1.25rem] sm:rounded-3xl min-h-0 h-full border-white/15 bg-white/[0.11] dark:bg-white/[0.07]";
+  "about-media-tile px-8 py-7 sm:px-12 sm:py-10 rounded-[1.25rem] sm:rounded-3xl min-h-0 h-full border-white/15 bg-white/[0.11] dark:bg-white/[0.07]";
+
+const skillBackgrounds = [
+  "/photos/about-modules/brand-system.webp",
+  "/photos/about-modules/ui-ux-design.webp",
+  "/photos/about-modules/motion-video.webp",
+  "/photos/about-modules/photography-story.webp",
+  "/photos/about-modules/team-collaboration.webp",
+] as const;
+
+const hobbyBackgrounds = [
+  "/photos/about-modules/outdoor-exploration.webp",
+  "/photos/about-modules/sports-competition.webp",
+  "/photos/about-modules/art-expression.webp",
+  "/photos/about-modules/go-strategy.webp",
+] as const;
 
 export default function About() {
   const { t, mounted } = useTranslation();
@@ -132,6 +148,17 @@ export default function About() {
                       "flex items-center"
                     )}
                   >
+                    <Image
+                      src={skillBackgrounds[index]}
+                      alt=""
+                      fill
+                      sizes="(min-width: 640px) 50vw, 100vw"
+                      draggable={false}
+                      aria-hidden="true"
+                      data-gsh-image
+                      className="about-media-tile__image"
+                    />
+                    <div aria-hidden className="about-media-tile__wash" />
                     <div className="relative z-10">
                       <div className="flex gap-3 text-xl font-medium leading-snug w-full">
                         <span
@@ -186,6 +213,17 @@ export default function About() {
                       "flex flex-col justify-center"
                     )}
                   >
+                    <Image
+                      src={hobbyBackgrounds[index]}
+                      alt=""
+                      fill
+                      sizes="(min-width: 640px) 50vw, 100vw"
+                      draggable={false}
+                      aria-hidden="true"
+                      data-gsh-image
+                      className="about-media-tile__image"
+                    />
+                    <div aria-hidden className="about-media-tile__wash" />
                     <div className="relative z-10">
                       <div className="flex items-center gap-3 mb-4">
                         <div className="w-2 h-2 shrink-0 rounded-full bg-purple-500 transition-transform duration-300 group-hover:scale-125" />
