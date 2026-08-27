@@ -291,7 +291,7 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 
 - **Desktop structure:** three equal columns in one row; every item has identical padding, minimum height, icon treatment, and information hierarchy.
 - **Mobile structure:** one natural-height column at `900px` and below.
-- **Material:** a shared parent frame and zinc hairlines organize the services. Each item uses a subject-matched, full-bleed nocturnal photograph beneath the same graphite readability wash, then centers an indigo icon tile with its preserved title and description; do not nest three unrelated floating cards. Images stay text-free, use the graphite/cold-white/indigo palette, and crop responsively without creating bright fields behind copy.
+- **Material:** a shared parent frame and zinc hairlines organize the services. Each item uses a subject-matched, full-bleed nocturnal photograph with lifted detail (`brightness(1.2)`, `1.3` on hover/focus) beneath a graphite readability wash that fades toward the image subject, then centers an indigo icon tile with its preserved title and description; do not nest three unrelated floating cards. Images stay text-free, use the graphite/cold-white/indigo palette, and crop responsively while the text-side wash and existing text shadow protect readability.
 - **Behavior:** each complete service surface is a semantic link to its matching project in the portfolio focus rail. Brand Design targets `p1`, UI/UX targets `p2`, and Video/Photography targets the user-specified `p3`; arrival activates that rail and centers it in the viewport without bypassing keyboard focus or reduced-motion preferences.
 
 ### Portfolio focus rail
