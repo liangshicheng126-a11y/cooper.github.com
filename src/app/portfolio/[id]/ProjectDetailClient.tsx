@@ -218,7 +218,7 @@ export default function ProjectDetailClient({
       )}
 
       {hasPhotographyGallery && (
-        <section className="gallery-section mb-16 lg:mb-24">
+        <section className="gallery-section">
           <div className="flex items-center justify-between gap-4 mb-5">
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t.portfolio.projectDetail.photoGallery}</h2>
             <span className="text-base sm:text-lg text-foreground/55 font-medium">
@@ -295,7 +295,7 @@ export default function ProjectDetailClient({
       )}
 
       {hasPosterGallery && (
-        <section className="gallery-section mb-16 lg:mb-24">
+        <section className="gallery-section">
           <div className="flex items-center justify-between gap-4 mb-6">
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t.portfolio.projectDetail.posterGallery}</h2>
             <span className="text-base sm:text-lg text-foreground/55 font-medium">
@@ -331,7 +331,7 @@ export default function ProjectDetailClient({
             {videoResultsSection}
           </div>
         )}
-        <section className="gallery-section mb-16 lg:mb-24">
+        <section className="gallery-section">
           <div className="mb-5 flex items-center justify-between gap-4">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">{t.portfolio.projectDetail.videoPreview}</h2>
             <span className="text-base font-medium text-foreground/55 sm:text-lg">

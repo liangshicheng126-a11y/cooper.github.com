@@ -22,7 +22,7 @@ type Props = {
 
 export default function P2SubProjectPicker({ sectionTitle, projects }: Props) {
   return (
-    <section className="mb-16 lg:mb-24">
+    <section>
       <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-6 sm:mb-8">{sectionTitle}</h2>
       <GsapScrollBatch entrance="portfolio" playOnMount className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 xl:gap-10">
         {projects.map((project, index) => (

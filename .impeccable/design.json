@@ -141,7 +141,7 @@
       "footer-separation": {
         "displayName": "Footer Separation",
         "value": "clamp(2.5rem, 5vw, 4.5rem)",
-        "purpose": "Keeps the global footer clearly distinct from the final content module without creating a disconnected empty field on desktop or mobile."
+        "purpose": "Keeps the global footer clearly distinct from the final content module without creating a disconnected empty field on desktop or mobile. The p1-p4 portfolio endings retain the same page-shell bottom padding as About, but no extra trailing section margin may stack with this separation."
       }
     },
     "shadows": [

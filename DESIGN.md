@@ -354,6 +354,7 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 ### Footer
 
 - **Structure:** a centered single-column close separated from the preceding page content by the global `clamp(2.5rem, 5vw, 4.5rem)` rhythm: brand and note lead, followed by one centered horizontal row containing email, phone, WeChat, and location. Every contact is a keyboard-operable copy action; at `640px`, the row scrolls horizontally inside its own bounds instead of overflowing the page.
+- **Portfolio endings:** the final gallery on `p1`, `p3`, and `p4`, and the project picker on `p2`, have no trailing section margin. Keep their existing page-shell bottom padding, matching About, and let the global footer separation provide the remaining gap; do not stack an extra `mb-16` / `lg:mb-24` before the footer.
 - **Feedback:** successful copy displays a small localized fixed toast for `1.8s`; failure states are honest, keyboard focus remains visible, and reduced motion removes the entrance animation.
 - **Tone:** quiet and factual. The localized MetallicPaint wordmark is the sole expressive close; hover may brighten actionable contact links while non-action contact facts remain visually stable.
 
