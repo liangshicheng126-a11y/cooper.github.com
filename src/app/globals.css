@@ -1250,6 +1250,7 @@ body.lightbox-open .mobile-top-shell {
   --night-accent: #a5b4fc;
   --night-accent-strong: #818cf8;
   --mobile-topbar-offset: 5.25rem;
+  --footer-separation: clamp(2.5rem, 5vw, 4.5rem);
   color-scheme: dark;
 }
 
@@ -1516,7 +1517,7 @@ select option {
   justify-items: center;
   gap: 1.75rem;
   width: min(88rem, 100%);
-  margin: clamp(5rem, 10vw, 9rem) auto 0;
+  margin: var(--footer-separation) auto 0;
   padding: 2rem 0.25rem 0.5rem;
   border-top: 1px solid var(--night-line);
   text-align: center;

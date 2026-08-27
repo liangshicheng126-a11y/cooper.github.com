@@ -58,6 +58,7 @@ spacing:
   content: "1rem"
   block: "1.25rem"
   section: "2rem"
+  footer-separation: "clamp(2.5rem, 5vw, 4.5rem)"
 components:
   button-primary:
     backgroundColor: "{colors.cold-white}"
@@ -193,7 +194,7 @@ Professional services use three equal desktop columns in one row. Every service 
 
 - The supported viewport floor is `320px`.
 - At `1024px`, the full desktop navigation yields to the menu control and modal navigation panel.
-- At `900px` and below, professional services and analysis become natural-height single columns; the footer keeps its centered single-column close.
+- At `900px` and below, professional services and analysis become natural-height single columns; the footer keeps its centered single-column close and uses the same fluid `2.5rem–4.5rem` separation from preceding content as every other route.
 - At `640px` and below, header insets contract to `0.75rem`, main padding becomes `7.5rem 0.85rem 1rem`, the footer contact row becomes horizontally scrollable without overflowing the page, workflow becomes a two-column number/content structure, and analysis point grids become single-column.
 - The mobile hero remains exactly `100svh` and uses full-width stacked actions. On desktop viewports no taller than `36rem`, the hero may become intrinsic-height to prevent collision.
 - At `640px` and below, the FloatingLines layer drops from `0.58` to `0.44` opacity, reduces saturation/brightness, and caps renderer device pixel ratio at `1.25` instead of the wider-screen cap of `2`.
@@ -343,7 +344,7 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 
 ### Footer
 
-- **Structure:** a centered single-column close: brand and note lead, followed by one centered horizontal row containing email, phone, WeChat, and location. Every contact is a keyboard-operable copy action; at `640px`, the row scrolls horizontally inside its own bounds instead of overflowing the page.
+- **Structure:** a centered single-column close separated from the preceding page content by the global `clamp(2.5rem, 5vw, 4.5rem)` rhythm: brand and note lead, followed by one centered horizontal row containing email, phone, WeChat, and location. Every contact is a keyboard-operable copy action; at `640px`, the row scrolls horizontally inside its own bounds instead of overflowing the page.
 - **Feedback:** successful copy displays a small localized fixed toast for `1.8s`; failure states are honest, keyboard focus remains visible, and reduced motion removes the entrance animation.
 - **Tone:** quiet and factual. The localized MetallicPaint wordmark is the sole expressive close; hover may brighten actionable contact links while non-action contact facts remain visually stable.
 

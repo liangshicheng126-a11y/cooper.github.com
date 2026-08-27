@@ -137,6 +137,13 @@
         "purpose": "Navigation, counters, metadata, and terse utility text."
       }
     },
+    "spacingMeta": {
+      "footer-separation": {
+        "displayName": "Footer Separation",
+        "value": "clamp(2.5rem, 5vw, 4.5rem)",
+        "purpose": "Keeps the global footer clearly distinct from the final content module without creating a disconnected empty field on desktop or mobile."
+      }
+    },
     "shadows": [
       {
         "name": "floating-chrome",
