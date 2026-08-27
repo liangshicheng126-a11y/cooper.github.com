@@ -25,6 +25,8 @@ const VARIANTS = [
 const TALL_HEIGHT_RATIO = 2.2;
 /** Thumb crop width/height — keeps brand/hero readable in masonry. */
 const TALL_THUMB_ASPECT = 3 / 4;
+/** WebP's maximum supported side is 16,383px; leave a small safety margin. */
+const WEBP_MAX_EDGE = 16_380;
 
 async function collectImages(dirAbs, relParts = []) {
   let entries;
@@ -104,6 +106,8 @@ async function resizeToWebp(sourceAbs, targetAbs, maxEdge, quality, { cropTopTal
     await pipeline
       .resize({
         width: maxEdge,
+        height: WEBP_MAX_EDGE,
+        fit: "inside",
         withoutEnlargement: true,
       })
       .webp({ quality, effort: 4 })
