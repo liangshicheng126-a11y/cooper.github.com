@@ -1642,7 +1642,7 @@ select option {
   -webkit-backdrop-filter: blur(18px) saturate(118%) !important;
 }
 
-/* About: dedicated card imagery stays below a stable graphite reading wash. */
+/* About: brighter imagery with a graphite wash concentrated behind the copy. */
 .about-media-tile {
   isolation: isolate;
   background: rgba(7, 7, 9, 0.74) !important;
@@ -1652,8 +1652,8 @@ select option {
   z-index: -2;
   object-fit: cover;
   object-position: center right;
-  filter: saturate(0.72) contrast(1.05) brightness(0.72);
-  opacity: 0.94;
+  filter: saturate(0.88) contrast(1.04) brightness(1.2);
+  opacity: 1;
   will-change: transform;
 }
 
@@ -1663,8 +1663,8 @@ select option {
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(90deg, rgba(5, 5, 7, 0.96) 0%, rgba(5, 5, 7, 0.88) 46%, rgba(5, 5, 7, 0.56) 100%),
-    linear-gradient(180deg, rgba(5, 5, 7, 0.06) 0%, rgba(5, 5, 7, 0.48) 100%);
+    linear-gradient(90deg, rgba(5, 5, 7, 0.86) 0%, rgba(5, 5, 7, 0.5) 46%, rgba(5, 5, 7, 0.12) 100%),
+    linear-gradient(180deg, rgba(5, 5, 7, 0.02) 0%, rgba(5, 5, 7, 0.2) 100%);
 }
 
 .glass:not(.rounded-full),
