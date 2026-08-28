@@ -33,7 +33,6 @@ type MenuItemProps = FlowingMenuItem & {
   touchMode: boolean;
   onActivate: () => void;
   onDeactivate: () => void;
-  onToggle: () => void;
 };
 
 function MenuItem({
@@ -46,7 +45,6 @@ function MenuItem({
   touchMode,
   onActivate,
   onDeactivate,
-  onToggle,
 }: MenuItemProps) {
   const itemRef = useRef<HTMLDivElement>(null);
   const marqueeRef = useRef<HTMLDivElement>(null);
@@ -169,17 +167,29 @@ function MenuItem({
         type="button"
         className={styles.itemButton}
         aria-expanded={active}
-        onMouseEnter={(event) => {
+        onPointerEnter={(event) => {
+          // Touch contact also emits pointerenter; only a real mouse hover selects here.
+          if (event.pointerType !== "mouse" || event.buttons !== 0) return;
           recordEdge(event.clientX, event.clientY, event.currentTarget, "entry");
           onActivate();
         }}
-        onMouseLeave={(event) => {
+        onPointerLeave={(event) => {
+          if (event.pointerType !== "mouse") return;
           recordEdge(event.clientX, event.clientY, event.currentTarget, "exit");
           if (!touchMode) onDeactivate();
         }}
-        onFocus={onActivate}
+        onFocus={(event) => {
+          // A pointer may focus the button before its gesture becomes a scroll.
+          if (event.currentTarget.matches(":focus-visible")) onActivate();
+        }}
         onBlur={() => !touchMode && onDeactivate()}
-        onClick={() => (touchMode ? onToggle() : onActivate())}
+        onClick={(event) => {
+          if (event.detail > 0) {
+            recordEdge(event.clientX, event.clientY, event.currentTarget, "entry");
+          }
+          // Native click waits for a completed tap; repeated activation is idempotent.
+          onActivate();
+        }}
       >
         <span className={styles.number}>{number}</span>
         <span className={styles.title}>{text}</span>
@@ -235,7 +245,6 @@ export default function FlowingMenu({
             active={activeIndex === index}
             onActivate={() => setActiveIndex(index)}
             onDeactivate={() => setActiveIndex((current) => (current === index ? null : current))}
-            onToggle={() => setActiveIndex((current) => (current === index ? null : index))}
           />
         ))}
       </div>

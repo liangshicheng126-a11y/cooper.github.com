@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useSyncExternalStore } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import useMotionTier from "@/hooks/useMotionTier";
@@ -12,6 +12,31 @@ import Stack from "@/components/ui/Stack";
 import { useTranslation } from "@/locales/LanguageProvider";
 
 const ACCENT = "#6366f1";
+const MOBILE_GALLERY_QUERY = "(max-width: 767px), (hover: none) and (pointer: coarse)";
+
+// Stack paints the final card on top. Preserve the other photos' browsing order.
+const ABOUT_PHOTOS = [
+  { file: "ice-climb", altIndex: 1 },
+  { file: "ice-climb-action", altIndex: 2 },
+  { file: "mountain-shell", altIndex: 3 },
+  { file: "meadow-rest", altIndex: 4 },
+  { file: "snow-journey", altIndex: 0 },
+] as const;
+
+function subscribeToGalleryViewport(onChange: () => void) {
+  const query = window.matchMedia(MOBILE_GALLERY_QUERY);
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+}
+
+function isMobileGalleryViewport() {
+  return window.matchMedia(MOBILE_GALLERY_QUERY).matches;
+}
+
+// Never flash or fetch the desktop-only photo before the device is resolved.
+function getServerGalleryViewport() {
+  return true;
+}
 
 type GsapAboutAvatarProps = {
   experienceLabel: string;
@@ -23,6 +48,11 @@ export default function GsapAboutAvatar({
   className,
 }: GsapAboutAvatarProps) {
   const { t } = useTranslation();
+  const mobileGallery = useSyncExternalStore(
+    subscribeToGalleryViewport,
+    isMobileGalleryViewport,
+    getServerGalleryViewport,
+  );
   const wrapperRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
@@ -36,34 +66,16 @@ export default function GsapAboutAvatar({
   const reduced = usePrefersReducedMotion();
   const gsapActive = shouldUseGsap(reduced);
   const cards = useMemo(
-    () => [
-      <img
-        key="snow-journey"
-        src="/photos/about-stack/snow-journey.webp"
-        alt={t.media.aboutPhotos[0]}
-      />,
-      <img
-        key="ice-climb"
-        src="/photos/about-stack/ice-climb.webp"
-        alt={t.media.aboutPhotos[1]}
-      />,
-      <img
-        key="ice-climb-action"
-        src="/photos/about-stack/ice-climb-action.webp"
-        alt={t.media.aboutPhotos[2]}
-      />,
-      <img
-        key="mountain-shell"
-        src="/photos/about-stack/mountain-shell.webp"
-        alt={t.media.aboutPhotos[3]}
-      />,
-      <img
-        key="meadow-rest"
-        src="/photos/about-stack/meadow-rest.webp"
-        alt={t.media.aboutPhotos[4]}
-      />,
-    ],
-    [t.media.aboutPhotos],
+    () => ABOUT_PHOTOS
+      .filter((photo) => !mobileGallery || photo.file !== "snow-journey")
+      .map((photo) => (
+        <img
+          key={photo.file}
+          src={`/photos/about-stack/${photo.file}.webp`}
+          alt={t.media.aboutPhotos[photo.altIndex]}
+        />
+      )),
+    [mobileGallery, t.media.aboutPhotos],
   );
 
   const pauseIdle = () => {
@@ -147,7 +159,7 @@ export default function GsapAboutAvatar({
   );
 
   return (
-    <div ref={wrapperRef} className="w-full h-full aspect-[4/5] max-h-[36rem]">
+    <div ref={wrapperRef} data-about-gallery={mobileGallery ? "mobile" : "desktop"} className="w-full h-full aspect-[4/5] max-h-[36rem]">
       <GsapGlassHover
         accent={ACCENT}
         variant="avatar"
@@ -171,6 +183,7 @@ export default function GsapAboutAvatar({
             className="relative h-full w-full will-change-transform"
           >
             <Stack
+              key={mobileGallery ? "mobile" : "desktop"}
               cards={cards}
               randomRotation
               sensitivity={110}

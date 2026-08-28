@@ -122,6 +122,7 @@ export default function SiteFooter() {
             key={contact.key}
             type="button"
             className="site-footer__contact"
+            data-contact={contact.key}
             onClick={() => copyToClipboard(contact.value)}
             aria-label={`${t.ui.copy} ${contact.label}`}
             title={t.ui.clickToCopy}

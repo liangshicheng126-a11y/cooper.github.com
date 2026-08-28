@@ -230,7 +230,7 @@
       {
         "name": "workflow-flow",
         "value": "560ms edge reveal; 19s linear active-row loop",
-        "purpose": "The focused, hovered, or tapped workflow stage reveals one repeating image-and-text marquee; only the active visible row runs."
+        "purpose": "One completed tap or click idempotently selects a workflow stage; real mouse hover and keyboard-visible focus can also select it, while touch-generated hover/focus does not select it again. Existing GSAP reveal and marquee effects are unchanged; only the active visible row runs."
       },
       {
         "name": "floating-lines",
@@ -275,7 +275,7 @@
       "name": "MetallicPaint Footer Signature",
       "kind": "custom",
       "refersTo": "cold-white",
-      "description": "Bounded WebGL2 liquid-metal COOPER. wordmark above one horizontal row of four keyboard-operable copy contacts; the signature pauses offscreen/page-hidden and is static for reduced motion, while copy feedback appears in a localized compact toast. The footer preserves its layout space but remains visually hidden, inert, and hidden from assistive technology until the initial locale is ready, preventing a wrong-language flash.",
+      "description": "Bounded WebGL2 liquid-metal COOPER. wordmark above four keyboard-operable copy contacts, each at least 44px high. Desktop contacts share one centered row when space allows and wrap naturally otherwise; at 640px and below, a two-column grid gives email and location full-width rows with phone and WeChat together. Labels wrap without a horizontal scrolling or dragging rail. The signature pauses offscreen/page-hidden and is static for reduced motion, while copy feedback appears in a localized compact toast. The footer preserves its layout space but remains visually hidden, inert, and hidden from assistive technology until the initial locale is ready, preventing a wrong-language flash.",
       "html": "<div class=\"ds-metallic-wordmark\" role=\"img\" aria-label=\"COOPER.\"><canvas aria-hidden=\"true\"></canvas><span aria-hidden=\"true\">COOPER.</span></div>",
       "css": ".ds-metallic-wordmark{position:relative;width:min(26rem,78vw);height:clamp(4.25rem,8vw,6rem);margin-inline:auto;overflow:hidden;font:800 clamp(1.8rem,4vw,3.5rem)/1 var(--font-archivo,Arial,sans-serif);letter-spacing:-.035em}.ds-metallic-wordmark canvas,.ds-metallic-wordmark span{position:absolute;inset:0;width:100%;height:100%}.ds-metallic-wordmark span{display:grid;place-items:center;color:#f4f4f5}"
     },
@@ -315,7 +315,7 @@
       "name": "About Photo Stack",
       "kind": "custom",
       "refersTo": "panel",
-      "description": "A five-card 4:5 personal-image stack in the About avatar region; drag, click, Enter, or Space moves the top card behind the stack while the experience badge remains above it.",
+      "description": "A responsive 4:5 personal-image stack in the About avatar region. Desktop places /photos/about-stack/snow-journey.webp last so it opens on top of the five-card stack, preserving the other photographs' relative browsing order. The query (max-width: 767px), (hover: none) and (pointer: coarse) filters only that photo on narrow screens and coarse no-hover devices, including phone landscape; the remaining four cards open with meadow-rest.webp. Query changes update the gallery when viewport or input conditions change, and the snow-journey source asset is retained. Drag, click, Enter, or Space moves the top card behind the stack while the experience badge remains above it.",
       "html": "<div class=\"ds-photo-stack\" role=\"button\" tabindex=\"0\" aria-label=\"Browse personal photos\"><figure><img alt=\"Personal outdoor photograph\"></figure><figure><img alt=\"Personal outdoor photograph\"></figure></div>",
       "css": ".ds-photo-stack{position:relative;width:100%;aspect-ratio:4/5;perspective:900px}.ds-photo-stack figure{position:absolute;inset:0;overflow:hidden;margin:0;border:1px solid rgba(255,255,255,.16);border-radius:16px;background:#09090b;box-shadow:0 22px 58px rgba(0,0,0,.42);transform-origin:88% 88%}.ds-photo-stack figure:first-child{transform:rotate(3deg) scale(.952)}.ds-photo-stack img{width:100%;height:100%;object-fit:cover}.ds-photo-stack:focus-visible{outline:2px solid rgba(199,210,254,.95);outline-offset:7px}"
     },
@@ -331,7 +331,7 @@
       "name": "Flowing Workflow Menu",
       "kind": "custom",
       "refersTo": "panel",
-      "description": "Four preserved workflow rows; the hovered, focused, or tapped row reveals a repeating text-and-image marquee, with only that visible row looping.",
+      "description": "Four preserved workflow rows; one completed tap or click directly and idempotently selects a row, and repeated activation keeps it selected. Real mouse hover without pressed buttons and keyboard-visible focus also select a row; touch-generated hover/focus does not select it again. Touch layouts keep one row active. The existing GSAP edge reveal and repeating text-and-image marquee remain unchanged, with only the active visible row looping.",
       "html": "<div class=\"ds-flow-menu\" role=\"list\"><button><small>01</small><strong>Discovery</strong><span>Understand the project and direction.</span></button><button><small>02</small><strong>Explore</strong><span>Shape the visual language.</span></button><button><small>03</small><strong>Execute</strong><span>Refine every detail.</span></button><button><small>04</small><strong>Deliver</strong><span>Prepare the final system.</span></button></div>",
       "css": ".ds-flow-menu{overflow:hidden;border-block:1px solid rgba(255,255,255,.12);background:rgba(5,5,6,.28)}.ds-flow-menu button{display:grid;width:100%;min-height:7.75rem;grid-template-columns:minmax(4.5rem,.28fr) minmax(9rem,.72fr) minmax(0,1.45fr);gap:clamp(1rem,3vw,3rem);align-items:center;padding:1.35rem 0;border:0;border-top:1px solid rgba(255,255,255,.12);background:transparent;color:#f4f4f5;text-align:left}.ds-flow-menu button:first-child{border-top:0}.ds-flow-menu small{color:rgba(244,244,245,.32);font-weight:700;letter-spacing:.22em}.ds-flow-menu strong{font-size:1.4rem}.ds-flow-menu span{color:rgba(244,244,245,.64)}.ds-flow-menu button:focus-visible{outline:2px solid rgba(199,210,254,.95);outline-offset:-4px}"
     },
