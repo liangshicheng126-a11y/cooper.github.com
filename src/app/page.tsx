@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { motion } from "framer-motion";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -38,27 +38,9 @@ export default function Home() {
   const reduced = usePrefersReducedMotion();
   const useGsap = shouldUseGsap(reduced);
   const introRevealReady = useIntroRevealReady();
-  const pageContainerRef = useRef<HTMLDivElement>(null);
-  const heroTitleRef = useRef<HTMLDivElement>(null);
   const portfolioBtnRef = useRef<HTMLAnchorElement>(null);
   const aboutBtnRef = useRef<HTMLAnchorElement>(null);
   const { t, mounted } = useTranslation();
-
-  useEffect(() => {
-    const title = heroTitleRef.current;
-    const container = pageContainerRef.current;
-    if (!title || !container) return;
-
-    // Font loading, language changes and wrapping all affect the title's height.
-    // Anchor the title itself; supporting copy can extend below the viewport.
-    const measureTitle = () => {
-      container.style.setProperty("--hero-title-block-height", `${title.getBoundingClientRect().height}px`);
-    };
-    measureTitle();
-    const observer = new ResizeObserver(measureTitle);
-    observer.observe(title);
-    return () => observer.disconnect();
-  }, []);
 
   useGSAP(() => {
     if (!useGsap || tier === "minimal") return;
@@ -154,7 +136,6 @@ export default function Home() {
 
   return (
     <div
-      ref={pageContainerRef}
       className={cn("flex flex-col flex-1 pb-4 sm:pb-6 w-full min-w-0 overflow-x-clip", !mounted && "opacity-0")}
     >
       <motion.div
@@ -166,7 +147,7 @@ export default function Home() {
         {/* Hero Section */}
         <div className="hero-section-responsive relative z-[90] flex flex-col">
         <section className="flex flex-col relative z-[90] overflow-x-clip">
-          <div ref={heroTitleRef} className="hero-depth-title">
+          <div className="hero-depth-title">
             <h1 className="hero-title-responsive text-4xl sm:text-6xl lg:text-8xl font-bold tracking-tight max-w-5xl leading-[1.1]">
               <DepthText
                 text={t.hero.title}

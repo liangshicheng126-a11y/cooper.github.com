@@ -2,6 +2,7 @@
  * Real, localized @2x website captures for the /portfolio/p2 design showcase.
  * Start the site separately, then run: node scripts/capture-p2-design.mjs
  * SITE_URL may override http://localhost:3030. Existing source assets are untouched.
+ * Pass --only=home-hero,language-menu to refresh only those affected captures.
  */
 import { chromium } from "playwright";
 import fs from "node:fs/promises";
@@ -29,6 +30,14 @@ const CAPTURES = [
   { file: "language-menu", pathname: "/portfolio/", openLanguageMenu: true },
   { file: "xiaocoo-page", pathname: "/xiaocoo/" },
 ];
+const onlyArgument = process.argv.slice(2).find((arg) => arg.startsWith("--only="));
+const requestedFiles = onlyArgument ? onlyArgument.slice("--only=".length).split(",") : null;
+if (requestedFiles?.some((file) => !CAPTURES.some((capture) => capture.file === file))) {
+  throw new Error("--only must contain comma-separated capture names from CAPTURES");
+}
+const selectedCaptures = requestedFiles
+  ? CAPTURES.filter((capture) => requestedFiles.includes(capture.file))
+  : CAPTURES;
 
 async function waitForFonts(page) {
   await page.evaluate(async (timeoutMs) => {
@@ -168,7 +177,7 @@ try {
       });
       const page = await context.newPage();
       page.setDefaultTimeout(READY_TIMEOUT);
-      for (const shot of CAPTURES) {
+      for (const shot of selectedCaptures) {
         const name = `${language.code}/${shot.file}.webp`;
         console.log(`Capturing ${name}`);
         try {
@@ -216,4 +225,4 @@ try {
 } finally {
   await browser.close();
 }
-console.log(`\nDone: ${LANGUAGES.length * CAPTURES.length} localized WebP assets in ${OUT}`);
+console.log(`\nDone: ${LANGUAGES.length * selectedCaptures.length} localized WebP assets in ${OUT}`);

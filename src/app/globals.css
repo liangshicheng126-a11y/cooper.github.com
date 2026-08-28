@@ -1719,12 +1719,13 @@ select option {
 }
 
 .hero-section-responsive > section {
-  display: grid;
-  grid-template-rows: max(7rem, calc(50svh - var(--hero-title-block-height, 8.5rem) / 2)) auto auto;
+  display: flex;
+  flex-direction: column;
   min-height: 100svh;
-  align-content: start;
+  justify-content: center;
   width: 100%;
-  align-items: start;
+  align-items: center;
+  padding-block: 7rem;
   text-align: center;
   overflow: visible;
 }
@@ -1734,18 +1735,12 @@ select option {
 }
 
 .hero-support {
-  grid-row: 3;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding-block: clamp(0.5rem, 2svh, 1.25rem) clamp(2rem, 4svh, 3rem);
-}
-
-/* Centre the heading itself in every language, independently of supporting copy. */
-.hero-depth-title {
-  grid-row: 2;
-  margin-block: 0;
+  /* Balance the title's top inset so the entire visible hero group is centered. */
+  padding-block: clamp(0.5rem, 2svh, 1.25rem) 1.25rem;
 }
 
 .website-design-cover [data-gsh-image] {
@@ -1771,6 +1766,7 @@ select option {
 
 .hero-depth-title {
   width: 100%;
+  margin-block: 0;
   padding: 1.25rem clamp(0.75rem, 3vw, 2rem);
   overflow: visible;
 }

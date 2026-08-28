@@ -47,6 +47,7 @@ const {
 } = load("src/locales/config.ts");
 const { formatGalleryDate, formatGalleryLocation } = load("src/locales/media.ts");
 assert.deepEqual(Object.keys(translations), ["zh", "en", "ja", "ko"]);
+assert.deepEqual(languageOptions.map(({ value }) => value), ["zh", "en", "ko", "ja"], "Korean must appear above Japanese in the language menu");
 const expected = shape(translations.en);
 
 for (const option of languageOptions) {

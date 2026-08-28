@@ -1,8 +1,8 @@
 export const languageOptions = [
   { value: "zh", label: "中文", shortLabel: "中", htmlLang: "zh-CN", locale: "zh-CN" },
   { value: "en", label: "English", shortLabel: "EN", htmlLang: "en", locale: "en-US" },
-  { value: "ja", label: "日本語", shortLabel: "日", htmlLang: "ja", locale: "ja-JP" },
   { value: "ko", label: "한국어", shortLabel: "한", htmlLang: "ko", locale: "ko-KR" },
+  { value: "ja", label: "日本語", shortLabel: "日", htmlLang: "ja", locale: "ja-JP" },
 ] as const;
 
 export type Language = (typeof languageOptions)[number]["value"];
