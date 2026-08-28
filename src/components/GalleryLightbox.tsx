@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ArrowLeft, ChevronLeft, ChevronRight, X } from "lucide-react";
 import useMotionTier from "@/hooks/useMotionTier";
+import { useTranslation } from "@/locales/LanguageProvider";
 
 type Props = {
   photos: string[];
@@ -49,6 +50,7 @@ export default function GalleryLightbox({
   altPrefix,
   galleryLabel,
 }: Props) {
+  const { t } = useTranslation();
   const tier = useMotionTier();
   const softMotion = tier !== "minimal";
   const touchStartX = useRef<number | null>(null);
@@ -386,7 +388,7 @@ export default function GalleryLightbox({
               type="button"
               className="absolute left-1 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur-sm transition-colors hover:bg-black/60 sm:left-4 sm:h-11 sm:w-11"
               onClick={goPrev}
-              aria-label="Previous"
+              aria-label={t.media.previousPhoto}
             >
               <ChevronLeft className="h-6 w-6" />
             </button>
@@ -394,7 +396,7 @@ export default function GalleryLightbox({
               type="button"
               className="absolute right-1 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur-sm transition-colors hover:bg-black/60 sm:right-4 sm:h-11 sm:w-11"
               onClick={goNext}
-              aria-label="Next"
+              aria-label={t.media.nextPhoto}
             >
               <ChevronRight className="h-6 w-6" />
             </button>

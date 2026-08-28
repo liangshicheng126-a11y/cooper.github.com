@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -39,9 +39,26 @@ export default function Home() {
   const useGsap = shouldUseGsap(reduced);
   const introRevealReady = useIntroRevealReady();
   const pageContainerRef = useRef<HTMLDivElement>(null);
+  const heroTitleRef = useRef<HTMLDivElement>(null);
   const portfolioBtnRef = useRef<HTMLAnchorElement>(null);
   const aboutBtnRef = useRef<HTMLAnchorElement>(null);
   const { t, mounted } = useTranslation();
+
+  useEffect(() => {
+    const title = heroTitleRef.current;
+    const container = pageContainerRef.current;
+    if (!title || !container) return;
+
+    // Font loading, language changes and wrapping all affect the title's height.
+    // Anchor the title itself; supporting copy can extend below the viewport.
+    const measureTitle = () => {
+      container.style.setProperty("--hero-title-block-height", `${title.getBoundingClientRect().height}px`);
+    };
+    measureTitle();
+    const observer = new ResizeObserver(measureTitle);
+    observer.observe(title);
+    return () => observer.disconnect();
+  }, []);
 
   useGSAP(() => {
     if (!useGsap || tier === "minimal") return;
@@ -149,7 +166,7 @@ export default function Home() {
         {/* Hero Section */}
         <div className="hero-section-responsive relative z-[90] flex flex-col">
         <section className="flex flex-col relative z-[90] overflow-x-clip">
-          <div className="hero-depth-title mb-6 sm:mb-8">
+          <div ref={heroTitleRef} className="hero-depth-title">
             <h1 className="hero-title-responsive text-4xl sm:text-6xl lg:text-8xl font-bold tracking-tight max-w-5xl leading-[1.1]">
               <DepthText
                 text={t.hero.title}
@@ -171,6 +188,7 @@ export default function Home() {
             </h1>
           </div>
 
+          <div className="hero-support">
           {/* Plain div — same reasoning: heroSoft y/opacity + BlurText opacity would compound */}
           <div className="text-lg sm:text-xl lg:text-2xl text-foreground/60 mb-8 sm:mb-12 max-w-3xl leading-relaxed font-light">
             <BlurText
@@ -179,7 +197,7 @@ export default function Home() {
               direction="bottom"
               animateBy="words"
               stepDuration={0.32}
-              className="inline-flex flex-wrap leading-relaxed"
+              className="inline-flex flex-wrap justify-center leading-relaxed"
             />
           </div>
 
@@ -205,6 +223,7 @@ export default function Home() {
             </Magnet>
 
           </motion.div>
+          </div>
         </section>
 
         </div>

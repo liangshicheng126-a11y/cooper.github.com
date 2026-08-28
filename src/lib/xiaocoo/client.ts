@@ -1,3 +1,5 @@
+import type { Language } from "@/locales/config";
+
 export type ChatRole = "user" | "assistant" | "system";
 
 export type ChatMessage = {
@@ -33,7 +35,7 @@ export async function streamXiaocooChat(
   messages: ChatMessage[],
   options?: {
     signal?: AbortSignal;
-    language?: "zh" | "en";
+    language?: Language;
     visitorName?: string;
     deviceId?: string;
   }
@@ -41,7 +43,10 @@ export async function streamXiaocooChat(
   const url = getXiaocooApiUrl();
   return fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "Accept-Language": options?.language ?? "zh",
+    },
     body: JSON.stringify({
       messages: messages.filter((m) => m.role === "user" || m.role === "assistant"),
       language: options?.language ?? "zh",

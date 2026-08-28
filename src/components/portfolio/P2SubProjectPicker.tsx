@@ -13,6 +13,7 @@ type SubProject = {
   image: string;
   accent: string;
   viewLabel: string;
+  coverClassName?: string;
 };
 
 type Props = {
@@ -40,7 +41,7 @@ export default function P2SubProjectPicker({ sectionTitle, projects }: Props) {
                 viewProject={project.viewLabel}
                 variant="portfolio"
                 imageOverlay="gradient"
-                className="project-card-responsive rounded-3xl"
+                className={`project-card-responsive rounded-3xl ${project.coverClassName ?? ""}`}
               />
               <p className="mt-4 px-2 text-sm sm:text-base text-foreground/60 leading-relaxed max-w-prose">
                 {project.desc}

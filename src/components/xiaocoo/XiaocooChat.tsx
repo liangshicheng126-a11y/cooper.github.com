@@ -8,7 +8,17 @@ import { useTranslation } from "@/locales/LanguageProvider";
 import useMotionTier from "@/hooks/useMotionTier";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import { shouldUseGsap } from "@/lib/motion";
-import { findCannedReply } from "@/lib/xiaocoo/cannedReplies";
+import {
+  findCannedReply,
+  getCannedReply,
+  XIAOCOO_SUGGESTION_IDS,
+  type CannedReplyId,
+} from "@/lib/xiaocoo/cannedReplies";
+import {
+  chatErrorCode,
+  chatErrorMessage,
+  type ChatErrorCode,
+} from "@/lib/xiaocoo/localization";
 import {
   getOrCreateDeviceId,
   readOpenAiSseStream,
@@ -28,17 +38,14 @@ const MAX_NAME_LEN = 40;
 const MAX_STORED_MESSAGES = 40;
 const CANNED_THINK_MS = 800;
 const CANNED_THINK_REDUCED_MS = 300;
-/** Mobile keeps only these three prompts (zh/en), in this order. */
-const MOBILE_SUGGESTION_MATCHERS = [
-  /一分钟介绍|Introduce yourself in one minute/i,
-  /目前在哪里|Where are you now/i,
-  /未来的规划|future plans/i,
-] as const;
+/** Stable positions: introduction, current location, then future plans. */
+const MOBILE_SUGGESTION_INDICES = [0, 5, 3] as const;
 
-function pickMobileSuggestions(all: string[]) {
-  return MOBILE_SUGGESTION_MATCHERS.map((re) => all.find((s) => re.test(s))).filter(
-    (s): s is string => Boolean(s)
-  );
+class ChatRequestError extends Error {
+  constructor(readonly code: ChatErrorCode) {
+    super(code);
+    this.name = "ChatRequestError";
+  }
 }
 
 const BUBBLE_TRANSITION: Transition = {
@@ -140,7 +147,7 @@ export default function XiaocooChat() {
   const [messages, setMessages] = useState<UiMessage[]>([]);
   const [input, setInput] = useState("");
   const [streaming, setStreaming] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<ChatErrorCode | null>(null);
   const [hydrated, setHydrated] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -211,7 +218,7 @@ export default function XiaocooChat() {
     }
   };
 
-  const send = async (text: string) => {
+  const send = async (text: string, suggestionId?: CannedReplyId) => {
     const content = text.trim();
     if (!content || streaming || !visitorName) return;
 
@@ -230,7 +237,9 @@ export default function XiaocooChat() {
     const controller = new AbortController();
     abortRef.current = controller;
 
-    const canned = findCannedReply(content);
+    const canned = suggestionId
+      ? getCannedReply(suggestionId, language)
+      : findCannedReply(content, language);
     if (canned) {
       try {
         const delay = useMotionRef.current ? CANNED_THINK_MS : CANNED_THINK_REDUCED_MS;
@@ -266,14 +275,14 @@ export default function XiaocooChat() {
       });
 
       if (!response.ok) {
-        let detail = t.xiaocoo.error;
+        let code: unknown;
         try {
-          const json = (await response.json()) as { error?: string };
-          if (json.error) detail = json.error;
+          const json: unknown = await response.json();
+          if (json && typeof json === "object") code = (json as { code?: unknown }).code;
         } catch {
-          /* keep default */
+          /* HTTP status provides a localized fallback for older endpoints. */
         }
-        throw new Error(detail);
+        throw new ChatRequestError(chatErrorCode(response.status, code));
       }
 
       let assembled = "";
@@ -286,16 +295,18 @@ export default function XiaocooChat() {
       }
 
       if (!assembled.trim()) {
-        throw new Error(t.xiaocoo.error);
+        throw new ChatRequestError("UPSTREAM_ERROR");
       }
     } catch (err) {
       if ((err as Error).name === "AbortError") return;
-      const message = err instanceof Error && err.message ? err.message : t.xiaocoo.error;
-      setError(message);
+      const code = err instanceof ChatRequestError
+        ? err.code
+        : err instanceof TypeError ? "NETWORK_ERROR" : "UPSTREAM_ERROR";
+      setError(code);
       setMessages((prev) =>
         prev.map((m) =>
           m.id === assistantId
-            ? { ...m, content: m.content.trim() || t.xiaocoo.error }
+            ? { ...m, content: m.content.trim() || chatErrorMessage(language, code) }
             : m
         )
       );
@@ -310,9 +321,13 @@ export default function XiaocooChat() {
     void send(input);
   };
 
-  const suggestions = isMobile
-    ? pickMobileSuggestions(t.xiaocoo.suggestions)
-    : t.xiaocoo.suggestions;
+  const allSuggestions = XIAOCOO_SUGGESTION_IDS.map((id, index) => ({
+    id,
+    label: t.xiaocoo.suggestions[index],
+  }));
+  const suggestions = (isMobile
+    ? MOBILE_SUGGESTION_INDICES.map((index) => allSuggestions[index])
+    : allSuggestions).filter((suggestion) => Boolean(suggestion?.label));
 
   if (!visitorName) {
     return (
@@ -442,10 +457,10 @@ export default function XiaocooChat() {
           <div className="grid grid-cols-1 sm:flex sm:flex-wrap gap-2 max-h-[28vh] overflow-y-auto pb-2">
             {suggestions.map((suggestion) => (
               <button
-                key={suggestion}
+                key={suggestion.id}
                 type="button"
                 disabled={streaming}
-                onClick={() => void send(suggestion)}
+                onClick={() => void send(suggestion.label, suggestion.id)}
                 className={cn(
                   "xiaocoo-suggestion min-h-11 text-left text-[13px] sm:min-h-0 sm:text-sm px-3.5 py-2.5 sm:py-2 rounded-xl",
                   "border text-foreground transition-colors",
@@ -453,7 +468,7 @@ export default function XiaocooChat() {
                   "disabled:opacity-50 w-full sm:w-auto"
                 )}
               >
-                {suggestion}
+                {suggestion.label}
               </button>
             ))}
           </div>
@@ -471,7 +486,7 @@ export default function XiaocooChat() {
               disabled={streaming}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
+                if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing && e.nativeEvent.keyCode !== 229) {
                   e.preventDefault();
                   void send(input);
                 }
@@ -506,7 +521,7 @@ export default function XiaocooChat() {
 
       {error && (
         <p className="text-sm text-rose-500/90 px-1 whitespace-pre-wrap" role="alert">
-          {error}
+          {chatErrorMessage(language, error)}
         </p>
       )}
     </div>

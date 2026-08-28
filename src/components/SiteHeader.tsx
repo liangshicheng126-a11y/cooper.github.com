@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
@@ -16,12 +16,14 @@ import {
 } from "lucide-react";
 
 import { useTranslation } from "@/locales/LanguageProvider";
+import { isLanguage, languageOptions } from "@/locales/config";
 import { isNavActive } from "@/lib/nav";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { AnimatedGroup } from "@/components/ui/animated-group";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import { useIntroRevealReady } from "@/components/motion/IntroPlaybackContext";
+import StaggeredMenu from "@/components/ui/StaggeredMenu";
 
 const navIconClassName = "h-4 w-4 shrink-0";
 
@@ -29,6 +31,7 @@ export default function SiteHeader() {
   const pathname = usePathname() ?? "/";
   const { language, setLanguage, t, mounted } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
   const reduced = usePrefersReducedMotion();
   const introRevealReady = useIntroRevealReady();
 
@@ -42,6 +45,7 @@ export default function SiteHeader() {
 
   useEffect(() => {
     setMenuOpen(false);
+    setLanguageMenuOpen(false);
   }, [pathname]);
 
   useEffect(() => {
@@ -53,16 +57,19 @@ export default function SiteHeader() {
     };
   }, [menuOpen]);
 
-  const toggleLanguage = () => {
-    setLanguage(language === "zh" ? "en" : "zh");
-  };
+  const changeLanguageMenuOpen = useCallback((open: boolean) => {
+    setLanguageMenuOpen(open);
+    if (open) setMenuOpen(false);
+  }, []);
 
   return (
     <motion.header
       className="site-header"
+      inert={!mounted || undefined}
+      aria-hidden={!mounted || undefined}
       initial={false}
       animate={
-        introRevealReady
+        mounted && introRevealReady
           ? { opacity: 1, y: 0, filter: "blur(0px)" }
           : { opacity: 0, y: -12, filter: "blur(8px)" }
       }
@@ -73,7 +80,7 @@ export default function SiteHeader() {
       }
     >
       <div className="site-header__inner">
-        <Link href="/" className="site-wordmark" aria-label="COOPER. home">
+        <Link href="/" className="site-wordmark" aria-label={`COOPER. · ${t.nav.home}`}>
           <span className="site-wordmark__dot" aria-hidden />
           <span>COOPER.</span>
         </Link>
@@ -101,7 +108,7 @@ export default function SiteHeader() {
           }}
         >
           <LayoutGroup id="site-primary-navigation">
-            <nav className="site-nav flex" aria-label="Primary navigation">
+            <nav className="site-nav flex" aria-label={t.ui.navigation}>
               {navItems.map((item) => {
                 const active = isNavActive(pathname, item.href);
                 return (
@@ -134,25 +141,27 @@ export default function SiteHeader() {
         </AnimatedGroup>
 
         <div className="flex items-center gap-2">
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={toggleLanguage}
-            className="min-w-[3.25rem] border border-white/10 bg-white/[0.035] text-[11px] tracking-[0.12em] text-zinc-300"
-            aria-label={language === "zh" ? "Switch to English" : "切换至中文"}
-          >
-            {mounted ? (language === "zh" ? "EN" : "中文") : "EN"}
-          </Button>
+          <StaggeredMenu
+            items={languageOptions}
+            value={language}
+            open={languageMenuOpen}
+            title={t.ui.language}
+            closeLabel={t.ui.closeLanguage}
+            onOpenChange={changeLanguageMenuOpen}
+            onSelect={(value) => { if (isLanguage(value)) setLanguage(value); }}
+          />
           <Button
             type="button"
             variant="outline"
             size="icon"
-            onClick={() => setMenuOpen((value) => !value)}
+            onClick={() => {
+              setLanguageMenuOpen(false);
+              setMenuOpen((value) => !value);
+            }}
             className="lg:hidden"
             aria-expanded={menuOpen}
             aria-controls="site-mobile-menu"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-label={menuOpen ? t.ui.closeMenu : t.ui.openMenu}
           >
             {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
@@ -173,19 +182,19 @@ export default function SiteHeader() {
               type="button"
               className="absolute inset-0 cursor-default bg-black/70 backdrop-blur-md"
               onClick={() => setMenuOpen(false)}
-              aria-label="Close menu overlay"
+              aria-label={t.ui.closeMenu}
             />
             <motion.div
               role="dialog"
               aria-modal="true"
-              aria-label="Site navigation"
+              aria-label={t.ui.navigation}
               className="site-mobile-menu__panel"
               initial={{ opacity: 0, y: -12, filter: "blur(8px)" }}
               animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               exit={{ opacity: 0, y: -8, filter: "blur(6px)" }}
               transition={{ duration: 0.34, ease: [0.16, 1, 0.3, 1] }}
             >
-              <nav className="grid gap-2" aria-label="Mobile navigation">
+              <nav className="grid gap-2" aria-label={t.ui.mobileNavigation}>
                 {navItems.map((item) => {
                   const active = isNavActive(pathname, item.href);
                   return (

@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { Archivo, Noto_Sans_SC } from "next/font/google";
+import { Archivo, Noto_Sans_SC, Noto_Sans_JP, Noto_Sans_KR } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/locales/LanguageProvider";
+import { DEFAULT_LANGUAGE, getLanguageOption } from "@/locales/config";
 import PageTransition from "@/components/PageTransition";
 import GsapProvider from "@/components/motion/GsapProvider";
 import MotionTierProvider from "@/components/motion/MotionTierProvider";
@@ -28,6 +29,22 @@ const notoSansSC = Noto_Sans_SC({
   preload: false,
   fallback: ["Microsoft YaHei", "Arial"],
 });
+const notoSansJP = Noto_Sans_JP({
+  weight: "variable",
+  subsets: ["latin"],
+  variable: "--font-noto-sans-jp",
+  display: "swap",
+  preload: false,
+  fallback: ["Hiragino Kaku Gothic ProN", "Yu Gothic", "sans-serif"],
+});
+const notoSansKR = Noto_Sans_KR({
+  weight: "variable",
+  subsets: ["latin"],
+  variable: "--font-noto-sans-kr",
+  display: "swap",
+  preload: false,
+  fallback: ["Apple SD Gothic Neo", "Malgun Gothic", "sans-serif"],
+});
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ??
   (process.env.GITHUB_REPOSITORY_OWNER
@@ -45,8 +62,6 @@ export const viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Designer Portfolio",
-  description: "Independent Designer / Visual Developer Portfolio",
   openGraph: {
     title: "Designer Portfolio",
     description: "Independent Designer / Visual Developer Portfolio",
@@ -66,14 +81,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html lang={getLanguageOption(DEFAULT_LANGUAGE).htmlLang} className="dark" suppressHydrationWarning>
       <head>
         <script
           id="cooper-opening-gate"
           dangerouslySetInnerHTML={{ __html: openingGateScript }}
         />
       </head>
-      <body className={`${archivo.variable} ${notoSansSC.variable}`} suppressHydrationWarning>
+      <body className={`${archivo.variable} ${notoSansSC.variable} ${notoSansJP.variable} ${notoSansKR.variable}`} suppressHydrationWarning>
         <span
           hidden
           aria-hidden

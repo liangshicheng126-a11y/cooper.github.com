@@ -9,6 +9,7 @@ import { shouldUseGsap } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import GsapGlassHover from "@/components/motion/GsapGlassHover";
 import Stack from "@/components/ui/Stack";
+import { useTranslation } from "@/locales/LanguageProvider";
 
 const ACCENT = "#6366f1";
 
@@ -21,6 +22,7 @@ export default function GsapAboutAvatar({
   experienceLabel,
   className,
 }: GsapAboutAvatarProps) {
+  const { t } = useTranslation();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
@@ -38,30 +40,30 @@ export default function GsapAboutAvatar({
       <img
         key="snow-journey"
         src="/photos/about-stack/snow-journey.webp"
-        alt="Cooper in a snowy mountain landscape"
+        alt={t.media.aboutPhotos[0]}
       />,
       <img
         key="ice-climb"
         src="/photos/about-stack/ice-climb.webp"
-        alt="Ice climbing outdoors"
+        alt={t.media.aboutPhotos[1]}
       />,
       <img
         key="ice-climb-action"
         src="/photos/about-stack/ice-climb-action.webp"
-        alt="Cooper ice climbing with two ice axes"
+        alt={t.media.aboutPhotos[2]}
       />,
       <img
         key="mountain-shell"
         src="/photos/about-stack/mountain-shell.webp"
-        alt="Cooper facing a mountain ridge in outdoor gear"
+        alt={t.media.aboutPhotos[3]}
       />,
       <img
         key="meadow-rest"
         src="/photos/about-stack/meadow-rest.webp"
-        alt="Cooper resting in a mountain meadow"
+        alt={t.media.aboutPhotos[4]}
       />,
     ],
-    [],
+    [t.media.aboutPhotos],
   );
 
   const pauseIdle = () => {
@@ -174,7 +176,7 @@ export default function GsapAboutAvatar({
               sensitivity={110}
               sendToBackOnClick
               pauseOnHover
-              ariaLabel="Drag, click, or press Enter to browse Cooper's photo stack"
+              ariaLabel={t.media.photoStackLabel}
             />
           </div>
           <div

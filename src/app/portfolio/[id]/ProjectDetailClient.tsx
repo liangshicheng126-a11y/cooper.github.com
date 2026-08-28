@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useTranslation } from "@/locales/LanguageProvider";
+import { formatGalleryDate, formatGalleryLocation } from "@/locales/media";
 import { ArrowLeft, Calendar, User, Layout, CheckCircle } from "lucide-react";
 import VideoPreviewGrid from "@/components/VideoPreviewGrid";
 import type { VideoPreviewItem } from "@/components/VideoPreviewLightbox";
@@ -49,7 +50,7 @@ export default function ProjectDetailClient({
   photographyGroups = [],
   posters = [],
 }: Props) {
-  const { t, mounted } = useTranslation();
+  const { t, mounted, language } = useTranslation();
   const tier = useMotionTier();
   const [lightboxPhotos, setLightboxPhotos] = useState<string[] | null>(null);
   const [lightboxFallbacks, setLightboxFallbacks] = useState<string[] | null>(null);
@@ -63,7 +64,7 @@ export default function ProjectDetailClient({
   if (!project) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
-        <h2 className="text-2xl font-bold mb-4">Project Not Found</h2>
+        <h2 className="text-2xl font-bold mb-4">{t.media.projectNotFound}</h2>
         <Link href="/portfolio" className="text-indigo-500 hover:underline">
           {t.portfolio.projectDetail.back}
         </Link>
@@ -81,14 +82,14 @@ export default function ProjectDetailClient({
   const videoByProject: Partial<Record<string, VideoPreviewItem[]>> = {
     p4: [
       {
-        title: "恐惧是生物的本能",
+        title: t.media.videoTitles[0],
         href: "https://www.douyin.com/video/7606366795284967670",
         mp4Url: "/videos/微信视频2026-04-28_141704_425.mp4",
         poster: "/videos/thumbnails/fear-instinct.jpg",
         fallbackHref: "https://www.douyin.com/video/7606366795284967670",
       },
       {
-        title: "色彩重启剪辑",
+        title: t.media.videoTitles[1],
         href: "https://www.bilibili.com/video/BV1ys9rBREj8/",
         embedUrl: "https://player.bilibili.com/player.html?bvid=BV1ys9rBREj8&page=1&high_quality=1&autoplay=1",
         poster: "/videos/thumbnails/color-reboot-edit.jpg",
@@ -241,7 +242,7 @@ export default function ProjectDetailClient({
                         >
                           {Array.from({ length: 18 }).map((_, i) => (
                             <span key={`${year}-${copy}-${i}`} className="year-divider-item">
-                              <span>{year}</span>
+                              <span>{year === "Unknown" ? t.media.unknown : year}</span>
                               <span>{t.portfolio.projectDetail.yearDividerDot}</span>
                             </span>
                           ))}
@@ -256,11 +257,11 @@ export default function ProjectDetailClient({
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
                       <h3 className="leading-none">
                         <span className="inline-flex flex-wrap items-center gap-2 sm:gap-3 bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-cyan-500 bg-clip-text text-transparent">
-                          <span className="text-4xl sm:text-5xl font-extrabold tracking-[0.08em]">{year}</span>
+                          <span className="text-4xl sm:text-5xl font-extrabold tracking-[0.08em]">{year === "Unknown" ? t.media.unknown : year}</span>
                           <span className="text-xl sm:text-2xl font-bold opacity-80">·</span>
-                          <span className="text-lg sm:text-2xl font-bold tracking-[0.14em] uppercase">{group.dateLabel}</span>
+                          <span className="text-lg sm:text-2xl font-bold tracking-[0.14em] uppercase">{formatGalleryDate(group.dateLabel, language)}</span>
                           <span className="text-xl sm:text-2xl font-bold opacity-80">·</span>
-                          <span className="text-lg sm:text-2xl font-black tracking-[0.16em] uppercase">{group.location}</span>
+                          <span className="text-lg sm:text-2xl font-black tracking-[0.16em] uppercase">{formatGalleryLocation(group.location, language)}</span>
                         </span>
                       </h3>
                       <span className="text-xs sm:text-base uppercase tracking-widest text-foreground/55 font-semibold self-end sm:self-auto">

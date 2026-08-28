@@ -10,22 +10,22 @@ import GroupedDesignGallerySection from "@/components/portfolio/GroupedDesignGal
 import DesignAnalysisSection from "@/components/portfolio/DesignAnalysisSection";
 import DesignChallengesSection from "@/components/portfolio/DesignChallengesSection";
 import SiteDesignAnalysis from "@/components/portfolio/SiteDesignAnalysis";
-import type { PersonalWebsiteScreenshotGroup } from "@/lib/p2PersonalWebsiteScreenshots";
+import type { PersonalWebsiteScreenshotGroupsByLanguage } from "@/lib/p2PersonalWebsiteScreenshots";
 import type { SmartGlassesScreenshotGroup } from "@/lib/p2SmartGlassesScreenshots";
 import type { P2SubId } from "@/lib/p2Subprojects";
 
 type Props = {
   subId: P2SubId;
-  personalWebsiteGroups?: PersonalWebsiteScreenshotGroup[];
+  personalWebsiteGroupsByLanguage?: PersonalWebsiteScreenshotGroupsByLanguage;
   smartGlassesGroups?: SmartGlassesScreenshotGroup[];
 };
 
 export default function P2SubClient({
   subId,
-  personalWebsiteGroups = [],
+  personalWebsiteGroupsByLanguage,
   smartGlassesGroups = [],
 }: Props) {
-  const { t, mounted } = useTranslation();
+  const { t, mounted, language } = useTranslation();
   const tier = useMotionTier();
   const sub = t.portfolio.projectDetail.p2Subprojects;
   const heroMask = heroMaskVariants(tier);
@@ -48,7 +48,7 @@ export default function P2SubClient({
 
   const personalWebsiteGalleryGroups =
     subId === "personal-website"
-      ? personalWebsiteGroups
+      ? (personalWebsiteGroupsByLanguage?.[language] ?? [])
           .map((group) => {
             const copy = t.portfolio.projectDetail.p2PersonalWebsiteGroups[group.groupId];
             return {
@@ -147,6 +147,7 @@ export default function P2SubClient({
       {subId === "personal-website" ? (
         <>
           <GroupedDesignGallerySection
+            key={`personal-website-${language}`}
             groups={personalWebsiteGalleryGroups}
             labels={{
               sectionTitle: galleryLabels.title,

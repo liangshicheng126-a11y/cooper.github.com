@@ -1,4 +1,6 @@
 import { XIAOCOO_KNOWLEDGE } from "./bundledKnowledge";
+import type { Language } from "@/locales/config";
+import { chatLanguageInstruction } from "./localization";
 
 export type LlmMessage = {
   role: "system" | "user" | "assistant";
@@ -8,15 +10,10 @@ export type LlmMessage = {
 const MAX_MESSAGES = 24;
 const MAX_CONTENT_CHARS = 4000;
 
-export function buildSystemPrompt(language: "zh" | "en" = "zh"): string {
-  const langHint =
-    language === "en"
-      ? "Reply in English unless the user writes in Chinese."
-      : "默认用简体中文回答；用户用英文提问时再用英文。";
-
+export function buildSystemPrompt(language: Language = "zh"): string {
   return [
     "你是小coo，梁世城（Cooper Liang）的个人数字分身。",
-    langHint,
+    chatLanguageInstruction(language),
     "严格依据下方知识库作答，不知则坦诚说明，禁止编造履历。",
     "",
     "===== 知识库 =====",
@@ -46,7 +43,7 @@ export function sanitizeMessages(
 
 export function buildChatMessages(
   history: Array<{ role: "user" | "assistant"; content: string }>,
-  language: "zh" | "en"
+  language: Language
 ): LlmMessage[] {
   return [{ role: "system", content: buildSystemPrompt(language) }, ...history];
 }

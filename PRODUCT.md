@@ -13,7 +13,7 @@ web
 
 ## Product Purpose
 
-cooperliang.top is Cooper Liang's bilingual personal portfolio and working contact surface. It presents a coherent picture of his brand design, UI/UX, photography, and video work, then gives visitors direct paths to inspect projects, learn about him, understand his task-brief approach, use Xiaocoo, or make contact.
+cooperliang.top is Cooper Liang's multilingual personal portfolio and working contact surface. It presents a coherent picture of his brand design, UI/UX, photography, and video work, then gives visitors direct paths to inspect projects, learn about him, understand his task-brief approach, use Xiaocoo, or make contact.
 
 ## Positioning
 
@@ -22,8 +22,12 @@ The site joins finished visual work, process analysis, personal outdoor and arti
 ## Operating Context
 
 - Visitors browse a public responsive website on desktop and mobile.
-- Content is available in Chinese and English.
+- Content is available in Chinese, English, Japanese, and Korean. The header's StaggeredMenu language selector preserves the current route and remembers the selected language; original artwork and user-written chat history retain their original text.
+- A saved manual language choice takes priority. On a first visit, browser language preferences are checked in order for Chinese, English, Japanese, or Korean; every Chinese region and script variant uses Simplified Chinese, and an unsupported preference list falls back to English. Automatic detection does not write to localStorage; only a manual selection is saved.
+- The header and footer wait for the initial locale to be ready before becoming visible and interactive, preventing a flash of the wrong language.
+- In all four languages, the home title itself is the centering anchor; its description and two actions occupy the following track. A ResizeObserver measures the title block so the top track can use max(7rem, calc(50svh - titleHeight / 2)). The title targets the viewport center on ordinary desktop and mobile screens; long supporting copy and very short screens can extend the hero naturally, with at least 7rem above the title to avoid header overlap.
 - Portfolio routes include a project index, detailed graphic/photography/video cases, and nested P2 interface-design subprojects.
+- The personal-website case uses eight real screenshots per language under public/photos/portfolio/p2/localized/{zh,en,ja,ko}/: four core-page images and four component images. The current language selects the screenshot set and changing it resets the lightbox. The language-menu image replaces the removed Task Brief image; scripts/capture-p2-design.mjs remains the capture workflow.
 - The Contact route submits structured information through its existing API flow. The former Task Brief route is intentionally absent from the public build and navigation.
 - Xiaocoo answers questions about Cooper's background, work, projects, and skills.
 
@@ -39,6 +43,7 @@ The site joins finished visual work, process analysis, personal outdoor and arti
 
 - Preserve the names "COOPER.", "梁世城 Cooper", "小coo", and the current bilingual voice.
 - Preserve the portfolio's real project imagery and existing contact details.
+- The P2 personal-website selection card may use public/photos/portfolio/p2/covers/personal-website-studio.webp as a text-free studio concept background with a bottom readability mask. This cover is not an actual website screenshot; the localized case gallery remains the source of real screen evidence.
 - The uploaded React hero script is the binding visual reference for this redesign: nocturnal background imagery, restrained translucent surfaces, high-contrast typography, radial light, compact rounded controls, and soft entrance motion.
 
 ## Evidence on Hand
@@ -54,7 +59,7 @@ The site joins finished visual work, process analysis, personal outdoor and arti
 1. Let the work lead: visual projects and real project detail remain the strongest proof.
 2. Preserve clarity across media: graphic design, UI/UX, photography, and video should stay easy to distinguish and explore.
 3. Make collaboration actionable: direct contact and Xiaocoo flows must remain easy to find and use without a separate Task Brief destination.
-4. Treat bilingual parity, full-motion defaults, and explicit reduced-motion support as core behavior, not optional polish.
+4. Treat four-language parity, full-motion defaults, and explicit reduced-motion support as core behavior, not optional polish.
 5. Keep the site personal: professional capability and Cooper's exploratory character should remain visible together.
 
 ## Accessibility & Inclusion

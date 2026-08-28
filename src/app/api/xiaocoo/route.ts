@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { isLanguage, type Language } from "@/locales/config";
+import { chatErrorMessage, type ChatErrorCode } from "@/lib/xiaocoo/localization";
 import {
   buildChatMessages,
   forwardDeepSeekStream,
@@ -68,14 +70,18 @@ export async function OPTIONS(request: Request) {
 export async function POST(request: Request) {
   const origin = request.headers.get("origin");
   const headers = corsHeaders(origin);
+  const requestedLanguage = request.headers.get("accept-language")?.split(/[;,]/)[0].trim().toLowerCase().split("-")[0];
+  let language: Language = isLanguage(requestedLanguage) ? requestedLanguage : "zh";
+  const errorResponse = (code: ChatErrorCode, status: number, detail?: string) =>
+    NextResponse.json(
+      { error: chatErrorMessage(language, code), code, ...(detail ? { detail } : {}) },
+      { status, headers },
+    );
 
   try {
     const llm = resolveDeepSeekEnv();
     if (!llm) {
-      return NextResponse.json(
-        { error: "XiaoCoo API is not configured (missing DEEPSEEK_API_KEY)." },
-        { status: 503, headers }
-      );
+      return errorResponse("SERVICE_UNAVAILABLE", 503);
     }
 
     const ip =
@@ -85,32 +91,32 @@ export async function POST(request: Request) {
     const now = Date.now();
     const recent = (ipRequestLog.get(ip) ?? []).filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
     if (recent.length >= RATE_LIMIT_MAX) {
-      return NextResponse.json(
-        { error: "Too many requests. Please wait and retry." },
-        { status: 429, headers }
-      );
+      return errorResponse("RATE_LIMITED", 429);
     }
     recent.push(now);
     ipRequestLog.set(ip, recent);
 
-    const body = (await request.json()) as Body;
+    let body: Body;
+    try {
+      const parsed: unknown = await request.json();
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+        return errorResponse("INVALID_REQUEST", 400);
+      }
+      body = parsed as Body;
+    } catch {
+      return errorResponse("INVALID_REQUEST", 400);
+    }
+    language = isLanguage(body.language) ? body.language : language;
     const history = sanitizeMessages(body.messages);
     if (history.length === 0 || history[history.length - 1]?.role !== "user") {
-      return NextResponse.json(
-        { error: "Expected a non-empty messages array ending with a user turn." },
-        { status: 400, headers }
-      );
+      return errorResponse("INVALID_REQUEST", 400);
     }
 
     const visitorName = sanitizeVisitorName(body.visitorName);
     if (!visitorName) {
-      return NextResponse.json(
-        { error: "visitorName is required." },
-        { status: 400, headers }
-      );
+      return errorResponse("VISITOR_REQUIRED", 400);
     }
 
-    const language = body.language === "en" ? "en" : "zh";
     const deviceId = sanitizeDeviceId(body.deviceId);
     const quotaKey = buildQuotaKey(visitorName, deviceId);
     if (isQuotaExceeded(quotaKey)) {
@@ -125,10 +131,7 @@ export async function POST(request: Request) {
 
     if (!upstream.ok || !upstream.body) {
       const detail = await upstream.text().catch(() => "");
-      return NextResponse.json(
-        { error: "Upstream model error.", detail: detail.slice(0, 500) },
-        { status: 502, headers }
-      );
+      return errorResponse("UPSTREAM_ERROR", 502, detail.slice(0, 500));
     }
 
     const userMessage = history[history.length - 1]?.content ?? "";
@@ -164,9 +167,6 @@ export async function POST(request: Request) {
       },
     });
   } catch {
-    return NextResponse.json(
-      { error: "Unexpected server error." },
-      { status: 500, headers }
-    );
+    return errorResponse("UNEXPECTED_ERROR", 500);
   }
 }

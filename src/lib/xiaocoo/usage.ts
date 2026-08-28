@@ -1,5 +1,8 @@
 /** DeepSeek usage pricing + daily quota helpers (shared by Next API). */
 
+import type { Language } from "@/locales/config";
+import { chatErrorMessage } from "./localization";
+
 export const DAILY_BUDGET_CNY = 1;
 /** Approximate USD→CNY for quota accounting (DeepSeek bills in USD). */
 export const USD_CNY_RATE = 7.2;
@@ -49,11 +52,8 @@ export function utcDateKey(d = new Date()): string {
   return d.toISOString().slice(0, 10);
 }
 
-export function quotaExceededMessage(language: "zh" | "en"): string {
-  if (language === "en") {
-    return "Today's XiaoCoo chat quota for this device/name is used up (≈¥1/day). Please reach out directly: email liangshicheng303@126.com · WeChat llqsc1122.";
-  }
-  return "今天这台设备/该访客名的小coo 问答额度已用完（约 ¥1/天）。可通过其他渠道联系本人：邮箱 liangshicheng303@126.com · 微信 llqsc1122。";
+export function quotaExceededMessage(language: Language): string {
+  return chatErrorMessage(language, "QUOTA_EXCEEDED");
 }
 
 export function buildQuotaKey(visitorName: string, deviceId: string): string {

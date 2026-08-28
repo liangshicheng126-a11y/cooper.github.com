@@ -26,8 +26,9 @@ export default function P2HubClient() {
       title: sub.personalWebsite.title,
       desc: sub.personalWebsite.desc,
       category: sub.personalWebsite.category,
-      image: "/photos/portfolio/p2/covers/personal-website.png",
-      accent: "#6366f1",
+      image: "/photos/portfolio/p2/covers/personal-website-studio.webp",
+      accent: "#a5b4fc",
+      coverClassName: "website-design-cover",
       viewLabel: sub.viewDetail,
     },
     {

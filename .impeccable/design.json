@@ -267,7 +267,7 @@
       "name": "DepthText Home Statement",
       "kind": "custom",
       "refersTo": "display",
-      "description": "The translated home statement rendered as a restrained layered extrusion with fine-pointer tracking, a slow fallback orbit, and static reduced/minimal modes.",
+      "description": "The translated home statement rendered as a restrained layered extrusion with fine-pointer tracking, a slow fallback orbit, and static reduced/minimal modes. Across all four languages, the title itself anchors to the viewport center. ResizeObserver measures the title wrapper into --hero-title-block-height; the grid uses max(7rem, calc(50svh - var(--hero-title-block-height, 8.5rem) / 2)) auto auto. Supporting copy and actions occupy the following track and may extend the 100svh-minimum hero naturally; the 7rem top minimum prevents header overlap on very short screens.",
       "html": "<h1><span class=\"ds-depth-text\">CREATE FOR NEEDS</span></h1>",
       "css": ".ds-depth-text{display:inline-grid;max-width:100%;color:#f4f4f5;font:800 clamp(2.75rem,8.2vw,6rem)/.9 var(--font-archivo,Arial),var(--font-noto-sans-sc,'Microsoft YaHei'),sans-serif;letter-spacing:-.04em;transform-style:preserve-3d;text-shadow:0 22px 34px rgba(67,56,202,.26)}@media(prefers-reduced-motion:reduce){.ds-depth-text{will-change:auto}}"
     },
@@ -275,7 +275,7 @@
       "name": "MetallicPaint Footer Signature",
       "kind": "custom",
       "refersTo": "cold-white",
-      "description": "Bounded WebGL2 liquid-metal COOPER. wordmark above one horizontal row of four keyboard-operable copy contacts; the signature pauses offscreen/page-hidden and is static for reduced motion, while copy feedback appears in a localized compact toast.",
+      "description": "Bounded WebGL2 liquid-metal COOPER. wordmark above one horizontal row of four keyboard-operable copy contacts; the signature pauses offscreen/page-hidden and is static for reduced motion, while copy feedback appears in a localized compact toast. The footer preserves its layout space but remains visually hidden, inert, and hidden from assistive technology until the initial locale is ready, preventing a wrong-language flash.",
       "html": "<div class=\"ds-metallic-wordmark\" role=\"img\" aria-label=\"COOPER.\"><canvas aria-hidden=\"true\"></canvas><span aria-hidden=\"true\">COOPER.</span></div>",
       "css": ".ds-metallic-wordmark{position:relative;width:min(26rem,78vw);height:clamp(4.25rem,8vw,6rem);margin-inline:auto;overflow:hidden;font:800 clamp(1.8rem,4vw,3.5rem)/1 var(--font-archivo,Arial,sans-serif);letter-spacing:-.035em}.ds-metallic-wordmark canvas,.ds-metallic-wordmark span{position:absolute;inset:0;width:100%;height:100%}.ds-metallic-wordmark span{display:grid;place-items:center;color:#f4f4f5}"
     },
@@ -299,7 +299,7 @@
       "name": "Floating Site Header",
       "kind": "nav",
       "refersTo": "floating-header",
-      "description": "Compact centered chrome with wordmark, language control, and one shared active-route surface that travels between link positions.",
+      "description": "Compact centered chrome with wordmark, a four-language StaggeredMenu in the former English-toggle slot, and one shared active-route surface that travels between link positions. The language panel uses native labels, explicit selection, keyboard navigation, and layered indigo slide-in motion. A valid saved manual choice wins; otherwise the first supported browser language preference selects Chinese, English, Japanese, or Korean, with every Chinese region/script variant mapped to Simplified Chinese and unsupported preferences falling back to English. Only manual selection writes localStorage; automatic detection does not persist. The header remains visually hidden, inert, and hidden from assistive technology until the initial locale is ready; switching preserves the route.",
       "html": "<header class=\"ds-header\"><a class=\"ds-wordmark\" href=\"#\"><i></i>COOPER.</a><nav><a class=\"ds-nav-active\" href=\"#\">HOME</a><a href=\"#\">WORK</a><a href=\"#\">ABOUT</a></nav><button>EN</button></header>",
       "css": ".ds-header{display:flex;align-items:center;justify-content:space-between;width:min(52rem,100%);min-height:3.75rem;padding:.5rem .6rem .5rem 1rem;border:1px solid rgba(255,255,255,.105);border-radius:14px;background:rgba(7,7,9,.7);color:#f4f4f5;box-shadow:0 18px 48px rgba(0,0,0,.34);backdrop-filter:blur(22px) saturate(135%);font-family:var(--font-archivo,Arial,sans-serif)}.ds-wordmark{display:flex;align-items:center;gap:.65rem;color:#fff;font-size:.88rem;font-weight:800;letter-spacing:.11em;text-decoration:none}.ds-wordmark i{width:.48rem;height:.48rem;border-radius:999px;background:#a5b4fc;box-shadow:0 6px 18px rgba(129,140,248,.38)}.ds-header nav{display:flex;gap:.15rem}.ds-header nav a{position:relative;padding:.7rem .78rem;border-radius:10px;color:rgba(244,244,245,.62);font-size:.78rem;font-weight:600;text-decoration:none;transition:color 220ms ease,background-color 220ms ease}.ds-header nav a:hover,.ds-header nav .ds-nav-active{color:#fff;background:rgba(255,255,255,.065)}.ds-nav-active:after{content:'';position:absolute;right:.72rem;bottom:.3rem;left:.72rem;height:1px;background:rgba(199,210,254,.75)}.ds-header button{min-width:3.25rem;height:2.25rem;border:1px solid rgba(255,255,255,.1);border-radius:8px;background:rgba(255,255,255,.035);color:#d4d4d8;font-size:.69rem;letter-spacing:.12em}.ds-header a:focus-visible,.ds-header button:focus-visible{outline:2px solid rgba(199,210,254,.95);outline-offset:3px}"
     },
@@ -382,7 +382,7 @@
     "keyCharacteristics": [
       "Graphite-black canvas with cold white, zinc, and rare indigo signals.",
       "Centered full-width screening-room composition, never a split portfolio sidebar.",
-      "Exactly centered 100svh title, description, and two-action group beneath compact floating chrome.",
+      "Across all four languages, the home title itself anchors to the viewport center; its description and two actions occupy the following track and can extend the hero naturally when needed.",
       "A session-gated screening-room opening resolves the COOPER. wordmark, reveals the real FloatingLines field from left to right, clears the wordmark, and only then brings in navigation and homepage detail.",
       "Pointer-responsive DepthText gives the home statement restrained dimensional weight; the footer closes with one compact MetallicPaint wordmark.",
       "A shared navigation surface preserves route continuity; the About photo stack and home workflow turn personal imagery and process into bounded tactile interactions.",
@@ -431,6 +431,16 @@
         "name": "The Hairline-Before-Card Rule",
         "body": "When grouping related information, first try spacing and a zinc divider. Add a filled container only when the content needs a distinct material layer.",
         "section": "shapes"
+      },
+      {
+        "name": "The Localized Case Evidence Rule",
+        "body": "The personal-website case uses eight actual website screenshots per language under public/photos/portfolio/p2/localized/{zh,en,ja,ko}/, captured by scripts/capture-p2-design.mjs. The pages group contains home-hero, portfolio-grid, about-page, and contact-page; the components group contains home-services, p2-detail, language-menu, and xiaocoo-page, all WebP. The current language selects the full set; only a missing image may fall back to its Chinese counterpart. Changing language resets the gallery and closes the old lightbox so no previous-language image remains. The language-menu image replaces the removed Task Brief capture.",
+        "section": "components"
+      },
+      {
+        "name": "The Concept-Cover Boundary Rule",
+        "body": "public/photos/portfolio/p2/covers/personal-website-studio.webp is a text-free studio concept background for the P2 personal-website card, not an actual website screenshot. A bottom readability mask protects its title and action; the case gallery supplies the real screen evidence.",
+        "section": "components"
       },
       {
         "name": "The Radius-Hierarchy Rule",

@@ -1,6 +1,6 @@
 ---
 name: "Cooper Nocturnal Screening Room"
-description: "A bilingual portfolio staged as a restrained nocturnal screening room for work, capability, and contact."
+description: "A four-language portfolio staged as a restrained nocturnal screening room for work, capability, and contact."
 colors:
   graphite-black: "#050506"
   deep-ink: "#09090b"
@@ -23,23 +23,23 @@ colors:
   floating-line-blue: "#2F4BC0"
 typography:
   display:
-    fontFamily: "var(--font-archivo), var(--font-noto-sans-sc), sans-serif"
+    fontFamily: "var(--font-archivo), var(--font-script), sans-serif"
     fontSize: "clamp(2.75rem, 8.2vw, 6rem)"
     fontWeight: 700
     lineHeight: 0.98
     letterSpacing: "-0.04em"
   title:
-    fontFamily: "var(--font-archivo), var(--font-noto-sans-sc), sans-serif"
+    fontFamily: "var(--font-archivo), var(--font-script), sans-serif"
     fontSize: "1.5rem"
     fontWeight: 700
     lineHeight: 1.333
   body:
-    fontFamily: "var(--font-archivo), var(--font-noto-sans-sc), sans-serif"
+    fontFamily: "var(--font-archivo), var(--font-script), sans-serif"
     fontSize: "1rem"
     fontWeight: 400
     lineHeight: 1.5
   label:
-    fontFamily: "var(--font-archivo), var(--font-noto-sans-sc), sans-serif"
+    fontFamily: "var(--font-archivo), var(--font-script), sans-serif"
     fontSize: "0.78rem"
     fontWeight: 600
     lineHeight: 1.25
@@ -123,7 +123,7 @@ Form direction 4, seed `94f35f2e`, is the shipped authority. The finish-review d
 
 - Graphite-black canvas with cold white, zinc, and rare indigo signals.
 - Centered full-width screening-room composition, never a split portfolio sidebar.
-- Exactly centered `100svh` title, description, and two-action group beneath compact floating chrome.
+- Across all four languages, the home title itself anchors to the viewport center; its description and two actions occupy the following track and can extend the hero naturally when needed.
 - A session-gated screening-room opening resolves the COOPER. wordmark, reveals the real FloatingLines field from left to right, clears the wordmark, and only then brings in navigation and homepage detail.
 - Pointer-responsive DepthText gives the home statement restrained dimensional weight; the footer closes with one compact MetallicPaint wordmark.
 - Low-opacity React Bits FloatingLines atmosphere with a readability vignette and bounded GPU cost.
@@ -169,6 +169,8 @@ The UI palette is near-monochrome and nocturnal. Indigo is a navigational and in
 
 **Chinese Font:** Noto Sans SC (with Microsoft YaHei and sans-serif fallback)
 
+**Japanese / Korean Fonts:** Noto Sans JP / Noto Sans KR, selected through `--font-script` and the document language. All CJK families are self-hosted by Next's font build with `display: swap` and no eager preload; the browser requests the relevant glyph ranges. Native language names in the menu carry their own `lang` attributes.
+
 **Character:** Archivo (`--font-archivo`) carries Latin text with calm technical clarity. Noto Sans SC (`--font-noto-sans-sc`) carries Chinese across display, chapter, body, label, and operational roles with high legibility and complete weight support. Hierarchy comes from scale, spacing, and real `400–800` weights rather than a decorative single-weight face.
 
 ### Hierarchy
@@ -178,15 +180,15 @@ The UI palette is near-monochrome and nocturnal. Indigo is a navigational and in
 - **Body** (`typography.body`): paragraphs, project analysis, form copy, and descriptive content. Long-form analysis should stay near `72ch`; compact service descriptions stay near `48ch`.
 - **Label** (`typography.label`): navigation, counters, and small metadata. Use compact sizes, firm weight, and controlled tracking; uppercase is appropriate only for terse utility text.
 
-**The Script-Aware Sans Rule.** Archivo shapes Latin and Noto Sans SC shapes Chinese across every role. Do not introduce a third expressive family; hierarchy comes from weight and scale, not novelty glyph construction.
+**The Script-Aware Sans Rule.** Archivo shapes Latin; the Noto Sans SC, JP, and KR variants shape their respective scripts across every role. The four-language expansion adds script coverage, not a new expressive style; hierarchy still comes from weight and scale.
 
 **The Oversized-Once Rule.** The largest scale belongs to the first-view title. Subsequent headings step down decisively so the page reads as chapters, not repeated hero cards.
 
 ## Layout
 
-The page shell is centered at a maximum width of `88rem` and isolated over a fixed backdrop. Main content begins below the floating chrome with `8.5rem` top padding on wider screens. The home hero offsets that shell padding and occupies exactly `100svh`, centering one title + description + two-CTA group on both axes before yielding to the content stack.
+The page shell is centered at a maximum width of `88rem` and isolated over a fixed backdrop. Main content begins below the floating chrome with `8.5rem` top padding on wider screens. The home hero offsets that shell padding and keeps a minimum height of `100svh`. Across Chinese, English, Japanese, and Korean, the title itself is the horizontal and vertical centering anchor; the supporting description and two actions occupy the following track, rather than shifting the title as part of one centered group.
 
-The first viewport has a fixed composition: compact floating top bar over the page and an exactly centered group containing the oversized title, one supporting statement, and two actions. Do not insert promotional modules, scroll prompts, carousels, counters, or extra proof above the professional-services section.
+The first viewport has a fixed hierarchy: compact floating top bar, the oversized title anchored at the viewport center, then one supporting statement and two actions below. A `ResizeObserver` records the title wrapper's actual height in `--hero-title-block-height`; the grid uses `max(7rem, calc(50svh - var(--hero-title-block-height, 8.5rem) / 2)) auto auto` for its top spacer, title, and support tracks. This keeps long translated support copy from pushing the title down. The support track remains in normal flow and may extend the hero beyond the viewport; on very short screens the `7rem` top minimum prevents header overlap rather than forcing clipped centering. Do not insert promotional modules, scroll prompts, carousels, counters, or extra proof above the professional-services section.
 
 Professional services use three equal desktop columns in one row. Every service receives the same dimensions, padding, icon treatment, and typographic weight; none is promoted above the others. At `900px` and below, the grid becomes a natural-height single column. Stats use three equal columns. Workflow rows divide number, title, and description into three editorial columns. P2 analysis uses a `0.58fr / 1.42fr` chapter grid with text constrained to readable measure. Hairlines, not card gutters, carry most of the information architecture.
 
@@ -196,7 +198,7 @@ Professional services use three equal desktop columns in one row. Every service 
 - At `1024px`, the full desktop navigation yields to the menu control and modal navigation panel.
 - At `900px` and below, professional services and analysis become natural-height single columns; the footer keeps its centered single-column close and uses the same fluid `2.5rem–4.5rem` separation from preceding content as every other route.
 - At `640px` and below, header insets contract to `0.75rem`, main padding becomes `7.5rem 0.85rem 1rem`, the footer contact row becomes horizontally scrollable without overflowing the page, workflow becomes a two-column number/content structure, and analysis point grids become single-column.
-- The mobile hero remains exactly `100svh` and uses full-width stacked actions. On desktop viewports no taller than `36rem`, the hero may become intrinsic-height to prevent collision.
+- The hero has a `100svh` minimum, with the title targeting the viewport center at ordinary desktop and mobile widths, including `1440px`, `390px`, and `320px`. Mobile actions remain full-width and stacked; long translations or very short screens extend the support track naturally without clipping, while the top spacer retains its `7rem` minimum.
 - At `640px` and below, the FloatingLines layer drops from `0.58` to `0.44` opacity, reduces saturation/brightness, and caps renderer device pixel ratio at `1.25` instead of the wider-screen cap of `2`.
 
 ### Accessibility rules
@@ -262,6 +264,7 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 - **Material:** 28 restrained cold-white-to-deep-indigo layers, shallow `1.55px` depth, six-degree maximum tilt, and a slow `0.12` orbit within the existing `6rem` display ceiling.
 - **Behavior:** pointer tracking is available only on fine-pointer full-motion devices. Intersection and page-visibility state pause its animation loop; reduced and minimal tiers hold an intentional static perspective.
 - **Accessibility:** only the front face is exposed to assistive technology; extrusion copies are decorative and hidden.
+- **Placement:** the title wrapper is measured with `ResizeObserver` and occupies the second grid track; its actual height sets the top spacer, so centering applies to the title itself in all four languages. Description and actions remain in the third track and do not determine the title's center.
 
 ### MetallicPaint footer signature
 
@@ -278,6 +281,16 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 - **Wordmark:** cold white, heavy Archivo, tracked lettering, preceded by one indigo signal dot.
 - **Navigation:** small rounded links; default labels are muted, hover and active states become white. One shared translucent active surface and its one-pixel indigo-white underline travel between route positions with a tightly damped spring, preserving spatial continuity across navigation. Explicit reduced motion resolves the shared surface immediately.
 - **Mobile:** preserve the language control, menu toggle, body scroll lock, backdrop close target, `aria-expanded`, `aria-controls`, modal semantics, and current-route state.
+- **Locale readiness:** keep the header visually hidden, inert, and hidden from assistive technology until the initial language is resolved; do not briefly expose labels from the default language.
+
+### Four-language selector
+
+- **Placement:** replaces the former English toggle in the existing header action slot. One globe/current-language/plus trigger opens a compact right-aligned panel below the header; no second language control or full-screen language dialog is introduced.
+- **Options:** 中文, English, 日本語, 한국어. Native names remain readable in every locale, with an explicit checkmark and `menuitemradio` state identifying the selection. Switching preserves the current URL and existing content/media.
+- **Motion:** adapted from the user's React Bits StaggeredMenu. Two indigo/graphite underlays slide in before the dark panel, then labels enter in a short stagger. The plus rotates into a close mark. The same timeline reverses for dismissal and remains interruptible; explicit reduced motion resolves it immediately.
+- **Input:** 44px trigger, full-row option targets, visible focus, Arrow Up/Down, Home/End, Escape, outside-click and focus-leave dismissal. Escape or choosing an option returns focus to the trigger; the closed panel is inert. Language and mobile navigation panels do not stay open together.
+- **Initial language:** a valid saved manual choice wins. Otherwise, inspect browser language preferences in their listed order and use the first supported Chinese, English, Japanese, or Korean language; every Chinese region or script variant resolves to Simplified Chinese. If no supported preference is found, use English. Automatic selection does not write to `localStorage`.
+- **Persistence:** only manual selections save the validated `zh`, `en`, `ja`, or `ko` preference, which survives refresh and synchronizes between tabs. Blocked storage does not prevent detection or in-memory switching. The document language, title, media labels, dates, footer feedback, and subsequent XiaoCoo replies follow the selection; existing chat history and original artwork pixels are not rewritten. The personal-website case instead selects its corresponding real localized screenshots.
 
 ### Hero actions
 
@@ -301,6 +314,12 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 - **Deep links:** stable `portfolio-project-p1` through `portfolio-project-p4` anchors may open the portfolio route, activate the matching rail, and center it beneath the floating header. Hash-driven positioning uses immediate movement when reduced motion is requested.
 - **Media:** use each project's real image as the full panel field with a dark readability wash. Do not replace, recolor, or fabricate media.
 - **Motion:** grid-track and content emphasis may resolve over `520ms` with the approved curve; `prefers-reduced-motion` makes the transition effectively immediate.
+
+### Personal website case study
+
+**The Localized Case Evidence Rule.** The personal-website case uses eight actual website screenshots per language under public/photos/portfolio/p2/localized/{zh,en,ja,ko}/, captured by scripts/capture-p2-design.mjs. The pages group contains home-hero, portfolio-grid, about-page, and contact-page; the components group contains home-services, p2-detail, language-menu, and xiaocoo-page, all WebP. The current language selects the full set; only a missing image may fall back to its Chinese counterpart. Changing language resets the gallery and closes the old lightbox so no previous-language image remains. The language-menu image replaces the removed Task Brief capture.
+
+**The Concept-Cover Boundary Rule.** public/photos/portfolio/p2/covers/personal-website-studio.webp is a text-free studio concept background for the P2 personal-website card, not an actual website screenshot. A bottom readability mask protects its title and action; the case gallery supplies the real screen evidence.
 
 ### About photo stack
 
@@ -355,6 +374,7 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 
 - **Structure:** a centered single-column close separated from the preceding page content by the global `clamp(2.5rem, 5vw, 4.5rem)` rhythm: brand and note lead, followed by one centered horizontal row containing email, phone, WeChat, and location. Every contact is a keyboard-operable copy action; at `640px`, the row scrolls horizontally inside its own bounds instead of overflowing the page.
 - **Portfolio endings:** the final gallery on `p1`, `p3`, and `p4`, and the project picker on `p2`, have no trailing section margin. Keep their existing page-shell bottom padding, matching About, and let the global footer separation provide the remaining gap; do not stack an extra `mb-16` / `lg:mb-24` before the footer.
+- **Locale readiness:** preserve the footer's layout space but keep it visually hidden, inert, and hidden from assistive technology until the initial language is resolved, so the note and contact feedback never flash in the wrong language.
 - **Feedback:** successful copy displays a small localized fixed toast for `1.8s`; failure states are honest, keyboard focus remains visible, and reduced motion removes the entrance animation.
 - **Tone:** quiet and factual. The localized MetallicPaint wordmark is the sole expressive close; hover may brighten actionable contact links while non-action contact facts remain visually stable.
 
@@ -382,7 +402,11 @@ This design system governs presentation only. The names **COOPER.**, **梁世城
 
 ### Maintenance checklist
 
-- [ ] The hero is exactly `100svh`; its title + description + two-CTA group is centered on both axes; no separate scroll-prompt module competes with it.
+- [ ] In all four languages, the measured home title itself targets the viewport center; the description and two actions occupy the following track. The hero has a `100svh` minimum and grows naturally for long copy or very short screens, with a `7rem` top-spacer minimum to avoid header overlap.
+- [ ] Saved manual language choices take priority over supported browser preferences; all Chinese variants use Simplified Chinese, unsupported preferences fall back to English, and automatic detection never writes `localStorage`.
+- [ ] Header and footer remain visually hidden and inert until the locale is ready, avoiding a wrong-language flash.
+- [ ] The personal-website case selects eight real screenshots for the active language, resets its lightbox on language change, and uses the language-menu capture instead of the removed Task Brief image.
+- [ ] The P2 personal-website card uses the text-free studio concept cover with a bottom readability mask; it is not represented as an actual website screenshot.
 - [ ] The first homepage visit plays one skippable screening-room opening in the fixed order COOPER. → left-to-right FloatingLines reveal → COOPER. clears → page detail; later visits in the same session do not replay it, `?intro=1` forces QA playback, and reduced motion plus `NEXT_PUBLIC_INTRO_ENABLED=false` bypass it without hiding content.
 - [ ] The home title uses one DepthText instance with its translated copy intact; reduced/minimal tiers are static and the loop pauses offscreen or page-hidden.
 - [ ] Archivo remains the Latin face and Noto Sans SC remains the Chinese face across display, title, body, and label roles; no third expressive font has entered the system.

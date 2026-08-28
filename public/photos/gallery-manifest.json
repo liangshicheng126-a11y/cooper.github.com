@@ -703,6 +703,10 @@
     "width": 2880,
     "height": 1800
   },
+  "/photos/portfolio/p2/covers/personal-website-studio.webp": {
+    "width": 1440,
+    "height": 960
+  },
   "/photos/portfolio/p2/covers/personal-website.png": {
     "width": 1600,
     "height": 900
@@ -750,6 +754,134 @@
   "/photos/portfolio/p2/home.png": {
     "width": 1920,
     "height": 2581
+  },
+  "/photos/portfolio/p2/localized/en/about-page.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/en/contact-page.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/en/home-hero.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/en/home-services.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/en/language-menu.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/en/p2-detail.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/en/portfolio-grid.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/en/xiaocoo-page.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/ja/about-page.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/ja/contact-page.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/ja/home-hero.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/ja/home-services.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/ja/language-menu.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/ja/p2-detail.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/ja/portfolio-grid.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/ja/xiaocoo-page.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/ko/about-page.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/ko/contact-page.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/ko/home-hero.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/ko/home-services.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/ko/language-menu.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/ko/p2-detail.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/ko/portfolio-grid.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/ko/xiaocoo-page.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/zh/about-page.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/zh/contact-page.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/zh/home-hero.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/zh/home-services.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/zh/language-menu.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/zh/p2-detail.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/zh/portfolio-grid.webp": {
+    "width": 2880,
+    "height": 1800
+  },
+  "/photos/portfolio/p2/localized/zh/xiaocoo-page.webp": {
+    "width": 2880,
+    "height": 1800
   },
   "/photos/portfolio/p2/p2-detail.png": {
     "width": 2880,

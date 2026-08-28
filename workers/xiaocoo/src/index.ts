@@ -1,5 +1,12 @@
 import { XIAOCOO_KNOWLEDGE } from "./knowledge";
 import { handleTaskBriefRequest } from "./taskBrief";
+import {
+  chatErrorMessage,
+  chatLanguageInstruction,
+  normalizeChatLanguage,
+  type ChatErrorCode,
+  type Language,
+} from "./chatLocale";
 
 export interface Env {
   DEEPSEEK_API_KEY: string;
@@ -71,15 +78,10 @@ function corsHeaders(origin: string | null, env: Env): HeadersInit {
   };
 }
 
-function buildSystemPrompt(language: "zh" | "en"): string {
-  const langHint =
-    language === "en"
-      ? "Reply in English unless the user writes in Chinese."
-      : "默认用简体中文回答；用户用英文提问时再用英文。";
-
+function buildSystemPrompt(language: Language): string {
   return [
     "你是小coo，梁世城（Cooper Liang）的个人数字分身。",
-    langHint,
+    chatLanguageInstruction(language),
     "严格依据下方知识库作答，不知则坦诚说明，禁止编造履历。",
     "",
     "===== 知识库 =====",
@@ -137,11 +139,8 @@ function buildQuotaKey(visitorName: string, deviceId: string): string {
   return `${utcDateKey()}:${name}:${deviceId}`;
 }
 
-function quotaExceededMessage(language: "zh" | "en"): string {
-  if (language === "en") {
-    return "Today's XiaoCoo chat quota for this device/name is used up (≈¥1/day). Please reach out directly: email liangshicheng303@126.com · WeChat llqsc1122.";
-  }
-  return "今天这台设备/该访客名的小coo 问答额度已用完（约 ¥1/天）。可通过其他渠道联系本人：邮箱 liangshicheng303@126.com · 微信 llqsc1122。";
+function quotaExceededMessage(language: Language): string {
+  return chatErrorMessage(language, "QUOTA_EXCEEDED");
 }
 
 function estimateCostCny(usage: TokenUsage | null | undefined): number {
@@ -319,6 +318,14 @@ export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const origin = request.headers.get("origin");
     const headers = corsHeaders(origin, env);
+    let language = normalizeChatLanguage(
+      request.headers.get("accept-language")?.split(/[;,]/)[0].trim().toLowerCase().split("-")[0],
+    );
+    const errorResponse = (code: ChatErrorCode, status: number, detail?: string) =>
+      Response.json(
+        { error: chatErrorMessage(language, code), code, ...(detail ? { detail } : {}) },
+        { status, headers },
+      );
 
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers });
@@ -328,14 +335,11 @@ export default {
     if (taskBriefResponse) return taskBriefResponse;
 
     if (request.method !== "POST") {
-      return Response.json({ error: "Method not allowed" }, { status: 405, headers });
+      return errorResponse("INVALID_REQUEST", 405);
     }
 
     if (!env.DEEPSEEK_API_KEY) {
-      return Response.json(
-        { error: "XiaoCoo API is not configured (missing DEEPSEEK_API_KEY)." },
-        { status: 503, headers }
-      );
+      return errorResponse("SERVICE_UNAVAILABLE", 503);
     }
 
     const ip =
@@ -344,10 +348,7 @@ export default {
       "unknown";
 
     if (!checkRateLimit(ip)) {
-      return Response.json(
-        { error: "Too many requests. Please wait and retry." },
-        { status: 429, headers }
-      );
+      return errorResponse("RATE_LIMITED", 429);
     }
 
     let body: {
@@ -357,25 +358,26 @@ export default {
       deviceId?: unknown;
     };
     try {
-      body = (await request.json()) as typeof body;
+      const parsed: unknown = await request.json();
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+        return errorResponse("INVALID_REQUEST", 400);
+      }
+      body = parsed as typeof body;
     } catch {
-      return Response.json({ error: "Invalid JSON body." }, { status: 400, headers });
+      return errorResponse("INVALID_REQUEST", 400);
     }
+    language = normalizeChatLanguage(body.language, language);
 
     const history = sanitizeMessages(body.messages);
     if (history.length === 0 || history[history.length - 1]?.role !== "user") {
-      return Response.json(
-        { error: "Expected a non-empty messages array ending with a user turn." },
-        { status: 400, headers }
-      );
+      return errorResponse("INVALID_REQUEST", 400);
     }
 
     const visitorName = sanitizeVisitorName(body.visitorName);
     if (!visitorName) {
-      return Response.json({ error: "visitorName is required." }, { status: 400, headers });
+      return errorResponse("VISITOR_REQUIRED", 400);
     }
 
-    const language = body.language === "en" ? "en" : "zh";
     const deviceId = sanitizeDeviceId(body.deviceId);
     const quotaKey = buildQuotaKey(visitorName, deviceId);
     if ((await getQuotaCny(quotaKey)) >= DAILY_BUDGET_CNY) {
@@ -408,10 +410,7 @@ export default {
 
     if (!upstream.ok || !upstream.body) {
       const detail = await upstream.text().catch(() => "");
-      return Response.json(
-        { error: "Upstream model error.", detail: detail.slice(0, 500) },
-        { status: 502, headers }
-      );
+      return errorResponse("UPSTREAM_ERROR", 502, detail.slice(0, 500));
     }
 
     const userMessage = history[history.length - 1]?.content ?? "";

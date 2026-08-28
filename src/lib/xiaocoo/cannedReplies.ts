@@ -3,7 +3,17 @@
  * Prefer these over the LLM so production replies stay on-script.
  */
 
+import type { Language } from "@/locales/config";
+import { translatedCannedReplies } from "./cannedReplies.locales";
+
+/** Matches the existing six suggestion positions in every site dictionary. */
+export const XIAOCOO_SUGGESTION_IDS = [
+  "intro", "skills", "workflow", "plans", "departure", "location",
+] as const;
+export type CannedReplyId = (typeof XIAOCOO_SUGGESTION_IDS)[number] | "ellen-valve" | "education";
+
 export type CannedReply = {
+  id: CannedReplyId;
   /** Match keys (normalized): suggestion label + common aliases */
   keys: string[];
   answer: string;
@@ -11,9 +21,10 @@ export type CannedReply = {
 
 function normalizeQuestion(input: string): string {
   return input
+    .normalize("NFKC")
     .trim()
     .toLowerCase()
-    .replace(/[？?！!。．\s]/g, "")
+    .replace(/[\p{P}\s]/gu, "")
     .replace(/上一[家个]/g, "上家")
     .replace(/一下你自己/g, "你自己")
     .replace(/介绍一下你自己/g, "介绍你自己");
@@ -22,6 +33,7 @@ function normalizeQuestion(input: string): string {
 /** Canonical answers — items 1 / 3 / 4 / 5 / 7 / 10 from the brief */
 export const XIAOCOO_CANNED_REPLIES: CannedReply[] = [
   {
+    id: "intro",
     keys: [
       "用一分钟介绍一下你自己",
       "用一分钟介绍你自己",
@@ -35,6 +47,7 @@ export const XIAOCOO_CANNED_REPLIES: CannedReply[] = [
 我是一个实干型设计师，强调执行力和实用性，我希望设计不只是停留在好看的层面，而是真正能被用户看到和理解，并服务于产品转化，变为一个记忆锚点，为可落地的灵感而设计。`,
   },
   {
+    id: "skills",
     keys: [
       "你的核心技能和常用工具是什么？",
       "你的核心技能和常用工具是什么",
@@ -52,6 +65,7 @@ export const XIAOCOO_CANNED_REPLIES: CannedReply[] = [
 不只是「做得好看」，更关注卖点传达、停留与转化，以及平台为什么推荐。`,
   },
   {
+    id: "workflow",
     keys: [
       "平时是怎么工作的",
       "平时怎么工作",
@@ -75,6 +89,7 @@ export const XIAOCOO_CANNED_REPLIES: CannedReply[] = [
 我的 AI 工作流并不是为了替代设计，而是为了释放设计。通过 AI，我将原本耗费在重复性执行工作（如抠图、修图、找素材）上的时间，转移到了品牌视觉逻辑的构建和用户心理的洞察上。这使得我能够以更低的成本、更快的速度，产出更具商业竞争力的视觉内容。`,
   },
   {
+    id: "plans",
     keys: [
       "未来的规划",
       "未来规划",
@@ -87,6 +102,7 @@ export const XIAOCOO_CANNED_REPLIES: CannedReply[] = [
 我希望自己的设计能力，不只是停留在表现层面，而是能够真正服务于品牌成长和产品价值传达。通过将 AI 工具深度融入产品拍摄、平面制作、视频剪辑等工作流，提升效率与创意产出质量，将设计流程标准化、高效化。让设计成为公司核心竞争力的重要组成部分。`,
   },
   {
+    id: "departure",
     keys: [
       "为什么从上家公司离职",
       "为什么从上一家公司离职",
@@ -98,6 +114,7 @@ export const XIAOCOO_CANNED_REPLIES: CannedReply[] = [
     answer: `在上一家公司积累了扎实的全链路落地经验后，我意识到设计不仅是执行，更需要深厚的审美积淀与全球化的视野。为了突破现有的职业瓶颈，我选择前往韩国深造设计学硕士。这段经历不仅让我系统性地提升了设计理论与审美高度，更让我学会了如何从国际化的视角去审视品牌与市场，从而为后续回国后的实战工作打下了更坚实的理论基础。`,
   },
   {
+    id: "location",
     keys: [
       "目前在哪里",
       "你在哪里",
@@ -110,6 +127,7 @@ export const XIAOCOO_CANNED_REPLIES: CannedReply[] = [
 微信：llqsc1122`,
   },
   {
+    id: "ellen-valve",
     keys: [
       "爱伦阀门",
       "爱伦阀门经历",
@@ -123,6 +141,7 @@ export const XIAOCOO_CANNED_REPLIES: CannedReply[] = [
 多媒体内容创作：负责工厂宣传视频的策划、拍摄与剪辑，通过动态视觉语言强化品牌背书，提升用户信任感。`,
   },
   {
+    id: "education",
     keys: [
       "教育背景",
       "学历",
@@ -137,14 +156,25 @@ export const XIAOCOO_CANNED_REPLIES: CannedReply[] = [
   },
 ];
 
-export function findCannedReply(question: string): string | null {
+export function getCannedReply(id: CannedReplyId, language: Language): string | null {
+  if (language !== "zh") return translatedCannedReplies[language][id].answer;
+  return XIAOCOO_CANNED_REPLIES.find((item) => item.id === id)?.answer ?? null;
+}
+
+export function findCannedReply(question: string, language: Language = "zh"): string | null {
   const q = normalizeQuestion(question);
   if (!q) return null;
   for (const item of XIAOCOO_CANNED_REPLIES) {
-    for (const key of item.keys) {
+    const keys = [
+      ...item.keys,
+      ...translatedCannedReplies.en[item.id].keys,
+      ...translatedCannedReplies.ja[item.id].keys,
+      ...translatedCannedReplies.ko[item.id].keys,
+    ];
+    for (const key of keys) {
       const k = normalizeQuestion(key);
       if (!k) continue;
-      if (q === k || q.includes(k) || k.includes(q)) return item.answer;
+      if (q === k || q.includes(k) || k.includes(q)) return getCannedReply(item.id, language);
     }
   }
   return null;

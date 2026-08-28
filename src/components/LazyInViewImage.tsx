@@ -67,8 +67,9 @@ export default function LazyInViewImage({
     }
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry?.isIntersecting) return;
+      (entries) => {
+        // Reflow can batch an earlier exit and a later entry for the same image.
+        if (!entries.some((entry) => entry.isIntersecting)) return;
         hasLoadedRef.current = true;
         setShouldLoad(true);
         observer.disconnect();

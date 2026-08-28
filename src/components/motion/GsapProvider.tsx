@@ -7,6 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import useMotionTier from "@/hooks/useMotionTier";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import { shouldUseGsap } from "@/lib/motion";
+import { useTranslation } from "@/locales/LanguageProvider";
 
 let registered = false;
 
@@ -18,6 +19,7 @@ function ensureScrollTrigger() {
 
 export default function GsapProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const { language } = useTranslation();
   const tier = useMotionTier();
   const reduced = usePrefersReducedMotion();
   const useGsap = shouldUseGsap(reduced);
@@ -49,7 +51,7 @@ export default function GsapProvider({ children }: { children: React.ReactNode }
       if (refreshTimer.current) clearTimeout(refreshTimer.current);
       window.removeEventListener("load", refresh);
     };
-  }, [pathname, tier, useGsap]);
+  }, [pathname, tier, useGsap, language]);
 
   return <>{children}</>;
 }

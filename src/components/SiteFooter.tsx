@@ -8,7 +8,7 @@ import MetallicPaint from "@/components/ui/MetallicPaint";
 import { useTranslation } from "@/locales/LanguageProvider";
 
 export default function SiteFooter() {
-  const { language, t } = useTranslation();
+  const { t, mounted } = useTranslation();
   const [toast, setToast] = useState<{ id: number; message: string } | null>(null);
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -47,9 +47,7 @@ export default function SiteFooter() {
     if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
     setToast({
       id: Date.now(),
-      message: copied
-        ? language === "zh" ? "已复制" : "Copied"
-        : language === "zh" ? "复制失败，请重试" : "Copy failed. Please try again.",
+      message: copied ? t.ui.copied : t.ui.copyFailed,
     });
     toastTimerRef.current = setTimeout(() => setToast(null), 1800);
   };
@@ -87,7 +85,12 @@ export default function SiteFooter() {
   ];
 
   return (
-    <footer className="site-footer">
+    <footer
+      className="site-footer"
+      style={mounted ? undefined : { opacity: 0 }}
+      inert={!mounted || undefined}
+      aria-hidden={!mounted || undefined}
+    >
       <div>
         <MetallicPaint
           imageSrc="/cooper-wordmark-mask.svg"
@@ -120,8 +123,8 @@ export default function SiteFooter() {
             type="button"
             className="site-footer__contact"
             onClick={() => copyToClipboard(contact.value)}
-            aria-label={`${language === "zh" ? "复制" : "Copy"} ${contact.label}`}
-            title={language === "zh" ? "点击复制" : "Click to copy"}
+            aria-label={`${t.ui.copy} ${contact.label}`}
+            title={t.ui.clickToCopy}
           >
             {contact.icon}
             <span>{contact.label}</span>

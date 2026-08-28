@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { ArrowLeft, ChevronLeft, ChevronRight, ExternalLink, X } from "lucide-react";
+import { useTranslation } from "@/locales/LanguageProvider";
 
 export type VideoPreviewItem = {
   title: string;
@@ -38,6 +39,7 @@ export default function VideoPreviewLightbox({
   videoLoadErrors,
   onVideoError,
 }: Props) {
+  const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
   const video = videos[index];
 
@@ -133,7 +135,7 @@ export default function VideoPreviewLightbox({
             </div>
           ) : (
             <div className="flex aspect-video flex-col items-center justify-center gap-4 bg-gradient-to-br from-indigo-500/20 via-cyan-500/20 to-fuchsia-500/20 p-8 text-center">
-              <p className="max-w-md text-sm text-white/70">当前视频源不支持站内播放，请使用下方链接在原平台观看。</p>
+              <p className="max-w-md text-sm text-white/70">{t.media.videoUnavailable}</p>
             </div>
           )}
         </div>
@@ -163,7 +165,7 @@ export default function VideoPreviewLightbox({
             <button
               type="button"
               onClick={goPrev}
-              aria-label="Previous video"
+              aria-label={t.media.previousVideo}
               className="rounded-xl border border-white/15 p-2.5 text-white/80 transition-colors hover:bg-white/10"
             >
               <ChevronLeft className="h-5 w-5" />
@@ -171,7 +173,7 @@ export default function VideoPreviewLightbox({
             <button
               type="button"
               onClick={goNext}
-              aria-label="Next video"
+              aria-label={t.media.nextVideo}
               className="rounded-xl border border-white/15 p-2.5 text-white/80 transition-colors hover:bg-white/10"
             >
               <ChevronRight className="h-5 w-5" />

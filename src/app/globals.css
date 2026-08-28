@@ -1254,6 +1254,13 @@ body.lightbox-open .mobile-top-shell {
   color-scheme: dark;
 }
 
+:lang(ja) { --font-script: var(--font-noto-sans-jp); }
+:lang(ko) {
+  --font-script: var(--font-noto-sans-kr);
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
 html {
   min-width: 320px;
   scroll-behavior: smooth;
@@ -1261,12 +1268,13 @@ html {
 }
 
 body {
+  --font-script: var(--font-noto-sans-sc);
   min-height: 100dvh;
   margin: 0;
   margin-right: 0;
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-archivo), var(--font-noto-sans-sc), "Microsoft YaHei", sans-serif;
+  font-family: var(--font-archivo), var(--font-script), "Microsoft YaHei", sans-serif;
   caret-color: var(--night-accent);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -1374,6 +1382,7 @@ select option {
 }
 
 .site-header__inner {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1508,7 +1517,7 @@ select option {
 }
 
 :where(.site-main h1, .site-main h2, .site-footer__brand) {
-  font-family: var(--font-archivo), var(--font-noto-sans-sc), "Microsoft YaHei", sans-serif;
+  font-family: var(--font-archivo), var(--font-script), "Microsoft YaHei", sans-serif;
 }
 
 .site-footer {
@@ -1706,18 +1715,45 @@ select option {
   margin-top: -8.5rem;
   align-items: center;
   justify-content: center !important;
-  padding: clamp(6rem, 12svh, 8.5rem) 0 !important;
+  padding: 0 !important;
 }
 
 .hero-section-responsive > section {
+  display: grid;
+  grid-template-rows: max(7rem, calc(50svh - var(--hero-title-block-height, 8.5rem) / 2)) auto auto;
+  min-height: 100svh;
+  align-content: start;
   width: 100%;
-  align-items: center;
+  align-items: start;
   text-align: center;
   overflow: visible;
 }
 
 .hero-actions {
   justify-content: center;
+}
+
+.hero-support {
+  grid-row: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding-block: clamp(0.5rem, 2svh, 1.25rem) clamp(2rem, 4svh, 3rem);
+}
+
+/* Centre the heading itself in every language, independently of supporting copy. */
+.hero-depth-title {
+  grid-row: 2;
+  margin-block: 0;
+}
+
+.website-design-cover [data-gsh-image] {
+  background-position: 62% center;
+}
+
+.website-design-cover [data-gsh-overlay] {
+  background: linear-gradient(180deg, rgba(5, 5, 6, 0.03) 15%, rgba(5, 5, 6, 0.28) 45%, rgba(5, 5, 6, 0.93) 100%);
 }
 
 .hero-section-responsive h1 {
@@ -2071,7 +2107,7 @@ select option {
   bottom: 1.35rem;
   max-height: calc(100% - 2.7rem);
   color: rgba(244, 244, 245, 0.82);
-  font-family: var(--font-archivo), var(--font-noto-sans-sc), "Microsoft YaHei", sans-serif;
+  font-family: var(--font-archivo), var(--font-script), "Microsoft YaHei", sans-serif;
   font-size: 1.05rem;
   line-height: 1;
   letter-spacing: 0.02em;
@@ -2460,7 +2496,7 @@ select option {
   .hero-section-responsive {
     min-height: 100svh !important;
     margin-top: -7.5rem;
-    padding: clamp(5.5rem, 12svh, 7rem) 0 !important;
+    padding: 0 !important;
   }
 
   .hero-section-responsive h1 {
@@ -2515,7 +2551,7 @@ select option {
 @media (max-height: 36rem) and (min-width: 641px) {
   .hero-section-responsive {
     min-height: auto !important;
-    padding: 8rem 0 4rem !important;
+    padding: 0 !important;
   }
 
 }
