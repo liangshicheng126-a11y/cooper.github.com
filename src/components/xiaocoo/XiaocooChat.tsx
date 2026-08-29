@@ -8,6 +8,7 @@ import { useTranslation } from "@/locales/LanguageProvider";
 import useMotionTier from "@/hooks/useMotionTier";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import { shouldUseGsap } from "@/lib/motion";
+import { subscribeToMediaQuery } from "@/lib/mediaQuery";
 import {
   findCannedReply,
   getCannedReply,
@@ -162,8 +163,7 @@ export default function XiaocooChat() {
     const mq = window.matchMedia("(max-width: 767px)");
     const sync = () => setIsMobile(mq.matches);
     sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
+    return subscribeToMediaQuery(mq, sync);
   }, []);
 
   useEffect(() => {

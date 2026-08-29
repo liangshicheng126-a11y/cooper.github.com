@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
+import { subscribeToMediaQuery } from "@/lib/mediaQuery";
 import styles from "./FlowingMenu.module.css";
 
 export type FlowingMenuItem = {
@@ -229,8 +230,7 @@ export default function FlowingMenu({
       setActiveIndex((current) => (query.matches ? current ?? 0 : null));
     };
     update();
-    query.addEventListener("change", update);
-    return () => query.removeEventListener("change", update);
+    return subscribeToMediaQuery(query, update);
   }, []);
 
   return (

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { subscribeToMediaQuery } from "@/lib/mediaQuery";
 
 export interface CardItem {
   id: string | number;
@@ -60,8 +61,7 @@ export const ExpandingCards = React.forwardRef<HTMLUListElement, ExpandingCardsP
       const media = window.matchMedia("(min-width: 768px)");
       const sync = () => setIsDesktop(media.matches);
       sync();
-      media.addEventListener("change", sync);
-      return () => media.removeEventListener("change", sync);
+      return subscribeToMediaQuery(media, sync);
     }, []);
 
     const gridStyle = React.useMemo<React.CSSProperties>(() => {

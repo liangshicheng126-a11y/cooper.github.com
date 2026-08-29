@@ -349,6 +349,13 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 - **Public navigation:** the former Task Brief route and its navigation entry are intentionally absent. Language switching belongs exclusively to the global top navigation.
 - **Operational consistency:** inputs, buttons, pending states, errors, focus rings, and mobile behavior reuse the shared field and control rules instead of introducing a second light interface.
 
+### Release recovery surface
+
+- **Role:** a root-level emergency surface appears only when the application cannot render. It names the problem without technical leakage and provides explicit fresh-reload and in-place retry actions.
+- **Material:** use the same graphite canvas, strong obsidian panel, cold-white hierarchy, zinc boundary, indigo signal label, `16px` surface radius, and `44px` control floor as the rest of the screening room.
+- **Release resilience:** every GitHub Pages artifact includes the current and immediately previous Next.js static bundles. A critical `beforeInteractive` guard detects missing Next.js scripts, styles, and chunk imports, performs one cache-bypassing reload, and removes its temporary parameter as soon as the refreshed document starts; loop prevention remains active for failed recovery attempts.
+- **Compatibility:** media-query subscriptions use modern `change` listeners with the legacy WebKit listener as a fallback, without changing the selected motion tier, breakpoint, or interaction behavior.
+
 ### Panels and editorial chapters
 
 - **Panels:** shared `16px` corners, zinc border, dark translucent gradient, shallow internal sheen, and restrained blur.
@@ -424,6 +431,7 @@ This design system governs presentation only. The names **COOPER.**, **梁世城
 - [ ] The home workflow keeps all four translated steps and their existing GSAP effects; one tap/click idempotently selects a step, real mouse hover and keyboard-visible focus still select, touch-generated hover/focus does not double-select, the active cold-white surface is opaque with an above-surface indigo focus ring, and only the active visible marquee runs.
 - [ ] Keyboard focus, semantic headings, contrast, mobile scroll locking, full-motion defaults, and the explicit reduced-motion path are verified.
 - [ ] `NightBackdrop` mounts exactly one FloatingLines instance with gradient `#E945F5 / #2F4BC0 / #E945F5`, speed `1`, interactivity off, bend `5 / -0.5`, damping `0.05`, and parallax `true / 0.2`.
+- [ ] Pages deployment retains one previous `_next/static` bundle; the early asset guard reloads at most once with cache bypass, cleans its temporary URL parameter after success, and the root recovery surface keeps reload/retry controls at least `44px` high.
 - [ ] Fixed full-screen WebGL, vignette readability, mobile DPR `1.25` and opacity `0.44`, page-hidden render pause, reduced-motion static frame, fallback state, and full cleanup remain intact.
 - [ ] The footer MetallicPaint region remains bounded, pauses offscreen/page-hidden, caps DPR at `1.5 / 1`, renders a static reduced-motion frame, and preserves the readable `COOPER.` fallback.
 - [ ] `DESIGN.md` and `.impeccable/design.json` agree on tokens, components, motion, breakpoints, named rules, and guardrails.

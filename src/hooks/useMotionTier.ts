@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { subscribeToMediaQuery } from "@/lib/mediaQuery";
 
 export type MotionTier = "full" | "reduced" | "minimal";
 
@@ -25,8 +26,7 @@ export default function useMotionTier(): MotionTier {
     update();
 
     const query = window.matchMedia(REDUCED_MOTION_QUERY);
-    query.addEventListener("change", update);
-    return () => query.removeEventListener("change", update);
+    return subscribeToMediaQuery(query, update);
   }, []);
 
   return tier;

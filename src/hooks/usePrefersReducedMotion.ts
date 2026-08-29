@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useReducedMotion } from "framer-motion";
+import { subscribeToMediaQuery } from "@/lib/mediaQuery";
 
 const QUERY = "(prefers-reduced-motion: reduce)";
 
@@ -17,8 +18,7 @@ export default function usePrefersReducedMotion(): boolean {
       setMounted(true);
     };
     update();
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
+    return subscribeToMediaQuery(mq, update);
   }, []);
 
   // Keep the server and first client render identical, then honor the real

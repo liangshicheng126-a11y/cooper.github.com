@@ -6,6 +6,7 @@ import gsap from "gsap";
 import useMotionTier from "@/hooks/useMotionTier";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import { shouldUseGsap } from "@/lib/motion";
+import { subscribeToMediaQuery } from "@/lib/mediaQuery";
 import { cn } from "@/lib/utils";
 import GsapGlassHover from "@/components/motion/GsapGlassHover";
 import Stack from "@/components/ui/Stack";
@@ -25,8 +26,7 @@ const ABOUT_PHOTOS = [
 
 function subscribeToGalleryViewport(onChange: () => void) {
   const query = window.matchMedia(MOBILE_GALLERY_QUERY);
-  query.addEventListener("change", onChange);
-  return () => query.removeEventListener("change", onChange);
+  return subscribeToMediaQuery(query, onChange);
 }
 
 function isMobileGalleryViewport() {

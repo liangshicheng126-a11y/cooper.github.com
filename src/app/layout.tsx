@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Archivo, Noto_Sans_SC, Noto_Sans_JP, Noto_Sans_KR } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/locales/LanguageProvider";
@@ -15,6 +16,7 @@ import {
   getOpeningIntroEarlyGateScript,
   getPagesBasePath,
 } from "@/lib/openingIntro";
+import { getClientAssetRecoveryScript } from "@/lib/clientRecovery";
 import { INTRO_ENABLED } from "@/lib/motion";
 
 const archivo = Archivo({
@@ -54,6 +56,7 @@ const openingGateScript = getOpeningIntroEarlyGateScript(
   getPagesBasePath(),
   INTRO_ENABLED
 );
+const clientAssetRecoveryScript = getClientAssetRecoveryScript();
 
 export const viewport = {
   width: "device-width",
@@ -83,6 +86,11 @@ export default function RootLayout({
   return (
     <html lang={getLanguageOption(DEFAULT_LANGUAGE).htmlLang} className="dark" suppressHydrationWarning>
       <head>
+        <Script
+          id="cooper-client-asset-recovery"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: clientAssetRecoveryScript }}
+        />
         <script
           id="cooper-opening-gate"
           dangerouslySetInnerHTML={{ __html: openingGateScript }}
