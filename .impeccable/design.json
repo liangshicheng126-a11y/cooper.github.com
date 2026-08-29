@@ -230,7 +230,7 @@
       {
         "name": "workflow-flow",
         "value": "560ms edge reveal; 19s linear active-row loop",
-        "purpose": "One completed tap or click idempotently selects a workflow stage; real mouse hover and keyboard-visible focus can also select it, while touch-generated hover/focus does not select it again. Existing GSAP reveal and marquee effects are unchanged; only the active visible row runs."
+        "purpose": "One completed tap or click idempotently selects a workflow stage; real mouse hover and keyboard-visible focus can also select it, while touch-generated hover/focus does not select it again. The active cold-white surface is fully opaque so the base label cannot bleed through, and its indigo focus indicator renders above that surface. Existing GSAP reveal and marquee effects are unchanged; only the active visible row runs."
       },
       {
         "name": "floating-lines",
@@ -331,7 +331,7 @@
       "name": "Flowing Workflow Menu",
       "kind": "custom",
       "refersTo": "panel",
-      "description": "Four preserved workflow rows; one completed tap or click directly and idempotently selects a row, and repeated activation keeps it selected. Real mouse hover without pressed buttons and keyboard-visible focus also select a row; touch-generated hover/focus does not select it again. Touch layouts keep one row active. The existing GSAP edge reveal and repeating text-and-image marquee remain unchanged, with only the active visible row looping.",
+      "description": "Four preserved workflow rows; one completed tap or click directly and idempotently selects a row, and repeated activation keeps it selected. Real mouse hover without pressed buttons and keyboard-visible focus also select a row; touch-generated hover/focus does not select it again. Touch layouts keep one row active. The active cold-white marquee surface is fully opaque to prevent the base label and description from bleeding through, while an indigo inset focus indicator renders above the active surface. The existing GSAP edge reveal and repeating text-and-image marquee remain unchanged, with only the active visible row looping.",
       "html": "<div class=\"ds-flow-menu\" role=\"list\"><button><small>01</small><strong>Discovery</strong><span>Understand the project and direction.</span></button><button><small>02</small><strong>Explore</strong><span>Shape the visual language.</span></button><button><small>03</small><strong>Execute</strong><span>Refine every detail.</span></button><button><small>04</small><strong>Deliver</strong><span>Prepare the final system.</span></button></div>",
       "css": ".ds-flow-menu{overflow:hidden;border-block:1px solid rgba(255,255,255,.12);background:rgba(5,5,6,.28)}.ds-flow-menu button{display:grid;width:100%;min-height:7.75rem;grid-template-columns:minmax(4.5rem,.28fr) minmax(9rem,.72fr) minmax(0,1.45fr);gap:clamp(1rem,3vw,3rem);align-items:center;padding:1.35rem 0;border:0;border-top:1px solid rgba(255,255,255,.12);background:transparent;color:#f4f4f5;text-align:left}.ds-flow-menu button:first-child{border-top:0}.ds-flow-menu small{color:rgba(244,244,245,.32);font-weight:700;letter-spacing:.22em}.ds-flow-menu strong{font-size:1.4rem}.ds-flow-menu span{color:rgba(244,244,245,.64)}.ds-flow-menu button:focus-visible{outline:2px solid rgba(199,210,254,.95);outline-offset:-4px}"
     },

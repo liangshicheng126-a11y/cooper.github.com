@@ -45,6 +45,10 @@
   outline-offset: -4px;
 }
 
+.itemButton:focus-visible + .marquee {
+  box-shadow: inset 0 0 0 2px #4f46e5;
+}
+
 .number {
   color: rgba(244, 244, 245, 0.32);
   font-size: 0.78rem;
@@ -74,7 +78,7 @@
   height: 100%;
   pointer-events: none;
   transform: translate3d(0, 101%, 0);
-  background: rgba(244, 244, 245, 0.97);
+  background: #f4f4f5;
   color: #09090b;
 }
 
