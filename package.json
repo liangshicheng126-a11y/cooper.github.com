@@ -6,6 +6,7 @@
     "dev": "next dev",
     "prebuild": "node scripts/bundle-xiaocoo-kb.mjs && node scripts/optimize-gallery-images.mjs",
     "build": "next build",
+    "postbuild": "node scripts/move-client-recovery-script.mjs",
     "start": "next start",
     "lint": "next lint",
     "check:locales": "node scripts/check-locales.mjs",
