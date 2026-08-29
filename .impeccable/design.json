@@ -363,7 +363,7 @@
       "name": "Release Recovery Surface",
       "kind": "custom",
       "refersTo": "panel",
-      "description": "Root-level emergency surface for an unrecoverable client exception. It uses the screening-room palette and offers a cache-bypassing reload plus an in-place retry, both with 44px minimum targets. The Pages artifact carries the current and immediately previous Next.js static bundles, while a beforeInteractive guard performs at most one automatic refresh for a missing Next.js asset and cleans the temporary URL parameter as the refreshed document starts.",
+      "description": "Root-level emergency surface for an unrecoverable client exception. It uses the screening-room palette and offers a cache-bypassing reload plus an in-place retry, both with 44px minimum targets. The Pages artifact carries the current and immediately previous Next.js static bundles, while a head-inline pre-bootstrap guard performs at most one automatic refresh for a missing Next.js asset and cleans the temporary URL parameter as the refreshed document starts.",
       "html": "<main class=\"ds-recovery\"><p>COOPER.</p><h1>Unable to load</h1><span>Reload the latest version.</span><div><button>Reload</button><button>Retry</button></div></main>",
       "css": ".ds-recovery{width:min(100%,32rem);padding:clamp(1.5rem,6vw,2.5rem);border:1px solid rgba(255,255,255,.12);border-radius:16px;background:rgba(12,12,15,.9);color:#f4f4f5}.ds-recovery>p{color:#a5b4fc;font-size:.78rem;font-weight:700;letter-spacing:.11em}.ds-recovery h1{font-size:1.5rem;line-height:1.333;letter-spacing:-.025em}.ds-recovery span{color:rgba(244,244,245,.68);line-height:1.6}.ds-recovery button{min-height:44px;padding:.75rem 1rem;border-radius:12px;font-weight:700}"
     },

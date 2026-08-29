@@ -353,7 +353,7 @@ Hairlines are essential geometry. One-pixel zinc rules organize capabilities, st
 
 - **Role:** a root-level emergency surface appears only when the application cannot render. It names the problem without technical leakage and provides explicit fresh-reload and in-place retry actions.
 - **Material:** use the same graphite canvas, strong obsidian panel, cold-white hierarchy, zinc boundary, indigo signal label, `16px` surface radius, and `44px` control floor as the rest of the screening room.
-- **Release resilience:** every GitHub Pages artifact includes the current and immediately previous Next.js static bundles. A critical `beforeInteractive` guard detects missing Next.js scripts, styles, and chunk imports, performs one cache-bypassing reload, and removes its temporary parameter as soon as the refreshed document starts; loop prevention remains active for failed recovery attempts.
+- **Release resilience:** every GitHub Pages artifact includes the current and immediately previous Next.js static bundles. A critical inline guard executes directly in the document head before the Next.js bootstrap, detects missing Next.js scripts, styles, and chunk imports, performs one cache-bypassing reload, and removes its temporary parameter as soon as the refreshed document starts; loop prevention remains active for failed recovery attempts.
 - **Compatibility:** media-query subscriptions use modern `change` listeners with the legacy WebKit listener as a fallback, without changing the selected motion tier, breakpoint, or interaction behavior.
 
 ### Panels and editorial chapters

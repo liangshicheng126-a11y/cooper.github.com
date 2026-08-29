@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { Archivo, Noto_Sans_SC, Noto_Sans_JP, Noto_Sans_KR } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/locales/LanguageProvider";
@@ -86,9 +85,8 @@ export default function RootLayout({
   return (
     <html lang={getLanguageOption(DEFAULT_LANGUAGE).htmlLang} className="dark" suppressHydrationWarning>
       <head>
-        <Script
+        <script
           id="cooper-client-asset-recovery"
-          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: clientAssetRecoveryScript }}
         />
         <script
