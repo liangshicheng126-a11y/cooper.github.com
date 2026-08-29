@@ -33,6 +33,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Restore previous Next.js static assets
+        uses: actions/cache@v5
+        with:
+          path: .next-static-cache
+          key: next-static-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            next-static-${{ runner.os }}-
+
       - name: Build static site
         run: npm run build
         env:
@@ -43,6 +51,19 @@ jobs:
           # 小coo：Cloudflare Worker URL（仓库 Settings → Secrets → Actions）
           NEXT_PUBLIC_XIAOCOO_API_URL: ${{ secrets.NEXT_PUBLIC_XIAOCOO_API_URL }}
           NEXT_PUBLIC_TASK_BRIEF_API_URL: ${{ format('{0}/task-brief', secrets.NEXT_PUBLIC_XIAOCOO_API_URL) }}
+
+      - name: Retain the previous release static assets
+        shell: bash
+        run: |
+          mkdir -p .current-next-static
+          cp -a out/_next/static/. .current-next-static/
+
+          if [ -d .next-static-cache ]; then
+            cp -an .next-static-cache/. out/_next/static/
+          fi
+
+          rm -rf .next-static-cache
+          mv .current-next-static .next-static-cache
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
