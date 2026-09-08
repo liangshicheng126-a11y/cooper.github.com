@@ -107,6 +107,8 @@ export default function P2SubClient({
               title: copy.title,
               caption: copy.caption,
               images: group.images,
+              previewVariant:
+                group.groupId === "responsive" ? ("phone" as const) : undefined,
             };
           })
           .filter((group) => group.images.length > 0)
@@ -197,10 +199,12 @@ export default function P2SubClient({
             href="https://daeguaqua-experience-site.pages.dev/"
             target="_blank"
             rel="noreferrer"
-            className="mt-8 inline-flex items-center gap-2 rounded-xl border border-sky-300/25 bg-sky-400/10 px-5 py-3 text-sm font-bold text-sky-200 transition-colors hover:border-sky-300/45 hover:bg-sky-400/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/70"
+            className="group mt-9 inline-flex min-h-[4.5rem] min-w-[13.5rem] items-center justify-between gap-6 rounded-2xl border border-sky-300/35 bg-gradient-to-br from-sky-400/20 to-cyan-300/10 px-6 py-4 text-lg font-bold text-sky-100 shadow-[0_18px_50px_rgba(14,165,233,0.16)] backdrop-blur-md transition-all hover:-translate-y-0.5 hover:border-sky-200/60 hover:from-sky-400/30 hover:to-cyan-300/15 hover:shadow-[0_22px_60px_rgba(14,165,233,0.24)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/80"
           >
-            {sub.daeguAquarium.liveDemo}
-            <ExternalLink className="h-4 w-4" aria-hidden />
+            <span>{sub.daeguAquarium.liveDemo}</span>
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-sky-200/30 bg-sky-100/10 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+              <ExternalLink className="h-5 w-5" aria-hidden />
+            </span>
           </motion.a>
         )}
       </header>

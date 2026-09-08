@@ -12,6 +12,7 @@ export type DesignGalleryGroup = {
   title: string;
   caption: string;
   images: string[];
+  previewVariant?: "default" | "phone";
 };
 
 type Labels = {
@@ -69,7 +70,13 @@ export default function GroupedDesignGallerySection({ groups, labels }: Props) {
               </p>
               <GsapGalleryStagger entrance="slide">
                 {group.images.length === 1 ? (
-                  <MasonryItem className="gallery-thumb group w-full shadow-[0_2px_16px_rgba(15,23,42,0.08)] transition-shadow duration-300 sm:hover:shadow-[0_12px_32px_rgba(15,23,42,0.14)]">
+                  <MasonryItem
+                    className={`gallery-thumb group w-full shadow-[0_2px_16px_rgba(15,23,42,0.08)] transition-shadow duration-300 sm:hover:shadow-[0_12px_32px_rgba(15,23,42,0.14)] ${
+                      group.previewVariant === "phone"
+                        ? "mx-auto max-w-[16rem] sm:max-w-[18rem] lg:max-w-[20rem] ring-1 ring-white/10"
+                        : ""
+                    }`}
+                  >
                     <LazyInViewImage
                       src={thumbSrc(group.images[0])}
                       fallbackSrc={group.images[0]}
