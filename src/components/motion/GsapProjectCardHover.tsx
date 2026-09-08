@@ -14,6 +14,7 @@ type GsapProjectCardHoverProps = {
   viewProject: string;
   className?: string;
   variant?: HoverVariant;
+  contentAlign?: "start" | "center";
   /** Stronger bottom scrim for photo-heavy cover images (e.g. P2 hub picker). */
   imageOverlay?: "default" | "gradient";
 };
@@ -26,6 +27,7 @@ export default function GsapProjectCardHover({
   viewProject,
   className,
   variant = "portfolio",
+  contentAlign = "start",
   imageOverlay = "default",
 }: GsapProjectCardHoverProps) {
   const photoCover = imageOverlay === "gradient";
@@ -59,7 +61,10 @@ export default function GsapProjectCardHover({
 
         <div
           data-gsh-content
-          className="absolute inset-0 z-10 p-6 sm:p-10 lg:p-12 flex flex-col justify-end min-h-0"
+          className={cn(
+            "absolute inset-0 z-10 flex min-h-0 flex-col justify-end p-6 sm:p-10 lg:p-12",
+            contentAlign === "center" && "items-center text-center",
+          )}
         >
           <span
             className={cn(
@@ -83,6 +88,7 @@ export default function GsapProjectCardHover({
           <div
             className={cn(
               "inline-flex items-center space-x-3 font-semibold",
+              contentAlign === "center" && "justify-center",
               photoCover
                 ? "text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.75)]"
                 : "text-white",
