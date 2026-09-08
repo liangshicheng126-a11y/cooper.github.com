@@ -142,6 +142,12 @@ export const baseTranslations = {
             desc: "面向 AR 眼镜的移动端配套体验，聚焦实时信息与轻量交互场景。",
             category: "App 设计",
           },
+          daeguAquarium: {
+            title: "大邱水族馆体验网站",
+            desc: "在保留原站内容与业务入口的基础上，以深海视觉、流体动效和三语体验重构水族馆的数字参观旅程。",
+            category: "体验式 Web 设计",
+            liveDemo: "在线体验",
+          },
         },
         p2PersonalWebsiteGroups: {
           pages: {
@@ -175,6 +181,23 @@ export const baseTranslations = {
             title: "数据量化",
             caption:
               "周、月、年统计与疲劳曲线可视化，结合 AI 助理建议形成可穿戴数据闭环，帮助用户理解活动规律与恢复节奏。",
+          },
+        },
+        p2DaeguAquariumGroups: {
+          overview: {
+            title: "核心界面",
+            caption:
+              "首页以海底实景、海牛主视觉和清晰的购票/参观入口建立第一印象；活动轮播与故事卡片在保留原内容关系的同时，重新组织信息层级与阅读节奏。",
+          },
+          interactions: {
+            title: "动效与交互系统",
+            caption:
+              "卡片导航、三语选择器、可拖拽快捷参观面板与圆弧 SNS 画廊构成统一交互系统。反馈以水波、漂浮和渐进揭示为主，并保留键盘操作与静态回退。",
+          },
+          responsive: {
+            title: "响应式体验",
+            caption:
+              "移动端将首屏、快捷入口和内容卡片重排为单手可读的纵向路径，控制标题尺度、按钮触达区和媒体裁切，同时保留品牌氛围与主要功能。",
           },
         },
         p2SmartGlassesChallenges: {
@@ -243,6 +266,53 @@ export const baseTranslations = {
               "离线文件管理：翻译/地图/提词器/视频本地可用",
               "AI 建议：基于历史活动的恢复与训练提示",
               "生态扩展：手表/手环/车辆等设备接入预留"
+            ]
+          }
+        },
+        p2DaeguAquariumAnalysis: {
+          sectionTitle: "体验网站设计分析",
+          strategy: {
+            title: "设计目标与内容策略",
+            body: "项目不是替换水族馆的票务和内容系统，而是在既有公开页面上建立可评审的体验层。核心目标是让访客快速理解品牌、营业信息与参观路径，并让活动、动物故事和交通信息更容易发现。",
+            body2: "原有链接、日历、公告和业务入口继续工作；新的视觉与交互以渐进增强方式叠加。三语内容覆盖韩文、中文和英文，使本地访客与国际游客共享同一套信息结构。",
+            points: [
+              "保留业务链路：购票、订单、日历与原内容入口不被改写",
+              "参观任务优先：营业时间、价格、路线和活动快速可达",
+              "内容层级重组：首屏、事件、故事、SNS 与地图形成连续旅程",
+              "三语一致：韩文、中文、英文共享页面关系与交互"
+            ]
+          },
+          visual: {
+            title: "深海视觉语言",
+            body: "视觉系统从原站蓝色品牌和海底照片出发，以深海蓝、冷青高光、半透明面板与大面积留白构建沉浸感。主标题使用按语言匹配的展示字体，正文保持高对比无衬线排版。",
+            body2: "WebGL 水波只作用于背景纹理，文字、按钮和动物主体保持清晰。海牛以轻微漂浮取代夸张位移，圆形涟漪、柔和阴影和水色强调共同维持克制的水下空间感。",
+            points: [
+              "品牌延续：深海蓝与冷青来自既有水族馆识别",
+              "前后景分离：水波背景不扭曲文字和操作控件",
+              "脚本适配字体：韩文、中文、英文标题分别优化",
+              "真实素材优先：原动物与场馆照片始终是视觉主体"
+            ]
+          },
+          interaction: {
+            title: "动态交互系统",
+            body: "GSAP 负责品牌开场、标题揭示、滚动入场与菜单编排；导航和语言选项以卡片序列展开。快捷参观入口支持拖拽、吸边、键盘移动和内容标签切换，降低高频信息的查找成本。",
+            body2: "SNS 区域使用 WebGL 圆弧画廊呈现原有图片，支持鼠标、触摸、滚轮和方向键。所有增强都不拦截真实链接，并在关闭动效、离开视口或 WebGL 不可用时回到可操作的静态内容。",
+            points: [
+              "统一运动语汇：涟漪、漂浮、揭示与卡片序列",
+              "多输入支持：鼠标、触摸、键盘与横向滚轮",
+              "不阻断导航：反馈不延迟真实链接和业务跳转",
+              "状态可控：动效开关、离屏暂停和静态回退完整"
+            ]
+          },
+          technical: {
+            title: "技术实现与可访问性",
+            body: "体验层以原生 HTML、CSS 和 JavaScript 注入公开页面，避免为了视觉升级重写既有后台。GSAP、ScrollTrigger、SplitText 与自定义 WebGL 模块相互独立，单个模块失败不会阻止正文显示。",
+            body2: "语义标题、可见焦点、Escape 关闭、键盘画廊和 44px 触达区构成基础可访问性。动画在页面隐藏或离屏时暂停，WebGL 限制 DPR 与总像素，兼顾移动设备的性能和电量。",
+            points: [
+              "渐进增强：原页面和业务接口保持可用",
+              "模块隔离：动效、翻译、导航与画廊可独立回退",
+              "性能预算：DPR/像素上限、离屏暂停与资源清理",
+              "可访问操作：语义结构、焦点、键盘与触摸目标"
             ]
           }
         },
@@ -543,6 +613,12 @@ export const baseTranslations = {
             desc: "A companion mobile experience for AR glasses—real-time info and lightweight interactions.",
             category: "App Design",
           },
+          daeguAquarium: {
+            title: "Daegu Aquarium Experience",
+            desc: "A deep-sea, motion-led, trilingual visitor journey layered onto the aquarium’s existing content and service links.",
+            category: "Experiential Web Design",
+            liveDemo: "View Live Experience",
+          },
         },
         p2PersonalWebsiteGroups: {
           pages: {
@@ -576,6 +652,23 @@ export const baseTranslations = {
             title: "Activity Metrics",
             caption:
               "Weekly, monthly, and yearly stats with fatigue curves; AI assistant suggestions close the wearable data loop so users can track activity patterns and recovery rhythm.",
+          },
+        },
+        p2DaeguAquariumGroups: {
+          overview: {
+            title: "Core Experience",
+            caption:
+              "An underwater hero, the manatee visual, and clear ticket/visit actions set the first impression. Event rails and story cards preserve the original content relationships while rebuilding hierarchy and reading rhythm.",
+          },
+          interactions: {
+            title: "Motion & Interaction System",
+            caption:
+              "Card navigation, a trilingual selector, draggable quick-visit panel, and curved social gallery share one interaction language of ripples, buoyancy, and progressive reveals—with keyboard and static fallbacks intact.",
+          },
+          responsive: {
+            title: "Responsive Experience",
+            caption:
+              "Mobile reorganizes the hero, shortcuts, and content cards into a one-hand vertical journey, controlling title scale, tap targets, and media crops without losing the aquatic atmosphere or essential tasks.",
           },
         },
         p2SmartGlassesChallenges: {
@@ -644,6 +737,53 @@ export const baseTranslations = {
               "Offline files: translate / map / teleprompter / video on device",
               "AI suggestions: recovery and training from activity history",
               "Ecosystem hooks: watch, band, vehicle integrations planned"
+            ]
+          }
+        },
+        p2DaeguAquariumAnalysis: {
+          sectionTitle: "Experience Website Analysis",
+          strategy: {
+            title: "Experience Strategy",
+            body: "This project does not replace the aquarium’s ticketing or content platform. It adds a reviewable experience layer over the public site so visitors can understand the brand, hours, and visit path quickly while discovering events, animal stories, and directions.",
+            body2: "Existing links, calendars, notices, and service entry points continue to work. Visual and interaction upgrades are progressive enhancements, while Korean, Chinese, and English share the same information architecture.",
+            points: [
+              "Service continuity: ticket, order, calendar, and content links stay intact",
+              "Visit tasks first: hours, pricing, directions, and events remain close",
+              "Reframed hierarchy: hero, events, stories, social, and map form one journey",
+              "Trilingual parity: Korean, Chinese, and English share page relationships"
+            ]
+          },
+          visual: {
+            title: "Deep-Sea Visual Language",
+            body: "The system grows from the original blue identity and underwater photography, using deep navy, cool-cyan highlights, translucent panels, and generous negative space. Display type adapts by language while body copy keeps a high-contrast sans-serif rhythm.",
+            body2: "WebGL refraction affects only the background texture, leaving text, controls, and the animal subject sharp. Subtle buoyancy replaces exaggerated movement; circular ripples, soft shadows, and aquatic accents sustain an immersive but restrained scene.",
+            points: [
+              "Brand continuity: deep navy and cyan extend the aquarium identity",
+              "Layer separation: water distortion never compromises controls or copy",
+              "Script-aware display type: Korean, Chinese, and English tuned separately",
+              "Real media first: original animals and venue photography remain central"
+            ]
+          },
+          interaction: {
+            title: "Dynamic Interaction System",
+            body: "GSAP orchestrates the brand intro, type reveals, scroll entrances, and menu sequences. Navigation and language choices unfold as card stacks, while the quick-visit control supports dragging, edge docking, keyboard movement, and tabbed content.",
+            body2: "The social section uses a WebGL curved gallery for original posts with mouse, touch, wheel, and arrow-key input. Enhancements never block real links and return to usable static content when motion is disabled, content is offscreen, or WebGL is unavailable.",
+            points: [
+              "One motion vocabulary: ripples, buoyancy, reveals, and card sequences",
+              "Multiple inputs: mouse, touch, keyboard, and horizontal wheel",
+              "Navigation stays immediate: feedback never delays real destinations",
+              "Controllable state: motion toggle, offscreen pause, and static fallback"
+            ]
+          },
+          technical: {
+            title: "Engineering & Accessibility",
+            body: "The experience layer augments public pages with native HTML, CSS, and JavaScript instead of rewriting the existing backend. GSAP, ScrollTrigger, SplitText, and custom WebGL modules remain isolated so one enhancement cannot prevent core content from rendering.",
+            body2: "Semantic headings, visible focus, Escape-to-close, keyboard galleries, and 44px targets form the accessibility baseline. Animation pauses when hidden or offscreen, while WebGL caps DPR and total pixels to respect mobile performance and battery.",
+            points: [
+              "Progressive enhancement: source pages and service APIs remain usable",
+              "Module isolation: motion, language, navigation, and gallery fail safely",
+              "Performance budget: DPR caps, offscreen pause, and resource cleanup",
+              "Accessible input: semantics, focus, keyboard, and touch targets"
             ]
           }
         },

@@ -40,6 +40,15 @@ export default function P2HubClient() {
       accent: "#a855f7",
       viewLabel: sub.viewDetail,
     },
+    {
+      slug: "daegu-aquarium",
+      title: sub.daeguAquarium.title,
+      desc: sub.daeguAquarium.desc,
+      category: sub.daeguAquarium.category,
+      image: "/photos/portfolio/p2/covers/daegu-aquarium.webp",
+      accent: "#38bdf8",
+      viewLabel: sub.viewDetail,
+    },
   ];
 
   if (!mounted) {
