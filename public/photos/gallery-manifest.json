@@ -699,6 +699,10 @@
     "width": 2880,
     "height": 1800
   },
+  "/photos/portfolio/p2/covers/daegu-aquarium.webp": {
+    "width": 1200,
+    "height": 900
+  },
   "/photos/portfolio/p2/covers/personal-website-studio.webp": {
     "width": 1440,
     "height": 960
@@ -710,6 +714,38 @@
   "/photos/portfolio/p2/covers/smart-glasses.png": {
     "width": 1600,
     "height": 900
+  },
+  "/photos/portfolio/p2/daegu-aquarium/events.webp": {
+    "width": 1184,
+    "height": 431
+  },
+  "/photos/portfolio/p2/daegu-aquarium/home-desktop.webp": {
+    "width": 1440,
+    "height": 900
+  },
+  "/photos/portfolio/p2/daegu-aquarium/home-mobile.webp": {
+    "width": 390,
+    "height": 844
+  },
+  "/photos/portfolio/p2/daegu-aquarium/language-menu.webp": {
+    "width": 1440,
+    "height": 900
+  },
+  "/photos/portfolio/p2/daegu-aquarium/navigation-menu.webp": {
+    "width": 1440,
+    "height": 900
+  },
+  "/photos/portfolio/p2/daegu-aquarium/quick-guide.webp": {
+    "width": 1440,
+    "height": 900
+  },
+  "/photos/portfolio/p2/daegu-aquarium/sns-gallery.webp": {
+    "width": 1184,
+    "height": 522
+  },
+  "/photos/portfolio/p2/daegu-aquarium/story-system.webp": {
+    "width": 1184,
+    "height": 529
   },
   "/photos/portfolio/p2/design-components-nav.png": {
     "width": 1024,

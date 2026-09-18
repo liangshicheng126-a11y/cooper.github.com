@@ -2,7 +2,19 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowLeft, Cpu, Layout, Lightbulb, Monitor, Target, Zap } from "lucide-react";
+import {
+  ArrowLeft,
+  Code2,
+  Cpu,
+  ExternalLink,
+  Layout,
+  Lightbulb,
+  Monitor,
+  Palette,
+  Target,
+  Waves,
+  Zap,
+} from "lucide-react";
 import { useTranslation } from "@/locales/LanguageProvider";
 import useMotionTier from "@/hooks/useMotionTier";
 import { heroMaskVariants } from "@/lib/motion";
@@ -12,18 +24,21 @@ import DesignChallengesSection from "@/components/portfolio/DesignChallengesSect
 import SiteDesignAnalysis from "@/components/portfolio/SiteDesignAnalysis";
 import type { PersonalWebsiteScreenshotGroupsByLanguage } from "@/lib/p2PersonalWebsiteScreenshots";
 import type { SmartGlassesScreenshotGroup } from "@/lib/p2SmartGlassesScreenshots";
+import type { DaeguAquariumScreenshotGroup } from "@/lib/p2DaeguAquariumScreenshots";
 import type { P2SubId } from "@/lib/p2Subprojects";
 
 type Props = {
   subId: P2SubId;
   personalWebsiteGroupsByLanguage?: PersonalWebsiteScreenshotGroupsByLanguage;
   smartGlassesGroups?: SmartGlassesScreenshotGroup[];
+  daeguAquariumGroups?: DaeguAquariumScreenshotGroup[];
 };
 
 export default function P2SubClient({
   subId,
   personalWebsiteGroupsByLanguage,
   smartGlassesGroups = [],
+  daeguAquariumGroups = [],
 }: Props) {
   const { t, mounted, language } = useTranslation();
   const tier = useMotionTier();
@@ -36,7 +51,11 @@ export default function P2SubClient({
   };
 
   const detail =
-    subId === "personal-website" ? sub.personalWebsite : sub.smartGlasses;
+    subId === "personal-website"
+      ? sub.personalWebsite
+      : subId === "smart-glasses"
+        ? sub.smartGlasses
+        : sub.daeguAquarium;
 
   const galleryLabels = {
     title: t.portfolio.projectDetail.designGallery,
@@ -77,6 +96,24 @@ export default function P2SubClient({
           .filter((group) => group.images.length > 0)
       : [];
 
+  const daeguAquariumGalleryGroups =
+    subId === "daegu-aquarium"
+      ? daeguAquariumGroups
+          .map((group) => {
+            const copy =
+              t.portfolio.projectDetail.p2DaeguAquariumGroups[group.groupId];
+            return {
+              groupId: group.groupId,
+              title: copy.title,
+              caption: copy.caption,
+              images: group.images,
+              previewVariant:
+                group.groupId === "responsive" ? ("phone" as const) : undefined,
+            };
+          })
+          .filter((group) => group.images.length > 0)
+      : [];
+
   const smartGlassesChallenges =
     subId === "smart-glasses"
       ? ([
@@ -100,6 +137,20 @@ export default function P2SubClient({
           key,
           icon,
           ...t.portfolio.projectDetail.p2SmartGlassesAnalysis[key],
+        }))
+      : [];
+
+  const daeguAquariumAnalysisDimensions =
+    subId === "daegu-aquarium"
+      ? ([
+          { key: "strategy", icon: Target },
+          { key: "visual", icon: Palette },
+          { key: "interaction", icon: Waves },
+          { key: "technical", icon: Code2 },
+        ] as const).map(({ key, icon }) => ({
+          key,
+          icon,
+          ...t.portfolio.projectDetail.p2DaeguAquariumAnalysis[key],
         }))
       : [];
 
@@ -142,6 +193,20 @@ export default function P2SubClient({
         >
           {detail.desc}
         </motion.p>
+        {subId === "daegu-aquarium" && (
+          <motion.a
+            variants={item}
+            href="https://daeguaqua-experience-site.pages.dev/"
+            target="_blank"
+            rel="noreferrer"
+            className="group mt-9 inline-flex min-h-[4.5rem] min-w-[13.5rem] items-center justify-between gap-6 rounded-2xl border border-sky-300/35 bg-gradient-to-br from-sky-400/20 to-cyan-300/10 px-6 py-4 text-lg font-bold text-sky-100 shadow-[0_18px_50px_rgba(14,165,233,0.16)] backdrop-blur-md transition-all hover:-translate-y-0.5 hover:border-sky-200/60 hover:from-sky-400/30 hover:to-cyan-300/15 hover:shadow-[0_22px_60px_rgba(14,165,233,0.24)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/80"
+          >
+            <span>{sub.daeguAquarium.liveDemo}</span>
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-sky-200/30 bg-sky-100/10 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+              <ExternalLink className="h-5 w-5" aria-hidden />
+            </span>
+          </motion.a>
+        )}
       </header>
 
       {subId === "personal-website" ? (
@@ -159,7 +224,7 @@ export default function P2SubClient({
           />
           <SiteDesignAnalysis analysis={t.portfolio.projectDetail.p2Analysis} />
         </>
-      ) : (
+      ) : subId === "smart-glasses" ? (
         <>
           <GroupedDesignGallerySection
             groups={smartGlassesGalleryGroups}
@@ -178,6 +243,25 @@ export default function P2SubClient({
           <DesignAnalysisSection
             sectionTitle={t.portfolio.projectDetail.p2SmartGlassesAnalysis.sectionTitle}
             dimensions={smartGlassesAnalysisDimensions}
+          />
+        </>
+      ) : (
+        <>
+          <GroupedDesignGallerySection
+            groups={daeguAquariumGalleryGroups}
+            labels={{
+              sectionTitle: galleryLabels.title,
+              countLabel: galleryLabels.countLabel,
+              altPrefix: galleryLabels.altPrefix,
+              lightboxBack: galleryLabels.lightboxBack,
+              lightboxClose: galleryLabels.lightboxClose,
+            }}
+          />
+          <DesignAnalysisSection
+            sectionTitle={
+              t.portfolio.projectDetail.p2DaeguAquariumAnalysis.sectionTitle
+            }
+            dimensions={daeguAquariumAnalysisDimensions}
           />
         </>
       )}
