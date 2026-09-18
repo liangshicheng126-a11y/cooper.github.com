@@ -196,9 +196,9 @@ export default function P2SubClient({
         {subId === "daegu-aquarium" && (
           <motion.a
             variants={item}
-            href="https://daeguaqua-experience-site.pages.dev/"
+            href="https://daeguaqua-experience-site.pages.dev/?from=cooperliang"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener"
             className="group mt-9 inline-flex min-h-[4.5rem] min-w-[13.5rem] items-center justify-between gap-6 rounded-2xl border border-sky-300/35 bg-gradient-to-br from-sky-400/20 to-cyan-300/10 px-6 py-4 text-lg font-bold text-sky-100 shadow-[0_18px_50px_rgba(14,165,233,0.16)] backdrop-blur-md transition-all hover:-translate-y-0.5 hover:border-sky-200/60 hover:from-sky-400/30 hover:to-cyan-300/15 hover:shadow-[0_22px_60px_rgba(14,165,233,0.24)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/80"
           >
             <span>{sub.daeguAquarium.liveDemo}</span>
