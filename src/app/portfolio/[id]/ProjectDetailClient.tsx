@@ -94,6 +94,12 @@ export default function ProjectDetailClient({
         embedUrl: "https://player.bilibili.com/player.html?bvid=BV1ys9rBREj8&page=1&high_quality=1&autoplay=1",
         poster: "/videos/thumbnails/color-reboot-edit.jpg",
       },
+      {
+        title: t.media.videoTitles[2],
+        href: "https://www.douyin.com/video/7674227650852395391",
+        poster: "/videos/thumbnails/life-flows-with-years.jpg",
+        fallbackHref: "https://www.douyin.com/video/7674227650852395391",
+      },
     ],
   };
   const hasVideoPreview = Boolean(videoByProject[id]?.length);
