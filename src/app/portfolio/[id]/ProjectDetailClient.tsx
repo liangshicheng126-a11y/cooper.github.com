@@ -105,6 +105,11 @@ export default function ProjectDetailClient({
         href: "https://www.xiaohongshu.com/discovery/item/6ac72ac8000000001203ff11?source=webshare&xhsshare=pc_web&xsec_token=ABFTY1seC2YRxpEmbuIrevHZ3dmhaYmP6ztCyXYAf6n8w=&xsec_source=pc_share",
         fallbackHref: "https://www.xiaohongshu.com/discovery/item/6ac72ac8000000001203ff11?source=webshare&xhsshare=pc_web&xsec_token=ABFTY1seC2YRxpEmbuIrevHZ3dmhaYmP6ztCyXYAf6n8w=&xsec_source=pc_share",
       },
+      {
+        title: t.media.videoTitles[4],
+        href: "https://www.xiaohongshu.com/discovery/item/6a819f3d0000000027023121?source=webshare&xhsshare=pc_web&xsec_token=ABUaPwAQvOZOhnMlVvTV7qvX-Ql5QOc0hEi2j9GXVco8I=&xsec_source=pc_share",
+        fallbackHref: "https://www.xiaohongshu.com/discovery/item/6a819f3d0000000027023121?source=webshare&xhsshare=pc_web&xsec_token=ABUaPwAQvOZOhnMlVvTV7qvX-Ql5QOc0hEi2j9GXVco8I=&xsec_source=pc_share",
+      },
     ],
   };
   const hasVideoPreview = Boolean(videoByProject[id]?.length);
