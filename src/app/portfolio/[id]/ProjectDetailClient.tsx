@@ -100,6 +100,11 @@ export default function ProjectDetailClient({
         poster: "/videos/thumbnails/life-flows-with-years.jpg",
         fallbackHref: "https://www.douyin.com/video/7674227650852395391",
       },
+      {
+        title: t.media.videoTitles[3],
+        href: "https://www.xiaohongshu.com/discovery/item/6ac72ac8000000001203ff11?source=webshare&xhsshare=pc_web&xsec_token=ABFTY1seC2YRxpEmbuIrevHZ3dmhaYmP6ztCyXYAf6n8w=&xsec_source=pc_share",
+        fallbackHref: "https://www.xiaohongshu.com/discovery/item/6ac72ac8000000001203ff11?source=webshare&xhsshare=pc_web&xsec_token=ABFTY1seC2YRxpEmbuIrevHZ3dmhaYmP6ztCyXYAf6n8w=&xsec_source=pc_share",
+      },
     ],
   };
   const hasVideoPreview = Boolean(videoByProject[id]?.length);
