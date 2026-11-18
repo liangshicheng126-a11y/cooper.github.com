@@ -434,7 +434,9 @@ export default function FloatingLines({
         uniforms.parallaxOffset.value.copy(currentParallaxRef.current);
       }
 
-      if (!document.hidden || reducedMotion) {
+      // Skip GPU work while the opening splash film covers the page.
+      const filmPlaying = document.documentElement.hasAttribute("data-intro-film");
+      if ((!document.hidden || reducedMotion) && !filmPlaying) {
         renderer.render(scene, camera);
       }
 

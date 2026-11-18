@@ -25,6 +25,7 @@ export default function OpeningSequence() {
     setIntroMode("idle");
     setIntroActive(false);
     setIntroComplete(true);
+    document.documentElement.removeAttribute("data-intro-film");
     document.documentElement.removeAttribute("data-intro-active");
     document.documentElement.removeAttribute("data-intro-needed");
   }, [setIntroActive, setIntroComplete, setIntroMode]);
@@ -192,6 +193,7 @@ export default function OpeningSequence() {
         window.clearTimeout(filmTimer);
         window.clearTimeout(loadTimer);
         window.clearTimeout(stallTimer);
+        document.documentElement.removeAttribute("data-intro-film");
         if (film) {
           film.pause();
           film.style.display = "none";
@@ -209,6 +211,8 @@ export default function OpeningSequence() {
         window.clearTimeout(loadTimer);
         film.addEventListener("waiting", onStall);
         film.addEventListener("playing", onPlaying);
+        // Background canvases pause their GPU work while this attribute is set.
+        document.documentElement.setAttribute("data-intro-film", "");
         filmTimer = window.setTimeout(startTimeline, INTRO_TIMING.splashMs + 1200);
         const attempt = film.play();
         if (attempt) attempt.catch(startTimeline);
@@ -228,6 +232,7 @@ export default function OpeningSequence() {
       }
 
       return () => {
+        document.documentElement.removeAttribute("data-intro-film");
         window.clearTimeout(filmTimer);
         window.clearTimeout(loadTimer);
         window.clearTimeout(stallTimer);
