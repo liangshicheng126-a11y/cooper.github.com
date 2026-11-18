@@ -11,6 +11,7 @@ const WORDMARK = Array.from("COOPER.");
 export default function OpeningSequence() {
   const rootRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
+  const filmRef = useRef<HTMLVideoElement>(null);
   const {
     shouldPlayIntro,
     introComplete,
@@ -29,6 +30,7 @@ export default function OpeningSequence() {
   }, [setIntroActive, setIntroComplete, setIntroMode]);
 
   const skipIntro = useCallback(() => {
+    if (filmRef.current) filmRef.current.style.display = "none";
     const timeline = timelineRef.current;
     if (timeline) {
       timeline.progress(1);
@@ -85,6 +87,7 @@ export default function OpeningSequence() {
       }
 
       const timeline = gsap.timeline({
+        paused: true,
         defaults: { ease: "power4.out" },
         onComplete: finishIntro,
       });
@@ -175,7 +178,33 @@ export default function OpeningSequence() {
         )
         .to(root, { autoAlpha: 0, duration: 0.14, ease: "none" }, ">-=0.08");
 
+      // Play the splash film first; its final frame equals this timeline's first frame.
+      const film = filmRef.current;
+      let filmTimer = 0;
+      let started = false;
+      const startTimeline = () => {
+        if (started) return;
+        started = true;
+        window.clearTimeout(filmTimer);
+        if (film) film.style.display = "none";
+        timeline.play(0);
+      };
+      const landscape = window.matchMedia("(min-aspect-ratio: 4/3)").matches;
+      if (!film || !landscape) {
+        startTimeline();
+      } else {
+        film.addEventListener("ended", startTimeline);
+        film.addEventListener("error", startTimeline);
+        // Autoplay blocked or the file stalls: never hold the page hostage.
+        filmTimer = window.setTimeout(startTimeline, INTRO_TIMING.splashMs + 1400);
+        const attempt = film.play();
+        if (attempt) attempt.catch(startTimeline);
+      }
+
       return () => {
+        window.clearTimeout(filmTimer);
+        film?.removeEventListener("ended", startTimeline);
+        film?.removeEventListener("error", startTimeline);
         timeline.kill();
         timelineRef.current = null;
         if (backgroundLines) {
@@ -202,6 +231,17 @@ export default function OpeningSequence() {
       <div
         className="opening-sequence__shutter opening-sequence__shutter--bottom"
         data-opening-shutter="bottom"
+        aria-hidden
+      />
+
+      <video
+        ref={filmRef}
+        className="opening-sequence__film"
+        src={INTRO_TIMING.splashSrc}
+        muted
+        playsInline
+        preload="auto"
+        disablePictureInPicture
         aria-hidden
       />
 

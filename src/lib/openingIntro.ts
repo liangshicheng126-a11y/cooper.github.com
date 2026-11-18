@@ -12,7 +12,10 @@ export const INTRO_TIMING = {
   holdDuration: 0.18,
   releaseDuration: 0.34,
   revealDuration: 0.52,
-  failsafeMs: 6200,
+  /** "Frame 0" splash film that plays before the wordmark; its last frame is this intro's first frame. */
+  splashSrc: "/videos/opening/cooper-splash-frame0.mp4",
+  splashMs: 5000,
+  failsafeMs: 12400,
 } as const;
 
 export type OpeningIntroMode = "hold" | "handoff" | "idle";
