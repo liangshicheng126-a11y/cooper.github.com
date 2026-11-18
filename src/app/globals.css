@@ -710,13 +710,13 @@ html[data-viewport-canvas="on"] {
 html[data-intro-needed] .site-header,
 html[data-intro-needed] .site-main {
   visibility: hidden;
-  animation: opening-details-failsafe 0s 12.5s forwards;
+  animation: opening-details-failsafe 0s 7s forwards;
 }
 
 html[data-intro-needed] .night-backdrop__lines {
   opacity: 0;
   clip-path: inset(0 100% 0 0);
-  animation: opening-lines-failsafe 0s 12.5s forwards;
+  animation: opening-lines-failsafe 0s 7s forwards;
 }
 
 .opening-sequence {
@@ -762,18 +762,6 @@ html[data-intro-needed] .night-backdrop__lines {
 
 .opening-sequence__shutter--bottom::after {
   background: radial-gradient(ellipse at 50% 0%, rgba(233, 69, 245, 0.07), transparent 62%);
-}
-
-/* Splash film: ends on the exact pixels of the shutters below, so hiding it is invisible. */
-.opening-sequence__film {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  background: transparent;
-  pointer-events: none;
 }
 
 .opening-sequence__stage {

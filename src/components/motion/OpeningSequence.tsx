@@ -11,7 +11,6 @@ const WORDMARK = Array.from("COOPER.");
 export default function OpeningSequence() {
   const rootRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
-  const filmRef = useRef<HTMLVideoElement>(null);
   const {
     shouldPlayIntro,
     introComplete,
@@ -25,13 +24,11 @@ export default function OpeningSequence() {
     setIntroMode("idle");
     setIntroActive(false);
     setIntroComplete(true);
-    document.documentElement.removeAttribute("data-intro-film");
     document.documentElement.removeAttribute("data-intro-active");
     document.documentElement.removeAttribute("data-intro-needed");
   }, [setIntroActive, setIntroComplete, setIntroMode]);
 
   const skipIntro = useCallback(() => {
-    if (filmRef.current) filmRef.current.style.display = "none";
     const timeline = timelineRef.current;
     if (timeline) {
       timeline.progress(1);
@@ -88,7 +85,6 @@ export default function OpeningSequence() {
       }
 
       const timeline = gsap.timeline({
-        paused: true,
         defaults: { ease: "power4.out" },
         onComplete: finishIntro,
       });
@@ -179,68 +175,7 @@ export default function OpeningSequence() {
         )
         .to(root, { autoAlpha: 0, duration: 0.14, ease: "none" }, ">-=0.08");
 
-      // Play the splash film first; its final frame equals this timeline's first frame.
-      // It only starts once it can play through, and any mid-play stall skips to the intro,
-      // so a slow connection never sees a stuttering film.
-      const film = filmRef.current;
-      let filmTimer = 0;
-      let loadTimer = 0;
-      let stallTimer = 0;
-      let started = false;
-      const startTimeline = () => {
-        if (started) return;
-        started = true;
-        window.clearTimeout(filmTimer);
-        window.clearTimeout(loadTimer);
-        window.clearTimeout(stallTimer);
-        document.documentElement.removeAttribute("data-intro-film");
-        if (film) {
-          film.pause();
-          film.style.display = "none";
-        }
-        timeline.play(0);
-      };
-      const onStall = () => {
-        window.clearTimeout(stallTimer);
-        stallTimer = window.setTimeout(startTimeline, INTRO_TIMING.splashStallMs);
-      };
-      const onPlaying = () => window.clearTimeout(stallTimer);
-      const beginFilm = () => {
-        if (!film || started) return;
-        film.removeEventListener("canplaythrough", beginFilm);
-        window.clearTimeout(loadTimer);
-        film.addEventListener("waiting", onStall);
-        film.addEventListener("playing", onPlaying);
-        // Background canvases pause their GPU work while this attribute is set.
-        document.documentElement.setAttribute("data-intro-film", "");
-        filmTimer = window.setTimeout(startTimeline, INTRO_TIMING.splashMs + 1200);
-        const attempt = film.play();
-        if (attempt) attempt.catch(startTimeline);
-      };
-      const landscape = window.matchMedia("(min-aspect-ratio: 4/3)").matches;
-      if (!film || !landscape) {
-        startTimeline();
-      } else {
-        film.addEventListener("ended", startTimeline);
-        film.addEventListener("error", startTimeline);
-        if (film.readyState >= 4) {
-          beginFilm();
-        } else {
-          film.addEventListener("canplaythrough", beginFilm);
-          loadTimer = window.setTimeout(startTimeline, INTRO_TIMING.splashLoadMs);
-        }
-      }
-
       return () => {
-        document.documentElement.removeAttribute("data-intro-film");
-        window.clearTimeout(filmTimer);
-        window.clearTimeout(loadTimer);
-        window.clearTimeout(stallTimer);
-        film?.removeEventListener("ended", startTimeline);
-        film?.removeEventListener("error", startTimeline);
-        film?.removeEventListener("canplaythrough", beginFilm);
-        film?.removeEventListener("waiting", onStall);
-        film?.removeEventListener("playing", onPlaying);
         timeline.kill();
         timelineRef.current = null;
         if (backgroundLines) {
@@ -267,17 +202,6 @@ export default function OpeningSequence() {
       <div
         className="opening-sequence__shutter opening-sequence__shutter--bottom"
         data-opening-shutter="bottom"
-        aria-hidden
-      />
-
-      <video
-        ref={filmRef}
-        className="opening-sequence__film"
-        src={INTRO_TIMING.splashSrc}
-        muted
-        playsInline
-        preload="auto"
-        disablePictureInPicture
         aria-hidden
       />
 
