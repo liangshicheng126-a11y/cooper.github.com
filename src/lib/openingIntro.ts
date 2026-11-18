@@ -15,6 +15,9 @@ export const INTRO_TIMING = {
   /** "Frame 0" splash film that plays before the wordmark; its last frame is this intro's first frame. */
   splashSrc: "/videos/opening/cooper-splash-frame0.mp4",
   splashMs: 5000,
+  /** Give up on the film (and go straight to the intro) if it can't buffer in time. */
+  splashLoadMs: 2500,
+  splashStallMs: 600,
   failsafeMs: 12400,
 } as const;
 

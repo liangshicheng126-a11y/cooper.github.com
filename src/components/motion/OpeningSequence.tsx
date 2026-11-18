@@ -179,15 +179,39 @@ export default function OpeningSequence() {
         .to(root, { autoAlpha: 0, duration: 0.14, ease: "none" }, ">-=0.08");
 
       // Play the splash film first; its final frame equals this timeline's first frame.
+      // It only starts once it can play through, and any mid-play stall skips to the intro,
+      // so a slow connection never sees a stuttering film.
       const film = filmRef.current;
       let filmTimer = 0;
+      let loadTimer = 0;
+      let stallTimer = 0;
       let started = false;
       const startTimeline = () => {
         if (started) return;
         started = true;
         window.clearTimeout(filmTimer);
-        if (film) film.style.display = "none";
+        window.clearTimeout(loadTimer);
+        window.clearTimeout(stallTimer);
+        if (film) {
+          film.pause();
+          film.style.display = "none";
+        }
         timeline.play(0);
+      };
+      const onStall = () => {
+        window.clearTimeout(stallTimer);
+        stallTimer = window.setTimeout(startTimeline, INTRO_TIMING.splashStallMs);
+      };
+      const onPlaying = () => window.clearTimeout(stallTimer);
+      const beginFilm = () => {
+        if (!film || started) return;
+        film.removeEventListener("canplaythrough", beginFilm);
+        window.clearTimeout(loadTimer);
+        film.addEventListener("waiting", onStall);
+        film.addEventListener("playing", onPlaying);
+        filmTimer = window.setTimeout(startTimeline, INTRO_TIMING.splashMs + 1200);
+        const attempt = film.play();
+        if (attempt) attempt.catch(startTimeline);
       };
       const landscape = window.matchMedia("(min-aspect-ratio: 4/3)").matches;
       if (!film || !landscape) {
@@ -195,16 +219,23 @@ export default function OpeningSequence() {
       } else {
         film.addEventListener("ended", startTimeline);
         film.addEventListener("error", startTimeline);
-        // Autoplay blocked or the file stalls: never hold the page hostage.
-        filmTimer = window.setTimeout(startTimeline, INTRO_TIMING.splashMs + 1400);
-        const attempt = film.play();
-        if (attempt) attempt.catch(startTimeline);
+        if (film.readyState >= 4) {
+          beginFilm();
+        } else {
+          film.addEventListener("canplaythrough", beginFilm);
+          loadTimer = window.setTimeout(startTimeline, INTRO_TIMING.splashLoadMs);
+        }
       }
 
       return () => {
         window.clearTimeout(filmTimer);
+        window.clearTimeout(loadTimer);
+        window.clearTimeout(stallTimer);
         film?.removeEventListener("ended", startTimeline);
         film?.removeEventListener("error", startTimeline);
+        film?.removeEventListener("canplaythrough", beginFilm);
+        film?.removeEventListener("waiting", onStall);
+        film?.removeEventListener("playing", onPlaying);
         timeline.kill();
         timelineRef.current = null;
         if (backgroundLines) {
